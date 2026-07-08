@@ -1,0 +1,96 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  /* ─── Brand Palette ─────────────────────────────────── */
+  --color-terra:   #c4603a;
+  --color-sage:    #5c7a5f;
+  --color-gold:    #c89a3e;
+  --color-cream:   #f5e6d8;
+  --color-brown:   #2c1f18;
+  --color-blush:   #e8927a;
+  --color-mauve:   #8a6a7a;
+
+  /* ─── Backgrounds ───────────────────────────────────── */
+  --color-bg:      #f4ede4;
+  --color-surface: #f9f4ee;
+  --color-card:    #ffffff;
+
+  /* ─── Muted / Borders ───────────────────────────────── */
+  --color-muted:   #7a6555;
+  --color-muted2:  #a8927e;
+  --color-border:  rgba(44, 31, 24, 0.08);
+  --color-border2: rgba(44, 31, 24, 0.15);
+
+  /* ─── Status ─────────────────────────────────────────── */
+  --color-success: #3d7a4f;
+  --color-error:   #b84040;
+
+  /* ─── Typography ─────────────────────────────────────── */
+  --font-serif: var(--font-cormorant), Georgia, serif;
+  --font-sans:  var(--font-dm-sans), system-ui, sans-serif;
+  --font-mono:  var(--font-dm-mono), 'Courier New', monospace;
+
+  /* ─── Spacing extras ─────────────────────────────────── */
+  --radius-card: 10px;
+  --radius-btn:  6px;
+}
+
+/* ─── Base reset ─────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  color: var(--color-brown);
+  font-size: 14px;
+  line-height: 1.65;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Typography helpers ─────────────────────────────── */
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* ─── Smooth focus ring (accessibility) ──────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-terra);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ─── Selection colour ───────────────────────────────── */
+::selection {
+  background-color: rgba(196, 96, 58, 0.15);
+  color: var(--color-brown);
+}
+
+/* ─── Anchor base (override per-component) ───────────── */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ─── Image defaults ─────────────────────────────────── */
+img,
+video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}

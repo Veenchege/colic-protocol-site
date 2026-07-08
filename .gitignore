@@ -1,0 +1,27 @@
+# dependencies
+/node_modules
+
+# next.js build output
+/.next/
+/out/
+
+# production
+/build
+
+# env files, never commit real keys
+.env
+.env.local
+.env*.local
+
+# auto-generated, regenerated on every dev/build via scripts/build-blog-data.mjs
+/lib/blog-data.generated.ts
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# OS
+.DS_Store
