@@ -1,0 +1,76 @@
+# Colic Protocol — robots.txt
+# Policy: allow standard search engines and AI search/citation crawlers,
+# block AI training-only crawlers. Reviewed quarterly, this space moves fast.
+
+# ─── Standard search engines — fully open ───────────────────────
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# ─── AI search / citation / agent crawlers — ALLOWED ────────────
+# These power live answers and citations in ChatGPT, Claude, and
+# Perplexity. Blocking them removes this site from AI-generated
+# answers entirely. No reason to block these for a content site
+# that wants to be found.
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+# ─── AI training-only crawlers — BLOCKED ─────────────────────────
+# These bulk-collect content for model training with no citation
+# benefit in return. Blocking them costs zero search or AI-answer
+# visibility. This is an IP/content-rights decision, not a
+# visibility one.
+
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: Applebot-Extended
+Disallow: /
+
+User-agent: FacebookBot
+Disallow: /
+
+User-agent: Meta-ExternalAgent
+Disallow: /
+
+# ─── Bytespider — documented as frequently ignoring robots.txt ──
+# Declared anyway. A text-file rule doesn't stop a non-compliant
+# bot, real enforcement for this one needs a Cloudflare WAF rule
+# if it becomes a measurable problem. Check Cloudflare's Security
+# Analytics for Bytespider traffic before spending time on this.
+User-agent: Bytespider
+Disallow: /
+
+# ─── Everything else, default ────────────────────────────────────
+User-agent: *
+Allow: /
+Disallow: /api/
+
+Sitemap: https://colicprotocol.baby/sitemap.xml
