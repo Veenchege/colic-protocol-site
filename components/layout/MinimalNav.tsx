@@ -17,7 +17,7 @@ export default function MinimalNav({ logoLinksHome = true }: MinimalNavProps) {
       className="w-full bg-surface/90 backdrop-blur-sm border-b border-border2"
       role="banner"
     >
-      <div className="max-w-5xl mx-auto px-5 md:px-8 h-14 flex items-center">
+      <div className="max-w-6xl mx-auto px-5 md:px-8 h-14 flex items-center">
         {logoLinksHome ? (
           <Link
             href="/"

@@ -21,7 +21,7 @@ export default function Hero() {
         aria-hidden="true"
       />
 
-      <div className="relative max-w-5xl mx-auto px-5 md:px-8 pt-16 pb-20 md:pt-24 md:pb-28 flex flex-col items-center text-center">
+      <div className="relative max-w-6xl mx-auto px-5 md:px-8 pt-16 pb-20 md:pt-24 md:pb-28 text-center">
 
         {/* Eyebrow */}
         <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-terra mb-6 flex items-center justify-center gap-2">
@@ -33,7 +33,7 @@ export default function Hero() {
         <h1
           id="hero-headline"
           className="font-serif font-bold text-brown leading-[1.06] tracking-tight mb-6
-                     text-[clamp(36px,7vw,68px)] max-w-[14ch] mx-auto"
+                     text-[clamp(36px,7vw,68px)] max-w-[16ch] mx-auto"
         >
           Stop guessing what&apos;s wrong.{' '}
           <em className="text-terra not-italic">Start with the science.</em>

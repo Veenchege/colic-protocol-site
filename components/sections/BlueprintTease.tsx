@@ -19,7 +19,7 @@ export default function BlueprintTease() {
       className="py-16 md:py-24 bg-bg"
       aria-labelledby="blueprint-heading"
     >
-      <div className="max-w-5xl mx-auto px-5 md:px-8">
+      <div className="max-w-6xl mx-auto px-5 md:px-8">
 
         {/* Header */}
         <div className="mb-10 max-w-2xl mx-auto text-center">

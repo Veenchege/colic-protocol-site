@@ -10,7 +10,7 @@ export default function FinalCTA() {
       className="py-16 md:py-24 bg-bg border-t border-border2"
       aria-labelledby="final-cta-heading"
     >
-      <div className="max-w-5xl mx-auto px-5 md:px-8 text-center">
+      <div className="max-w-6xl mx-auto px-5 md:px-8 text-center">
 
         <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-terra mb-6 flex items-center justify-center gap-2">
           <span className="inline-block w-6 h-px bg-terra" aria-hidden="true" />

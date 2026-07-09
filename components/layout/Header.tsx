@@ -11,7 +11,7 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 bg-surface/90 backdrop-blur-sm border-b border-border2">
-      <div className="max-w-5xl mx-auto px-5 md:px-8">
+      <div className="max-w-6xl mx-auto px-5 md:px-8">
 
         {/* ── Main bar ── */}
         <div className="h-16 flex items-center justify-between">

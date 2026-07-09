@@ -24,7 +24,7 @@ export default function BlogIndexPage() {
 
         {/* ── Header ── */}
         <section className="bg-bg py-14 md:py-20 border-b border-border2">
-          <div className="max-w-5xl mx-auto px-5 md:px-8 text-center">
+          <div className="max-w-6xl mx-auto px-5 md:px-8 text-center">
             <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-terra mb-4 flex items-center justify-center gap-2">
               <span className="inline-block w-6 h-px bg-terra" aria-hidden="true" />
               Evidence-based colic research
@@ -42,7 +42,7 @@ export default function BlogIndexPage() {
 
         {/* ── Posts grid ── */}
         <section className="bg-bg py-14 md:py-20">
-          <div className="max-w-5xl mx-auto px-5 md:px-8">
+          <div className="max-w-6xl mx-auto px-5 md:px-8">
             {posts.length === 0 ? (
               <div className="text-center py-16">
                 <p className="font-serif text-xl text-muted italic">

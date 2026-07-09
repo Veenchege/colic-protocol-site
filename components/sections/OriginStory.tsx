@@ -4,7 +4,7 @@ export default function OriginStory() {
       className="py-16 md:py-24 bg-bg"
       aria-labelledby="origin-heading"
     >
-      <div className="max-w-5xl mx-auto px-5 md:px-8">
+      <div className="max-w-6xl mx-auto px-5 md:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-start">
 
           {/* ── Left: Story ── */}

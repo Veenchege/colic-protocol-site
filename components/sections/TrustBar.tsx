@@ -7,7 +7,7 @@ const TRUST_POINTS = [
 export default function TrustBar() {
   return (
     <div className="border-y border-border2 bg-surface">
-      <div className="max-w-5xl mx-auto px-5 md:px-8 py-5">
+      <div className="max-w-6xl mx-auto px-5 md:px-8 py-5">
         <ul className="flex flex-wrap items-center justify-center gap-x-10 gap-y-3">
           {TRUST_POINTS.map(({ stat, label }) => (
             <li

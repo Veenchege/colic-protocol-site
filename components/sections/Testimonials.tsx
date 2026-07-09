@@ -13,7 +13,7 @@ export default function Testimonials() {
       className="py-16 md:py-24 bg-surface"
       aria-labelledby="testimonials-heading"
     >
-      <div className="max-w-5xl mx-auto px-5 md:px-8">
+      <div className="max-w-6xl mx-auto px-5 md:px-8">
 
         {/* Header */}
         <div className="mb-10 max-w-xl mx-auto text-center">
