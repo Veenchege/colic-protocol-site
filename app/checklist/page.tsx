@@ -47,8 +47,8 @@ export default function ChecklistPage() {
         <div className="max-w-2xl mx-auto px-5 md:px-8 py-12 md:py-20">
 
           {/* ── Header ── */}
-          <div className="mb-10">
-            <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-terra mb-4 flex items-center gap-2">
+          <div className="mb-10 text-center">
+            <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-terra mb-4 flex items-center justify-center gap-2">
               <span className="inline-block w-6 h-px bg-terra" aria-hidden="true" />
               Free · No email required · Instant download
             </p>
@@ -56,7 +56,7 @@ export default function ChecklistPage() {
               The Midnight Emergency Checklist{' '}
               <span className="text-terra italic">(The Zion Protocol)</span>
             </h1>
-            <p className="text-muted text-sm md:text-base leading-relaxed">
+            <p className="text-muted text-sm md:text-base leading-relaxed max-w-prose mx-auto">
               A four-stage crisis triage built from peer-reviewed colic
               research. Works tonight. Takes 15 minutes to read. Built by an
               Epidemiologist after the medical system said &ldquo;wait it out.&rdquo;
@@ -102,7 +102,7 @@ export default function ChecklistPage() {
           </div>
 
           {/* ── Primary CTA ── */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col items-center gap-4 text-center">
             <Button href={gumroadUrl} variant="primary" size="lg" external>
               Download the free checklist
             </Button>

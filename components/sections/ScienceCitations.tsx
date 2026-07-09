@@ -9,8 +9,8 @@ export default function ScienceCitations() {
       <div className="max-w-5xl mx-auto px-5 md:px-8">
 
         {/* Header */}
-        <div className="mb-10 max-w-2xl">
-          <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-terra mb-4 flex items-center gap-2">
+        <div className="mb-10 max-w-2xl mx-auto text-center">
+          <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-terra mb-4 flex items-center justify-center gap-2">
             <span className="inline-block w-6 h-px bg-terra" aria-hidden="true" />
             The evidence
           </p>
@@ -33,7 +33,7 @@ export default function ScienceCitations() {
         </div>
 
         {/* Footnote */}
-        <p className="mt-6 font-mono text-[10px] tracking-[0.08em] text-muted2 leading-relaxed max-w-2xl">
+        <p className="mt-6 font-mono text-[10px] tracking-[0.08em] text-muted2 leading-relaxed max-w-2xl mx-auto text-center">
           Note on Liao et al. 2026: this study demonstrates association between
           untreated colic and gut-brain axis disruption — not proven causation.
           The language of causation is not supported by this study design.

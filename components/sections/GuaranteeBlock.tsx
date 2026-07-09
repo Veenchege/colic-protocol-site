@@ -28,14 +28,14 @@ export default function GuaranteeBlock({
       aria-label="Results commitment"
     >
       {/* Eyebrow */}
-      <p className="font-mono text-[9px] tracking-[0.14em] uppercase text-terra mb-3">
+      <p className="font-mono text-[9px] tracking-[0.14em] uppercase text-terra mb-3 text-center">
         The 72-Hour Guarantee
       </p>
 
       {/* Headline */}
       <h3
         className={[
-          'font-serif font-semibold text-brown leading-snug mb-3',
+          'font-serif font-semibold text-brown leading-snug mb-3 text-center',
           compact ? 'text-base' : 'text-xl md:text-2xl',
         ]
           .filter(Boolean)
@@ -63,7 +63,7 @@ export default function GuaranteeBlock({
       {/* Supporting details */}
       <ul
         className={[
-          'flex flex-wrap gap-x-6 gap-y-1 mb-4',
+          'flex flex-wrap justify-center gap-x-6 gap-y-1 mb-4',
           compact ? 'text-[10px]' : 'text-xs',
         ]
           .filter(Boolean)
@@ -87,9 +87,11 @@ export default function GuaranteeBlock({
 
       {/* Optional CTA */}
       {showCTA && (
-        <Button href="/blueprint" variant="primary" size="md">
-          Get the $47 Blueprint
-        </Button>
+        <div className="text-center">
+          <Button href="/blueprint" variant="primary" size="md">
+            Get the $47 Blueprint
+          </Button>
+        </div>
       )}
     </div>
   )

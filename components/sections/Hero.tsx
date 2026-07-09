@@ -21,10 +21,10 @@ export default function Hero() {
         aria-hidden="true"
       />
 
-      <div className="relative max-w-5xl mx-auto px-5 md:px-8 pt-16 pb-20 md:pt-24 md:pb-28">
+      <div className="relative max-w-5xl mx-auto px-5 md:px-8 pt-16 pb-20 md:pt-24 md:pb-28 flex flex-col items-center text-center">
 
         {/* Eyebrow */}
-        <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-terra mb-6 flex items-center gap-2">
+        <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-terra mb-6 flex items-center justify-center gap-2">
           <span className="inline-block w-6 h-px bg-terra" aria-hidden="true" />
           Evidence-based infant colic management
         </p>
@@ -33,21 +33,21 @@ export default function Hero() {
         <h1
           id="hero-headline"
           className="font-serif font-bold text-brown leading-[1.06] tracking-tight mb-6
-                     text-[clamp(36px,7vw,68px)] max-w-[14ch]"
+                     text-[clamp(36px,7vw,68px)] max-w-[14ch] mx-auto"
         >
           Stop guessing what&apos;s wrong.{' '}
           <em className="text-terra not-italic">Start with the science.</em>
         </h1>
 
         {/* Sub-headline */}
-        <p className="text-base md:text-lg text-muted leading-relaxed mb-10 max-w-[46ch]">
+        <p className="text-base md:text-lg text-muted leading-relaxed mb-10 max-w-[46ch] mx-auto">
           A 2-minute symptom test identifies which of three root systems is
           driving your baby&apos;s colic — and delivers the exact protocol to
           run tonight. Free.
         </p>
 
         {/* CTAs */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Button href="/quiz" variant="primary" size="lg">
             Find your baby&apos;s colic type — free
           </Button>

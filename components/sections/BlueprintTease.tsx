@@ -22,8 +22,8 @@ export default function BlueprintTease() {
       <div className="max-w-5xl mx-auto px-5 md:px-8">
 
         {/* Header */}
-        <div className="mb-10 max-w-2xl">
-          <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-terra mb-4 flex items-center gap-2">
+        <div className="mb-10 max-w-2xl mx-auto text-center">
+          <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-terra mb-4 flex items-center justify-center gap-2">
             <span className="inline-block w-6 h-px bg-terra" aria-hidden="true" />
             The full protocol
           </p>
@@ -98,9 +98,11 @@ export default function BlueprintTease() {
         </div>
 
         {/* CTA */}
-        <Button href="/blueprint" variant="secondary" size="md">
-          See the full Blueprint
-        </Button>
+        <div className="text-center">
+          <Button href="/blueprint" variant="secondary" size="md">
+            See the full Blueprint
+          </Button>
+        </div>
       </div>
     </section>
   )

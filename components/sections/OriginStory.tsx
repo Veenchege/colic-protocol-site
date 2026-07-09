@@ -9,14 +9,14 @@ export default function OriginStory() {
 
           {/* ── Left: Story ── */}
           <div>
-            <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-terra mb-4 flex items-center gap-2">
+            <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-terra mb-4 flex items-center justify-center md:justify-start gap-2 text-center md:text-left">
               <span className="inline-block w-6 h-px bg-terra" aria-hidden="true" />
               Why this exists
             </p>
 
             <h2
               id="origin-heading"
-              className="font-serif font-bold text-brown text-3xl md:text-4xl leading-snug mb-8"
+              className="font-serif font-bold text-brown text-3xl md:text-4xl leading-snug mb-8 text-center md:text-left"
             >
               Week 3. My daughter Zion had been crying for six hours.
             </h2>

@@ -42,8 +42,8 @@ export default function FAQ() {
       <div className="max-w-3xl mx-auto px-5 md:px-8">
 
         {/* Header */}
-        <div className="mb-10">
-          <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-terra mb-4 flex items-center gap-2">
+        <div className="mb-10 text-center">
+          <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-terra mb-4 flex items-center justify-center gap-2">
             <span className="inline-block w-6 h-px bg-terra" aria-hidden="true" />
             Common questions
           </p>

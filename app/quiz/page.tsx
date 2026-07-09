@@ -33,8 +33,8 @@ export default function QuizPage() {
         <div className="max-w-2xl mx-auto px-5 md:px-8 py-10 md:py-16">
 
           {/* Page intro */}
-          <div className="mb-10">
-            <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-terra mb-3 flex items-center gap-2">
+          <div className="mb-10 text-center">
+            <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-terra mb-3 flex items-center justify-center gap-2">
               <span className="inline-block w-6 h-px bg-terra" aria-hidden="true" />
               Free · 2 minutes · No credit card
             </p>
@@ -42,7 +42,7 @@ export default function QuizPage() {
               Find your baby&apos;s{' '}
               <span className="text-terra">colic type.</span>
             </h1>
-            <p className="text-muted text-sm leading-relaxed mt-3 max-w-prose">
+            <p className="text-muted text-sm leading-relaxed mt-3 max-w-prose mx-auto">
               Tell us your email first, then answer 8 questions. Each answer
               narrows the root cause. At the end you get a full report, gut
               reset, nervous system regulation, or acoustic correction,

@@ -44,8 +44,8 @@ export default function ChecklistPreview() {
       <div className="max-w-5xl mx-auto px-5 md:px-8">
 
         {/* Header */}
-        <div className="mb-12 max-w-2xl">
-          <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-terra mb-4 flex items-center gap-2">
+        <div className="mb-12 max-w-2xl mx-auto text-center">
+          <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-terra mb-4 flex items-center justify-center gap-2">
             <span className="inline-block w-6 h-px bg-terra" aria-hidden="true" />
             The free protocol
           </p>
@@ -105,7 +105,7 @@ export default function ChecklistPreview() {
         </div>
 
         {/* CTA */}
-        <div className="mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+        <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
           <Button
             href={gumroadChecklist}
             variant="primary"
