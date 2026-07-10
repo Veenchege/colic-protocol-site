@@ -33,9 +33,10 @@ export default function Hero() {
         <h1
           id="hero-headline"
           className="font-serif font-bold text-brown leading-[1.06] tracking-tight mb-6
-                     text-[clamp(36px,7vw,68px)] max-w-[16ch] mx-auto"
+                     text-[clamp(36px,7vw,68px)] max-w-[20ch] mx-auto"
         >
-          Stop guessing what&apos;s wrong.{' '}
+          Stop guessing what&apos;s wrong.
+          <br />
           <em className="text-terra not-italic">Start with the science.</em>
         </h1>
 
@@ -62,11 +63,6 @@ export default function Hero() {
             or download the 3AM checklist directly
           </a>
         </div>
-
-        {/* Micro social proof */}
-        <p className="mt-8 font-mono text-[10px] tracking-[0.1em] uppercase text-muted2">
-          71+ protocols downloaded · 20+ countries · No credit card required
-        </p>
       </div>
     </section>
   )

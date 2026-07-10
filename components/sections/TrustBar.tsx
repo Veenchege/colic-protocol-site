@@ -1,7 +1,7 @@
 const TRUST_POINTS = [
   { stat: '71+',   label: 'Protocols downloaded' },
   { stat: '20+',   label: 'Countries' },
-  { stat: '3',     label: 'Independent peer-reviewed studies' },
+  { stat: '3',     label: 'Peer-reviewed studies' },
 ]
 
 export default function TrustBar() {
