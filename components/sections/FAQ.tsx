@@ -31,31 +31,22 @@ const FAQS = [
 
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
-
   const toggle = (i: number) => setOpenIndex(openIndex === i ? null : i)
 
   return (
-    <section
-      className="py-16 md:py-24 bg-surface"
-      aria-labelledby="faq-heading"
-    >
+    <section className="py-16 md:py-24 bg-surface" aria-labelledby="faq-heading">
       <div className="max-w-3xl mx-auto px-5 md:px-8">
 
-        {/* Header */}
-        <div className="mb-10 text-center">
-          <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-terra mb-4 flex items-center justify-center gap-2">
-            <span className="inline-block w-6 h-px bg-terra" aria-hidden="true" />
-            Common questions
-          </p>
+        <div className="mb-10">
+          <p className="kicker mb-4">Common questions</p>
           <h2
             id="faq-heading"
-            className="font-serif font-bold text-brown text-3xl md:text-4xl leading-snug"
+            className="font-sans font-bold text-brown text-[30px] md:text-[38px] leading-[1.15] tracking-tight"
           >
             The six questions every parent asks before downloading.
           </h2>
         </div>
 
-        {/* Accordion */}
         <div className="flex flex-col divide-y divide-border2">
           {FAQS.map(({ q, a }, i) => {
             const isOpen = openIndex === i
@@ -63,41 +54,28 @@ export default function FAQ() {
               <div key={q}>
                 <button
                   onClick={() => toggle(i)}
-                  className="w-full text-left py-5 flex items-start justify-between gap-4
-                             group focus-visible:outline-2 focus-visible:outline-terra focus-visible:outline-offset-2 rounded"
+                  className="w-full text-left py-6 flex items-start justify-between gap-4 group
+                             focus-visible:outline-2 focus-visible:outline-terra focus-visible:outline-offset-2 rounded"
                   aria-expanded={isOpen}
                   aria-controls={`faq-answer-${i}`}
                   id={`faq-question-${i}`}
                 >
-                  <span className="font-serif font-semibold text-brown text-base md:text-lg leading-snug group-hover:text-terra transition-colors duration-150">
+                  <span className="font-semibold text-brown text-[17px] md:text-lg leading-snug group-hover:text-terra transition-colors duration-150">
                     {q}
                   </span>
-                  {/* Chevron */}
                   <span
-                    className={[
-                      'flex-shrink-0 w-5 h-5 text-terra transition-transform duration-200 mt-0.5',
-                      isOpen ? 'rotate-180' : '',
-                    ].join(' ')}
+                    className={['flex-shrink-0 w-5 h-5 text-terra transition-transform duration-200 mt-0.5', isOpen ? 'rotate-180' : ''].join(' ')}
                     aria-hidden="true"
                   >
                     <svg viewBox="0 0 20 20" fill="currentColor">
-                      <path
-                        fillRule="evenodd"
-                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                        clipRule="evenodd"
-                      />
+                      <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
                     </svg>
                   </span>
                 </button>
 
                 {isOpen && (
-                  <div
-                    id={`faq-answer-${i}`}
-                    role="region"
-                    aria-labelledby={`faq-question-${i}`}
-                    className="pb-5"
-                  >
-                    <p className="text-sm text-muted leading-relaxed">{a}</p>
+                  <div id={`faq-answer-${i}`} role="region" aria-labelledby={`faq-question-${i}`} className="pb-6">
+                    <p className="text-[15px] text-muted leading-relaxed">{a}</p>
                   </div>
                 )}
               </div>

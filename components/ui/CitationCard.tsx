@@ -1,63 +1,51 @@
 /* ─── Types ──────────────────────────────────────────────────── */
 export interface Citation {
-  authors:  string          // e.g. 'Savino et al.'
-  journal:  string          // e.g. 'Pediatrics'
-  year:     number          // e.g. 2010
-  finding:  string          // one-sentence summary of the key finding
-  detail?:  string          // optional: study type / sample size
-  url?:     string          // optional: PubMed or journal link
+  authors:  string
+  journal:  string
+  year:     number
+  finding:  string
+  detail?:  string
+  url?:     string
 }
 
 interface CitationCardProps {
   citation:   Citation
   className?: string
-  compact?:   boolean       // compact = no detail line, smaller padding
+  compact?:   boolean
 }
 
 /* ─── Component ──────────────────────────────────────────────── */
-export default function CitationCard({
-  citation,
-  className = '',
-  compact   = false,
-}: CitationCardProps) {
+export default function CitationCard({ citation, className = '', compact = false }: CitationCardProps) {
   const { authors, journal, year, finding, detail, url } = citation
 
   const card = (
     <div
       className={[
         'bg-card border border-border2 rounded-card',
-        compact ? 'p-5' : 'p-6',
-        'flex flex-col gap-2',
+        compact ? 'p-5' : 'p-7',
+        'flex flex-col gap-3',
         className,
-      ]
-        .filter(Boolean)
-        .join(' ')}
+      ].filter(Boolean).join(' ')}
     >
-      {/* Header row: authors · journal · year */}
-      <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-        <span className="font-serif font-semibold text-brown text-sm leading-snug">
-          {authors}
-        </span>
-        <span className="font-mono text-[9px] tracking-[0.1em] uppercase text-terra">
+      <div className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
+        <span className="font-semibold text-brown text-[15px] leading-snug">{authors}</span>
+        <span className="font-mono text-[10px] tracking-[0.08em] uppercase text-terra">
           {journal} · {year}
         </span>
       </div>
 
-      {/* Finding */}
-      <p className="font-serif text-[13px] leading-relaxed text-muted italic">
-        "{finding}"
+      <p className="font-serif text-[16px] leading-relaxed text-brown/85 italic">
+        &ldquo;{finding}&rdquo;
       </p>
 
-      {/* Optional detail line */}
       {!compact && detail && (
-        <p className="font-mono text-[9px] tracking-[0.06em] uppercase text-muted2">
+        <p className="text-xs text-muted2 leading-relaxed pt-2 border-t border-border">
           {detail}
         </p>
       )}
     </div>
   )
 
-  /* If a URL is provided, wrap the card in an accessible anchor */
   if (url) {
     return (
       <a
@@ -67,7 +55,7 @@ export default function CitationCard({
         className="block group hover:no-underline"
         aria-label={`Read: ${authors} — ${journal} ${year}`}
       >
-        <div className="group-hover:border-terra/40 transition-colors duration-150">
+        <div className="group-hover:border-terra/40 transition-colors duration-150 rounded-card">
           {card}
         </div>
       </a>
@@ -78,9 +66,6 @@ export default function CitationCard({
 }
 
 /* ─── Pre-built citation data ─────────────────────────────────── */
-// Import and spread these wherever the science section appears.
-// Keeps citation data in one place — update here, reflects everywhere.
-
 export const CITATIONS: Citation[] = [
   {
     authors: 'Savino et al.',

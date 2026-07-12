@@ -23,16 +23,16 @@ export default function BlogIndexPage() {
       <main id="main-content">
 
         {/* ── Header ── */}
-        <section className="bg-bg py-14 md:py-20 border-b border-border2">
-          <div className="max-w-6xl mx-auto px-5 md:px-8 text-center">
-            <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-terra mb-4 flex items-center justify-center gap-2">
+        <section className="bg-paper py-14 md:py-20 border-b border-border2">
+          <div className="max-w-5xl mx-auto px-5 md:px-8">
+            <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-terra mb-4 flex items-center gap-2">
               <span className="inline-block w-6 h-px bg-terra" aria-hidden="true" />
               Evidence-based colic research
             </p>
             <h1 className="font-serif font-bold text-brown text-3xl md:text-[48px] leading-snug mb-4">
               The clinical record.
             </h1>
-            <p className="text-muted text-base md:text-lg leading-relaxed max-w-prose mx-auto">
+            <p className="text-muted text-base md:text-lg leading-relaxed max-w-prose">
               Every post is built from primary literature — not parenting
               opinions, not anecdote. Citations included. Written by an
               Epidemiologist who treated infant colic as a data problem.
@@ -41,8 +41,8 @@ export default function BlogIndexPage() {
         </section>
 
         {/* ── Posts grid ── */}
-        <section className="bg-bg py-14 md:py-20">
-          <div className="max-w-6xl mx-auto px-5 md:px-8">
+        <section className="bg-paper py-14 md:py-20">
+          <div className="max-w-5xl mx-auto px-5 md:px-8">
             {posts.length === 0 ? (
               <div className="text-center py-16">
                 <p className="font-serif text-xl text-muted italic">

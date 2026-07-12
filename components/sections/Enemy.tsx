@@ -24,73 +24,51 @@ const ENEMIES = [
 
 export default function Enemy() {
   return (
-    <section
-      className="py-16 md:py-24 bg-bg"
-      aria-labelledby="enemy-heading"
-    >
-      <div className="max-w-6xl mx-auto px-5 md:px-8">
+    <section className="py-16 md:py-24 bg-paper" aria-labelledby="enemy-heading">
+      <div className="max-w-5xl mx-auto px-5 md:px-8">
 
-        {/* Header */}
-        <div className="mb-12 max-w-2xl mx-auto text-center">
-          <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-terra mb-4 flex items-center justify-center gap-2">
-            <span className="inline-block w-6 h-px bg-terra" aria-hidden="true" />
-            Why everything has failed
-          </p>
+        <div className="mb-12 max-w-2xl">
+          <p className="kicker mb-4">Why everything has failed</p>
           <h2
             id="enemy-heading"
-            className="font-serif font-bold text-brown text-3xl md:text-4xl leading-snug mb-4"
+            className="font-sans font-bold text-brown text-[30px] md:text-[38px] leading-[1.15] tracking-tight mb-4"
           >
-            Gripe water. Gas drops.{' '}
-            <span className="text-terra">&ldquo;Wait it out.&rdquo;</span>{' '}
+            Gripe water. Gas drops. <span className="text-terra">&ldquo;Wait it out.&rdquo;</span>{' '}
             Here is what the research shows.
           </h2>
-          <p className="text-muted text-sm md:text-base leading-relaxed">
-            These are not failure of effort. They are failure of the tools.
-            None of them have peer-reviewed evidence for colic — and the
-            mechanism explains exactly why.
+          <p className="text-[17px] text-muted leading-relaxed">
+            These are not failures of effort. They are failures of the tools. None of them
+            have peer-reviewed evidence for colic — and the mechanism explains exactly why.
           </p>
         </div>
 
-        {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-12">
           {ENEMIES.map(({ name, parents, reality, citation }) => (
-            <article
-              key={name}
-              className="bg-card border border-border2 rounded-card p-7 flex flex-col gap-4"
-            >
-              {/* Product name */}
-              <h3 className="font-mono text-[10px] tracking-[0.12em] uppercase text-error">
+            <article key={name} className="bg-card border border-border2 rounded-card p-7 flex flex-col gap-5">
+              <h3 className="text-[15px] font-semibold text-brown leading-snug pb-4 border-b border-border">
                 {name}
               </h3>
 
-              {/* What parents think */}
-              <div>
-                <p className="font-mono text-[9px] tracking-[0.08em] uppercase text-muted2 mb-1">
-                  What parents expect
-                </p>
-                <p className="text-xs text-muted leading-relaxed italic">
-                  &ldquo;{parents}&rdquo;
+              <div className="flex items-start gap-2.5">
+                <span className="mt-[3px] text-error/70 flex-shrink-0" aria-hidden="true">✕</span>
+                <p className="text-sm text-muted2 leading-relaxed line-through decoration-muted2/40">
+                  {parents}
                 </p>
               </div>
 
-              {/* What the evidence shows */}
-              <div>
-                <p className="font-mono text-[9px] tracking-[0.08em] uppercase text-muted2 mb-1">
-                  What the evidence shows
-                </p>
-                <p className="text-xs text-muted leading-relaxed">{reality}</p>
+              <div className="flex items-start gap-2.5">
+                <span className="mt-[3px] text-terra flex-shrink-0" aria-hidden="true">→</span>
+                <p className="text-sm text-brown/90 leading-relaxed">{reality}</p>
               </div>
 
-              {/* Citation */}
-              <p className="font-mono text-[9px] tracking-[0.06em] text-muted2 mt-auto pt-3 border-t border-border">
+              <p className="font-mono text-[10px] tracking-[0.04em] text-muted2 mt-auto pt-4 border-t border-border">
                 {citation}
               </p>
             </article>
           ))}
         </div>
 
-        {/* Bottom line */}
-        <p className="font-serif text-xl md:text-2xl text-brown text-center italic max-w-2xl mx-auto">
+        <p className="font-serif text-2xl md:text-[28px] text-brown text-center italic max-w-2xl mx-auto">
           &ldquo;You have not been failing. You have been given the wrong tools.&rdquo;
         </p>
       </div>

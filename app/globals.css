@@ -3,28 +3,43 @@
 
 @theme {
   /* ─── Brand Palette ─────────────────────────────────── */
+  /* Kept for brand continuity across dashboards, quiz, and content —
+     but no longer used as a flat wash. See background layer below. */
   --color-terra:   #c4603a;
   --color-sage:    #5c7a5f;
   --color-gold:    #c89a3e;
-  --color-cream:   #f5e6d8;
-  --color-brown:   #2c1f18;
+  --color-cream:   #f2e6d8;
+  --color-brown:   #241a13;
   --color-blush:   #e8927a;
+
+  /* Nervous-system brand colour. Was an undefined `purple` token that
+     silently fell back to Tailwind's default violet-500 sitewide
+     (Badge.tsx, ThreeSystem.tsx, quiz results). Fixed here. */
   --color-mauve:   #8a6a7a;
 
-  /* ─── Backgrounds ───────────────────────────────────── */
-  --color-bg:      #f4ede4;
-  --color-surface: #f9f4ee;
+  /* ─── Backgrounds — temperature system ──────────────── */
+  /* Two temperatures used deliberately, not one flat cream everywhere:
+     `paper`  = neutral/cool, for clinical-diagnostic sections (evidence,
+                mechanism, protocol detail) — reads as competence.
+     `warm`   = the old cream tone, reserved for sections doing emotional
+                work (validation, origin story, guarantee) — reads as warmth.
+     This pairing is the Fiske–Cuddy warmth/competence split your own
+     Authority & Trust doc prescribes — enforced structurally instead of
+     asserted in prose nobody checks against. */
+  --color-paper:   #faf8f4;
+  --color-warm:    #f4ead9;
+  --color-surface: #f6f3ee;
   --color-card:    #ffffff;
 
   /* ─── Muted / Borders ───────────────────────────────── */
-  --color-muted:   #7a6555;
-  --color-muted2:  #a8927e;
-  --color-border:  rgba(44, 31, 24, 0.08);
-  --color-border2: rgba(44, 31, 24, 0.15);
+  --color-muted:   #6b5847;
+  --color-muted2:  #9c8873;
+  --color-border:  rgba(36, 26, 19, 0.09);
+  --color-border2: rgba(36, 26, 19, 0.16);
 
   /* ─── Status ─────────────────────────────────────────── */
   --color-success: #3d7a4f;
-  --color-error:   #b84040;
+  --color-error:   #b23f38;
 
   /* ─── Typography ─────────────────────────────────────── */
   --font-serif: var(--font-cormorant), Georgia, serif;
@@ -32,8 +47,8 @@
   --font-mono:  var(--font-dm-mono), 'Courier New', monospace;
 
   /* ─── Spacing extras ─────────────────────────────────── */
-  --radius-card: 10px;
-  --radius-btn:  6px;
+  --radius-card: 14px;
+  --radius-btn:  8px;
 }
 
 /* ─── Base reset ─────────────────────────────────────── */
@@ -50,23 +65,24 @@ html {
 
 body {
   font-family: var(--font-sans);
-  background-color: var(--color-bg);
+  background-color: var(--color-paper);
   color: var(--color-brown);
-  font-size: 14px;
-  line-height: 1.65;
+  font-size: 16px;
+  line-height: 1.6;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 /* ─── Typography helpers ─────────────────────────────── */
-.font-serif {
-  font-family: var(--font-serif);
-}
+.font-serif { font-family: var(--font-serif); }
+.font-mono  { font-family: var(--font-mono); }
 
-.font-mono {
-  font-family: var(--font-mono);
-}
+/* Section heading default: sans, not serif. Serif is reserved for
+   emotional beats (Hero H1, pull-quotes) — see component usage.
+   This is the single change that does the most work against the
+   "every h2 is an italic serif" template feel. */
+h2, h3 { font-family: var(--font-sans); letter-spacing: -0.01em; }
 
 /* ─── Smooth focus ring (accessibility) ──────────────── */
 :focus-visible {
@@ -82,15 +98,20 @@ body {
 }
 
 /* ─── Anchor base (override per-component) ───────────── */
-a {
-  color: inherit;
-  text-decoration: none;
-}
+a { color: inherit; text-decoration: none; }
 
 /* ─── Image defaults ─────────────────────────────────── */
-img,
-video {
-  max-width: 100%;
-  height: auto;
-  display: block;
+img, video { max-width: 100%; height: auto; display: block; }
+
+/* ─── Kicker — used sparingly now, not on every section ──
+   Deliberately dropped the horizontal-rule + mono-uppercase combo that
+   repeated 10 times down the old homepage. Only clinical/evidence
+   sections get a kicker at all now (see component usage). */
+.kicker {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-terra);
+  font-weight: 500;
 }

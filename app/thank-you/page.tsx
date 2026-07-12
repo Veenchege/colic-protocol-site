@@ -54,7 +54,7 @@ export default function ThankYouPage({
     <>
       <MinimalNav />
 
-      <main id="main-content" className="min-h-screen bg-bg">
+      <main id="main-content" className="min-h-screen bg-paper">
         <div className="max-w-2xl mx-auto px-5 md:px-8 py-12 md:py-20">
 
           {/* ── Success badge ── */}

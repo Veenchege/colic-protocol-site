@@ -3,6 +3,7 @@ import Header           from '@/components/layout/Header'
 import Footer           from '@/components/layout/Footer'
 import Hero             from '@/components/sections/Hero'
 import TrustBar         from '@/components/sections/TrustBar'
+import Validation       from '@/components/sections/Validation'
 import Enemy            from '@/components/sections/Enemy'
 import ThreeSystem      from '@/components/sections/ThreeSystem'
 import OriginStory      from '@/components/sections/OriginStory'
@@ -47,6 +48,13 @@ export default function HomePage() {
         {/* 2. Trust bar — 3 data points in mono type */}
         <TrustBar />
 
+        {/* 2b. Validation — new. "Does this sound familiar" moment that
+            was previously missing entirely between the hero hook and
+            the evidence sections. See Ideal Client Persona v2 psychographic
+            profile and Framework 3's carousel structure, both of which put
+            validation before mechanism. */}
+        <Validation />
+
         {/* 3. Enemy — simethicone / gripe water / wait it out destroyed with citations */}
         <Enemy />
 
@@ -66,7 +74,7 @@ export default function HomePage() {
         <Testimonials />
 
         {/* 9. Guarantee block — caption-safe language, no sticker phrasing */}
-        <div className="py-10 md:py-16 bg-surface">
+        <div className="py-10 md:py-16 bg-warm">
           <div className="max-w-3xl mx-auto px-5 md:px-8">
             <GuaranteeBlock showCTA={false} />
           </div>

@@ -82,7 +82,7 @@ export default function BlogPostPage({
       <main id="main-content">
 
         {/* ── Post header ── */}
-        <section className="bg-bg py-12 md:py-16 border-b border-border2">
+        <section className="bg-paper py-12 md:py-16 border-b border-border2">
           <div className="max-w-2xl mx-auto px-5 md:px-8">
 
             {/* Category + reading time */}
@@ -120,7 +120,7 @@ export default function BlogPostPage({
         </section>
 
         {/* ── Article body ── */}
-        <article className="bg-bg py-12 md:py-16">
+        <article className="bg-paper py-12 md:py-16">
           <div className="max-w-2xl mx-auto px-5 md:px-8">
             {/*
               Tailwind Typography prose styles.

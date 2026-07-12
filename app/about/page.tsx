@@ -41,9 +41,9 @@ export default function AboutPage() {
       <main id="main-content">
 
         {/* ── Hero ── */}
-        <section className="bg-bg py-14 md:py-20 border-b border-border2">
-          <div className="max-w-3xl mx-auto px-5 md:px-8 text-center">
-            <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-terra mb-4 flex items-center justify-center gap-2">
+        <section className="bg-paper py-14 md:py-20 border-b border-border2">
+          <div className="max-w-3xl mx-auto px-5 md:px-8">
+            <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-terra mb-4 flex items-center gap-2">
               <span className="inline-block w-6 h-px bg-terra" aria-hidden="true" />
               The founder & the evidence
             </p>
@@ -51,7 +51,7 @@ export default function AboutPage() {
               Treating infant colic{' '}
               <span className="text-terra">as a data problem.</span>
             </h1>
-            <p className="text-muted text-base md:text-lg leading-relaxed max-w-prose mx-auto">
+            <p className="text-muted text-base md:text-lg leading-relaxed max-w-prose">
               An Epidemiologist goes back to the primary literature when the
               medical system says wait. Here is the methodology, the evidence
               base, and an honest account of where the science has limits.
@@ -60,7 +60,7 @@ export default function AboutPage() {
         </section>
 
         {/* ── Founder story ── */}
-        <section className="bg-bg py-14 md:py-20">
+        <section className="bg-paper py-14 md:py-20">
           <div className="max-w-3xl mx-auto px-5 md:px-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
 
@@ -119,18 +119,16 @@ export default function AboutPage() {
         {/* ── The evidence base ── */}
         <section className="bg-surface py-14 md:py-20">
           <div className="max-w-3xl mx-auto px-5 md:px-8">
-            <div className="text-center mb-8">
-              <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-terra mb-4 flex items-center justify-center gap-2">
-                <span className="inline-block w-6 h-px bg-terra" aria-hidden="true" />
-                The four studies
-              </p>
-              <h2 className="font-serif font-bold text-brown text-2xl md:text-3xl leading-snug mb-3">
-                A converging body of research across 16 years.
-              </h2>
-              <p className="text-muted text-sm leading-relaxed max-w-prose mx-auto">
-                The protocol is not built on a single study from 2010. It is built on a line of independent research groups reaching the same conclusion across 16 years. Here is each study and what it specifically shows.
-              </p>
-            </div>
+            <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-terra mb-4 flex items-center gap-2">
+              <span className="inline-block w-6 h-px bg-terra" aria-hidden="true" />
+              The four studies
+            </p>
+            <h2 className="font-serif font-bold text-brown text-2xl md:text-3xl leading-snug mb-3">
+              A converging body of research across 16 years.
+            </h2>
+            <p className="text-muted text-sm leading-relaxed mb-8 max-w-prose">
+              The protocol is not built on a single study from 2010. It is built on a line of independent research groups reaching the same conclusion across 16 years. Here is each study and what it specifically shows.
+            </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
               {CITATIONS.map((c) => (
                 <CitationCard key={`${c.authors}-${c.year}`} citation={c} />
@@ -140,17 +138,15 @@ export default function AboutPage() {
         </section>
 
         {/* ── What the evidence supports / does not support ── */}
-        <section className="bg-bg py-14 md:py-20">
+        <section className="bg-paper py-14 md:py-20">
           <div className="max-w-3xl mx-auto px-5 md:px-8">
-            <div className="text-center mb-8">
-              <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-terra mb-6 flex items-center justify-center gap-2">
-                <span className="inline-block w-6 h-px bg-terra" aria-hidden="true" />
-                Honest limits of the evidence
-              </p>
-              <h2 className="font-serif font-bold text-brown text-2xl md:text-3xl leading-snug">
-                What the research supports — and what it does not.
-              </h2>
-            </div>
+            <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-terra mb-6 flex items-center gap-2">
+              <span className="inline-block w-6 h-px bg-terra" aria-hidden="true" />
+              Honest limits of the evidence
+            </p>
+            <h2 className="font-serif font-bold text-brown text-2xl md:text-3xl leading-snug mb-8">
+              What the research supports — and what it does not.
+            </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
 
               {/* Supported */}
@@ -184,18 +180,18 @@ export default function AboutPage() {
 
         {/* ── Dual CTA ── */}
         <section className="bg-surface py-14 md:py-20 border-t border-border2">
-          <div className="max-w-3xl mx-auto px-5 md:px-8 text-center">
+          <div className="max-w-3xl mx-auto px-5 md:px-8">
             <h2 className="font-serif font-bold text-brown text-2xl md:text-3xl leading-snug mb-4">
               Start with the free protocol. Tonight.
             </h2>
-            <p className="text-muted text-sm leading-relaxed mb-8 max-w-prose mx-auto">
+            <p className="text-muted text-sm leading-relaxed mb-8 max-w-prose">
               The free checklist manages a colic episode using the same
               evidence base as the Blueprint. No email required. If you want
               the diagnostic decision tree and the full three-system
               sequencing architecture, the Blueprint is $47 with a full
               refund if results do not show in 72 hours.
             </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               <Button href="/quiz" variant="primary" size="md">
                 Take the free colic type quiz
               </Button>

@@ -13,7 +13,7 @@ export default function TermsPage() {
   return (
     <>
       <MinimalNav />
-      <main id="main-content" className="bg-bg py-12 md:py-20">
+      <main id="main-content" className="bg-paper py-12 md:py-20">
         <div className="max-w-2xl mx-auto px-5 md:px-8">
 
           <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-terra mb-4">
