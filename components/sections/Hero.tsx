@@ -5,7 +5,7 @@ export default function Hero() {
 
   return (
     <section className="relative bg-night overflow-hidden" aria-labelledby="hero-headline">
-      <div className="relative max-w-6xl mx-auto px-5 md:px-8 pt-14 pb-16 md:pt-20 md:pb-24">
+      <div className="relative max-w-6xl mx-auto px-6 md:px-12 pt-14 pb-16 md:pt-20 md:pb-24">
         <div className="grid grid-cols-1 md:grid-cols-[1.1fr_0.9fr] gap-10 md:gap-12 items-center">
 
           <div>
@@ -50,22 +50,32 @@ export default function Hero() {
               Not decoration: this is the literal "diagnosis before protocol"
               claim, shown before a single word of copy explains it. */}
           <div className="hidden md:block" aria-hidden="true">
-            <svg viewBox="0 0 400 380" fill="none" className="w-full h-auto">
-              <path d="M40 20 C 40 150, 190 200, 195 280" stroke="#c4603a" strokeWidth="2" opacity="0.85" />
-              <path d="M200 10 C 200 130, 195 200, 197 280" stroke="#8a6a7a" strokeWidth="2" opacity="0.85" />
-              <path d="M360 20 C 360 150, 205 200, 199 280" stroke="#5c7a5f" strokeWidth="2" opacity="0.85" />
-              <circle cx="40" cy="20" r="4" fill="#c4603a" />
-              <circle cx="200" cy="10" r="4" fill="#8a6a7a" />
-              <circle cx="360" cy="20" r="4" fill="#5c7a5f" />
-              <circle cx="198" cy="280" r="7" fill="#f2e8dc" />
-              <line x1="198" y1="280" x2="198" y2="360" stroke="rgba(242,232,220,0.25)" strokeWidth="1.5" strokeDasharray="3 5" />
-            </svg>
+            <svg viewBox="0 -34 400 414" fill="none" className="w-full h-auto">
+  <path d="M40 20 C 40 150, 190 200, 195 280" stroke="#c4603a" strokeWidth="2" opacity="0.85" />
+  <path d="M200 10 C 200 130, 195 200, 197 280" stroke="#8a6a7a" strokeWidth="2" opacity="0.85" />
+  <path d="M360 20 C 360 150, 205 200, 199 280" stroke="#5c7a5f" strokeWidth="2" opacity="0.85" />
+  <circle cx="40" cy="20" r="4" fill="#c4603a" />
+  <circle cx="200" cy="10" r="4" fill="#8a6a7a" />
+  <circle cx="360" cy="20" r="4" fill="#5c7a5f" />
+  <circle cx="198" cy="280" r="7" fill="#f2e8dc" />
+  <line x1="198" y1="280" x2="198" y2="360" stroke="rgba(242,232,220,0.25)" strokeWidth="1.5" strokeDasharray="3 5" />
+
+  <text x="40" y="-14" textAnchor="middle" className="font-mono text-[11px] tracking-[0.06em] uppercase" fill="#c4603a" opacity="0.9">
+    Gut Microbiome
+  </text>
+  <text x="200" y="-14" textAnchor="middle" className="font-mono text-[11px] tracking-[0.06em] uppercase" fill="#8a6a7a" opacity="0.9">
+    Nervous System
+  </text>
+  <text x="360" y="-14" textAnchor="middle" className="font-mono text-[11px] tracking-[0.06em] uppercase" fill="#5c7a5f" opacity="0.9">
+    Feeding Mechanics
+  </text>
+</svg>
           </div>
         </div>
       </div>
 
       <div className="border-t border-night-line">
-        <div className="max-w-6xl mx-auto px-5 md:px-8 py-6">
+        <div className="max-w-6xl mx-auto px-6 md:px-12 py-6">
           <ul className="flex flex-wrap items-center gap-x-12 gap-y-4">
             {[
               { stat: '71+', label: 'Protocols downloaded' },
