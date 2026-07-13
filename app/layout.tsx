@@ -1,20 +1,20 @@
 import type { Metadata } from 'next'
-import { Cormorant_Garamond, DM_Sans, DM_Mono } from 'next/font/google'
+import { Fraunces, Inter, DM_Mono } from 'next/font/google'
 import './globals.css'
 
 /* ─── Fonts ─────────────────────────────────────────────────── */
-const cormorant = Cormorant_Garamond({
+const fraunces = Fraunces({
   subsets: ['latin'],
-  weight: ['400', '600', '700'],
+  weight: ['400', '500', '600'],
   style: ['normal', 'italic'],
-  variable: '--font-cormorant',
+  variable: '--font-fraunces',
   display: 'swap',
 })
 
-const dmSans = DM_Sans({
+const inter = Inter({
   subsets: ['latin'],
-  weight: ['300', '400', '500', '600'],
-  variable: '--font-dm-sans',
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-inter',
   display: 'swap',
 })
 
@@ -108,7 +108,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${cormorant.variable} ${dmSans.variable} ${dmMono.variable}`}
+      className={`${fraunces.variable} ${inter.variable} ${dmMono.variable}`}
     >
       <head>
         <GTMScript />

@@ -79,8 +79,7 @@ export default function BlueprintPage() {
         {/* ── 1. Hero — price and guarantee visible above fold ── */}
         <section className="bg-paper py-14 md:py-20 border-b border-border2">
           <div className="max-w-3xl mx-auto px-5 md:px-8">
-            <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-terra mb-4 flex items-center gap-2">
-              <span className="inline-block w-6 h-px bg-terra" aria-hidden="true" />
+            <p className="kicker text-terra mb-4">
               Complete colic management system
             </p>
             <h1 className="font-serif font-bold text-brown text-3xl md:text-[48px] leading-snug mb-4">
@@ -116,8 +115,7 @@ export default function BlueprintPage() {
         {/* ── 3. The gap ── */}
         <section className="bg-paper py-14 md:py-20">
           <div className="max-w-3xl mx-auto px-5 md:px-8">
-            <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-terra mb-4 flex items-center gap-2">
-              <span className="inline-block w-6 h-px bg-terra" aria-hidden="true" />
+            <p className="kicker text-terra mb-4">
               What the checklist cannot do
             </p>
             <h2 className="font-serif font-bold text-brown text-2xl md:text-3xl leading-snug mb-6">
@@ -156,8 +154,7 @@ export default function BlueprintPage() {
         {/* ── 4. What's inside — core components ── */}
         <section className="bg-surface py-14 md:py-20">
           <div className="max-w-3xl mx-auto px-5 md:px-8">
-            <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-terra mb-4 flex items-center gap-2">
-              <span className="inline-block w-6 h-px bg-terra" aria-hidden="true" />
+            <p className="kicker text-terra mb-4">
               What is inside
             </p>
             <h2 className="font-serif font-bold text-brown text-2xl md:text-3xl leading-snug mb-8">
@@ -208,8 +205,7 @@ export default function BlueprintPage() {
         {/* ── 5. Science ── */}
         <section className="bg-paper py-14 md:py-20">
           <div className="max-w-3xl mx-auto px-5 md:px-8">
-            <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-terra mb-4 flex items-center gap-2">
-              <span className="inline-block w-6 h-px bg-terra" aria-hidden="true" />
+            <p className="kicker text-terra mb-4">
               The evidence base
             </p>
             <h2 className="font-serif font-bold text-brown text-2xl md:text-3xl leading-snug mb-8">
@@ -230,8 +226,7 @@ export default function BlueprintPage() {
         {/* ── 6. Origin story (condensed) ── */}
         <section className="bg-surface py-14 md:py-20">
           <div className="max-w-3xl mx-auto px-5 md:px-8">
-            <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-terra mb-4 flex items-center gap-2">
-              <span className="inline-block w-6 h-px bg-terra" aria-hidden="true" />
+            <p className="kicker text-terra mb-4">
               Why this exists
             </p>
             <h2 className="font-serif font-bold text-brown text-2xl md:text-3xl leading-snug mb-6">
@@ -254,8 +249,7 @@ export default function BlueprintPage() {
         {/* ── 8. Pricing block ── */}
         <section className="bg-paper py-14 md:py-20">
           <div className="max-w-3xl mx-auto px-5 md:px-8">
-            <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-terra mb-6 flex items-center gap-2">
-              <span className="inline-block w-6 h-px bg-terra" aria-hidden="true" />
+            <p className="kicker text-terra mb-6">
               What it costs
             </p>
             <div className="bg-card border border-border2 rounded-card p-7 mb-6">

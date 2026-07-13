@@ -25,8 +25,7 @@ export default function BlogIndexPage() {
         {/* ── Header ── */}
         <section className="bg-paper py-14 md:py-20 border-b border-border2">
           <div className="max-w-5xl mx-auto px-5 md:px-8">
-            <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-terra mb-4 flex items-center gap-2">
-              <span className="inline-block w-6 h-px bg-terra" aria-hidden="true" />
+            <p className="kicker text-terra mb-4">
               Evidence-based colic research
             </p>
             <h1 className="font-serif font-bold text-brown text-3xl md:text-[48px] leading-snug mb-4">
@@ -67,7 +66,7 @@ export default function BlogIndexPage() {
             </h2>
             <p className="text-muted text-sm leading-relaxed mb-6 max-w-md mx-auto">
               The free checklist puts the protocol into a four-stage format
-              usable one-handed at 3AM. No email required.
+              usable one-handed at 3AM.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button href="/quiz" variant="primary" size="md">

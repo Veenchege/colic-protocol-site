@@ -25,7 +25,7 @@ export default function InlineCTA({ variant = 'default' }: InlineCTAProps) {
     >
       {/* Eyebrow */}
       <p className="font-mono text-[9px] tracking-[0.14em] uppercase text-terra mb-2">
-        Free · No email required
+        Free · Instant download
       </p>
 
       {/* Headline */}

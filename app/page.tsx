@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import Header           from '@/components/layout/Header'
 import Footer           from '@/components/layout/Footer'
 import Hero             from '@/components/sections/Hero'
-import TrustBar         from '@/components/sections/TrustBar'
 import Validation       from '@/components/sections/Validation'
 import Enemy            from '@/components/sections/Enemy'
 import ThreeSystem      from '@/components/sections/ThreeSystem'
@@ -20,7 +19,7 @@ export const metadata: Metadata = {
   title:
     'Colic Protocol — Evidence-Based Infant Colic Management',
   description:
-    'Stop guessing what\'s wrong. A 2-minute symptom test identifies your baby\'s colic type and delivers the exact protocol to run tonight. Free. Built by an Epidemiologist. Based on Savino et al., Pediatrics 2010.',
+    'Your baby isn\'t crying for "no reason." A 2-minute symptom test identifies which of three root causes is driving your baby\'s colic and delivers the exact protocol to run tonight. Free. Built by an Epidemiologist. Based on Savino et al., Pediatrics 2010.',
   alternates: {
     canonical: '/',
   },
@@ -42,13 +41,17 @@ export default function HomePage() {
 
       <main id="main-content">
 
-        {/* 1. Hero — pain hook headline + quiz primary CTA + checklist secondary CTA */}
+        {/* 1. Hero — dark, pain hook headline + quiz primary CTA + checklist
+            secondary CTA + integrated trust strip (merged, was a separate
+            TrustBar component — no reason for a second dark band right
+            under the first one). */}
         <Hero />
 
-        {/* 2. Trust bar — 3 data points in mono type */}
-        <TrustBar />
+        {/* Flat seam — dark hero into light body. One clean transition,
+            not a gradient blur. */}
+        <div className="seam-down" aria-hidden="true" />
 
-        {/* 2b. Validation — new. "Does this sound familiar" moment that
+        {/* 2. Validation — new. "Does this sound familiar" moment that
             was previously missing entirely between the hero hook and
             the evidence sections. See Ideal Client Persona v2 psychographic
             profile and Framework 3's carousel structure, both of which put

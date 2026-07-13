@@ -43,8 +43,7 @@ export default function AboutPage() {
         {/* ── Hero ── */}
         <section className="bg-paper py-14 md:py-20 border-b border-border2">
           <div className="max-w-3xl mx-auto px-5 md:px-8">
-            <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-terra mb-4 flex items-center gap-2">
-              <span className="inline-block w-6 h-px bg-terra" aria-hidden="true" />
+            <p className="kicker text-terra mb-4">
               The founder & the evidence
             </p>
             <h1 className="font-serif font-bold text-brown text-3xl md:text-[48px] leading-snug mb-4">
@@ -119,8 +118,7 @@ export default function AboutPage() {
         {/* ── The evidence base ── */}
         <section className="bg-surface py-14 md:py-20">
           <div className="max-w-3xl mx-auto px-5 md:px-8">
-            <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-terra mb-4 flex items-center gap-2">
-              <span className="inline-block w-6 h-px bg-terra" aria-hidden="true" />
+            <p className="kicker text-terra mb-4">
               The four studies
             </p>
             <h2 className="font-serif font-bold text-brown text-2xl md:text-3xl leading-snug mb-3">
@@ -140,8 +138,7 @@ export default function AboutPage() {
         {/* ── What the evidence supports / does not support ── */}
         <section className="bg-paper py-14 md:py-20">
           <div className="max-w-3xl mx-auto px-5 md:px-8">
-            <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-terra mb-6 flex items-center gap-2">
-              <span className="inline-block w-6 h-px bg-terra" aria-hidden="true" />
+            <p className="kicker text-terra mb-6">
               Honest limits of the evidence
             </p>
             <h2 className="font-serif font-bold text-brown text-2xl md:text-3xl leading-snug mb-8">
@@ -186,7 +183,7 @@ export default function AboutPage() {
             </h2>
             <p className="text-muted text-sm leading-relaxed mb-8 max-w-prose">
               The free checklist manages a colic episode using the same
-              evidence base as the Blueprint. No email required. If you want
+              evidence base as the Blueprint. If you want
               the diagnostic decision tree and the full three-system
               sequencing architecture, the Blueprint is $47 with a full
               refund if results do not show in 72 hours.

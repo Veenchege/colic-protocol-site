@@ -4,18 +4,25 @@ import Link from 'next/link'
 import { useState } from 'react'
 import Button from '@/components/ui/Button'
 
+/**
+ * Permanent dark chrome — on every page, not just the homepage hero.
+ * On the homepage it blends seamlessly into the night hero below it.
+ * On light-body pages it reads as a fixed brand bar (Stripe/Linear
+ * pattern), consistent regardless of what background the page content
+ * itself uses.
+ */
 export default function Header() {
   const [open, setOpen] = useState(false)
   const close = () => setOpen(false)
 
   return (
-    <header className="sticky top-0 z-50 bg-paper/85 backdrop-blur-md border-b border-border">
+    <header className="sticky top-0 z-50 bg-night border-b border-night-line">
       <div className="max-w-6xl mx-auto px-5 md:px-8">
         <div className="h-[68px] flex items-center justify-between">
 
           <Link
             href="/"
-            className="font-serif text-[22px] font-semibold text-brown tracking-tight shrink-0"
+            className="font-serif text-[21px] font-medium text-cream-text tracking-tight shrink-0"
             onClick={close}
           >
             Colic Protocol
@@ -30,7 +37,7 @@ export default function Header() {
           </nav>
 
           <button
-            className="md:hidden p-2 -mr-2 text-muted hover:text-terra transition-colors rounded focus-visible:outline-2 focus-visible:outline-terra"
+            className="md:hidden p-2 -mr-2 text-cream-text/70 hover:text-terra transition-colors rounded focus-visible:outline-2 focus-visible:outline-terra"
             onClick={() => setOpen((v) => !v)}
             aria-label={open ? 'Close navigation menu' : 'Open navigation menu'}
             aria-expanded={open}
@@ -43,7 +50,7 @@ export default function Header() {
         {open && (
           <nav
             id="mobile-nav"
-            className="md:hidden border-t border-border pt-5 pb-6 flex flex-col gap-5"
+            className="md:hidden border-t border-night-line pt-5 pb-6 flex flex-col gap-5"
             aria-label="Mobile navigation"
           >
             <NavLink href="/about" onClick={close}>The Science</NavLink>
@@ -60,7 +67,7 @@ export default function Header() {
 
 function NavLink({ href, children, onClick }: { href: string; children: React.ReactNode; onClick?: () => void }) {
   return (
-    <Link href={href} onClick={onClick} className="text-[15px] text-muted hover:text-terra transition-colors duration-150">
+    <Link href={href} onClick={onClick} className="text-[15px] text-cream-text/65 hover:text-terra transition-colors duration-150">
       {children}
     </Link>
   )

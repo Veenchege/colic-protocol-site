@@ -20,25 +20,25 @@ export default function Footer() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="bg-warm border-t border-border2 mt-28">
+    <footer className="bg-night border-t border-night-line">
       <div className="max-w-6xl mx-auto px-5 md:px-8 py-14 md:py-18">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8 mb-12">
 
           <div>
-            <p className="font-serif text-2xl font-semibold text-brown mb-3">Colic Protocol</p>
-            <p className="text-sm text-muted leading-relaxed max-w-[240px]">
+            <p className="font-serif text-2xl font-medium text-cream-text mb-3">Colic Protocol</p>
+            <p className="text-sm text-cream-text/50 leading-relaxed max-w-[240px]">
               Evidence-based infant colic management built by an Epidemiologist.
               Based on Savino et al., Pediatrics 2010.
             </p>
           </div>
 
           <div>
-            <p className="kicker mb-4">Navigation</p>
+            <p className="kicker text-cream-text/40 mb-4">Navigation</p>
             <nav aria-label="Footer navigation">
               <ul className="flex flex-col gap-2.5">
                 {NAV_LINKS.map(({ label, href }) => (
                   <li key={href}>
-                    <Link href={href} className="text-sm text-muted hover:text-terra transition-colors duration-150">
+                    <Link href={href} className="text-sm text-cream-text/65 hover:text-terra transition-colors duration-150">
                       {label}
                     </Link>
                   </li>
@@ -48,7 +48,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <p className="kicker mb-4">Follow @colicprotocol</p>
+            <p className="kicker text-cream-text/40 mb-4">Follow @colicprotocol</p>
             <ul className="flex flex-col gap-2.5">
               {SOCIALS.map(({ label, handle, href }) => (
                 <li key={label}>
@@ -56,10 +56,10 @@ export default function Footer() {
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-sm text-muted hover:text-terra transition-colors duration-150 group"
+                    className="flex items-center gap-2 text-sm text-cream-text/65 hover:text-terra transition-colors duration-150 group"
                     aria-label={`${label} — ${handle}`}
                   >
-                    <span className="font-mono text-[10px] tracking-wide uppercase text-muted2 group-hover:text-terra/70 transition-colors w-16 shrink-0">
+                    <span className="font-mono text-[10px] tracking-wide uppercase text-cream-text/35 group-hover:text-terra/70 transition-colors w-16 shrink-0">
                       {label}
                     </span>
                     <span>{handle}</span>
@@ -70,9 +70,9 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-border pt-8 mb-6">
-          <p className="text-xs text-muted2 leading-relaxed max-w-2xl">
-            <strong className="text-muted font-medium">Medical disclaimer:</strong>{' '}
+        <div className="border-t border-night-line pt-8 mb-6">
+          <p className="text-xs text-cream-text/35 leading-relaxed max-w-2xl">
+            <strong className="text-cream-text/55 font-medium">Medical disclaimer:</strong>{' '}
             The information on this website and in the Colic Protocol products is for informational
             purposes only and does not constitute medical advice, diagnosis, or treatment. Always
             consult a qualified healthcare professional for any concerns about your baby&apos;s
@@ -82,8 +82,8 @@ export default function Footer() {
         </div>
 
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <p className="font-mono text-[11px] text-muted2 tracking-wide">© {year} Colic Protocol. All rights reserved.</p>
-          <p className="font-mono text-[11px] text-muted2 tracking-wide">colicprotocol.baby</p>
+          <p className="font-mono text-[11px] text-cream-text/30 tracking-wide">© {year} Colic Protocol. All rights reserved.</p>
+          <p className="font-mono text-[11px] text-cream-text/30 tracking-wide">colicprotocol.baby</p>
         </div>
       </div>
     </footer>

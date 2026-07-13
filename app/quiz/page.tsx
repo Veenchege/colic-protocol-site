@@ -34,8 +34,7 @@ export default function QuizPage() {
 
           {/* Page intro */}
           <div className="mb-10">
-            <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-terra mb-3 flex items-center gap-2">
-              <span className="inline-block w-6 h-px bg-terra" aria-hidden="true" />
+            <p className="kicker text-terra mb-3">
               Free · 2 minutes · No credit card
             </p>
             <h1 className="font-serif font-bold text-brown text-3xl md:text-4xl leading-snug">

@@ -50,8 +50,8 @@ export default function ChecklistPreview() {
           </h2>
           <p className="text-[17px] text-muted leading-relaxed">
             A four-stage crisis triage built from the same evidence base as the Blueprint.
-            Free. No email required on Gumroad — or complete the quiz to get a version
-            personalised to your baby&apos;s colic type.
+            Free — delivered straight to your inbox via Gumroad — or complete the quiz
+            to get a version personalised to your baby&apos;s colic type.
           </p>
         </div>
 
@@ -86,7 +86,7 @@ export default function ChecklistPreview() {
           <Button href={gumroadChecklist} variant="primary" size="lg" external>
             Download the free checklist
           </Button>
-          <p className="text-sm text-muted2 font-mono tracking-wide">No email required · instant download</p>
+          <p className="text-sm text-muted2 font-mono tracking-wide">Email required for delivery · instant download</p>
         </div>
       </div>
     </section>

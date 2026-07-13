@@ -1,61 +1,84 @@
-import Button from '@/components/ui/Button'
-
 export default function Hero() {
   const gumroadChecklist =
     process.env.NEXT_PUBLIC_GUMROAD_CHECKLIST ??
     'https://colicprotocol.gumroad.com/l/midnight-emergency-checklist'
 
   return (
-    <section className="relative bg-warm overflow-hidden" aria-labelledby="hero-headline">
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            'radial-gradient(ellipse 65% 55% at 12% 15%, rgba(196,96,58,0.09) 0%, transparent 62%),' +
-            'radial-gradient(ellipse 45% 45% at 88% 85%, rgba(92,122,95,0.07) 0%, transparent 58%)',
-        }}
-        aria-hidden="true"
-      />
+    <section className="relative bg-night overflow-hidden" aria-labelledby="hero-headline">
+      <div className="relative max-w-6xl mx-auto px-5 md:px-8 pt-14 pb-16 md:pt-20 md:pb-24">
+        <div className="grid grid-cols-1 md:grid-cols-[1.1fr_0.9fr] gap-10 md:gap-12 items-center">
 
-      <div className="relative max-w-5xl mx-auto px-5 md:px-8 pt-20 pb-16 md:pt-28 md:pb-24">
+          <div>
+            <h1
+              id="hero-headline"
+              className="font-serif font-medium text-cream-text leading-[1.05] tracking-tight mb-6
+                         text-[clamp(34px,5.6vw,58px)] max-w-[13ch]"
+            >
+              Your baby isn&apos;t crying for{' '}
+              <em className="italic text-terra not-italic md:italic">&ldquo;no reason.&rdquo;</em>
+            </h1>
 
-        {/* Headline — no eyebrow kicker here. This is the emotional entry
-            point, it doesn't need a mono label to earn attention. */}
-        <h1
-          id="hero-headline"
-          className="font-serif font-semibold text-brown leading-[1.04] tracking-tight mb-7
-                     text-[clamp(34px,6.4vw,60px)] max-w-[15ch]"
-        >
-          Your baby isn&apos;t crying for &ldquo;no reason.&rdquo;
-        </h1>
+            <p className="text-[19px] md:text-[21px] text-cream-text/70 leading-[1.5] mb-8 max-w-[40ch]">
+              Colic has three distinct root causes. Most advice treats it as one problem.
+              The 2-minute assessment tells you which is driving tonight — and exactly
+              what to do about it.
+            </p>
 
-        <p className="text-[19px] md:text-[21px] text-muted leading-[1.5] mb-4 max-w-[38ch]">
-          Colic has three distinct root causes. Most advice treats it as one problem.
-        </p>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 mb-8">
+              <a
+                href="/quiz"
+                className="inline-flex items-center justify-center rounded-btn bg-terra text-white font-semibold text-base px-8 py-4 min-h-[48px] hover:bg-[#a94f2f] transition-colors duration-150"
+              >
+                Find your baby&apos;s colic type — free
+              </a>
+              <a
+                href={gumroadChecklist}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[15px] text-cream-text/55 underline underline-offset-4 hover:text-terra transition-colors duration-150"
+              >
+                or download the 3AM checklist directly
+              </a>
+            </div>
 
-        <p className="text-base md:text-lg text-muted leading-relaxed mb-10 max-w-[46ch]">
-          The 2-minute assessment identifies which of the three is driving your
-          baby&apos;s crying, then gives you the exact protocol to run tonight. Free.
-        </p>
+            <p className="font-mono text-[11px] tracking-[0.09em] uppercase text-cream-text/35">
+              71+ protocols downloaded · 20+ countries · No credit card required
+            </p>
+          </div>
 
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
-          <Button href="/quiz" variant="primary" size="lg">
-            Find your baby&apos;s colic type — free
-          </Button>
-
-          <a
-            href={gumroadChecklist}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[15px] text-muted underline underline-offset-4 hover:text-terra transition-colors duration-150"
-          >
-            or download the 3AM checklist directly
-          </a>
+          {/* Signature graphic — three systems converging into one protocol.
+              Not decoration: this is the literal "diagnosis before protocol"
+              claim, shown before a single word of copy explains it. */}
+          <div className="hidden md:block" aria-hidden="true">
+            <svg viewBox="0 0 400 380" fill="none" className="w-full h-auto">
+              <path d="M40 20 C 40 150, 190 200, 195 280" stroke="#c4603a" strokeWidth="2" opacity="0.85" />
+              <path d="M200 10 C 200 130, 195 200, 197 280" stroke="#8a6a7a" strokeWidth="2" opacity="0.85" />
+              <path d="M360 20 C 360 150, 205 200, 199 280" stroke="#5c7a5f" strokeWidth="2" opacity="0.85" />
+              <circle cx="40" cy="20" r="4" fill="#c4603a" />
+              <circle cx="200" cy="10" r="4" fill="#8a6a7a" />
+              <circle cx="360" cy="20" r="4" fill="#5c7a5f" />
+              <circle cx="198" cy="280" r="7" fill="#f2e8dc" />
+              <line x1="198" y1="280" x2="198" y2="360" stroke="rgba(242,232,220,0.25)" strokeWidth="1.5" strokeDasharray="3 5" />
+            </svg>
+          </div>
         </div>
+      </div>
 
-        <p className="mt-9 font-mono text-[11px] tracking-[0.09em] uppercase text-muted2">
-          71+ protocols downloaded · 20+ countries · No credit card required
-        </p>
+      <div className="border-t border-night-line">
+        <div className="max-w-6xl mx-auto px-5 md:px-8 py-6">
+          <ul className="flex flex-wrap items-center gap-x-12 gap-y-4">
+            {[
+              { stat: '71+', label: 'Protocols downloaded' },
+              { stat: '20+', label: 'Countries' },
+              { stat: '3',   label: 'Peer-reviewed studies' },
+            ].map(({ stat, label }) => (
+              <li key={label} className="flex items-baseline gap-3">
+                <span className="font-serif font-semibold text-terra text-2xl leading-none">{stat}</span>
+                <span className="font-mono text-[11px] tracking-[0.07em] uppercase text-cream-text/40">{label}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </section>
   )
