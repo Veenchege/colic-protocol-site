@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Colic Root Cause Assessment | Colic Protocol</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --cream:#f5e6d8;
+  --cream2:#ede0d0;
+  --terra:#c4603a;
+  --terra-mid:#a84e2e;
+  --terra-d:rgba(196,96,58,0.10);
+  --terra-m:rgba(196,96,58,0.22);
+  --sage:#5c7a5f;
+  --sage-d:rgba(92,122,95,0.10);
+  --gold:#c89a3e;
+  --gold-d:rgba(200,154,62,0.10);
+  --brown:#2c1a10;
+  --muted:#8a6e5e;
+  --muted2:#b8a090;
+  --glass:rgba(245,230,216,0.82);
+  --shadow:0 14px 48px rgba(44,26,16,.10);
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+
+  --gut-col:#c4603a; --gut-bg:#fce9de;
+  --ns-col:#5c7a5f;  --ns-bg:#eef5e8;
+  --ac-col:#c89a3e;  --ac-bg:#fdf3dc;
+}
+
+body{
+  font-family:var(--sans);
+  background:linear-gradient(150deg,var(--cream) 0%,var(--cream2) 100%);
+  min-height:100vh;
+  color:var(--brown);
+  overflow-x:hidden;
+}
+
+.glow{position:fixed;top:-140px;right:-140px;width:420px;height:420px;background:radial-gradient(circle,rgba(196,96,58,.20) 0%,transparent 70%);filter:blur(60px);pointer-events:none;z-index:0;}
+.glow2{position:fixed;bottom:-160px;left:-120px;width:380px;height:380px;background:radial-gradient(circle,rgba(92,122,95,.14) 0%,transparent 70%);filter:blur(65px);pointer-events:none;z-index:0;}
+
+.wrap{max-width:660px;margin:0 auto;padding:16px 16px 64px;position:relative;z-index:2;}
+
+.brand{display:flex;align-items:center;gap:10px;padding:18px 0 0;}
+.brand-mark{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--terra),var(--terra-mid));display:grid;place-items:center;color:#fff;font-family:var(--serif);font-size:15px;font-weight:700;}
+.brand-name{font-family:var(--serif);font-size:16px;font-weight:600;color:var(--brown);letter-spacing:.02em;}
+.brand-sub{font-size:11px;color:var(--muted);margin-left:2px;}
+
+.card{background:var(--glass);backdrop-filter:blur(18px);border:1px solid rgba(255,245,235,.65);border-radius:22px;box-shadow:var(--shadow);padding:34px 30px;margin-top:22px;animation:rise .45s ease both;}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* Landing */
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:1.6px;color:var(--terra);text-transform:uppercase;margin-bottom:14px;display:block;}
+.landing h1{font-family:var(--serif);font-size:clamp(26px,5vw,40px);color:var(--brown);line-height:1.18;font-weight:700;margin-bottom:14px;}
+.landing h1 em{font-style:italic;color:var(--terra);}
+.landing .sub{font-size:15px;color:var(--muted);line-height:1.7;margin-bottom:24px;}
+
+.stat-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:20px 0;}
+.stat-box{background:rgba(255,255,255,.50);border:1px solid rgba(255,245,235,.8);border-radius:14px;padding:14px 10px;text-align:center;}
+.stat-box .num{font-family:var(--serif);font-size:28px;font-weight:700;color:var(--brown);display:block;line-height:1;}
+.stat-box .lbl{font-size:11px;color:var(--muted);line-height:1.4;margin-top:4px;}
+
+.trust-strip{display:flex;flex-wrap:wrap;gap:8px 18px;padding:14px 0;border-top:1px solid rgba(44,26,16,.07);border-bottom:1px solid rgba(44,26,16,.07);margin-bottom:26px;}
+.trust-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);font-weight:500;}
+.trust-dot{width:5px;height:5px;border-radius:50%;background:var(--terra);flex-shrink:0;}
+
+.form-row{display:flex;flex-direction:column;gap:10px;margin-bottom:16px;}
+.form-row input{padding:14px 16px;border:1.5px solid rgba(44,26,16,.12);border-radius:12px;font-family:var(--sans);font-size:15px;background:rgba(255,255,255,.80);color:var(--brown);transition:border-color .2s;outline:none;}
+.form-row input:focus{border-color:var(--terra);}
+.form-row input::placeholder{color:var(--muted2);}
+
+.btn-primary{width:100%;padding:17px;background:linear-gradient(135deg,var(--terra) 0%,var(--terra-mid) 100%);color:#fff;border:none;border-radius:12px;font-family:var(--sans);font-size:16px;font-weight:600;cursor:pointer;transition:transform .2s,box-shadow .2s;letter-spacing:.1px;}
+.btn-primary:hover{transform:scale(1.012);box-shadow:0 8px 28px rgba(196,96,58,.38);}
+.btn-primary:active{transform:scale(.99);}
+.disclaimer{font-size:11px;color:var(--muted);text-align:center;margin-top:10px;line-height:1.55;}
+
+/* Quiz */
+.q-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;}
+.q-count{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.4px;}
+.progress-track{flex:1;height:5px;background:rgba(44,26,16,.10);border-radius:20px;overflow:hidden;margin:0 14px;}
+.progress-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,var(--terra),var(--gold));transition:width .4s ease;}
+
+.q-text{font-family:var(--serif);font-size:clamp(19px,3.5vw,26px);color:var(--brown);line-height:1.30;font-weight:600;margin-bottom:6px;}
+.q-sub{font-size:13px;color:var(--muted);margin-bottom:22px;line-height:1.6;}
+.multi-hint{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--terra);opacity:.8;margin-bottom:12px;}
+
+.options{display:flex;flex-direction:column;gap:10px;}
+.option{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:15px 16px;background:rgba(255,255,255,.68);border:1.5px solid rgba(255,245,235,.8);border-radius:14px;cursor:pointer;font-size:14px;line-height:1.55;color:var(--brown);transition:all .2s ease;position:relative;overflow:hidden;}
+.option::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--terra);transform:scaleY(0);transition:transform .2s ease;border-radius:3px 0 0 3px;}
+.option:hover{background:#fff;border-color:var(--terra-m);transform:translateX(3px);}
+.option:hover::before{transform:scaleY(1);}
+.option.selected{background:rgba(196,96,58,.06);border-color:var(--terra);transform:translateX(3px);}
+.option.selected::before{transform:scaleY(1);}
+.opt-text{flex:1;}
+.opt-check{width:22px;height:22px;border-radius:6px;border:2px solid rgba(44,26,16,.15);flex-shrink:0;margin-top:1px;transition:all .2s;display:grid;place-items:center;font-size:13px;font-weight:700;color:#fff;}
+.option.selected .opt-check{background:var(--terra);border-color:var(--terra);}
+
+.btn-continue{width:100%;padding:15px;background:linear-gradient(135deg,var(--terra),var(--terra-mid));color:#fff;border:none;border-radius:12px;font-family:var(--sans);font-size:16px;font-weight:600;cursor:pointer;margin-top:16px;transition:opacity .25s,transform .25s;opacity:0;transform:translateY(6px);pointer-events:none;}
+.btn-continue.visible{opacity:1;transform:translateY(0);pointer-events:auto;}
+.btn-continue:hover{box-shadow:0 6px 22px rgba(196,96,58,.38);}
+
+/* Analysis */
+.analysis-wrap{text-align:center;padding:44px 28px;}
+.analysis-wrap .icon{font-size:44px;margin-bottom:20px;display:block;}
+.analysis-wrap h2{font-family:var(--serif);font-size:26px;color:var(--brown);margin-bottom:10px;}
+.analysis-wrap p{font-size:14px;color:var(--muted);line-height:1.65;}
+.dots-row{display:flex;justify-content:center;gap:8px;margin-top:24px;}
+.pdot{width:10px;height:10px;border-radius:50%;background:rgba(44,26,16,.12);animation:pdotpulse 1.4s ease-in-out infinite;}
+.pdot:nth-child(2){animation-delay:.2s;}.pdot:nth-child(3){animation-delay:.4s;}
+@keyframes pdotpulse{0%,80%,100%{background:rgba(44,26,16,.12);}40%{background:var(--terra);}}
+.scan-list{margin-top:22px;text-align:left;display:flex;flex-direction:column;gap:8px;}
+.scan-item{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted);padding:10px 14px;background:rgba(255,255,255,.50);border-radius:10px;opacity:0;animation:fadeup .4s ease forwards;}
+.scan-item:nth-child(1){animation-delay:.7s;}.scan-item:nth-child(2){animation-delay:1.4s;}.scan-item:nth-child(3){animation-delay:2.1s;}
+@keyframes fadeup{to{opacity:1;}}
+
+/* Result banner */
+.result-banner{border-radius:22px 22px 0 0;padding:30px 28px 26px;margin-top:22px;position:relative;overflow:hidden;}
+.result-banner::after{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;background:rgba(255,255,255,.10);border-radius:50%;}
+.type-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:12px;background:rgba(255,255,255,.20);color:rgba(255,255,255,.92);}
+.result-banner h1{font-family:var(--serif);font-size:clamp(22px,4vw,34px);color:#fff;font-weight:700;line-height:1.18;margin-bottom:8px;}
+.result-banner .prevalence{font-size:13px;color:rgba(255,255,255,.75);}
+
+.gut-banner{background:linear-gradient(135deg,#c4603a,#9e4620);}
+.ns-banner{background:linear-gradient(135deg,#5c7a5f,#3d5540);}
+.ac-banner{background:linear-gradient(135deg,#c89a3e,#a07828);}
+
+.result-body{background:rgba(245,230,216,.92);backdrop-filter:blur(18px);border:1px solid rgba(255,245,235,.65);border-radius:0 0 22px 22px;border-top:none;overflow:hidden;box-shadow:var(--shadow);}
+.result-section{padding:24px 26px;border-bottom:1px solid rgba(44,26,16,.06);}
+.result-section:last-child{border-bottom:none;}
+.section-label{font-size:10px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;margin-bottom:12px;color:var(--muted);}
+
+.headline{font-family:var(--serif);font-size:clamp(17px,3vw,22px);font-style:italic;color:var(--brown);line-height:1.35;margin-bottom:12px;}
+.science-text{font-size:14px;line-height:1.75;color:var(--brown);}
+
+.mistakes-list,.steps-list-result{display:flex;flex-direction:column;gap:10px;}
+.mistake-item{display:flex;gap:12px;padding:12px 14px;background:rgba(200,154,62,.08);border-radius:12px;border:1px solid rgba(200,154,62,.18);}
+.mistake-num{font-size:11px;font-weight:700;color:var(--gold);flex-shrink:0;width:18px;margin-top:1px;}
+.mistake-text{font-size:14px;line-height:1.55;color:var(--brown);}
+
+.step-card{padding:16px;border-radius:14px;border:1.5px solid rgba(44,26,16,.07);background:rgba(255,255,255,.60);display:flex;gap:14px;}
+.step-num{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;margin-top:2px;}
+.gut-sn{background:var(--gut-col);}.ns-sn{background:var(--ns-col);}.ac-sn{background:var(--ac-col);}
+.step-title{font-size:14px;font-weight:600;color:var(--brown);margin-bottom:5px;}
+.step-body{font-size:13px;line-height:1.65;color:var(--muted);}
+
+/* CTA section */
+.cta-section{background:var(--brown);border-radius:22px;padding:34px 28px;margin-top:16px;box-shadow:0 18px 52px rgba(44,26,16,.26);}
+.cta-hook{font-family:var(--serif);font-size:clamp(20px,3.5vw,28px);font-weight:700;color:#fff;line-height:1.25;margin-bottom:14px;}
+.cta-hook em{font-style:italic;color:var(--gold);}
+.cta-body{font-size:14px;line-height:1.75;color:rgba(255,255,255,.75);margin-bottom:22px;}
+.cta-body strong{color:#fff;}
+.consequence-box{background:rgba(255,255,255,.07);border-left:3px solid var(--terra);border-radius:0 10px 10px 0;padding:14px 16px;margin-bottom:24px;}
+.consequence-box p{font-size:14px;line-height:1.65;color:rgba(255,255,255,.72);font-style:italic;}
+.what-inside-label{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
+.protocol-list{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:24px;}
+.protocol-list li{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:rgba(255,255,255,.82);line-height:1.55;}
+.check{color:var(--sage);font-size:14px;flex-shrink:0;margin-top:1px;font-weight:700;}
+
+.guarantee-box{background:rgba(196,96,58,.15);border:1px solid rgba(196,96,58,.35);border-radius:12px;padding:14px 16px;margin-bottom:22px;}
+.guarantee-box strong{color:var(--terra);display:block;font-size:11px;letter-spacing:.8px;text-transform:uppercase;margin-bottom:4px;}
+.guarantee-box p{font-size:13px;color:rgba(255,255,255,.80);line-height:1.6;}
+
+.btn-cta{width:100%;padding:20px;background:linear-gradient(135deg,var(--terra) 0%,var(--terra-mid) 100%);color:#fff;border:none;border-radius:14px;font-family:var(--sans);font-size:18px;font-weight:700;cursor:pointer;transition:transform .2s,box-shadow .2s;letter-spacing:.05px;line-height:1.2;box-shadow:0 8px 30px rgba(196,96,58,.40);}
+.btn-cta:hover{transform:scale(1.016);box-shadow:0 12px 38px rgba(196,96,58,.52);}
+.btn-cta .cta-sub{display:block;font-size:12px;font-weight:400;opacity:.85;margin-top:3px;}
+.guarantee-note{text-align:center;font-size:11px;color:rgba(255,255,255,.35);margin-top:14px;line-height:1.6;}
+
+/* Segment tracking pill */
+.segment-pill{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:4px 10px;border-radius:20px;margin-bottom:16px;}
+.gut-pill{color:var(--gut-col);background:var(--gut-bg);border:1px solid rgba(196,96,58,.20);}
+.ns-pill{color:var(--ns-col);background:var(--ns-bg);border:1px solid rgba(92,122,95,.20);}
+.ac-pill{color:var(--ac-col);background:var(--ac-bg);border:1px solid rgba(200,154,62,.20);}
+
+.hidden{display:none!important;}
+
+@media(max-width:480px){
+  .card{padding:22px 18px;}
+  .stat-row{grid-template-columns:1fr 1fr;}
+  .stat-row .stat-box:last-child{grid-column:1/-1;}
+  .result-banner{padding:22px 18px 20px;}
+  .result-section{padding:18px;}
+  .cta-section{padding:24px 18px;}
+}
+</style>
+</head>
+<body>
+<div class="glow"></div>
+<div class="glow2"></div>
+<div class="wrap">
+
+  <div class="brand">
+    <div class="brand-mark">C</div>
+    <div>
+      <div class="brand-name">Colic Protocol</div>
+      <div class="brand-sub">by an Epidemiologist</div>
+    </div>
+  </div>
+
+  <!-- ═══ SCREEN 1: LANDING ═══ -->
+  <div id="landingScreen" class="card landing">
+    <span class="eyebrow">Free 90-Second Assessment</span>
+    <h1>Your baby's crying has a <em>specific root cause.</em> This identifies it.</h1>
+    <p class="sub">Infant colic isn't one condition — it's three distinct physiological failures that require different interventions. This assessment pinpoints your baby's primary driver and gives you the exact protocol to start tonight.</p>
+
+    <div class="stat-row">
+      <div class="stat-box"><span class="num">3</span><div class="lbl">root cause<br>systems</div></div>
+      <div class="stat-box"><span class="num">7</span><div class="lbl">diagnostic<br>questions</div></div>
+      <div class="stat-box"><span class="num">72h</span><div class="lbl">guarantee<br>on the Blueprint</div></div>
+    </div>
+
+    <div class="trust-strip">
+      <div class="trust-item"><span class="trust-dot"></span>Based on peer-reviewed RCT evidence</div>
+      <div class="trust-item"><span class="trust-dot"></span>Built by an Epidemiologist</div>
+      <div class="trust-item"><span class="trust-dot"></span>Start tonight — free</div>
+    </div>
+
+    <div class="form-row">
+      <input id="nameInput" type="text" placeholder="Your first name" autocomplete="given-name"/>
+      <input id="emailInput" type="email" placeholder="Your email address" autocomplete="email"/>
+      <input id="ageInput" type="number" min="1" max="24" placeholder="Baby's age in weeks (e.g. 5)" inputmode="numeric"/>
+    </div>
+
+    <button class="btn-primary" onclick="startQuiz()">Find My Baby's Root Cause &rarr;</button>
+    <p class="disclaimer">Educational purposes only. Not medical advice. Unsubscribe at any time.</p>
+  </div>
+
+  <!-- ═══ SCREEN 2: QUIZ ═══ -->
+  <div id="quizScreen" class="card hidden">
+    <div class="q-meta">
+      <span class="q-count" id="qCount">1 / 7</span>
+      <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    </div>
+    <div class="q-text" id="qText"></div>
+    <div class="q-sub" id="qSub"></div>
+    <div class="multi-hint">Select all that apply</div>
+    <div class="options" id="optionsBox"></div>
+    <button class="btn-continue" id="continueBtn" onclick="advanceQ()">Continue</button>
+  </div>
+
+  <!-- ═══ SCREEN 3: ANALYSIS ═══ -->
+  <div id="analysisScreen" class="card hidden">
+    <div class="analysis-wrap">
+      <span class="icon">🔬</span>
+      <h2>Analysing your baby's cry pattern…</h2>
+      <p>Mapping your responses against the three colic root-cause systems from peer-reviewed clinical literature.</p>
+      <div class="dots-row">
+        <div class="pdot"></div><div class="pdot"></div><div class="pdot"></div>
+      </div>
+      <div class="scan-list">
+        <div class="scan-item"><span>🦠</span> Evaluating gut microbiome presentation</div>
+        <div class="scan-item"><span>⚡</span> Mapping nervous system dysregulation signals</div>
+        <div class="scan-item"><span>🎵</span> Assessing acoustic environment factors</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SCREEN 4: RESULT ═══ -->
+  <div id="resultScreen" class="hidden">
+
+    <div class="result-banner" id="resultBanner">
+      <div class="type-badge" id="resultBadge"></div>
+      <h1 id="resultTitle"></h1>
+      <div class="prevalence" id="resultPrevalence"></div>
+    </div>
+
+    <div class="result-body">
+      <div class="result-section">
+        <div class="section-label">What is actually happening in your baby's body</div>
+        <div class="headline" id="resultHeadline"></div>
+        <div class="science-text" id="resultScience"></div>
+      </div>
+      <div class="result-section">
+        <div class="section-label">3 mistakes parents with this root cause make</div>
+        <div class="mistakes-list" id="resultMistakes"></div>
+      </div>
+      <div class="result-section">
+        <div class="section-label">Your 3-step type-specific protocol — start tonight</div>
+        <div class="steps-list-result" id="resultSteps"></div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-section">
+      <div class="cta-hook" id="ctaHook"></div>
+      <div class="cta-body" id="ctaBody"></div>
+      <div class="consequence-box"><p id="ctaConsequence"></p></div>
+
+      <div class="what-inside-label">The Calm Baby Blueprint gives you:</div>
+      <ul class="protocol-list" id="protocolList"></ul>
+
+      <div class="guarantee-box">
+        <strong>72-Hour Zero-Cry Guarantee</strong>
+        <p>If your baby is not experiencing significantly reduced crying within 72 hours of implementing this protocol — email me. Full refund immediately. No forms. No questions. You keep the Blueprint.</p>
+      </div>
+
+      <button class="btn-cta" onclick="goToProduct()">
+        <span id="ctaBtnText"></span>
+        <span class="cta-sub">Instant access · 72-hour guarantee · Keep it either way</span>
+      </button>
+
+      <p class="guarantee-note">Not medical advice · Consult your pediatrician for fever above 38°C or breathing difficulty</p>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ==========================================================
+   CONFIG — SWAP THESE TWO VALUES FOR YOUR ACCOUNT
+   ==========================================================
+   group_id_interactive = new duplicate group for quiz leads
+   group_id_pdf        = existing "Midnight Checklist Leads" group
+   Set use_interactive_group: true to track separately,
+   or false to drop all leads into the existing group.
+   ========================================================== */
+const CFG = {
+  // API key is gone from the client entirely.
+  // It lives in Vercel environment variable MAILERLITE_API_KEY.
+  // The quiz calls /api/subscribe which proxies to MailerLite server-side.
+
+  group_id: '190431733303215887',
+
+  // Product URL — never changes
+  productUrl: 'https://colicprotocol.gumroad.com/l/TheCalmBabyBlueprint',
+};
+
+/* ==========================================================
+   QUESTIONS
+   Each option: [display text, score weights]
+   Weights: {GUT: n, NS: n, AC: n}
+   ========================================================== */
+const QUESTIONS = [
+  {
+    q: "When does your baby cry most intensely?",
+    sub: "Think about the pattern over the last few days.",
+    opts: [
+      ["Consistently in the evening — usually 5PM to midnight, regardless of feeding",      {GUT:1,NS:2,AC:1}],
+      ["During or shortly after feeding — often arching away from the breast or bottle",    {GUT:2,NS:0,AC:0}],
+      ["Seemingly randomly throughout the day with no clear pattern",                       {GUT:1,NS:1,AC:0}],
+      ["Any time the environment changes — new sounds, visitors, lights",                   {GUT:0,NS:2,AC:2}],
+    ]
+  },
+  {
+    q: "What does your baby's cry sound like?",
+    sub: "The acoustic pattern of the cry carries diagnostic information.",
+    opts: [
+      ["High-pitched, continuous, and intense from the very first second — no build-up",   {GUT:0,NS:3,AC:1}],
+      ["Starts softer and escalates over 10–15 minutes into inconsolable",                 {GUT:2,NS:1,AC:0}],
+      ["Comes in waves — crying, pause, crying again — with legs pulled to chest",         {GUT:3,NS:0,AC:0}],
+      ["Whiny and fussy rather than piercing — baby seems uncomfortable but not in agony", {GUT:1,NS:0,AC:1}],
+    ]
+  },
+  {
+    q: "What does your baby's body do during a crying episode?",
+    sub: "Physical signals during crying point to specific root causes.",
+    opts: [
+      ["Legs pulled toward the chest, abdomen visibly tight or distended",                 {GUT:3,NS:0,AC:0}],
+      ["Full-body tension — arching back, fists clenched, face red and straining",         {GUT:1,NS:3,AC:0}],
+      ["Startles at sounds, faces scrunched, easily overwhelmed by stimulation",           {GUT:0,NS:2,AC:3}],
+      ["Inconsolable regardless of position — nothing seems to help at all",               {GUT:1,NS:2,AC:1}],
+    ]
+  },
+  {
+    q: "What has already been tried with little or no effect?",
+    sub: "Failed interventions are as diagnostically useful as symptoms.",
+    opts: [
+      ["Gripe water and simethicone gas drops — tried multiple brands",                    {GUT:2,NS:1,AC:0}],
+      ["Rocking, bouncing, swinging — baby calms briefly then starts again",               {GUT:0,NS:2,AC:1}],
+      ["White noise machine — didn't help or only helped briefly",                         {GUT:0,NS:1,AC:3}],
+      ["Changing feeding positions and feeding frequency",                                  {GUT:2,NS:0,AC:0}],
+    ]
+  },
+  {
+    q: "How does your baby typically respond when being held during a crying episode?",
+    sub: "",
+    opts: [
+      ["Calms somewhat when held face-down with gentle pressure on the abdomen",           {GUT:2,NS:1,AC:0}],
+      ["Calms briefly when moved rhythmically — but starts again when movement stops",     {GUT:0,NS:3,AC:0}],
+      ["Seems to escalate when touched during the worst episodes — overstimulated",        {GUT:0,NS:1,AC:3}],
+      ["Inconsistent — sometimes holding helps, sometimes it makes things worse",          {GUT:1,NS:2,AC:1}],
+    ]
+  },
+  {
+    q: "What does your baby's stool look like?",
+    sub: "Gut presentation provides direct microbiome data.",
+    opts: [
+      ["Green, frothy, or mucousy — sometimes with a strong smell",                        {GUT:3,NS:0,AC:0}],
+      ["Normal yellow seedy (breastfed) or tan (formula) — no stool changes noted",       {GUT:0,NS:2,AC:1}],
+      ["Infrequent — less than once a day — with apparent straining",                      {GUT:2,NS:1,AC:0}],
+      ["Not sure — haven't noticed a pattern",                                             {GUT:0,NS:0,AC:0}],
+    ]
+  },
+  {
+    q: "What is your baby's feeding situation?",
+    sub: "Feeding method affects which interventions are most effective.",
+    opts: [
+      ["Exclusively breastfed",                                                            {GUT:1,NS:0,AC:0}],
+      ["Formula-fed — has been from birth or switched recently",                           {GUT:2,NS:0,AC:0}],
+      ["Mixed feeding — breast and formula",                                               {GUT:1,NS:0,AC:0}],
+      ["I've eliminated dairy from my diet already and the crying hasn't changed",         {GUT:1,NS:1,AC:1}],
+    ]
+  },
+];
+
+/* ==========================================================
+   RESULTS
+   ========================================================== */
+const RESULTS = {
+  GUT: {
+    type: "Gut Microbiome Imbalance",
+    subtitle: "Primary Root Cause",
+    emoji: "🦠",
+    bannerClass: "gut-banner",
+    stepClass: "gut-sn",
+    segmentClass: "gut-pill",
+    prevalence: "The most common primary colic driver — present in approximately 60–70% of colicky infants.",
+    headline: "Your baby's gut is producing the inflammation driving the crying.",
+    science: "Colicky infants with this presentation show a consistent pattern: reduced Lactobacillus bacteria and elevated gas-producing Proteobacteria in the gut microbiome. This imbalance creates a fermentation loop that generates pain, bloating, and the inflammation driving each crying episode. Single-symptom remedies like simethicone address the gas as a mechanical output — they cannot touch the microbial environment producing it. This is why gas drops fail consistently in clinical trials.",
+    mistakes: [
+      "Continuing with simethicone or gripe water. Neither has passed a randomised controlled trial for colic, and neither addresses the microbial imbalance driving the gas production.",
+      "Treating episodes in isolation without addressing the recurring root. Managing the crying each night without the microbiome repair means the pattern continues until it resolves naturally — typically at 12 weeks.",
+      "Using a generic probiotic. Strain specificity matters critically. The only probiotic strain with published RCT evidence for infant colic is L. reuteri DSM 17938 — sold specifically as BioGaia Protectis. Generic probiotic blends do not carry this data.",
+    ],
+    steps: [
+      {title: "Start L. reuteri DSM 17938 immediately", body: "This is the specific strain — not a generic probiotic. Savino et al., Pediatrics 2010: 74% reduction in daily crying time by Day 21 in breastfed infants. Confirmed by two independent 2020 systematic reviews. The product is BioGaia Protectis Baby Drops. 5 drops daily. Added to expressed breast milk or formula cooled to body temperature. Begin tonight."},
+      {title: "Run the Tiger Hold for acute episodes", body: "Face-down across your forearm. Baby's belly on the muscle of your forearm, head resting in your palm. Pulse at 60 beats per minute — forward and back, not side to side. This simultaneously moves trapped gas using abdominal pressure and deactivates the Moro startle reflex. Hold for minimum 5 minutes before assessing."},
+      {title: "Brown noise at 60–65 dB before you pick them up", body: "Sound first, touch second. The womb acoustic environment is low-frequency — matching brown noise, not white noise. A dysregulated nervous system cannot receive touch as calming. Activate brown noise at 60–65 decibels, minimum 7 feet from baby's head, for 30 seconds before the Tiger Hold."},
+    ],
+    ctaHook: (name) => `${name}, you now know what has been causing this. Not a guess — a specific physiological pattern that has a documented clinical solution.`,
+    ctaBody: "The three steps above begin the process tonight. What they cannot give you is the complete dosing protocol calibrated to your baby's feeding method, the diagnostic decision tree for when more than one system is involved, or the timing framework that tells you exactly when to assess whether the protocol is working. That is what the <strong>Calm Baby Blueprint</strong> provides.",
+    ctaConsequence: "Every week the gut microbiome imbalance runs without intervention is another week of the same pattern nightly. It resolves on its own at 10–12 weeks. The L. reuteri protocol compresses that window — but only if the correct strain, dosage, and timing are implemented. Generic probiotics do not carry this data. Starting tonight matters.",
+    ctaBtnText: "Start the Gut Reset Protocol Tonight — $47",
+    protocol: [
+      "Diagnostic decision tree — know your baby's primary system before applying any intervention",
+      "Complete gut reset protocol with exact L. reuteri DSM 17938 dosing for breastfed and formula-fed infants",
+      "Tiger Hold, ILU massage, and vagus nerve sequence — technique videos included",
+      "60-minute brown noise soundscape calibrated to womb frequencies (Bonus 2)",
+      "Bloom Baby Tracker PWA — one-tap logging at 3AM to identify trigger patterns (Bonus 1)",
+      "Cry Decoder Masterclass — train your ear to distinguish gut pain from nervous system cries (Bonus 3)",
+    ],
+    mailerliteField: "Gut Microbiome Primary",
+  },
+
+  NS: {
+    type: "Nervous System Dysregulation",
+    subtitle: "Primary Root Cause",
+    emoji: "⚡",
+    bannerClass: "ns-banner",
+    stepClass: "ns-sn",
+    segmentClass: "ns-pill",
+    prevalence: "Present as the primary driver in approximately 20–30% of colic cases — and frequently missed.",
+    headline: "Your baby's nervous system is stuck in a chronic threat state.",
+    science: "The prefrontal cortex — responsible for emotional regulation — is not functional at 6 weeks. There is no neurological mechanism for self-soothing. When your baby's cortisol spikes during a crying episode, the only way it comes down is through external co-regulation. The pattern you're seeing — high-pitched, continuous from the first second, intensifying with more stimulation — is a nervous system crisis, not primarily a gut problem. Applying gut interventions to a nervous system presentation delays resolution by weeks.",
+    mistakes: [
+      "Waiting for the crying to peak and then trying to soothe. By the time the cry is at full intensity, the cortisol response is already cascading. Intervention is more effective in the first 30 seconds of distress.",
+      "Adding stimulation during episodes — talking, eye contact, multiple position changes. A dysregulated nervous system reads additional input as additional threat. Less is more during a nervous system crisis.",
+      "Running the Sound, Touch, Light sequence in the wrong order. Touch before sound adds a sensory demand to an already overloaded system. Sound must establish the safe acoustic signal before physical contact is introduced.",
+    ],
+    steps: [
+      {title: "Sound before touch — always", body: "Brown noise at 60–65 decibels, minimum 7 feet from baby's head. This is not optional sequencing. Activate the acoustic environment 30 seconds before you pick up your baby. The womb acoustic environment is brown noise, not white noise. This signals neurological safety before any additional sensory input."},
+      {title: "Tiger Hold at exactly 60 BPM — pulse, don't rock", body: "Face-down across your forearm. 60 beats per minute rhythmic pulse — forward and back. This specific rhythm matches the resting heartbeat and directly deactivates the Moro startle reflex that is keeping your baby's nervous system in a threat state. Rocking at irregular pace does not achieve this."},
+      {title: "Warm dim light — never darkness", body: "Darkness increases cortisol in newborns. Do not turn lights off during a nervous system episode. Use warm amber light at low intensity. After the brown noise and Tiger Hold are in place, dim and warm the light as the third step in the sequence. The full Sound → Touch → Light sequence is the protocol."},
+    ],
+    ctaHook: (name) => `${name}, you have not been soothing incorrectly. You have been soothing out of sequence. That is a completely different problem — and it has a specific fix.`,
+    ctaBody: "The three steps above give you the sequence for tonight. What they cannot give you is the 15-minute timing framework — how long to hold each layer before assessing, when to cycle back to Sound if Touch is not working, and how to adjust when the gut system is also involved simultaneously. That is in the <strong>Calm Baby Blueprint</strong>.",
+    ctaConsequence: "A dysregulated nervous system does not respond to more effort. It responds to the correct sequence, applied before the crying reaches full intensity. Parents who escalate — faster rocking, louder noise, more position changes — consistently find the episodes worsen. The sequence is the protocol. Starting it correctly tonight is the difference between managing the episode and shortening it.",
+    ctaBtnText: "Start the Nervous System Protocol Tonight — $47",
+    protocol: [
+      "The Sound → Touch → Light timing framework with assessment checkpoints at each stage",
+      "Tiger Hold with 60 BPM calibration — technique breakdown with rhythm guidance",
+      "Cry Decoder Masterclass — distinguish the nervous system cry from gut pain in real time (Bonus 3)",
+      "60-minute brown noise soundscape engineered to womb frequencies — use it tonight (Bonus 2)",
+      "Parent regulation section — your cortisol transmits through touch; regulate yourself first",
+      "Bloom Baby Tracker PWA — log what's working at 3AM without turning on a light (Bonus 1)",
+    ],
+    mailerliteField: "Nervous System Primary",
+  },
+
+  AC: {
+    type: "Acoustic Environment Overload",
+    subtitle: "Primary Root Cause",
+    emoji: "🎵",
+    bannerClass: "ac-banner",
+    stepClass: "ac-sn",
+    segmentClass: "ac-pill",
+    prevalence: "Frequently overlooked as a standalone driver — contributes significantly in approximately 30–40% of cases.",
+    headline: "Your baby's environment is actively working against their nervous system.",
+    science: "The womb is not a quiet environment — it is a continuous low-frequency acoustic space dominated by maternal heartbeat, blood flow, and digestive sounds, all in the brown noise frequency range. A newborn's nervous system spent 9 months calibrated to that specific frequency. The typical home environment — irregular sounds, high-frequency audio, variable background noise — is actively dysregulating. White noise sits above the womb frequency range and can worsen the response. Brown noise at the correct volume and distance is the specific intervention.",
+    mistakes: [
+      "Using white noise. White noise is high-frequency and statistically random — it sits above the womb frequency range and can overstimulate an already sensitised newborn nervous system. Brown noise is the correct acoustic intervention.",
+      "Placing the speaker too close or at too high a volume. The correct specification is 60–65 decibels minimum 7 feet from baby's head — roughly the volume of a shower heard from across the room. Closer or louder has the opposite effect.",
+      "Treating sound as a last resort rather than the first step. The acoustic layer must be established before touch. Picking up a baby in an acoustically dysregulating environment and then adding brown noise after is the wrong sequence.",
+    ],
+    steps: [
+      {title: "Replace all white noise with brown noise immediately", body: "If you're using a white noise machine, app, or audio track — stop tonight. Brown noise: low-frequency, slow rolling pattern matching womb acoustics. 60–65 decibels. Minimum 7 feet from baby's head. Search 'brown noise' on YouTube or Spotify as a starting point. The Blueprint includes a calibrated 60-minute soundscape engineered to these exact womb frequencies."},
+      {title: "Establish sound before the crying escalates", body: "For babies with acoustic sensitivity, the environment must be set before distress peaks. Brown noise active in the sleeping space 15 minutes before the typical witching hour onset. Do not wait until the cry has reached full intensity — the acoustic signal needs to be established in a relatively calm state to register as safe."},
+      {title: "Reduce daytime acoustic load", body: "Television, podcasts, and irregular household sounds add to the daily acoustic burden. The nervous system has a cumulative load threshold. Reducing daytime sensory input — especially irregular high-frequency sounds — lowers the baseline from which the evening dysregulation begins. Consistent brown noise during daytime sleep supports this."},
+    ],
+    ctaHook: (name) => `${name}, your baby is not unusually sensitive. Their environment has been sending the wrong signal. That is correctable — starting tonight, before you spend another dollar on anything else.`,
+    ctaBody: "The three steps above correct the immediate acoustic environment. What they cannot give you is the engineered soundscape calibrated to exact womb frequency specifications — or the full integration protocol showing how the acoustic layer works alongside the physical holds and gut microbiome repair. That is in the <strong>Calm Baby Blueprint</strong>.",
+    ctaConsequence: "Acoustic dysregulation compounds across the day. The witching hour is not a random evening event — it is the accumulation of a full day of suboptimal acoustic input reaching a threshold. Fixing the night environment without addressing the full acoustic architecture means the episodes are managed but not prevented. The pattern continues until the full system is corrected.",
+    ctaBtnText: "Fix the Acoustic Environment Tonight — $47",
+    protocol: [
+      "60-minute brown noise soundscape engineered to womb frequency specifications — use tonight (Bonus 2)",
+      "Acoustic environment design guide: speaker placement, volume calibration, room setup",
+      "The Sound → Touch → Light timing framework — sequence and integration protocol",
+      "Tiger Hold technique breakdown — the physical complement to the acoustic protocol",
+      "Bloom Baby Tracker PWA — track which acoustic adjustments produce measurable results (Bonus 1)",
+      "Cry Decoder Masterclass — identify acoustic-sensitivity cry patterns in real time (Bonus 3)",
+    ],
+    mailerliteField: "Acoustic Environment Primary",
+  },
+};
+
+/* ==========================================================
+   SESSION IDENTIFIERS
+   Generated once per page load. ASSESSMENT_ID travels through
+   MailerLite → Gumroad URL → Zapier for full purchase tracking.
+   ========================================================== */
+const ASSESSMENT_ID = (() => {
+  const year = new Date().getFullYear();
+  const rand = Math.floor(Math.random() * 99999).toString().padStart(5, '0');
+  return `CP-${year}-${rand}`;
+})();
+
+const UTM_SOURCE = new URLSearchParams(window.location.search).get('utm_source') || 'direct';
+
+/* ==========================================================
+   STATE
+   ========================================================== */
+let userName = '', userEmail = '', babyAgeWeeks = null, qIndex = 0;
+const scores = {GUT:0, NS:0, AC:0};
+const selectedMap = new Map();
+
+/* ==========================================================
+   MAILERLITE SUBSCRIPTION
+   Sends all tracking fields to /api/subscribe (Vercel proxy).
+   Never blocks the user — silent fail on network error.
+   Fields map to the MailerLite custom fields created in the
+   subscriber settings panel.
+   ========================================================== */
+async function subscribeToMailerLite(name, email, colcType, detail, status) {
+  const total = scores.GUT + scores.NS + scores.AC;
+  const dominant = Math.max(scores.GUT, scores.NS, scores.AC);
+  const confidencePct = total > 0 ? Math.round((dominant / total) * 100) : 0;
+
+  try {
+    await fetch('/api/assessment-submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email,
+        name,
+        // Core classification
+        colic_type:        colcType,
+        colic_type_detail: detail,
+        group_id:          CFG.group_id,
+        // Session tracking
+        assessment_id:     ASSESSMENT_ID,
+        lead_source:       UTM_SOURCE,
+        quiz_status:       status,
+        quiz_version:      '1.0',
+        // Demographics
+        baby_age_weeks:    babyAgeWeeks,
+        // Defaults — updated by Zapier on purchase
+        purchase_status:   'pending',
+      })
+    });
+  } catch(e) {
+    console.warn('Subscribe proxy silent error:', e);
+  }
+}
+
+/* ==========================================================
+   HELPERS
+   ========================================================== */
+const show = id => document.getElementById(id).classList.remove('hidden');
+const hide = id => document.getElementById(id).classList.add('hidden');
+
+function shake(id, msg) {
+  const el = document.getElementById(id);
+  el.style.borderColor = '#c4603a';
+  el.placeholder = msg;
+  setTimeout(() => {
+    el.style.borderColor = '';
+    el.placeholder = id === 'nameInput' ? 'Your first name' : 'Your email address';
+  }, 2200);
+}
+
+/* ==========================================================
+   FLOW
+   ========================================================== */
+function startQuiz() {
+  const name  = document.getElementById('nameInput').value.trim();
+  const email = document.getElementById('emailInput').value.trim();
+  const age   = document.getElementById('ageInput').value.trim();
+
+  if (!name)                          return shake('nameInput', 'Please enter your name');
+  if (!email || !email.includes('@')) return shake('emailInput', 'Please enter a valid email');
+
+  userName      = name;
+  userEmail     = email;
+  babyAgeWeeks  = age ? parseInt(age, 10) : null;
+
+  scores.GUT = 0; scores.NS = 0; scores.AC = 0;
+  qIndex = 0;
+  selectedMap.clear();
+
+  // Capture the lead now, before 7 questions and the analysis delay
+  // give her a chance to drop off with zero record anywhere.
+  subscribeToMailerLite(userName, userEmail, 'Unassigned', 'Quiz Started', 'started');
+
+  hide('landingScreen');
+  show('quizScreen');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = QUESTIONS[qIndex];
+  document.getElementById('qCount').textContent = `${qIndex + 1} / ${QUESTIONS.length}`;
+  document.getElementById('progressFill').style.width = `${(qIndex / QUESTIONS.length) * 100}%`;
+  document.getElementById('qText').textContent = q.q;
+  document.getElementById('qSub').textContent  = q.sub;
+
+  const box = document.getElementById('optionsBox');
+  box.innerHTML = '';
+  selectedMap.clear();
+
+  const btn = document.getElementById('continueBtn');
+  btn.classList.remove('visible');
+  btn.textContent = 'Continue';
+
+  q.opts.forEach((o, i) => {
+    const div = document.createElement('div');
+    div.className = 'option';
+    div.innerHTML = `<span class="opt-text">${o[0]}</span><span class="opt-check" id="chk${i}"></span>`;
+    div.style.animation = `rise .35s ${i * .07}s ease both`;
+    div.onclick = () => toggleOption(i, o[1], div);
+    box.appendChild(div);
+  });
+}
+
+function toggleOption(idx, weights, el) {
+  if (selectedMap.has(idx)) {
+    selectedMap.delete(idx);
+    el.classList.remove('selected');
+    el.querySelector('.opt-check').textContent = '';
+  } else {
+    selectedMap.set(idx, weights);
+    el.classList.add('selected');
+    el.querySelector('.opt-check').textContent = '✓';
+  }
+  const btn = document.getElementById('continueBtn');
+  if (selectedMap.size > 0) {
+    btn.classList.add('visible');
+    btn.textContent = selectedMap.size === 1 ? 'Continue' : `Continue (${selectedMap.size} selected)`;
+  } else {
+    btn.classList.remove('visible');
+  }
+}
+
+function advanceQ() {
+  selectedMap.forEach(weights => {
+    Object.keys(weights).forEach(k => { scores[k] += weights[k]; });
+  });
+  qIndex++;
+  selectedMap.clear();
+
+  const card = document.getElementById('quizScreen');
+  card.style.opacity = '0';
+  card.style.transform = 'translateY(-8px)';
+
+  setTimeout(() => {
+    if (qIndex < QUESTIONS.length) {
+      renderQuestion();
+    } else {
+      showAnalysis();
+      return;
+    }
+    card.style.transition = 'none';
+    card.style.opacity = '1';
+    card.style.transform = 'translateY(0)';
+    requestAnimationFrame(() => {
+      card.style.transition = 'opacity .3s, transform .3s';
+    });
+  }, 200);
+}
+
+function showAnalysis() {
+  hide('quizScreen');
+  show('analysisScreen');
+  setTimeout(showResult, 3600);
+}
+
+async function showResult() {
+  hide('analysisScreen');
+
+  // Determine primary type
+  const type = Object.keys(scores).reduce((a, b) => scores[a] >= scores[b] ? a : b);
+  const R = RESULTS[type];
+
+  // Fire MailerLite (non-blocking — result shows regardless of API outcome)
+  subscribeToMailerLite(userName, userEmail, R.type, R.mailerliteField, 'completed');
+
+  // Store locally for back-button resilience
+  localStorage.setItem('colic_type', type);
+  localStorage.setItem('colic_name', userName);
+
+  // Populate banner
+  const banner = document.getElementById('resultBanner');
+  banner.className = `result-banner ${R.bannerClass}`;
+  document.getElementById('resultBadge').innerHTML = `${R.emoji} &nbsp;${R.subtitle}`;
+  document.getElementById('resultTitle').textContent = R.type;
+  document.getElementById('resultPrevalence').textContent = R.prevalence;
+
+  // Science section
+  document.getElementById('resultHeadline').textContent = R.headline;
+  document.getElementById('resultScience').textContent  = R.science;
+
+  // Mistakes
+  const mBox = document.getElementById('resultMistakes');
+  mBox.innerHTML = '';
+  R.mistakes.forEach((m, i) => {
+    mBox.innerHTML += `<div class="mistake-item"><span class="mistake-num">${i+1}.</span><span class="mistake-text">${m}</span></div>`;
+  });
+
+  // Steps
+  const sBox = document.getElementById('resultSteps');
+  sBox.innerHTML = '';
+  R.steps.forEach((s, i) => {
+    sBox.innerHTML += `<div class="step-card"><div class="step-num ${R.stepClass}">${i+1}</div><div><div class="step-title">${s.title}</div><div class="step-body">${s.body}</div></div></div>`;
+  });
+
+  // CTA section
+  document.getElementById('ctaHook').textContent  = R.ctaHook(userName);
+  document.getElementById('ctaBody').innerHTML    = R.ctaBody;
+  document.getElementById('ctaConsequence').textContent = R.ctaConsequence;
+  document.getElementById('ctaBtnText').textContent     = R.ctaBtnText;
+
+  const pBox = document.getElementById('protocolList');
+  pBox.innerHTML = '';
+  R.protocol.forEach(item => {
+    pBox.innerHTML += `<li><span class="check">&#10003;</span>${item}</li>`;
+  });
+
+  show('resultScreen');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function goToProduct() {
+  // Assessment ID travels into the Gumroad URL so Zapier can match
+  // the purchase back to this subscriber record in MailerLite.
+  // window.location.href, not window.open — TikTok's in-app browser
+  // handles the new-tab/intent handoff inconsistently across Android
+  // builds. This avoids that failure mode instead of hoping around it.
+  const url = `${CFG.productUrl}?ref=${ASSESSMENT_ID}&utm_source=quiz&utm_medium=assessment&utm_campaign=${UTM_SOURCE}`;
+  window.location.href = url;
+}
+</script>
+</body>
+</html>
