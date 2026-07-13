@@ -1,7 +1,11 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "main": ".open-next/worker.js",
   "name": "colic-protocol-site",
   "compatibility_date": "2026-01-01",
   "compatibility_flags": ["nodejs_compat"],
-  "pages_build_output_dir": ".open-next/assets"
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  }
 }
