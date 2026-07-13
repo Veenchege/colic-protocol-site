@@ -78,7 +78,7 @@ export default function BlueprintPage() {
 
         {/* ── 1. Hero — price and guarantee visible above fold ── */}
         <section className="bg-paper py-14 md:py-20 border-b border-border2">
-          <div className="max-w-3xl mx-auto px-5 md:px-8">
+          <div className="max-w-3xl mx-auto px-6 md:px-12">
             <p className="kicker text-terra mb-4">
               Complete colic management system
             </p>
@@ -104,7 +104,7 @@ export default function BlueprintPage() {
 
         {/* ── 2. Guarantee FIRST — risk removed before pitch ── */}
         <section className="bg-surface py-12">
-          <div className="max-w-3xl mx-auto px-5 md:px-8">
+          <div className="max-w-3xl mx-auto px-6 md:px-12">
             <p className="font-serif font-semibold text-brown text-lg mb-5">
               Before anything else — the results commitment.
             </p>
@@ -114,7 +114,7 @@ export default function BlueprintPage() {
 
         {/* ── 3. The gap ── */}
         <section className="bg-paper py-14 md:py-20">
-          <div className="max-w-3xl mx-auto px-5 md:px-8">
+          <div className="max-w-3xl mx-auto px-6 md:px-12">
             <p className="kicker text-terra mb-4">
               What the checklist cannot do
             </p>
@@ -153,7 +153,7 @@ export default function BlueprintPage() {
 
         {/* ── 4. What's inside — core components ── */}
         <section className="bg-surface py-14 md:py-20">
-          <div className="max-w-3xl mx-auto px-5 md:px-8">
+          <div className="max-w-3xl mx-auto px-6 md:px-12">
             <p className="kicker text-terra mb-4">
               What is inside
             </p>
@@ -204,7 +204,7 @@ export default function BlueprintPage() {
 
         {/* ── 5. Science ── */}
         <section className="bg-paper py-14 md:py-20">
-          <div className="max-w-3xl mx-auto px-5 md:px-8">
+          <div className="max-w-3xl mx-auto px-6 md:px-12">
             <p className="kicker text-terra mb-4">
               The evidence base
             </p>
@@ -225,7 +225,7 @@ export default function BlueprintPage() {
 
         {/* ── 6. Origin story (condensed) ── */}
         <section className="bg-surface py-14 md:py-20">
-          <div className="max-w-3xl mx-auto px-5 md:px-8">
+          <div className="max-w-3xl mx-auto px-6 md:px-12">
             <p className="kicker text-terra mb-4">
               Why this exists
             </p>
@@ -248,7 +248,7 @@ export default function BlueprintPage() {
 
         {/* ── 8. Pricing block ── */}
         <section className="bg-paper py-14 md:py-20">
-          <div className="max-w-3xl mx-auto px-5 md:px-8">
+          <div className="max-w-3xl mx-auto px-6 md:px-12">
             <p className="kicker text-terra mb-6">
               What it costs
             </p>
@@ -275,7 +275,7 @@ export default function BlueprintPage() {
 
         {/* ── 9. Guarantee repeat ── */}
         <section className="bg-surface py-10">
-          <div className="max-w-3xl mx-auto px-5 md:px-8">
+          <div className="max-w-3xl mx-auto px-6 md:px-12">
             <GuaranteeBlock showCTA />
           </div>
         </section>
@@ -285,7 +285,7 @@ export default function BlueprintPage() {
 
         {/* ── 11. Final CTA ── */}
         <section className="bg-paper py-14 md:py-20 border-t border-border2">
-          <div className="max-w-3xl mx-auto px-5 md:px-8 text-center">
+          <div className="max-w-3xl mx-auto px-6 md:px-12 text-center">
             <h2 className="font-serif font-bold text-brown text-2xl md:text-3xl leading-snug mb-4">
               You have already lost enough.{' '}
               <span className="text-terra">The risk is now zero.</span>

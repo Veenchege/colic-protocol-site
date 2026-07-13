@@ -44,7 +44,7 @@ export default function ChecklistPage() {
       <MinimalNav />
 
       <main id="main-content" className="min-h-screen bg-paper">
-        <div className="max-w-2xl mx-auto px-5 md:px-8 py-12 md:py-20">
+        <div className="max-w-2xl mx-auto px-6 md:px-12 py-12 md:py-20">
 
           {/* ── Header ── */}
           <div className="mb-10">

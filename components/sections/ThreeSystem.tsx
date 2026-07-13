@@ -31,7 +31,7 @@ const SYSTEMS = [
 export default function ThreeSystem() {
   return (
     <section className="py-16 md:py-24 bg-paper" aria-labelledby="system-heading">
-      <div className="max-w-5xl mx-auto px-5 md:px-8">
+      <div className="max-w-5xl mx-auto px-6 md:px-12">
 
         <div className="mb-10 max-w-2xl">
           <p className="kicker text-terra mb-4">The mechanism</p>

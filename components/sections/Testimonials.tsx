@@ -10,7 +10,7 @@ export default function Testimonials() {
 
   return (
     <section className="py-16 md:py-24 bg-warm" aria-labelledby="testimonials-heading">
-      <div className="max-w-5xl mx-auto px-5 md:px-8">
+      <div className="max-w-5xl mx-auto px-6 md:px-12">
 
         <div className="mb-10 max-w-xl">
           <h2

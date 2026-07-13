@@ -78,7 +78,7 @@ export default function HomePage() {
 
         {/* 9. Guarantee block — caption-safe language, no sticker phrasing */}
         <div className="py-10 md:py-16 bg-warm">
-          <div className="max-w-3xl mx-auto px-5 md:px-8">
+          <div className="max-w-3xl mx-auto px-6 md:px-12">
             <GuaranteeBlock showCTA={false} />
           </div>
         </div>

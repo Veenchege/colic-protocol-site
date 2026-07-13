@@ -30,7 +30,7 @@ export default function QuizPage() {
         id="main-content"
         className="min-h-screen bg-paper"
       >
-        <div className="max-w-2xl mx-auto px-5 md:px-8 py-10 md:py-16">
+        <div className="max-w-2xl mx-auto px-6 md:px-12 py-10 md:py-16">
 
           {/* Page intro */}
           <div className="mb-10">

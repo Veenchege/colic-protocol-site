@@ -18,7 +18,7 @@ const SIGNS = [
 export default function Validation() {
   return (
     <section className="py-16 md:py-24 bg-warm" aria-labelledby="validation-heading">
-      <div className="max-w-3xl mx-auto px-5 md:px-8">
+      <div className="max-w-3xl mx-auto px-6 md:px-12">
 
         <h2
           id="validation-heading"

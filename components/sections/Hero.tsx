@@ -49,7 +49,7 @@ export default function Hero() {
           {/* Signature graphic — three systems converging into one protocol.
               Not decoration: this is the literal "diagnosis before protocol"
               claim, shown before a single word of copy explains it. */}
-          <div className="hidden md:block" aria-hidden="true">
+          <div className="hidden md:block mt-6 md:mt-10" aria-hidden="true">
             <svg viewBox="0 -34 400 414" fill="none" className="w-full h-auto">
   <path d="M40 20 C 40 150, 190 200, 195 280" stroke="#c4603a" strokeWidth="2" opacity="0.85" />
   <path d="M200 10 C 200 130, 195 200, 197 280" stroke="#8a6a7a" strokeWidth="2" opacity="0.85" />

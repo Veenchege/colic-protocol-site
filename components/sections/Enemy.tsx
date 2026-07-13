@@ -25,7 +25,7 @@ const ENEMIES = [
 export default function Enemy() {
   return (
     <section className="py-16 md:py-24 bg-paper" aria-labelledby="enemy-heading">
-      <div className="max-w-5xl mx-auto px-5 md:px-8">
+      <div className="max-w-5xl mx-auto px-6 md:px-12">
 
         <div className="mb-12 max-w-2xl">
           <p className="kicker mb-4">Why everything has failed</p>

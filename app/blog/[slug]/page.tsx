@@ -83,7 +83,7 @@ export default function BlogPostPage({
 
         {/* ── Post header ── */}
         <section className="bg-paper py-12 md:py-16 border-b border-border2">
-          <div className="max-w-2xl mx-auto px-5 md:px-8">
+          <div className="max-w-2xl mx-auto px-6 md:px-12">
 
             {/* Category + reading time */}
             <div className="flex flex-wrap items-center gap-3 mb-5">
@@ -121,7 +121,7 @@ export default function BlogPostPage({
 
         {/* ── Article body ── */}
         <article className="bg-paper py-12 md:py-16">
-          <div className="max-w-2xl mx-auto px-5 md:px-8">
+          <div className="max-w-2xl mx-auto px-6 md:px-12">
             {/*
               Tailwind Typography prose styles.
               Requires: npm install @tailwindcss/typography
@@ -144,13 +144,13 @@ export default function BlogPostPage({
         </article>
 
         {/* ── End-of-post full InlineCTA ── */}
-        <div className="max-w-2xl mx-auto px-5 md:px-8 pb-12">
+        <div className="max-w-2xl mx-auto px-6 md:px-12 pb-12">
           <InlineCTA variant="default" />
         </div>
 
         {/* ── Back to blog + quiz CTA ── */}
         <section className="bg-surface border-t border-border2 py-10">
-          <div className="max-w-2xl mx-auto px-5 md:px-8 flex flex-col sm:flex-row
+          <div className="max-w-2xl mx-auto px-6 md:px-12 flex flex-col sm:flex-row
                           items-start sm:items-center justify-between gap-5">
             <Button href="/blog" variant="ghost" size="sm">
               &larr; All articles

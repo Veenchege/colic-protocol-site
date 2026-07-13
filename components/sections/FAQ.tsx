@@ -35,7 +35,7 @@ export default function FAQ() {
 
   return (
     <section className="py-16 md:py-24 bg-surface" aria-labelledby="faq-heading">
-      <div className="max-w-3xl mx-auto px-5 md:px-8">
+      <div className="max-w-3xl mx-auto px-6 md:px-12">
 
         <div className="mb-10">
           <p className="kicker mb-4">Common questions</p>

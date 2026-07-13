@@ -42,7 +42,7 @@ export default function AboutPage() {
 
         {/* ── Hero ── */}
         <section className="bg-paper py-14 md:py-20 border-b border-border2">
-          <div className="max-w-3xl mx-auto px-5 md:px-8">
+          <div className="max-w-3xl mx-auto px-6 md:px-12">
             <p className="kicker text-terra mb-4">
               The founder & the evidence
             </p>
@@ -60,7 +60,7 @@ export default function AboutPage() {
 
         {/* ── Founder story ── */}
         <section className="bg-paper py-14 md:py-20">
-          <div className="max-w-3xl mx-auto px-5 md:px-8">
+          <div className="max-w-3xl mx-auto px-6 md:px-12">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
 
               {/* Credentials */}
@@ -117,7 +117,7 @@ export default function AboutPage() {
 
         {/* ── The evidence base ── */}
         <section className="bg-surface py-14 md:py-20">
-          <div className="max-w-3xl mx-auto px-5 md:px-8">
+          <div className="max-w-3xl mx-auto px-6 md:px-12">
             <p className="kicker text-terra mb-4">
               The four studies
             </p>
@@ -137,7 +137,7 @@ export default function AboutPage() {
 
         {/* ── What the evidence supports / does not support ── */}
         <section className="bg-paper py-14 md:py-20">
-          <div className="max-w-3xl mx-auto px-5 md:px-8">
+          <div className="max-w-3xl mx-auto px-6 md:px-12">
             <p className="kicker text-terra mb-6">
               Honest limits of the evidence
             </p>
@@ -177,7 +177,7 @@ export default function AboutPage() {
 
         {/* ── Dual CTA ── */}
         <section className="bg-surface py-14 md:py-20 border-t border-border2">
-          <div className="max-w-3xl mx-auto px-5 md:px-8">
+          <div className="max-w-3xl mx-auto px-6 md:px-12">
             <h2 className="font-serif font-bold text-brown text-2xl md:text-3xl leading-snug mb-4">
               Start with the free protocol. Tonight.
             </h2>
