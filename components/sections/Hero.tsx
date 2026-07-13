@@ -26,7 +26,7 @@ export default function Hero() {
 
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 mb-8">
               <a
-                href="/quiz"
+                href="/colic-code-quiz.html"
                 className="inline-flex items-center justify-center rounded-btn bg-terra text-white font-semibold text-base px-8 py-4 min-h-[48px] hover:bg-[#a94f2f] transition-colors duration-150"
               >
                 Find your baby&apos;s colic type — free
@@ -60,15 +60,15 @@ export default function Hero() {
   <circle cx="198" cy="280" r="7" fill="#f2e8dc" />
   <line x1="198" y1="280" x2="198" y2="360" stroke="rgba(242,232,220,0.25)" strokeWidth="1.5" strokeDasharray="3 5" />
 
-  <text x="40" y="-14" textAnchor="middle" className="font-mono text-[11px] tracking-[0.06em] uppercase" fill="#c4603a" opacity="0.9">
-    Gut Microbiome
-  </text>
-  <text x="200" y="-14" textAnchor="middle" className="font-mono text-[11px] tracking-[0.06em] uppercase" fill="#8a6a7a" opacity="0.9">
-    Nervous System
-  </text>
-  <text x="360" y="-14" textAnchor="middle" className="font-mono text-[11px] tracking-[0.06em] uppercase" fill="#5c7a5f" opacity="0.9">
-    Feeding Mechanics
-  </text>
+  <text x="30" y="-14" textAnchor="start" className="font-mono text-[11px] tracking-[0.06em] uppercase" fill="#c4603a" opacity="0.9">
+  Gut Microbiome
+</text>
+<text x="200" y="-14" textAnchor="middle" className="font-mono text-[11px] tracking-[0.06em] uppercase" fill="#8a6a7a" opacity="0.9">
+  Nervous System
+</text>
+<text x="370" y="-14" textAnchor="end" className="font-mono text-[11px] tracking-[0.06em] uppercase" fill="#5c7a5f" opacity="0.9">
+  Feeding Mechanics
+</text>
 </svg>
           </div>
         </div>

@@ -155,7 +155,7 @@ export default function BlogPostPage({
             <Button href="/blog" variant="ghost" size="sm">
               &larr; All articles
             </Button>
-            <Button href="/quiz" variant="primary" size="sm">
+            <Button href="/colic-code-quiz.html" variant="primary" size="sm">
               Find your baby&apos;s colic type &rarr;
             </Button>
           </div>

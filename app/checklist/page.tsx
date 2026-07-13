@@ -118,7 +118,7 @@ export default function ChecklistPage() {
               type? The free quiz takes 2 minutes and sends the right
               protocol track to your email.
             </p>
-            <Button href="/quiz" variant="secondary" size="sm">
+            <Button href="/colic-code-quiz.html" variant="secondary" size="sm">
               Take the free colic type quiz instead
             </Button>
           </div>

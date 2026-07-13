@@ -69,7 +69,7 @@ export default function BlogIndexPage() {
               usable one-handed at 3AM.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Button href="/quiz" variant="primary" size="md">
+              <Button href="/colic-code-quiz.html" variant="primary" size="md">
                 Find your baby&apos;s colic type — free
               </Button>
               <Button href="/checklist" variant="secondary" size="md">

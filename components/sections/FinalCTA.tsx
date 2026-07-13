@@ -21,7 +21,7 @@ export default function FinalCTA() {
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-5 mb-8">
           <a
-            href="/quiz"
+            href="/colic-code-quiz.html"
             className="inline-flex items-center justify-center rounded-btn bg-terra text-white font-semibold text-base px-8 py-4 min-h-[48px] hover:bg-[#a94f2f] transition-colors duration-150"
           >
             Find your baby&apos;s colic type — free

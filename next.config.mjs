@@ -49,3 +49,12 @@ const nextConfig = {
 }
 
 export default nextConfig
+async redirects() {
+  return [
+    {
+      source: '/quiz',
+      destination: '/colic-code-quiz.html',
+      permanent: true,
+    },
+  ]
+},

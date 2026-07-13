@@ -189,7 +189,7 @@ export default function AboutPage() {
               refund if results do not show in 72 hours.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button href="/quiz" variant="primary" size="md">
+              <Button href="/colic-code-quiz.html" variant="primary" size="md">
                 Take the free colic type quiz
               </Button>
               <Button href={gumroadChecklist} variant="secondary" size="md" external>

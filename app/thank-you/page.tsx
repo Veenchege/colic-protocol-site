@@ -144,7 +144,7 @@ export default function ThankYouPage({
                 Share via WhatsApp
               </a>
               <Link
-                href="/quiz"
+                href="/colic-code-quiz.html"
                 className="inline-flex items-center gap-1.5 text-xs text-muted hover:text-terra transition-colors duration-150 border border-border2 rounded px-3 py-1.5"
               >
                 Retake the quiz
