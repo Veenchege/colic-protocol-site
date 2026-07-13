@@ -1,3 +1,4 @@
+'use client'
 export default function OriginStory() {
   return (
     <section className="py-16 md:py-24 bg-warm" aria-labelledby="origin-heading">
