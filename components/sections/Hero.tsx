@@ -60,13 +60,13 @@ export default function Hero() {
   <circle cx="198" cy="280" r="7" fill="#f2e8dc" />
   <line x1="198" y1="280" x2="198" y2="360" stroke="rgba(242,232,220,0.25)" strokeWidth="1.5" strokeDasharray="3 5" />
 
-  <text x="30" y="-14" textAnchor="start" className="font-mono text-[11px] tracking-[0.06em] uppercase" fill="#c4603a" opacity="0.9">
+  <text x="40" y="-14" textAnchor="start" className="font-mono text-[10px] tracking-[0.04em] uppercase" fill="#c4603a" opacity="0.9">
   Gut Microbiome
 </text>
-<text x="200" y="-14" textAnchor="middle" className="font-mono text-[11px] tracking-[0.06em] uppercase" fill="#8a6a7a" opacity="0.9">
+<text x="255" y="-14" textAnchor="end" className="font-mono text-[10px] tracking-[0.04em] uppercase" fill="#8a6a7a" opacity="0.9">
   Nervous System
 </text>
-<text x="370" y="-14" textAnchor="end" className="font-mono text-[11px] tracking-[0.06em] uppercase" fill="#5c7a5f" opacity="0.9">
+<text x="265" y="-14" textAnchor="start" className="font-mono text-[10px] tracking-[0.04em] uppercase" fill="#5c7a5f" opacity="0.9">
   Feeding Mechanics
 </text>
 </svg>

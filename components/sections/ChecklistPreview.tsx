@@ -40,19 +40,28 @@ export default function ChecklistPreview() {
     <section className="py-16 md:py-24 bg-surface" aria-labelledby="checklist-heading">
       <div className="max-w-5xl mx-auto px-6 md:px-12">
 
-        <div className="mb-12 max-w-2xl">
-          <p className="kicker mb-4">The free protocol</p>
-          <h2
-            id="checklist-heading"
-            className="font-sans font-bold text-brown text-[30px] md:text-[38px] leading-[1.15] tracking-tight mb-4"
-          >
-            The Midnight Emergency Checklist <span className="text-terra">(The Zion Protocol)</span>
-          </h2>
-          <p className="text-[17px] text-muted leading-relaxed">
-            A four-stage crisis triage built from the same evidence base as the Blueprint.
-            Free — delivered straight to your inbox via Gumroad — or complete the quiz
-            to get a version personalised to your baby&apos;s colic type.
-          </p>
+        <div className="grid grid-cols-1 md:grid-cols-[1fr_220px] gap-10 items-start mb-12">
+          <div className="max-w-2xl">
+            <p className="kicker mb-4">The free protocol</p>
+            <h2
+              id="checklist-heading"
+              className="font-sans font-bold text-brown text-[30px] md:text-[38px] leading-[1.15] tracking-tight mb-4"
+            >
+              The Midnight Emergency Checklist <span className="text-terra">(The Zion Protocol)</span>
+            </h2>
+            <p className="text-[17px] text-muted leading-relaxed">
+              A four-stage crisis triage built from the same evidence base as the Blueprint.
+              Free — delivered straight to your inbox via Gumroad — or complete the quiz
+              to get a version personalised to your baby&apos;s colic type.
+            </p>
+          </div>
+          <div className="hidden md:block">
+            <img
+              src="/images/midnight-checklist-preview.jpg"
+              alt="Free Midnight Emergency Checklist preview"
+              className="w-full rounded-card border border-border2 shadow-lg"
+            />
+          </div>
         </div>
 
         <div className="relative flex flex-col gap-0">

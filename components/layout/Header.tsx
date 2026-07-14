@@ -37,7 +37,7 @@ export default function Header() {
           </nav>
 
           <button
-            className="md:hidden p-2 -mr-2 text-cream-text/70 hover:text-terra transition-colors rounded focus-visible:outline-2 focus-visible:outline-terra"
+            className="md:hidden p-2 -mr-2 text-cream-text/85 hover:text-terra transition-colors rounded focus-visible:outline-2 focus-visible:outline-terra"
             onClick={() => setOpen((v) => !v)}
             aria-label={open ? 'Close navigation menu' : 'Open navigation menu'}
             aria-expanded={open}
@@ -67,7 +67,7 @@ export default function Header() {
 
 function NavLink({ href, children, onClick }: { href: string; children: React.ReactNode; onClick?: () => void }) {
   return (
-    <Link href={href} onClick={onClick} className="text-[15px] text-cream-text/65 hover:text-terra transition-colors duration-150">
+    <Link href={href} onClick={onClick} className="text-[15px] text-cream-text/85 hover:text-terra transition-colors duration-150">
       {children}
     </Link>
   )

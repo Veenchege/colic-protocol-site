@@ -55,26 +55,7 @@ export default function OriginStory() {
               (roughly 3:4, warm/natural, not a studio headshot — this
               audience distrusts polish). Falls back to an initial mark
               if the file isn't present yet so the layout never breaks.
-            */}
-            <div className="relative w-full aspect-[4/5] rounded-card overflow-hidden bg-card border border-border2">
-              <img
-                src="/images/vincent.jpg"
-                alt="Vincent, epidemiologist and founder of Colic Protocol"
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  const el = e.currentTarget
-                  el.style.display = 'none'
-                  const fallback = el.nextElementSibling as HTMLElement | null
-                  if (fallback) fallback.style.display = 'flex'
-                }}
-              />
-              <div
-                className="hidden absolute inset-0 items-center justify-center bg-terra/8"
-                aria-hidden="true"
-              >
-                <span className="font-serif font-bold text-terra text-6xl">V.</span>
-              </div>
-            </div>
+            
 
             <div>
               <p className="font-serif font-semibold text-brown text-xl mb-1">Vincent</p>

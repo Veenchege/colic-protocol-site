@@ -44,22 +44,31 @@ export default function ChecklistPage() {
       <MinimalNav />
 
       <main id="main-content" className="min-h-screen bg-paper">
-        <div className="max-w-2xl mx-auto px-6 md:px-12 py-12 md:py-20">
+        <div className="max-w-3xl mx-auto px-6 md:px-12 py-12 md:py-20">
 
-          {/* ── Header ── */}
-          <div className="mb-10">
-            <p className="kicker text-terra mb-4">
-              Free download · Email required for delivery
-            </p>
-            <h1 className="font-serif font-bold text-brown text-3xl md:text-[44px] leading-snug mb-4">
-              The Midnight Emergency Checklist{' '}
-              <span className="text-terra italic">(The Zion Protocol)</span>
-            </h1>
-            <p className="text-muted text-sm md:text-base leading-relaxed">
-              A four-stage crisis triage built from peer-reviewed colic
-              research. Works tonight. Takes 15 minutes to read. Built by an
-              Epidemiologist after the medical system said &ldquo;wait it out.&rdquo;
-            </p>
+          {/* â”€â”€ Header â”€â”€ */}
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_200px] gap-8 items-start mb-10">
+            <div>
+              <p className="kicker text-terra mb-4">
+                Free download Â· Email required for delivery
+              </p>
+              <h1 className="font-serif font-bold text-brown text-3xl md:text-[44px] leading-snug mb-4">
+                The Midnight Emergency Checklist{' '}
+                <span className="text-terra italic">(The Zion Protocol)</span>
+              </h1>
+              <p className="text-muted text-sm md:text-base leading-relaxed">
+                A four-stage crisis triage built from peer-reviewed colic
+                research. Works tonight. Takes 15 minutes to read. Built by an
+                Epidemiologist after the medical system said &ldquo;wait it out.&rdquo;
+              </p>
+            </div>
+            <div className="hidden md:block">
+              <img
+                src="/images/midnight-checklist-preview.jpg"
+                alt="Free Midnight Emergency Checklist preview"
+                className="w-full rounded-card border border-border2 shadow-lg"
+              />
+            </div>
           </div>
 
           {/* ── Stages ── */}

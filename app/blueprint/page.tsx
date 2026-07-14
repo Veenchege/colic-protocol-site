@@ -78,26 +78,37 @@ export default function BlueprintPage() {
 
         {/* ── 1. Hero — price and guarantee visible above fold ── */}
         <section className="bg-paper py-14 md:py-20 border-b border-border2">
-          <div className="max-w-3xl mx-auto px-6 md:px-12">
-            <p className="kicker text-terra mb-4">
-              Complete colic management system
-            </p>
-            <h1 className="font-serif font-bold text-brown text-3xl md:text-[48px] leading-snug mb-4">
-              The Calm Baby Blueprint
-            </h1>
-            <p className="text-muted text-base md:text-lg leading-relaxed mb-6 max-w-prose">
-              The diagnostic protocol, gut reset, physical technique
-              sequences, and acoustic design specifications the checklist
-              cannot give you. Three bonuses included. One payment. No
-              subscription.
-            </p>
-            <div className="flex flex-wrap items-center gap-4">
-              <Button href={gumroadUrl} variant="primary" size="lg" external>
-                Get the Blueprint — $47
-              </Button>
-              <p className="font-mono text-[10px] tracking-[0.08em] uppercase text-muted2">
-                Full refund if results don&apos;t show in 72 hours
-              </p>
+          <div className="max-w-4xl mx-auto px-6 md:px-12">
+            <div className="grid grid-cols-1 md:grid-cols-[1fr_240px] gap-10 items-start">
+              <div>
+                <p className="kicker text-terra mb-4">
+                  Complete colic management system
+                </p>
+                <h1 className="font-serif font-bold text-brown text-3xl md:text-[48px] leading-snug mb-4">
+                  The Calm Baby Blueprint
+                </h1>
+                <p className="text-muted text-base md:text-lg leading-relaxed mb-6 max-w-prose">
+                  The diagnostic protocol, gut reset, physical technique
+                  sequences, and acoustic design specifications the checklist
+                  cannot give you. Three bonuses included. One payment. No
+                  subscription.
+                </p>
+                <div className="flex flex-wrap items-center gap-4">
+                  <Button href={gumroadUrl} variant="primary" size="lg" external>
+                    Get the Blueprint — $47
+                  </Button>
+                  <p className="font-mono text-[10px] tracking-[0.08em] uppercase text-muted2">
+                    Full refund if results don&apos;t show in 72 hours
+                  </p>
+                </div>
+              </div>
+              <div className="hidden md:block">
+                <img
+                  src="/images/calm-baby-blueprint-cover.png"
+                  alt="The Calm Baby Blueprint book cover"
+                  className="w-full rounded-card border border-border2 shadow-lg"
+                />
+              </div>
             </div>
           </div>
         </section>
