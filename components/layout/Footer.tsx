@@ -57,7 +57,7 @@ export default function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 text-sm text-cream-text/85 hover:text-terra transition-colors duration-150 group"
-                    aria-label={`${label} — ${handle}`}
+                    aria-label={`${label} â€” ${handle}`}
                   >
                     <span className="font-mono text-[10px] tracking-wide uppercase text-cream-text/60 group-hover:text-terra/70 transition-colors w-16 shrink-0">
                       {label}
@@ -76,13 +76,13 @@ export default function Footer() {
             The information on this website and in the Colic Protocol products is for informational
             purposes only and does not constitute medical advice, diagnosis, or treatment. Always
             consult a qualified healthcare professional for any concerns about your baby&apos;s
-            health. If your baby has a fever above 38°C, difficulty breathing, or you are concerned
+            health. If your baby has a fever above 38Â°C, difficulty breathing, or you are concerned
             about their welfare, contact emergency services immediately.
           </p>
         </div>
 
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <p className="font-mono text-[11px] text-cream-text/55 tracking-wide">� {year} Colic Protocol. All rights reserved.</p>
+          <p className="font-mono text-[11px] text-cream-text/55 tracking-wide">© {year} Colic Protocol. All rights reserved.</p>
           <p className="font-mono text-[11px] text-cream-text/55 tracking-wide">colicprotocol.baby</p>
         </div>
       </div>

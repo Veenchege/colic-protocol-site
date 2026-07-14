@@ -16,7 +16,7 @@ export default function FinalCTA() {
 
         <p className="text-cream-text/85 text-base md:text-lg leading-relaxed mb-10 max-w-xl mx-auto">
           Take the 2-minute quiz to get a protocol personalised to your baby&apos;s colic
-          type — or download the checklist directly and use it tonight.
+          type â€” or download the checklist directly and use it tonight.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-5 mb-8">
@@ -24,7 +24,7 @@ export default function FinalCTA() {
             href="/colic-code-quiz.html"
             className="inline-flex items-center justify-center rounded-btn bg-terra text-white font-semibold text-base px-8 py-4 min-h-[48px] hover:bg-[#a94f2f] transition-colors duration-150"
           >
-            Find your baby&apos;s colic type — free
+            Find your baby&apos;s colic type â€” free
           </a>
           <a
             href={gumroadChecklist}
@@ -37,7 +37,7 @@ export default function FinalCTA() {
         </div>
 
         <p className="font-mono text-[11px] tracking-[0.08em] uppercase text-cream-text/60">
-          No credit card · No subscription · Email required for delivery
+          No credit card Â· No subscription Â· Email required for delivery
         </p>
       </div>
     </section>
