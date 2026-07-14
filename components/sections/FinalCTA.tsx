@@ -14,7 +14,7 @@ export default function FinalCTA() {
           The protocol takes <em className="italic text-terra">15 minutes</em> to read.
         </h2>
 
-        <p className="text-cream-text/65 text-base md:text-lg leading-relaxed mb-10 max-w-xl mx-auto">
+        <p className="text-cream-text/85 text-base md:text-lg leading-relaxed mb-10 max-w-xl mx-auto">
           Take the 2-minute quiz to get a protocol personalised to your baby&apos;s colic
           type — or download the checklist directly and use it tonight.
         </p>
@@ -36,7 +36,7 @@ export default function FinalCTA() {
           </a>
         </div>
 
-        <p className="font-mono text-[11px] tracking-[0.08em] uppercase text-cream-text/35">
+        <p className="font-mono text-[11px] tracking-[0.08em] uppercase text-cream-text/60">
           No credit card · No subscription · Email required for delivery
         </p>
       </div>
