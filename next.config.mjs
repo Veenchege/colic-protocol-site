@@ -9,17 +9,14 @@ const nextConfig = {
     //   { protocol: 'https', hostname: 'cdn.colicprotocol.com' },
     // ],
   },
-
   // Strict TypeScript — never silence build errors.
   typescript: {
     ignoreBuildErrors: false,
   },
-
   // Strict ESLint — catch issues before deploy.
   eslint: {
     ignoreDuringBuilds: false,
   },
-
   // Security headers — applied to every response.
   async headers() {
     return [
@@ -41,20 +38,17 @@ const nextConfig = {
       },
     ]
   },
-
-  // No redirects defined. /checklist, /blueprint, /quiz etc. are all real
-  // pages under app/ — do not add a redirect here that shadows any of them.
-  // Next.js resolves config-level redirects before file-based routes, so a
-  // redirect at the same path as a page silently makes the page unreachable.
+  // /quiz is intentionally redirected to the static standalone assessment
+  // at /colic-code-quiz.html. app/quiz/page.tsx still exists in the repo
+  // but is now unreachable — this redirect takes priority over it.
+  async redirects() {
+    return [
+      {
+        source: '/quiz',
+        destination: '/colic-code-quiz.html',
+        permanent: true,
+      },
+    ]
+  },
 }
-
 export default nextConfig
-async redirects() {
-  return [
-    {
-      source: '/quiz',
-      destination: '/colic-code-quiz.html',
-      permanent: true,
-    },
-  ]
-},
