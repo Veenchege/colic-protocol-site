@@ -48,15 +48,7 @@ export default function OriginStory() {
           {/* ── Right: Founder ── */}
           <div className="flex flex-col gap-6">
 
-            {/*
-              Photo slot. Master Document v10 flags this as the single
-              highest-trust asset currently missing from the site — add
-              a real photo of Vincent at public/images/vincent.jpg
-              (roughly 3:4, warm/natural, not a studio headshot — this
-              audience distrusts polish). Falls back to an initial mark
-              if the file isn't present yet so the layout never breaks.
-            
-
+    
             <div>
               <p className="font-serif font-semibold text-brown text-xl mb-1">Vincent</p>
               <p className="font-mono text-[11px] tracking-[0.06em] uppercase text-terra mb-4">

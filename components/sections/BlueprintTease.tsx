@@ -16,7 +16,8 @@ const BONUSES = [
 export default function BlueprintTease() {
   return (
     <section className="py-16 md:py-24 bg-paper" aria-labelledby="blueprint-heading">
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_220px] gap-10 items-start mb-10">
+      <div className="max-w-5xl mx-auto px-6 md:px-12">
+        <div className="grid grid-cols-1 md:grid-cols-[1fr_220px] gap-10 items-start mb-10">
           <div className="max-w-2xl">
             <p className="kicker mb-4">The full protocol</p>
             <h2
