@@ -20,7 +20,7 @@ export default function Hero() {
 
             <p className="text-[19px] md:text-[21px] text-cream-text/70 leading-[1.5] mb-8 max-w-[40ch]">
               Colic has three distinct root causes. Most advice treats it as one problem.
-              The 2-minute assessment tells you which is driving tonight — and exactly
+              The 2-minute assessment tells you which is driving tonight Ã¢â‚¬â€ and exactly
               what to do about it.
             </p>
 
@@ -29,7 +29,7 @@ export default function Hero() {
                 href="/colic-code-quiz.html"
                 className="inline-flex items-center justify-center rounded-btn bg-terra text-white font-semibold text-base px-8 py-4 min-h-[48px] hover:bg-[#a94f2f] transition-colors duration-150"
               >
-                Find your baby&apos;s colic type — free
+                Find your baby&apos;s colic type Ã¢â‚¬â€ free
               </a>
               <a
                 href={gumroadChecklist}
@@ -41,12 +41,12 @@ export default function Hero() {
               </a>
             </div>
 
-            <p className="font-mono text-[11px] tracking-[0.09em] uppercase text-cream-text/35">
-              71+ protocols downloaded · 20+ countries · No credit card required
+            <p className="font-mono text-[11px] tracking-[0.09em] uppercase text-cream-text/60">
+              71+ protocols downloaded Ã‚Â· 20+ countries Ã‚Â· No credit card required
             </p>
           </div>
 
-          {/* Signature graphic — three systems converging into one protocol.
+          {/* Signature graphic Ã¢â‚¬â€ three systems converging into one protocol.
               Not decoration: this is the literal "diagnosis before protocol"
               claim, shown before a single word of copy explains it. */}
           <div className="hidden md:block mt-6 md:mt-10" aria-hidden="true">
@@ -84,7 +84,7 @@ export default function Hero() {
             ].map(({ stat, label }) => (
               <li key={label} className="flex items-baseline gap-3">
                 <span className="font-serif font-semibold text-terra text-2xl leading-none">{stat}</span>
-                <span className="font-mono text-[11px] tracking-[0.07em] uppercase text-cream-text/40">{label}</span>
+                <span className="font-mono text-[11px] tracking-[0.07em] uppercase text-cream-text/60">{label}</span>
               </li>
             ))}
           </ul>
