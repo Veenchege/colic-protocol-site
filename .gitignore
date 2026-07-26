@@ -19,6 +19,12 @@
 # vercel
 .vercel
 
+# wrangler local cache/state, created by `wrangler dev` and by
+# `opennextjs-cloudflare build` / `preview` — noticed missing from this
+# file while verifying the Cloudflare Pages build fix
+.wrangler
+.open-next/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

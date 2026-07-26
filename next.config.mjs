@@ -1,3 +1,7 @@
+import { initOpenNextCloudflareForDev } from '@opennextjs/cloudflare'
+
+initOpenNextCloudflareForDev()
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Image optimisation — add remote patterns here if you ever

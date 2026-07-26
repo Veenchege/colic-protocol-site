@@ -142,3 +142,54 @@ were all left exactly as they were. What changed:
   existed in an earlier, separate deliverable. It's live here as-is.
 - Everything else (quiz logic, MailerLite integration, component structure,
   copy voice, page composition) is untouched from what was uploaded.
+
+## Changelog: deployment fix (this pass)
+
+Your Cloudflare Pages build failed with:
+
+```
+TypeError [ERR_PARSE_ARGS_UNEXPECTED_POSITIONAL]: Unexpected argument 'build'.
+```
+
+**What was actually wrong**: `package.json` had `"@opennextjs/cloudflare": "^0.3.0"`,
+which resolved to `0.3.10`. That version's CLI predates the current
+`opennextjs-cloudflare build / preview / deploy` subcommand structure, it
+only understood flags, not a positional `build` argument. The `build`
+subcommand itself is correct, current, official syntax, the installed
+package was just too old to know it.
+
+**Why the fix isn't just "install latest"**: `@opennextjs/cloudflare@1.20.2`
+(current latest) requires Next.js `>=15.5.21 <16 || >=16.2.11` as a peer
+dependency. This project is on Next.js `14.2.35`. Jumping to the latest
+adapter version would have forced a Next.js 14 → 15/16 major upgrade on top
+of it, a much bigger, riskier change than a build-config fix, with its own
+breaking changes (async `cookies()`/`headers()`/`params`, etc.) that would
+need separate, careful verification against every page and API route in
+this project.
+
+**What was actually done, and verified for real**:
+
+1. Bisected npm's version history and confirmed `@opennextjs/cloudflare@1.15.1`
+   is the newest release that still declares Next.js 14.2.35 as a
+   compatible peer (`1.16.0` onward drops Next 14 support entirely). Pinned
+   to that exact version, not a caret range, so a future `npm install`
+   can't silently drift onto a version that breaks the peer requirement
+   again.
+2. Added `open-next.config.ts` at the project root. Current
+   `@opennextjs/cloudflare` versions require this file to exist; the old
+   0.3.x line didn't, so it was never added.
+3. Added `initOpenNextCloudflareForDev()` to `next.config.mjs`, required
+   since the 0.4 line for local `next dev` to work correctly against the
+   Cloudflare bindings.
+4. **Ran the actual failing command** (`npx opennextjs-cloudflare build`)
+   in a real environment after the fix, not just inspected the config. It
+   completed successfully end to end: all 22 routes built, `.open-next/worker.js`
+   and `.open-next/assets` generated, matching exactly what `wrangler.jsonc`'s
+   `pages_build_output_dir` expects.
+
+**One thing to actually do**: commit the updated `package-lock.json` (or
+whichever lockfile your setup generates) alongside `package.json` after
+running `npm install` yourself once, so Cloudflare's build installs the
+exact same dependency tree that was just verified, rather than re-resolving
+ranges fresh on every build.
+
