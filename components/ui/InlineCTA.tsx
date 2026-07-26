@@ -61,7 +61,7 @@ export default function InlineCTA({ variant = 'default' }: InlineCTAProps) {
           Download free checklist
         </Button>
         <Button
-          href="/colic-code-quiz.html"
+          href="/quiz"
           variant="ghost"
           size="sm"
         >

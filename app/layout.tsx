@@ -28,7 +28,7 @@ const dmMono = DM_Mono({
 /* ─── Metadata ───────────────────────────────────────────────── */
 export const metadata: Metadata = {
   title: {
-    default: 'Colic Protocol — Evidence-Based Infant Colic Management',
+    default: 'Colic Protocol - Evidence-Based Infant Colic Management',
     template: '%s | Colic Protocol',
   },
   description:
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
         url: '/images/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Colic Protocol — Evidence-Based Infant Colic Management',
+        alt: 'Colic Protocol - Evidence-Based Infant Colic Management',
       },
     ],
   },
@@ -99,6 +99,57 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   )
 }
 
+/* ─── Site-wide structured data ──────────────────────────────── */
+// Organization + WebSite JSON-LD. Renders once, on every page, via the
+// root layout. This is what lets Google associate the site with an
+// entity (name, logo, social profiles) rather than just a bag of pages,
+// and is a prerequisite for a lot of the richer search result treatment
+// (sitelinks search box, knowledge panel eligibility over time).
+function StructuredData() {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://colicprotocol.baby'
+
+  const organization = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'Colic Protocol',
+    url: siteUrl,
+    logo: `${siteUrl}/images/og-image.png`,
+    sameAs: [
+      'https://tiktok.com/@colicprotocol',
+      'https://instagram.com/colicprotocol',
+      'https://pinterest.com/colicprotocol',
+    ],
+  }
+
+  const website = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Colic Protocol',
+    url: siteUrl,
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${siteUrl}/blog?q={search_term_string}`,
+      },
+      'query-input': 'required name=search_term_string',
+    },
+  }
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(website) }}
+      />
+    </>
+  )
+}
+
 /* ─── Root Layout ────────────────────────────────────────────── */
 export default function RootLayout({
   children,
@@ -112,6 +163,7 @@ export default function RootLayout({
     >
       <head>
         <GTMScript />
+        <StructuredData />
       </head>
       <body>{children}</body>
     </html>

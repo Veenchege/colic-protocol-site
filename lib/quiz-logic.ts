@@ -25,13 +25,13 @@ export type UrgencyLevel = 'peak' | 'approaching' | 'early' | 'resolving'
  */
 export interface QuizAnswers {
   babyAge:      BabyAge
-  cryTiming:    string   // Q2 — when the crying happens
-  crySound:     string   // Q3 — the acoustic pattern of the cry
-  bodySignals:  string   // Q4 — physical signs during crying
-  triedBefore:  string   // Q5 — the single thing tried most
-  holdResponse: string   // Q6 — response to being held
-  stoolType:    string   // Q7 — stool presentation
-  feedingMethod: FeedingMethod // Q8 — feeding situation, drives track selection
+  cryTiming:    string   // Q2 - when the crying happens
+  crySound:     string   // Q3 - the acoustic pattern of the cry
+  bodySignals:  string   // Q4 - physical signs during crying
+  triedBefore:  string   // Q5 - the single thing tried most
+  holdResponse: string   // Q6 - response to being held
+  stoolType:    string   // Q7 - stool presentation
+  feedingMethod: FeedingMethod // Q8 - feeding situation, drives track selection
 }
 
 interface SystemScores {
@@ -63,7 +63,7 @@ export interface QuizReport {
 
 const CRY_TIMING_SCORES: Record<string, SystemScores> = {
   evenings: { gut: 1, ns: 2, ac: 1 },   // consistently 5PM–midnight
-  feeding:  { gut: 2, ns: 0, ac: 0 },   // during/after feeding — reflux flag
+  feeding:  { gut: 2, ns: 0, ac: 0 },   // during/after feeding - reflux flag
   random:   { gut: 1, ns: 1, ac: 0 },   // no clear pattern
   environment: { gut: 0, ns: 2, ac: 2 }, // any environment change
 }
@@ -181,14 +181,14 @@ const REPORTS: Record<
     ctaConsequence:
       'Every week the gut imbalance runs without intervention is another week of the same pattern nightly. It resolves on its own at 10 to 12 weeks. The L. reuteri protocol compresses that window, but only with the correct strain, dose, and timing. Generic probiotics do not carry this data.',
     protocolList: [
-      'Diagnostic decision tree — confirm gut is the primary system before committing to the protocol',
+      'Diagnostic decision tree - confirm gut is the primary system before committing to the protocol',
       'Full L. reuteri DSM 17938 dosing calibration for breastfed and formula-fed infants',
       'Tiger Hold, ILU massage, and vagus nerve sequence with technique breakdowns',
       '60-minute brown noise soundscape calibrated to womb frequencies',
-      'Bloom Baby Tracker app — one-tap logging at 3AM to confirm the pattern is breaking',
-      'Cry Decoder audio — distinguish gut pain from nervous system cries',
+      'Bloom Baby Tracker app - one-tap logging at 3AM to confirm the pattern is breaking',
+      'Cry Decoder audio - distinguish gut pain from nervous system cries',
     ],
-    ctaBtnText: 'Start the Gut Reset Protocol — $47',
+    ctaBtnText: 'Start the Gut Reset Protocol - $47',
   },
 
   NS: {
@@ -213,12 +213,12 @@ const REPORTS: Record<
     protocolList: [
       'The sound, touch, light timing framework with assessment checkpoints at each stage',
       'Tiger Hold with full 60 BPM rhythm calibration and technique breakdown',
-      'Cry Decoder audio — distinguish the nervous system cry from gut pain in real time',
+      'Cry Decoder audio - distinguish the nervous system cry from gut pain in real time',
       '60-minute brown noise soundscape engineered to womb frequencies',
-      'Parent regulation section — your cortisol transmits through touch, regulate yourself first',
-      'Bloom Baby Tracker app — log what is working at 3AM without turning on a light',
+      'Parent regulation section - your cortisol transmits through touch, regulate yourself first',
+      'Bloom Baby Tracker app - log what is working at 3AM without turning on a light',
     ],
-    ctaBtnText: 'Start the Nervous System Protocol — $47',
+    ctaBtnText: 'Start the Nervous System Protocol - $47',
   },
 
   ACOUSTIC: {
@@ -242,13 +242,13 @@ const REPORTS: Record<
       'Acoustic dysregulation compounds across the day. The witching hour is the accumulation of a full day of suboptimal acoustic input reaching a threshold, not a random evening event. Fixing only the night environment manages episodes without preventing them.',
     protocolList: [
       '60-minute brown noise soundscape engineered to womb frequency specifications',
-      'Acoustic environment design guide — speaker placement, volume calibration, room setup',
+      'Acoustic environment design guide - speaker placement, volume calibration, room setup',
       'The sound, touch, light timing framework and full integration protocol',
       'Tiger Hold technique breakdown as the physical complement to the acoustic layer',
-      'Bloom Baby Tracker app — track which acoustic adjustments produce measurable results',
-      'Cry Decoder audio — identify acoustic-sensitivity cry patterns in real time',
+      'Bloom Baby Tracker app - track which acoustic adjustments produce measurable results',
+      'Cry Decoder audio - identify acoustic-sensitivity cry patterns in real time',
     ],
-    ctaBtnText: 'Fix the Acoustic Environment — $47',
+    ctaBtnText: 'Fix the Acoustic Environment - $47',
   },
 
   MIXED: {
@@ -271,14 +271,14 @@ const REPORTS: Record<
     ctaConsequence:
       'Multi-system colic does not resolve faster by trying harder on one system. It resolves by running all three correctly, in sequence, at the same time. That is the sequencing architecture the Blueprint provides.',
     protocolList: [
-      'Diagnostic decision tree — identify which system is primary before sequencing intervention',
+      'Diagnostic decision tree - identify which system is primary before sequencing intervention',
       'Full L. reuteri DSM 17938 dosing protocol running alongside physical and acoustic layers',
       'Tiger Hold, ILU massage, and vagus nerve sequence with technique breakdowns',
       '60-minute brown noise soundscape calibrated to womb frequencies',
-      'Bloom Baby Tracker app — one-tap logging to see which system is improving first',
-      'Cry Decoder audio — distinguish which system is driving each individual episode',
+      'Bloom Baby Tracker app - one-tap logging to see which system is improving first',
+      'Cry Decoder audio - distinguish which system is driving each individual episode',
     ],
-    ctaBtnText: 'Start the Full Three-System Protocol — $47',
+    ctaBtnText: 'Start the Full Three-System Protocol - $47',
   },
 }
 
@@ -290,7 +290,7 @@ export function buildQuizReport(answers: QuizAnswers): QuizReport {
   const base     = REPORTS[coliType]
 
   const refluxFlag    = answers.cryTiming === 'feeding'
-  const dayNightFlag  = false // reserved — no night-only option in the 8-question set below; kept for future use
+  const dayNightFlag  = false // reserved - no night-only option in the 8-question set below; kept for future use
 
   const failedProducts: string[] = []
   if (answers.triedBefore === 'gripewater_gasdrops') {

@@ -4,7 +4,7 @@ import Button     from '@/components/ui/Button'
 
 /* ─── Metadata ───────────────────────────────────────────────── */
 export const metadata: Metadata = {
-  title:       'The Midnight Emergency Checklist — Free Download',
+  title:       'The Midnight Emergency Checklist - Free Download',
   description: 'The Zion Protocol. Four stages. Brown noise first, Tiger Hold second, gas release third. Built by an Epidemiologist. Free forever.',
   robots:      { index: true, follow: true },
 }
@@ -19,12 +19,12 @@ const STAGES = [
   {
     num:   '02',
     title: 'Environment Reset',
-    desc:  'Brown noise at 60–65dB, minimum seven feet from head. Warm dim light. This layer runs before touch — always.',
+    desc:  'Brown noise at 60–65dB, minimum seven feet from head. Warm dim light. This layer runs before touch - always.',
   },
   {
     num:   '03',
     title: 'Soothing Circuit',
-    desc:  'Tiger Hold: face-down, forearm pressure, 60 BPM pulse. Five minutes minimum. Not rocking — pulsing.',
+    desc:  'Tiger Hold: face-down, forearm pressure, 60 BPM pulse. Five minutes minimum. Not rocking - pulsing.',
   },
   {
     num:   '04',
@@ -44,31 +44,22 @@ export default function ChecklistPage() {
       <MinimalNav />
 
       <main id="main-content" className="min-h-screen bg-paper">
-        <div className="max-w-3xl mx-auto px-6 md:px-12 py-12 md:py-20">
+        <div className="max-w-2xl mx-auto px-5 md:px-8 py-12 md:py-20">
 
-          {/* â”€â”€ Header â”€â”€ */}
-          <div className="grid grid-cols-1 md:grid-cols-[1fr_200px] gap-8 items-start mb-10">
-            <div>
-              <p className="kicker text-terra mb-4">
-                Free download Â· Email required for delivery
-              </p>
-              <h1 className="font-serif font-bold text-brown text-3xl md:text-[44px] leading-snug mb-4">
-                The Midnight Emergency Checklist{' '}
-                <span className="text-terra italic">(The Zion Protocol)</span>
-              </h1>
-              <p className="text-muted text-sm md:text-base leading-relaxed">
-                A four-stage crisis triage built from peer-reviewed colic
-                research. Works tonight. Takes 15 minutes to read. Built by an
-                Epidemiologist after the medical system said &ldquo;wait it out.&rdquo;
-              </p>
-            </div>
-            <div className="hidden md:block">
-              <img
-                src="/images/midnight-checklist-preview.jpg"
-                alt="Free Midnight Emergency Checklist preview"
-                className="w-full rounded-card border border-border2 shadow-lg"
-              />
-            </div>
+          {/* ── Header ── */}
+          <div className="mb-10">
+            <p className="kicker text-terra mb-4">
+              Free download · Email required for delivery
+            </p>
+            <h1 className="font-serif font-bold text-brown text-3xl md:text-[44px] leading-snug mb-4">
+              The Midnight Emergency Checklist{' '}
+              <span className="text-terra italic">(The Zion Protocol)</span>
+            </h1>
+            <p className="text-muted text-sm md:text-base leading-relaxed">
+              A four-stage crisis triage built from peer-reviewed colic
+              research. Works tonight. Takes 15 minutes to read. Built by an
+              Epidemiologist after the medical system said &ldquo;wait it out.&rdquo;
+            </p>
           </div>
 
           {/* ── Stages ── */}
@@ -127,7 +118,7 @@ export default function ChecklistPage() {
               type? The free quiz takes 2 minutes and sends the right
               protocol track to your email.
             </p>
-            <Button href="/colic-code-quiz.html" variant="secondary" size="sm">
+            <Button href="/quiz" variant="secondary" size="sm">
               Take the free colic type quiz instead
             </Button>
           </div>

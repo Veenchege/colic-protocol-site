@@ -3,7 +3,7 @@ import MinimalNav from '@/components/layout/MinimalNav'
 import Footer     from '@/components/layout/Footer'
 
 export const metadata: Metadata = {
-  title:  'Terms of Use — Colic Protocol',
+  title:  'Terms of Use - Colic Protocol',
   robots: { index: true, follow: true },
 }
 
@@ -14,7 +14,7 @@ export default function TermsPage() {
     <>
       <MinimalNav />
       <main id="main-content" className="bg-paper py-12 md:py-20">
-        <div className="max-w-2xl mx-auto px-6 md:px-12">
+        <div className="max-w-2xl mx-auto px-5 md:px-8">
 
           <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-terra mb-4">
             Legal

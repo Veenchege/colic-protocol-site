@@ -6,7 +6,7 @@ import { ColiTypeBadge } from '@/components/ui/Badge'
 
 /* ─── Metadata ───────────────────────────────────────────────── */
 export const metadata: Metadata = {
-  title:  'Protocol On Its Way — Colic Protocol',
+  title:  'Protocol On Its Way - Colic Protocol',
   description: 'Your personalised colic protocol is in your inbox.',
   robots: { index: false, follow: false },  // no need to index this page
 }
@@ -15,19 +15,19 @@ export const metadata: Metadata = {
 const TYPE_CONTENT: Record<string, { headline: string; expectation: string }> = {
   GUT: {
     headline:    'Your gut reset protocol is on its way.',
-    expectation: 'Your Day 1 email covers the L. reuteri DSM 17938 dosing protocol, feeding method calibration, and the full three-stage sequence. Check your inbox — it arrives within five minutes.',
+    expectation: 'Your Day 1 email covers the L. reuteri DSM 17938 dosing protocol, feeding method calibration, and the full three-stage sequence. Check your inbox - it arrives within five minutes.',
   },
   NS: {
     headline:    'Your nervous system protocol is on its way.',
-    expectation: 'Your Day 1 email covers the Tiger Hold with exact rhythm specifications, the brown noise acoustic layer, and the parent regulation component. Check your inbox — it arrives within five minutes.',
+    expectation: 'Your Day 1 email covers the Tiger Hold with exact rhythm specifications, the brown noise acoustic layer, and the parent regulation component. Check your inbox - it arrives within five minutes.',
   },
   ACOUSTIC: {
     headline:    'Your acoustic reset protocol is on its way.',
-    expectation: 'Your Day 1 email covers the brown noise frequency specifications, environment calibration, and the sequence that must run before any physical technique. Check your inbox — it arrives within five minutes.',
+    expectation: 'Your Day 1 email covers the brown noise frequency specifications, environment calibration, and the sequence that must run before any physical technique. Check your inbox - it arrives within five minutes.',
   },
   MIXED: {
     headline:    'Your three-system protocol is on its way.',
-    expectation: 'Your Day 1 email covers the full sequenced system — gut reset, nervous system regulation, and acoustic environment in the correct order. Check your inbox — it arrives within five minutes.',
+    expectation: 'Your Day 1 email covers the full sequenced system - gut reset, nervous system regulation, and acoustic environment in the correct order. Check your inbox - it arrives within five minutes.',
   },
 }
 
@@ -55,7 +55,7 @@ export default function ThankYouPage({
       <MinimalNav />
 
       <main id="main-content" className="min-h-screen bg-paper">
-        <div className="max-w-2xl mx-auto px-6 md:px-12 py-12 md:py-20">
+        <div className="max-w-2xl mx-auto px-5 md:px-8 py-12 md:py-20">
 
           {/* ── Success badge ── */}
           <div className="flex items-center gap-3 mb-8">
@@ -95,7 +95,7 @@ export default function ThankYouPage({
               'Open your email app and look for a message from Vincent at Colic Protocol.',
               'If it is not there in five minutes, check your Spam or Promotions folder.',
               'Mark the email as safe so future emails land in your inbox.',
-              'Start with Stage 2 of the checklist tonight — brown noise before you pick up your baby.',
+              'Start with Stage 2 of the checklist tonight - brown noise before you pick up your baby.',
             ].map((step, i) => (
               <div key={step} className="flex gap-3">
                 <span className="font-serif font-bold text-terra text-lg leading-none flex-shrink-0 mt-0.5">
@@ -144,7 +144,7 @@ export default function ThankYouPage({
                 Share via WhatsApp
               </a>
               <Link
-                href="/colic-code-quiz.html"
+                href="/quiz"
                 className="inline-flex items-center gap-1.5 text-xs text-muted hover:text-terra transition-colors duration-150 border border-border2 rounded px-3 py-1.5"
               >
                 Retake the quiz

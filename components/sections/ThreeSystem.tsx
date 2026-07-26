@@ -12,7 +12,7 @@ const SYSTEMS = [
     tag:      'Nervous system dysregulation',
     headline: 'Tiger Hold + brown noise',
     body:
-      'The Moro startle reflex activates at baseline — your baby cannot self-regulate. The Tiger Hold at 60 BPM deactivates the reflex while moving trapped gas. Brown noise at womb frequency (60–65dB) signals neurological safety. Sound first, then touch.',
+      'The Moro startle reflex activates at baseline - your baby cannot self-regulate. The Tiger Hold at 60 BPM deactivates the reflex while moving trapped gas. Brown noise at womb frequency (60–65dB) signals neurological safety. Sound first, then touch.',
     detail:   'Brown noise only. White noise sits above womb frequency and overstimulates a dysregulated nervous system.',
     colour:   'text-mauve',
     dot:      'bg-mauve',
@@ -22,7 +22,7 @@ const SYSTEMS = [
     headline: 'Paced feeding / latch correction',
     body:
       'Air ingestion at every feed compounds the gas load. A correct latch or paced bottle position eliminates the air intake at the source. For formula-fed infants: baby near-upright, bottle horizontal, pause every 20–30 seconds.',
-    detail:   'Applies to both breastfed and formula-fed infants — different correction, same outcome.',
+    detail:   'Applies to both breastfed and formula-fed infants - different correction, same outcome.',
     colour:   'text-sage',
     dot:      'bg-sage',
   },
@@ -31,7 +31,7 @@ const SYSTEMS = [
 export default function ThreeSystem() {
   return (
     <section className="py-16 md:py-24 bg-paper" aria-labelledby="system-heading">
-      <div className="max-w-5xl mx-auto px-6 md:px-12">
+      <div className="max-w-5xl mx-auto px-5 md:px-8">
 
         <div className="mb-10 max-w-2xl">
           <p className="kicker text-terra mb-4">The mechanism</p>
@@ -43,7 +43,7 @@ export default function ThreeSystem() {
             <span className="text-terra">at the same time.</span>
           </h2>
           <p className="text-[17px] text-muted leading-relaxed">
-            Not a sequence — a simultaneous condition. Single-remedy approaches fail because
+            Not a sequence - a simultaneous condition. Single-remedy approaches fail because
             each one only ever addresses one of the three.
           </p>
         </div>

@@ -93,7 +93,7 @@ export async function upsertSubscriber(
   }
 
   throw new Error(
-    `MailerLite API error — status ${res.status}: ${errorDetail}`
+    `MailerLite API error - status ${res.status}: ${errorDetail}`
   )
 }
 
@@ -124,7 +124,7 @@ export async function addSubscriberToGroup(
       errorDetail = await res.text()
     }
     throw new Error(
-      `MailerLite addGroup error — status ${res.status}: ${errorDetail}`
+      `MailerLite addGroup error - status ${res.status}: ${errorDetail}`
     )
   }
 }

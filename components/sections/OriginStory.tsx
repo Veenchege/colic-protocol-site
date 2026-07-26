@@ -1,8 +1,9 @@
-'use client'
+import FounderPhoto from '@/components/ui/FounderPhoto'
+
 export default function OriginStory() {
   return (
     <section className="py-16 md:py-24 bg-warm" aria-labelledby="origin-heading">
-      <div className="max-w-5xl mx-auto px-6 md:px-12">
+      <div className="max-w-5xl mx-auto px-5 md:px-8">
         <div className="grid grid-cols-1 md:grid-cols-[1fr_340px] gap-14 md:gap-16 items-start">
 
           {/* ── Left: Story ── */}
@@ -23,7 +24,7 @@ export default function OriginStory() {
               </p>
               <p>
                 As an Epidemiologist and Health Data Analyst, I treated it the only way I
-                know how — as a data problem. I went back to the primary literature. What
+                know how - as a data problem. I went back to the primary literature. What
                 I found changed everything.
               </p>
               <p>
@@ -48,7 +49,16 @@ export default function OriginStory() {
           {/* ── Right: Founder ── */}
           <div className="flex flex-col gap-6">
 
-    
+            {/*
+              Photo slot. Master Document v10 flags this as the single
+              highest-trust asset currently missing from the site — add
+              a real photo of Vincent at public/images/vincent.jpg
+              (roughly 3:4, warm/natural, not a studio headshot — this
+              audience distrusts polish). Falls back to an initial mark
+              if the file isn't present yet so the layout never breaks.
+            */}
+            <FounderPhoto />
+
             <div>
               <p className="font-serif font-semibold text-brown text-xl mb-1">Vincent</p>
               <p className="font-mono text-[11px] tracking-[0.06em] uppercase text-terra mb-4">
@@ -58,7 +68,7 @@ export default function OriginStory() {
                 {[
                   'Trained in evidence synthesis and systematic review',
                   'Treats clinical decisions as data problems',
-                  'Father of Zion — resolved her colic using this protocol in 48 hours',
+                  'Father of Zion - resolved her colic using this protocol in 48 hours',
                 ].map((line) => (
                   <div key={line} className="flex items-start gap-2.5">
                     <span className="w-1 h-1 rounded-full bg-terra mt-2 flex-shrink-0" aria-hidden="true" />
@@ -71,7 +81,7 @@ export default function OriginStory() {
             <div className="border-t border-border2 pt-6">
               <p className="text-sm text-muted leading-relaxed">
                 Built on Savino et al. (Pediatrics 2010), confirmed by two independent 2020
-                systematic reviews and a 2026 nationwide study. Not a mommy-blog ebook — a
+                systematic reviews and a 2026 nationwide study. Not a mommy-blog ebook - a
                 protocol built from the primary literature.
               </p>
             </div>

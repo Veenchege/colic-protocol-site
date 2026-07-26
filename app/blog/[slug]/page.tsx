@@ -75,15 +75,61 @@ export default function BlogPostPage({
     day:   'numeric',
   })
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://colicprotocol.baby'
+
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: title,
+    description,
+    datePublished: date,
+    dateModified: date,
+    author: {
+      '@type': 'Person',
+      name: 'Vincent',
+      jobTitle: 'Epidemiologist',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Colic Protocol',
+      logo: {
+        '@type': 'ImageObject',
+        url: `${siteUrl}/images/og-image.png`,
+      },
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `${siteUrl}/blog/${post.slug}`,
+    },
+  }
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home',  item: siteUrl },
+      { '@type': 'ListItem', position: 2, name: 'Blog',  item: `${siteUrl}/blog` },
+      { '@type': 'ListItem', position: 3, name: title,   item: `${siteUrl}/blog/${post.slug}` },
+    ],
+  }
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <Header />
 
       <main id="main-content">
 
         {/* ── Post header ── */}
         <section className="bg-paper py-12 md:py-16 border-b border-border2">
-          <div className="max-w-2xl mx-auto px-6 md:px-12">
+          <div className="max-w-2xl mx-auto px-5 md:px-8">
 
             {/* Category + reading time */}
             <div className="flex flex-wrap items-center gap-3 mb-5">
@@ -121,7 +167,7 @@ export default function BlogPostPage({
 
         {/* ── Article body ── */}
         <article className="bg-paper py-12 md:py-16">
-          <div className="max-w-2xl mx-auto px-6 md:px-12">
+          <div className="max-w-2xl mx-auto px-5 md:px-8">
             {/*
               Tailwind Typography prose styles.
               Requires: npm install @tailwindcss/typography
@@ -144,18 +190,18 @@ export default function BlogPostPage({
         </article>
 
         {/* ── End-of-post full InlineCTA ── */}
-        <div className="max-w-2xl mx-auto px-6 md:px-12 pb-12">
+        <div className="max-w-2xl mx-auto px-5 md:px-8 pb-12">
           <InlineCTA variant="default" />
         </div>
 
         {/* ── Back to blog + quiz CTA ── */}
         <section className="bg-surface border-t border-border2 py-10">
-          <div className="max-w-2xl mx-auto px-6 md:px-12 flex flex-col sm:flex-row
+          <div className="max-w-2xl mx-auto px-5 md:px-8 flex flex-col sm:flex-row
                           items-start sm:items-center justify-between gap-5">
             <Button href="/blog" variant="ghost" size="sm">
               &larr; All articles
             </Button>
-            <Button href="/colic-code-quiz.html" variant="primary" size="sm">
+            <Button href="/quiz" variant="primary" size="sm">
               Find your baby&apos;s colic type &rarr;
             </Button>
           </div>

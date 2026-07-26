@@ -53,7 +53,7 @@ export default function CitationCard({ citation, className = '', compact = false
         target="_blank"
         rel="noopener noreferrer"
         className="block group hover:no-underline"
-        aria-label={`Read: ${authors} — ${journal} ${year}`}
+        aria-label={`Read: ${authors} - ${journal} ${year}`}
       >
         <div className="group-hover:border-terra/40 transition-colors duration-150 rounded-card">
           {card}
@@ -107,6 +107,6 @@ export const CITATIONS: Citation[] = [
     finding:
       'Untreated colic is associated with elevated risk of long-term gut-brain axis disruption (association, not proven causation).',
     detail:
-      'Nationwide study · Note: association only — language of causation is not supported by this study',
+      'Nationwide study · Note: association only - language of causation is not supported by this study',
   },
 ]

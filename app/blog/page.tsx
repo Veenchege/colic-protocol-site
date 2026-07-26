@@ -7,8 +7,8 @@ import { getAllPosts } from '@/lib/blog'
 
 /* ─── Metadata ───────────────────────────────────────────────── */
 export const metadata: Metadata = {
-  title:       'Evidence-Based Colic Research — Colic Protocol Blog',
-  description: 'Clinical explanations of infant colic — the Tiger Hold, L. reuteri DSM 17938, brown noise, and the three-system model. Written by an Epidemiologist.',
+  title:       'Evidence-Based Colic Research - Colic Protocol Blog',
+  description: 'Clinical explanations of infant colic - the Tiger Hold, L. reuteri DSM 17938, brown noise, and the three-system model. Written by an Epidemiologist.',
   robots:      { index: true, follow: true },
 }
 
@@ -24,7 +24,7 @@ export default function BlogIndexPage() {
 
         {/* ── Header ── */}
         <section className="bg-paper py-14 md:py-20 border-b border-border2">
-          <div className="max-w-5xl mx-auto px-6 md:px-12">
+          <div className="max-w-5xl mx-auto px-5 md:px-8">
             <p className="kicker text-terra mb-4">
               Evidence-based colic research
             </p>
@@ -32,7 +32,7 @@ export default function BlogIndexPage() {
               The clinical record.
             </h1>
             <p className="text-muted text-base md:text-lg leading-relaxed max-w-prose">
-              Every post is built from primary literature — not parenting
+              Every post is built from primary literature - not parenting
               opinions, not anecdote. Citations included. Written by an
               Epidemiologist who treated infant colic as a data problem.
             </p>
@@ -41,7 +41,7 @@ export default function BlogIndexPage() {
 
         {/* ── Posts grid ── */}
         <section className="bg-paper py-14 md:py-20">
-          <div className="max-w-5xl mx-auto px-6 md:px-12">
+          <div className="max-w-5xl mx-auto px-5 md:px-8">
             {posts.length === 0 ? (
               <div className="text-center py-16">
                 <p className="font-serif text-xl text-muted italic">
@@ -60,7 +60,7 @@ export default function BlogIndexPage() {
 
         {/* ── Bottom CTA ── */}
         <section className="bg-surface py-12 md:py-16 border-t border-border2">
-          <div className="max-w-3xl mx-auto px-6 md:px-12 text-center">
+          <div className="max-w-3xl mx-auto px-5 md:px-8 text-center">
             <h2 className="font-serif font-bold text-brown text-2xl md:text-3xl leading-snug mb-3">
               Ready to apply the research tonight?
             </h2>
@@ -69,8 +69,8 @@ export default function BlogIndexPage() {
               usable one-handed at 3AM.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Button href="/colic-code-quiz.html" variant="primary" size="md">
-                Find your baby&apos;s colic type — free
+              <Button href="/quiz" variant="primary" size="md">
+                Find your baby&apos;s colic type - free
               </Button>
               <Button href="/checklist" variant="secondary" size="md">
                 Download checklist directly

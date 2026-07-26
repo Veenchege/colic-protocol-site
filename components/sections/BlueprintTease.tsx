@@ -2,7 +2,7 @@ import Button from '@/components/ui/Button'
 
 const COMPONENTS = [
   { label: 'Diagnostic Protocol', desc: 'Decision tree that identifies the primary root cause system before any intervention.' },
-  { label: 'Gut Reset Protocol',  desc: 'L. reuteri DSM 17938 — exact strain, dosage for breastfed vs formula-fed, timing within feeding schedule.' },
+  { label: 'Gut Reset Protocol',  desc: 'L. reuteri DSM 17938 - exact strain, dosage for breastfed vs formula-fed, timing within feeding schedule.' },
   { label: 'Physical Techniques', desc: 'Tiger Hold with rhythm specifications. ILU gas massage. Vagus nerve stimulation sequence.' },
   { label: 'Acoustic Design',     desc: 'Frequency, volume, distance, and duration specifications for brown noise deployment.' },
 ]
@@ -16,31 +16,23 @@ const BONUSES = [
 export default function BlueprintTease() {
   return (
     <section className="py-16 md:py-24 bg-paper" aria-labelledby="blueprint-heading">
-      <div className="max-w-5xl mx-auto px-6 md:px-12">
-        <div className="grid grid-cols-1 md:grid-cols-[1fr_220px] gap-10 items-start mb-10">
-          <div className="max-w-2xl">
-            <p className="kicker mb-4">The full protocol</p>
-            <h2
-              id="blueprint-heading"
-              className="font-sans font-bold text-brown text-[30px] md:text-[38px] leading-[1.15] tracking-tight mb-4"
-            >
-              The checklist manages the crisis.{' '}
-              <span className="text-terra">The Blueprint fixes the root cause.</span>
-            </h2>
-            <p className="text-[17px] text-muted leading-relaxed">
-              The Midnight Emergency Checklist gives you Stages 2 and 3. It does not give
-              you the diagnostic decision tree, the calibrated dosing protocol, or the
-              sequencing architecture that makes all three systems work simultaneously.
-              That is the Blueprint.
-            </p>
-          </div>
-          <div className="hidden md:block">
-            <img
-              src="/images/calm-baby-blueprint-cover.png"
-              alt="The Calm Baby Blueprint book cover"
-              className="w-full rounded-card border border-border2 shadow-lg"
-            />
-          </div>
+      <div className="max-w-5xl mx-auto px-5 md:px-8">
+
+        <div className="mb-10 max-w-2xl">
+          <p className="kicker mb-4">The full protocol</p>
+          <h2
+            id="blueprint-heading"
+            className="font-sans font-bold text-brown text-[30px] md:text-[38px] leading-[1.15] tracking-tight mb-4"
+          >
+            The checklist manages the crisis.{' '}
+            <span className="text-terra">The Blueprint fixes the root cause.</span>
+          </h2>
+          <p className="text-[17px] text-muted leading-relaxed">
+            The Midnight Emergency Checklist gives you Stages 2 and 3. It does not give
+            you the diagnostic decision tree, the calibrated dosing protocol, or the
+            sequencing architecture that makes all three systems work simultaneously.
+            That is the Blueprint.
+          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">

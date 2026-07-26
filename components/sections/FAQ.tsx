@@ -5,19 +5,19 @@ import { useState } from 'react'
 const FAQS = [
   {
     q: 'My baby is formula-fed. Does this apply?',
-    a: 'Yes, with one adjustment. The L. reuteri RCT (Savino et al. 2010) was conducted in breastfed infants — the protocol for formula-fed babies leads with paced feeding technique and the correct bottle position to reduce air intake. The Tiger Hold, brown noise protocol, and ILU massage apply identically regardless of feeding method. The Blueprint has a dedicated formula-feeding track in Chapter 3.',
+    a: 'Yes, with one adjustment. The L. reuteri RCT (Savino et al. 2010) was conducted in breastfed infants - the protocol for formula-fed babies leads with paced feeding technique and the correct bottle position to reduce air intake. The Tiger Hold, brown noise protocol, and ILU massage apply identically regardless of feeding method. The Blueprint has a dedicated formula-feeding track in Chapter 3.',
   },
   {
     q: 'My pediatrician said to wait it out. Are they wrong?',
-    a: '90% of colic cases do resolve by 12 weeks — your pediatrician is medically accurate. What a 7-minute appointment cannot cover is what a 2026 nationwide study found: untreated colic is associated with long-term gut-brain axis disruption. Waiting has a cost. The protocol compresses the timeline and addresses the root cause rather than the symptom.',
+    a: '90% of colic cases do resolve by 12 weeks - your pediatrician is medically accurate. What a 7-minute appointment cannot cover is what a 2026 nationwide study found: untreated colic is associated with long-term gut-brain axis disruption. Waiting has a cost. The protocol compresses the timeline and addresses the root cause rather than the symptom.',
   },
   {
     q: 'Which probiotic should I actually buy?',
-    a: 'L. reuteri DSM 17938, sold commercially as BioGaia Protectis. That is the exact strain tested in the Savino et al. Pediatrics 2010 RCT and confirmed by two independent 2020 systematic reviews. Not a generic probiotic — this strain specifically. Screenshot the name. The dosing protocol for breastfed versus formula-fed infants, and the timing window relative to feeds, is in the Blueprint.',
+    a: 'L. reuteri DSM 17938, sold commercially as BioGaia Protectis. That is the exact strain tested in the Savino et al. Pediatrics 2010 RCT and confirmed by two independent 2020 systematic reviews. Not a generic probiotic - this strain specifically. Screenshot the name. The dosing protocol for breastfed versus formula-fed infants, and the timing window relative to feeds, is in the Blueprint.',
   },
   {
     q: "What's the difference between the checklist and the Blueprint?",
-    a: 'The checklist manages a colic episode — it gives you the immediate crisis intervention for tonight. The Blueprint fixes the root cause so episodes stop starting. Specifically, the checklist does not include the diagnostic decision tree that identifies which of three systems is primary in your baby, the calibrated dosing protocol for L. reuteri, or the sequencing architecture for running all three systems simultaneously.',
+    a: 'The checklist manages a colic episode - it gives you the immediate crisis intervention for tonight. The Blueprint fixes the root cause so episodes stop starting. Specifically, the checklist does not include the diagnostic decision tree that identifies which of three systems is primary in your baby, the calibrated dosing protocol for L. reuteri, or the sequencing architecture for running all three systems simultaneously.',
   },
   {
     q: 'What is the refund policy?',
@@ -33,9 +33,30 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
   const toggle = (i: number) => setOpenIndex(openIndex === i ? null : i)
 
+  // FAQPage structured data. Mirrors FAQS exactly so what's marked up
+  // matches what's visibly rendered — mismatched FAQ schema is a
+  // documented cause of Google manually disabling rich results for a
+  // domain, not just failing to show them.
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: FAQS.map(({ q, a }) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: a,
+      },
+    })),
+  }
+
   return (
     <section className="py-16 md:py-24 bg-surface" aria-labelledby="faq-heading">
-      <div className="max-w-3xl mx-auto px-6 md:px-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <div className="max-w-3xl mx-auto px-5 md:px-8">
 
         <div className="mb-10">
           <p className="kicker mb-4">Common questions</p>

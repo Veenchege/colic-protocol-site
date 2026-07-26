@@ -6,26 +6,26 @@ import CitationCard, { CITATIONS } from '@/components/ui/CitationCard'
 
 /* ─── Metadata ───────────────────────────────────────────────── */
 export const metadata: Metadata = {
-  title:       'The Science & The Founder — Colic Protocol',
-  description: 'An Epidemiologist treated infant colic as a data problem. Here is the evidence base, the methodology, and what the research actually supports — including where it has limits.',
+  title:       'The Science & The Founder - Colic Protocol',
+  description: 'An Epidemiologist treated infant colic as a data problem. Here is the evidence base, the methodology, and what the research actually supports - including where it has limits.',
   robots:      { index: true, follow: true },
 }
 
 /* ─── What the evidence supports / does not support ─────────── */
 const SUPPORTED = [
-  'L. reuteri DSM 17938 reduces daily crying duration in breastfed infants — Savino et al. 2010, confirmed by two independent 2020 systematic reviews.',
-  'Infant colic is associated with gut microbiome dysbiosis — elevated Proteobacteria, reduced Lactobacillus.',
-  'The Moro startle reflex is an active dysregulation mechanism in colic infants — rhythmic vestibular stimulation at 60 BPM reduces its activation threshold.',
+  'L. reuteri DSM 17938 reduces daily crying duration in breastfed infants - Savino et al. 2010, confirmed by two independent 2020 systematic reviews.',
+  'Infant colic is associated with gut microbiome dysbiosis - elevated Proteobacteria, reduced Lactobacillus.',
+  'The Moro startle reflex is an active dysregulation mechanism in colic infants - rhythmic vestibular stimulation at 60 BPM reduces its activation threshold.',
   'Low-frequency acoustic environments (brown noise range) align with womb frequency profiles and are associated with reduced infant arousal.',
-  'Untreated colic is associated with elevated markers of gut-brain axis disruption — Liao et al. 2026.',
+  'Untreated colic is associated with elevated markers of gut-brain axis disruption - Liao et al. 2026.',
 ]
 
 const NOT_SUPPORTED = [
-  'Simethicone (gas drops) — failed Cochrane review, no benefit over placebo.',
-  'Gripe water — zero RCTs across any formulation in 150+ years of commercial sale.',
-  'Craniosacral therapy — heterogeneous evidence, insufficient for clinical recommendation.',
-  'Chiropractic manipulation for colic — insufficient evidence, not recommended.',
-  'Liao et al. 2026 proving causation — the study shows association only.',
+  'Simethicone (gas drops) - failed Cochrane review, no benefit over placebo.',
+  'Gripe water - zero RCTs across any formulation in 150+ years of commercial sale.',
+  'Craniosacral therapy - heterogeneous evidence, insufficient for clinical recommendation.',
+  'Chiropractic manipulation for colic - insufficient evidence, not recommended.',
+  'Liao et al. 2026 proving causation - the study shows association only.',
 ]
 
 /* ─── Page ───────────────────────────────────────────────────── */
@@ -42,7 +42,7 @@ export default function AboutPage() {
 
         {/* ── Hero ── */}
         <section className="bg-paper py-14 md:py-20 border-b border-border2">
-          <div className="max-w-3xl mx-auto px-6 md:px-12">
+          <div className="max-w-3xl mx-auto px-5 md:px-8">
             <p className="kicker text-terra mb-4">
               The founder & the evidence
             </p>
@@ -60,7 +60,7 @@ export default function AboutPage() {
 
         {/* ── Founder story ── */}
         <section className="bg-paper py-14 md:py-20">
-          <div className="max-w-3xl mx-auto px-6 md:px-12">
+          <div className="max-w-3xl mx-auto px-5 md:px-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
 
               {/* Credentials */}
@@ -77,9 +77,9 @@ export default function AboutPage() {
                   </p>
                   <div className="flex flex-col gap-2 border-t border-border pt-4">
                     {[
-                      'Epidemiologist — trained in systematic review and evidence synthesis',
-                      'Health Data Analyst — treats clinical decisions as data problems',
-                      'Father of Zion — resolved her colic in 48 hours using this protocol',
+                      'Epidemiologist - trained in systematic review and evidence synthesis',
+                      'Health Data Analyst - treats clinical decisions as data problems',
+                      'Father of Zion - resolved her colic in 48 hours using this protocol',
                     ].map((line) => (
                       <div key={line} className="flex gap-2 items-start">
                         <span className="w-1 h-1 rounded-full bg-terra flex-shrink-0 mt-1.5" aria-hidden="true" />
@@ -99,7 +99,7 @@ export default function AboutPage() {
                   The medical system gave gripe water recommendations and told us to wait it out. My wife and I were taking shifts at 2AM. Neither of us had slept more than ninety minutes consecutively in three weeks.
                 </p>
                 <p>
-                  As an Epidemiologist, I have one framework for problems I cannot solve: go back to the primary literature. That is what I did. What I found was a converging body of peer-reviewed research — a 2010 RCT in Pediatrics, confirmed by two independent 2020 systematic reviews — that no one had assembled into a form usable at 3AM.
+                  As an Epidemiologist, I have one framework for problems I cannot solve: go back to the primary literature. That is what I did. What I found was a converging body of peer-reviewed research - a 2010 RCT in Pediatrics, confirmed by two independent 2020 systematic reviews - that no one had assembled into a form usable at 3AM.
                 </p>
                 <p>
                   The evidence pointed toward a three-system failure model: gut microbiome imbalance producing a fermentation loop, nervous system dysregulation maintaining a chronic threat state, and an acoustic environment that was actively overstimulating an undeveloped nervous system. Single-remedy approaches fail by design because they address one output of a multi-mechanism condition.
@@ -117,7 +117,7 @@ export default function AboutPage() {
 
         {/* ── The evidence base ── */}
         <section className="bg-surface py-14 md:py-20">
-          <div className="max-w-3xl mx-auto px-6 md:px-12">
+          <div className="max-w-3xl mx-auto px-5 md:px-8">
             <p className="kicker text-terra mb-4">
               The four studies
             </p>
@@ -137,12 +137,12 @@ export default function AboutPage() {
 
         {/* ── What the evidence supports / does not support ── */}
         <section className="bg-paper py-14 md:py-20">
-          <div className="max-w-3xl mx-auto px-6 md:px-12">
+          <div className="max-w-3xl mx-auto px-5 md:px-8">
             <p className="kicker text-terra mb-6">
               Honest limits of the evidence
             </p>
             <h2 className="font-serif font-bold text-brown text-2xl md:text-3xl leading-snug mb-8">
-              What the research supports — and what it does not.
+              What the research supports - and what it does not.
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
 
@@ -162,7 +162,7 @@ export default function AboutPage() {
               {/* Not supported */}
               <div className="flex flex-col gap-3">
                 <p className="font-mono text-[9px] tracking-[0.1em] uppercase text-error">
-                  Not supported — explicitly excluded
+                  Not supported - explicitly excluded
                 </p>
                 {NOT_SUPPORTED.map((item) => (
                   <div key={item} className="flex gap-2 items-start">
@@ -177,7 +177,7 @@ export default function AboutPage() {
 
         {/* ── Dual CTA ── */}
         <section className="bg-surface py-14 md:py-20 border-t border-border2">
-          <div className="max-w-3xl mx-auto px-6 md:px-12">
+          <div className="max-w-3xl mx-auto px-5 md:px-8">
             <h2 className="font-serif font-bold text-brown text-2xl md:text-3xl leading-snug mb-4">
               Start with the free protocol. Tonight.
             </h2>
@@ -189,7 +189,7 @@ export default function AboutPage() {
               refund if results do not show in 72 hours.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button href="/colic-code-quiz.html" variant="primary" size="md">
+              <Button href="/quiz" variant="primary" size="md">
                 Take the free colic type quiz
               </Button>
               <Button href={gumroadChecklist} variant="secondary" size="md" external>

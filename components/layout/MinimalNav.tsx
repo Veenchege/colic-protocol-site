@@ -17,12 +17,12 @@ export default function MinimalNav({ logoLinksHome = true }: MinimalNavProps) {
       className="w-full bg-surface/90 backdrop-blur-sm border-b border-border2"
       role="banner"
     >
-      <div className="max-w-5xl mx-auto px-6 md:px-12 h-14 flex items-center">
+      <div className="max-w-5xl mx-auto px-5 md:px-8 h-14 flex items-center">
         {logoLinksHome ? (
           <Link
             href="/"
             className="font-serif text-lg font-semibold text-brown tracking-tight"
-            aria-label="Colic Protocol — return to homepage"
+            aria-label="Colic Protocol - return to homepage"
           >
             Colic Protocol
           </Link>

@@ -12,21 +12,21 @@ const STAGES = [
     num:   '02',
     title: 'Environment Reset',
     time:  '30–60 seconds',
-    body:  'Brown noise at 60–65dB — minimum seven feet from the baby\'s head. Warm dim light. Not darkness — warm and dim. This is the acoustic and visual reset that must precede touch. Sound before touch, every time.',
+    body:  'Brown noise at 60–65dB - minimum seven feet from the baby\'s head. Warm dim light. Not darkness - warm and dim. This is the acoustic and visual reset that must precede touch. Sound before touch, every time.',
     note:  'Brown noise only. White noise sits above womb frequency range. The distinction matters for a dysregulated nervous system.',
   },
   {
     num:   '03',
     title: 'Soothing Circuit',
     time:  '5 minutes minimum',
-    body:  'The Tiger Hold: face-down across your forearm, belly on the muscle of your arm, head in your palm, legs either side of your elbow. Pulse at 60 BPM — one beat per second. Not rocking. Pulsing. Hold for minimum five minutes before assessing results.',
+    body:  'The Tiger Hold: face-down across your forearm, belly on the muscle of your arm, head in your palm, legs either side of your elbow. Pulse at 60 BPM - one beat per second. Not rocking. Pulsing. Hold for minimum five minutes before assessing results.',
     note:  'The 60 BPM rhythm deactivates the Moro startle reflex simultaneously with moving trapped gas. Two systems addressed at once.',
   },
   {
     num:   '04',
     title: 'Gas Release Sequence',
     time:  '3–5 minutes',
-    body:  'Bicycle legs. ILU massage in the correct direction (I, L, U — always clockwise from your perspective looking at the baby\'s belly). Football hold. Each technique has a specific mechanical reason for its inclusion and its sequence position.',
+    body:  'Bicycle legs. ILU massage in the correct direction (I, L, U - always clockwise from your perspective looking at the baby\'s belly). Football hold. Each technique has a specific mechanical reason for its inclusion and its sequence position.',
     note:  'ILU massage direction is the most common execution error. The direction matters because of peristaltic movement direction in the gut.',
   },
 ]
@@ -38,30 +38,21 @@ export default function ChecklistPreview() {
 
   return (
     <section className="py-16 md:py-24 bg-surface" aria-labelledby="checklist-heading">
-      <div className="max-w-5xl mx-auto px-6 md:px-12">
+      <div className="max-w-5xl mx-auto px-5 md:px-8">
 
-        <div className="grid grid-cols-1 md:grid-cols-[1fr_220px] gap-10 items-start mb-12">
-          <div className="max-w-2xl">
-            <p className="kicker mb-4">The free protocol</p>
-            <h2
-              id="checklist-heading"
-              className="font-sans font-bold text-brown text-[30px] md:text-[38px] leading-[1.15] tracking-tight mb-4"
-            >
-              The Midnight Emergency Checklist <span className="text-terra">(The Zion Protocol)</span>
-            </h2>
-            <p className="text-[17px] text-muted leading-relaxed">
-              A four-stage crisis triage built from the same evidence base as the Blueprint.
-              Free — delivered straight to your inbox via Gumroad — or complete the quiz
-              to get a version personalised to your baby&apos;s colic type.
-            </p>
-          </div>
-          <div className="hidden md:block">
-            <img
-              src="/images/midnight-checklist-preview.jpg"
-              alt="Free Midnight Emergency Checklist preview"
-              className="w-full rounded-card border border-border2 shadow-lg"
-            />
-          </div>
+        <div className="mb-12 max-w-2xl">
+          <p className="kicker mb-4">The free protocol</p>
+          <h2
+            id="checklist-heading"
+            className="font-sans font-bold text-brown text-[30px] md:text-[38px] leading-[1.15] tracking-tight mb-4"
+          >
+            The Midnight Emergency Checklist <span className="text-terra">(The Zion Protocol)</span>
+          </h2>
+          <p className="text-[17px] text-muted leading-relaxed">
+            A four-stage crisis triage built from the same evidence base as the Blueprint.
+            Free - delivered straight to your inbox via Gumroad - or complete the quiz
+            to get a version personalised to your baby&apos;s colic type.
+          </p>
         </div>
 
         <div className="relative flex flex-col gap-0">

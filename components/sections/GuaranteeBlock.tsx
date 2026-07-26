@@ -30,14 +30,14 @@ export default function GuaranteeBlock({ showCTA = false, compact = false, class
       </h3>
 
       <p className={['text-muted leading-relaxed mb-5', compact ? 'text-sm' : 'text-base'].join(' ')}>
-        If you don&apos;t — email Vincent directly. Full refund. No forms, no questions,
+        If you don&apos;t - email Vincent directly. Full refund. No forms, no questions,
         no waiting. You keep the Blueprint, the Bloom Baby Tracker app, the brown noise
         soundscape, and the Cry Decoder audio. Every component. Zero financial risk.
       </p>
 
       <ul className={['flex flex-wrap gap-x-6 gap-y-2 mb-5', compact ? 'text-xs' : 'text-sm'].join(' ')}>
         {[
-          '$47 — one time, no subscription',
+          '$47 - one time, no subscription',
           'Full refund within 72 hours if results don\u2019t show',
           'Keep everything either way',
           '20+ countries',

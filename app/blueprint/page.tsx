@@ -9,8 +9,8 @@ import CitationCard, { CITATIONS } from '@/components/ui/CitationCard'
 
 /* ─── Metadata ───────────────────────────────────────────────── */
 export const metadata: Metadata = {
-  title:       'The Calm Baby Blueprint — $47 Complete Colic Management System',
-  description: 'Diagnostic protocol. Gut reset. Physical techniques. Acoustic design. Three bonuses. $47. Full refund if results do not show in 72 hours — you keep everything.',
+  title:       'The Calm Baby Blueprint - $47 Complete Colic Management System',
+  description: 'Diagnostic protocol. Gut reset. Physical techniques. Acoustic design. Three bonuses. $47. Full refund if results do not show in 72 hours - you keep everything.',
   robots:      { index: true, follow: true },
 }
 
@@ -24,12 +24,12 @@ const CORE_COMPONENTS = [
   {
     num:   '02',
     title: 'Gut Reset Protocol',
-    desc:  'L. reuteri DSM 17938 — the specific strain backed by Savino et al. Pediatrics 2010. Exact dosage for breastfed versus formula-fed infants. Timing window relative to feeding schedule. Getting timing wrong reduces efficacy by up to 40%. All specifics included.',
+    desc:  'L. reuteri DSM 17938 - the specific strain backed by Savino et al. Pediatrics 2010. Exact dosage for breastfed versus formula-fed infants. Timing window relative to feeding schedule. Getting timing wrong reduces efficacy by up to 40%. All specifics included.',
   },
   {
     num:   '03',
     title: 'Physical Techniques',
-    desc:  'Tiger Hold with exact rhythm specifications (60 BPM — why this specific number). ILU gas massage in the correct direction with the mechanical reason for the sequence. Vagus nerve stimulation protocol. These are not generic instructions — they have mechanism explanations.',
+    desc:  'Tiger Hold with exact rhythm specifications (60 BPM - why this specific number). ILU gas massage in the correct direction with the mechanical reason for the sequence. Vagus nerve stimulation protocol. These are not generic instructions - they have mechanism explanations.',
   },
   {
     num:   '04',
@@ -41,12 +41,12 @@ const CORE_COMPONENTS = [
 const BONUSES = [
   {
     title: 'Bloom Baby Tracker App',
-    desc:  'A Progressive Web App that installs to your iPhone or Android home screen. One-tap logging at 3AM — crying duration, feeding time, sleep window. Reveals trigger patterns within 3 to 5 days of consistent use. Identifies which protocol element is working.',
+    desc:  'A Progressive Web App that installs to your iPhone or Android home screen. One-tap logging at 3AM - crying duration, feeding time, sleep window. Reveals trigger patterns within 3 to 5 days of consistent use. Identifies which protocol element is working.',
     tag:   'Bonus 1',
   },
   {
     title: '60-Minute Brown Noise Soundscape',
-    desc:  'A lossless audio file calibrated to womb frequencies — maternal heartbeat rate, blood flow, and digestive sound range. Not generic brown noise from YouTube. Engineered to the specific frequency profile the infant nervous system spent nine months calibrated to. Use tonight.',
+    desc:  'A lossless audio file calibrated to womb frequencies - maternal heartbeat rate, blood flow, and digestive sound range. Not generic brown noise from YouTube. Engineered to the specific frequency profile the infant nervous system spent nine months calibrated to. Use tonight.',
     tag:   'Bonus 2',
   },
   {
@@ -58,8 +58,8 @@ const BONUSES = [
 
 const PRICE_ANCHORS = [
   { label: 'Single colic consultation', cost: '$300–$500' },
-  { label: 'Gripe water — 3 rounds',   cost: '$45–$55 wasted' },
-  { label: 'Gas drops — 2 rounds',     cost: '$20–$30 wasted' },
+  { label: 'Gripe water - 3 rounds',   cost: '$45–$55 wasted' },
+  { label: 'Gas drops - 2 rounds',     cost: '$20–$30 wasted' },
   { label: 'White noise machine',      cost: '$35–$80 (wrong frequency)' },
   { label: 'Calm Baby Blueprint',      cost: '$47 · one time' },
 ]
@@ -78,46 +78,35 @@ export default function BlueprintPage() {
 
         {/* ── 1. Hero — price and guarantee visible above fold ── */}
         <section className="bg-paper py-14 md:py-20 border-b border-border2">
-          <div className="max-w-4xl mx-auto px-6 md:px-12">
-            <div className="grid grid-cols-1 md:grid-cols-[1fr_240px] gap-10 items-start">
-              <div>
-                <p className="kicker text-terra mb-4">
-                  Complete colic management system
-                </p>
-                <h1 className="font-serif font-bold text-brown text-3xl md:text-[48px] leading-snug mb-4">
-                  The Calm Baby Blueprint
-                </h1>
-                <p className="text-muted text-base md:text-lg leading-relaxed mb-6 max-w-prose">
-                  The diagnostic protocol, gut reset, physical technique
-                  sequences, and acoustic design specifications the checklist
-                  cannot give you. Three bonuses included. One payment. No
-                  subscription.
-                </p>
-                <div className="flex flex-wrap items-center gap-4">
-                  <Button href={gumroadUrl} variant="primary" size="lg" external>
-                    Get the Blueprint — $47
-                  </Button>
-                  <p className="font-mono text-[10px] tracking-[0.08em] uppercase text-muted2">
-                    Full refund if results don&apos;t show in 72 hours
-                  </p>
-                </div>
-              </div>
-              <div className="hidden md:block">
-                <img
-                  src="/images/calm-baby-blueprint-cover.png"
-                  alt="The Calm Baby Blueprint book cover"
-                  className="w-full rounded-card border border-border2 shadow-lg"
-                />
-              </div>
+          <div className="max-w-3xl mx-auto px-5 md:px-8">
+            <p className="kicker text-terra mb-4">
+              Complete colic management system
+            </p>
+            <h1 className="font-serif font-bold text-brown text-3xl md:text-[48px] leading-snug mb-4">
+              The Calm Baby Blueprint
+            </h1>
+            <p className="text-muted text-base md:text-lg leading-relaxed mb-6 max-w-prose">
+              The diagnostic protocol, gut reset, physical technique
+              sequences, and acoustic design specifications the checklist
+              cannot give you. Three bonuses included. One payment. No
+              subscription.
+            </p>
+            <div className="flex flex-wrap items-center gap-4">
+              <Button href={gumroadUrl} variant="primary" size="lg" external>
+                Get the Blueprint - $47
+              </Button>
+              <p className="font-mono text-[10px] tracking-[0.08em] uppercase text-muted2">
+                Full refund if results don&apos;t show in 72 hours
+              </p>
             </div>
           </div>
         </section>
 
         {/* ── 2. Guarantee FIRST — risk removed before pitch ── */}
         <section className="bg-surface py-12">
-          <div className="max-w-3xl mx-auto px-6 md:px-12">
+          <div className="max-w-3xl mx-auto px-5 md:px-8">
             <p className="font-serif font-semibold text-brown text-lg mb-5">
-              Before anything else — the results commitment.
+              Before anything else - the results commitment.
             </p>
             <GuaranteeBlock showCTA={false} />
           </div>
@@ -125,7 +114,7 @@ export default function BlueprintPage() {
 
         {/* ── 3. The gap ── */}
         <section className="bg-paper py-14 md:py-20">
-          <div className="max-w-3xl mx-auto px-6 md:px-12">
+          <div className="max-w-3xl mx-auto px-5 md:px-8">
             <p className="kicker text-terra mb-4">
               What the checklist cannot do
             </p>
@@ -164,7 +153,7 @@ export default function BlueprintPage() {
 
         {/* ── 4. What's inside — core components ── */}
         <section className="bg-surface py-14 md:py-20">
-          <div className="max-w-3xl mx-auto px-6 md:px-12">
+          <div className="max-w-3xl mx-auto px-5 md:px-8">
             <p className="kicker text-terra mb-4">
               What is inside
             </p>
@@ -215,7 +204,7 @@ export default function BlueprintPage() {
 
         {/* ── 5. Science ── */}
         <section className="bg-paper py-14 md:py-20">
-          <div className="max-w-3xl mx-auto px-6 md:px-12">
+          <div className="max-w-3xl mx-auto px-5 md:px-8">
             <p className="kicker text-terra mb-4">
               The evidence base
             </p>
@@ -229,14 +218,14 @@ export default function BlueprintPage() {
               ))}
             </div>
             <p className="font-mono text-[10px] tracking-[0.06em] text-muted2 leading-relaxed">
-              Note on Liao et al. 2026: association only — language of proven causation is not supported by this study design.
+              Note on Liao et al. 2026: association only - language of proven causation is not supported by this study design.
             </p>
           </div>
         </section>
 
         {/* ── 6. Origin story (condensed) ── */}
         <section className="bg-surface py-14 md:py-20">
-          <div className="max-w-3xl mx-auto px-6 md:px-12">
+          <div className="max-w-3xl mx-auto px-5 md:px-8">
             <p className="kicker text-terra mb-4">
               Why this exists
             </p>
@@ -244,7 +233,7 @@ export default function BlueprintPage() {
               Week 3. My daughter Zion had been crying for six hours.
             </h2>
             <div className="flex flex-col gap-4 text-sm text-muted leading-relaxed mb-6">
-              <p>The medical system gave gripe water recommendations and told me to wait. As an Epidemiologist, I went back to the primary literature instead and found what the research had been showing since 2010 — a converging evidence base that no one had packaged for a parent at 3AM.</p>
+              <p>The medical system gave gripe water recommendations and told me to wait. As an Epidemiologist, I went back to the primary literature instead and found what the research had been showing since 2010 - a converging evidence base that no one had packaged for a parent at 3AM.</p>
               <p>I built a sequenced protocol targeting all three root cause systems simultaneously. Within 48 hours, Zion slept for four consecutive hours for the first time in three weeks.</p>
               <p className="italic text-brown font-medium">This information exists in the published literature. It works. The Blueprint is just the packaging that makes it usable at 3AM.</p>
             </div>
@@ -259,7 +248,7 @@ export default function BlueprintPage() {
 
         {/* ── 8. Pricing block ── */}
         <section className="bg-paper py-14 md:py-20">
-          <div className="max-w-3xl mx-auto px-6 md:px-12">
+          <div className="max-w-3xl mx-auto px-5 md:px-8">
             <p className="kicker text-terra mb-6">
               What it costs
             </p>
@@ -275,7 +264,7 @@ export default function BlueprintPage() {
                 ))}
               </div>
               <Button href={gumroadUrl} variant="primary" size="lg" external className="w-full">
-                Get the Blueprint — $47
+                Get the Blueprint - $47
               </Button>
               <p className="text-center font-mono text-[10px] tracking-[0.08em] uppercase text-muted2 mt-3">
                 One time · Instant access · Full refund available within 72 hours
@@ -286,7 +275,7 @@ export default function BlueprintPage() {
 
         {/* ── 9. Guarantee repeat ── */}
         <section className="bg-surface py-10">
-          <div className="max-w-3xl mx-auto px-6 md:px-12">
+          <div className="max-w-3xl mx-auto px-5 md:px-8">
             <GuaranteeBlock showCTA />
           </div>
         </section>
@@ -296,7 +285,7 @@ export default function BlueprintPage() {
 
         {/* ── 11. Final CTA ── */}
         <section className="bg-paper py-14 md:py-20 border-t border-border2">
-          <div className="max-w-3xl mx-auto px-6 md:px-12 text-center">
+          <div className="max-w-3xl mx-auto px-5 md:px-8 text-center">
             <h2 className="font-serif font-bold text-brown text-2xl md:text-3xl leading-snug mb-4">
               You have already lost enough.{' '}
               <span className="text-terra">The risk is now zero.</span>
@@ -307,7 +296,7 @@ export default function BlueprintPage() {
               financial risk.
             </p>
             <Button href={gumroadUrl} variant="primary" size="lg" external>
-              Get the Calm Baby Blueprint — $47
+              Get the Calm Baby Blueprint - $47
             </Button>
           </div>
         </section>

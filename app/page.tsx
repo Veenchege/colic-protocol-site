@@ -17,14 +17,14 @@ import FinalCTA         from '@/components/sections/FinalCTA'
 /* ─── Page metadata ──────────────────────────────────────────── */
 export const metadata: Metadata = {
   title:
-    'Colic Protocol — Evidence-Based Infant Colic Management',
+    'Colic Protocol - Evidence-Based Infant Colic Management',
   description:
     'Your baby isn\'t crying for "no reason." A 2-minute symptom test identifies which of three root causes is driving your baby\'s colic and delivers the exact protocol to run tonight. Free. Built by an Epidemiologist. Based on Savino et al., Pediatrics 2010.',
   alternates: {
     canonical: '/',
   },
   openGraph: {
-    title:       'Colic Protocol — Evidence-Based Infant Colic Management',
+    title:       'Colic Protocol - Evidence-Based Infant Colic Management',
     description:
       'A 2-minute symptom test and free 3AM Emergency Protocol. Built by an Epidemiologist. Based on peer-reviewed research across 16 years.',
     url:         '/',
@@ -78,7 +78,7 @@ export default function HomePage() {
 
         {/* 9. Guarantee block — caption-safe language, no sticker phrasing */}
         <div className="py-10 md:py-16 bg-warm">
-          <div className="max-w-3xl mx-auto px-6 md:px-12">
+          <div className="max-w-3xl mx-auto px-5 md:px-8">
             <GuaranteeBlock showCTA={false} />
           </div>
         </div>

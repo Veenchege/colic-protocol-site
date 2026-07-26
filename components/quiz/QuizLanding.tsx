@@ -53,7 +53,7 @@ export default function QuizLanding({ onComplete }: QuizLandingProps) {
     <div className="flex flex-col gap-6">
       <div>
         <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-terra mb-3">
-          Step 1 of 2 — Before we start
+          Step 1 of 2 - Before we start
         </p>
         <h2 className="font-serif font-bold text-brown text-2xl md:text-3xl leading-snug mb-2">
           Where should we send your report?

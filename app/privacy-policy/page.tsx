@@ -3,7 +3,7 @@ import MinimalNav from '@/components/layout/MinimalNav'
 import Footer     from '@/components/layout/Footer'
 
 export const metadata: Metadata = {
-  title:  'Privacy Policy — Colic Protocol',
+  title:  'Privacy Policy - Colic Protocol',
   robots: { index: true, follow: true },
 }
 
@@ -14,7 +14,7 @@ export default function PrivacyPolicyPage() {
     <>
       <MinimalNav />
       <main id="main-content" className="bg-paper py-12 md:py-20">
-        <div className="max-w-2xl mx-auto px-6 md:px-12">
+        <div className="max-w-2xl mx-auto px-5 md:px-8">
 
           <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-terra mb-4">
             Legal
@@ -52,14 +52,14 @@ export default function PrivacyPolicyPage() {
                 you take the colic type quiz, download the free checklist, or
                 subscribe to our email list, we collect your email address
                 and, optionally, your first name. When you take the quiz, we
-                also collect your answers — baby&apos;s age range, feeding
+                also collect your answers - baby&apos;s age range, feeding
                 method, crying pattern, symptoms, and what you have already
-                tried — to personalise the protocol you receive.
+                tried - to personalise the protocol you receive.
               </p>
               <p>
                 <strong className="text-brown">Information collected automatically:</strong> we
                 use Google Analytics (GA4) and Google Tag Manager to
-                understand how visitors use this site — pages viewed, time
+                understand how visitors use this site - pages viewed, time
                 on page, referring source, and general device/location
                 information (country-level, not precise location). We do not
                 use Meta Pixel or any Meta advertising technology on this
@@ -107,7 +107,7 @@ export default function PrivacyPolicyPage() {
                   <p className="text-xs">
                     Processes purchases of the Calm Baby Blueprint and
                     delivers the free checklist download. Gumroad handles
-                    payment information directly — we never see or store your
+                    payment information directly - we never see or store your
                     card details.{' '}
                     <a href="https://gumroad.com/privacy" target="_blank" rel="noopener noreferrer" className="text-terra underline underline-offset-2">
                       Gumroad&apos;s privacy policy

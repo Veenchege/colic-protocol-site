@@ -3,15 +3,15 @@ const ENEMIES = [
     name:    'Simethicone (gas drops)',
     parents: 'Breaks up gas bubbles. Reduces abdominal pain. Stops the crying.',
     reality:
-      'Failed every randomised controlled trial it has entered for colic. The Cochrane review found no statistically significant benefit over placebo. It treats gas as a mechanical output — it cannot touch the inflammatory gut environment producing that gas.',
+      'Failed every randomised controlled trial it has entered for colic. The Cochrane review found no statistically significant benefit over placebo. It treats gas as a mechanical output - it cannot touch the inflammatory gut environment producing that gas.',
     citation: 'Cochrane Review · Simethicone vs placebo · No significant benefit',
   },
   {
     name:    'Gripe water',
     parents: 'Settles the stomach. Provides digestive relief.',
     reality:
-      'Zero randomised controlled trials in over 150 years of continuous commercial sale. The temporary calm some parents observe is a brief sensory distraction — the baby stops crying because something tastes different, not because anything physiological changed.',
-    citation: 'No RCT evidence for colic exists — across any formulation',
+      'Zero randomised controlled trials in over 150 years of continuous commercial sale. The temporary calm some parents observe is a brief sensory distraction - the baby stops crying because something tastes different, not because anything physiological changed.',
+    citation: 'No RCT evidence for colic exists - across any formulation',
   },
   {
     name:    '"Wait it out"',
@@ -25,7 +25,7 @@ const ENEMIES = [
 export default function Enemy() {
   return (
     <section className="py-16 md:py-24 bg-paper" aria-labelledby="enemy-heading">
-      <div className="max-w-5xl mx-auto px-6 md:px-12">
+      <div className="max-w-5xl mx-auto px-5 md:px-8">
 
         <div className="mb-12 max-w-2xl">
           <p className="kicker mb-4">Why everything has failed</p>
@@ -38,7 +38,7 @@ export default function Enemy() {
           </h2>
           <p className="text-[17px] text-muted leading-relaxed">
             These are not failures of effort. They are failures of the tools. None of them
-            have peer-reviewed evidence for colic — and the mechanism explains exactly why.
+            have peer-reviewed evidence for colic - and the mechanism explains exactly why.
           </p>
         </div>
 

@@ -4,7 +4,7 @@ import QuizContainer from '@/components/quiz/QuizContainer'
 
 /* ─── Metadata ───────────────────────────────────────────────── */
 export const metadata: Metadata = {
-  title:  'Find Your Baby\'s Colic Type — Free 90-Second Test',
+  title:  'Find Your Baby\'s Colic Type - Free 90-Second Test',
   description:
     'Answer 8 questions. Get a personalised colic protocol report based on your baby\'s specific root cause, gut, nervous system, or acoustic. Free.',
   robots: {
@@ -30,7 +30,7 @@ export default function QuizPage() {
         id="main-content"
         className="min-h-screen bg-paper"
       >
-        <div className="max-w-2xl mx-auto px-6 md:px-12 py-10 md:py-16">
+        <div className="max-w-2xl mx-auto px-5 md:px-8 py-10 md:py-16">
 
           {/* Page intro */}
           <div className="mb-10">
