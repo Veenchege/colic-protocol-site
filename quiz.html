@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free 90-Second Colic Assessment | Colic Protocol</title>
+<meta name="description" content="Find which of the three root systems, gut, nervous system, or acoustic, is driving your baby's crying. Free 90-second assessment, evidence-based, personalized result.">
+<meta property="og:title" content="Which of the 3 systems is driving your baby's crying? Free 90-second assessment.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://colicprotocol.baby/quiz">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://colicprotocol.baby/quiz">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+.skip-link{position:absolute;left:-9999px;top:0;z-index:200;background:#232B1E;color:#fff;padding:12px 20px;border-radius:0 0 10px 0;font-size:14px;font-weight:600}
+.skip-link:focus{left:0}
+:root{
+  --paper:#FBF4EA; --paper-deep:#F1E5D3; --ink:#241A12; --muted:#7A6A56; --muted-soft:#9C8C77;
+  --pine:#37452F; --pine-deep:#232B1E; --pine-mid:#4B5C41;
+  --terra:#BC5A33; --terra-deep:#8A3F22; --terra-soft:#E9D2C2;
+  --sage:#6C8759; --sage-soft:#DCE4D0;
+  --gold:#C0963F; --gold-soft:#EEDFB9;
+  --glass:rgba(255,252,247,.82); --shadow:0 12px 40px rgba(45,32,20,.12);
+  --gut:#BC5A33; --gut-bg:#F3E1D4; --nerv:#6C8759; --nerv-bg:#E4EBDC; --acou:#C0963F; --acou-bg:#F6EBD2;
+  --fd:'Cormorant Garamond',Georgia,serif; --fb:'DM Sans',system-ui,sans-serif; --fm:'DM Mono',monospace;
+}
+body{font-family:var(--fb);background:linear-gradient(155deg,var(--paper) 0%,var(--paper-deep) 100%);min-height:100vh;color:var(--ink);overflow-x:hidden;line-height:1.6}
+a{color:inherit}
+.glow{position:fixed;top:-170px;right:-150px;width:460px;height:460px;background:radial-gradient(circle,rgba(188,90,51,.14) 0%,transparent 70%);filter:blur(50px);pointer-events:none;z-index:0}
+.glow2{position:fixed;bottom:-180px;left:-140px;width:420px;height:420px;background:radial-gradient(circle,rgba(108,135,89,.14) 0%,transparent 70%);filter:blur(55px);pointer-events:none;z-index:0}
+
+/* nav */
+.quiz-nav{background:var(--pine-deep);padding:13px 16px;position:sticky;top:0;z-index:100}
+.qnav-inner{max-width:680px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+.qn-logo{display:flex;align-items:center;gap:9px;text-decoration:none}
+.qn-name{font-family:var(--fd);font-size:15px;color:rgba(251,244,234,.92);font-weight:700}
+.qn-back{font-size:13px;color:rgba(251,244,234,.48)}
+.qn-back:hover{color:rgba(251,244,234,.85)}
+
+.wrap{max-width:680px;margin:0 auto;padding:16px 16px 60px;position:relative;z-index:2}
+.card{background:var(--glass);backdrop-filter:blur(20px);border:1px solid rgba(255,252,247,.6);border-radius:20px;box-shadow:var(--shadow);padding:34px 28px;margin-top:24px;animation:rise .5s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.hidden{display:none!important}
+.eyebrow{font-family:var(--fm);font-size:11px;font-weight:500;letter-spacing:.13em;color:var(--terra);text-transform:uppercase;margin-bottom:12px;display:block}
+
+/* landing */
+.landing h1{font-family:var(--fd);font-size:clamp(26px,5vw,36px);color:var(--ink);line-height:1.18;font-weight:700;margin-bottom:14px}
+.landing h1 em{font-style:italic;color:var(--terra)}
+.landing .sub{font-size:15.5px;color:var(--muted);line-height:1.68;margin-bottom:22px}
+.stat-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:20px 0}
+.stat-box{background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.7);border-radius:14px;padding:14px 12px;text-align:center}
+.stat-box .num{font-family:var(--fd);font-size:26px;font-weight:700;color:var(--ink);display:block}
+.stat-box .lbl{font-size:11px;color:var(--muted);line-height:1.4;margin-top:2px}
+.trust-strip{display:flex;flex-wrap:wrap;gap:10px 20px;padding:14px 0;border-top:1px solid rgba(0,0,0,.07);border-bottom:1px solid rgba(0,0,0,.07);margin-bottom:24px}
+.trust-item{font-size:12px;color:var(--muted);font-weight:500}
+
+.btn-primary{width:100%;padding:16px;background:linear-gradient(135deg,var(--terra),var(--terra-deep));color:#fff;border:none;border-radius:12px;font-family:var(--fb);font-size:16px;font-weight:700;cursor:pointer;transition:transform .2s,box-shadow .2s}
+.btn-primary:hover{transform:scale(1.015);box-shadow:0 10px 28px rgba(188,90,51,.38)}
+.disclaimer{font-size:11px;color:var(--muted-soft);text-align:center;margin-top:10px;line-height:1.5}
+
+/* capture form */
+.form-row{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.form-row input{padding:14px 16px;border:1.5px solid rgba(0,0,0,.1);border-radius:12px;font-family:var(--fb);font-size:15px;background:rgba(255,255,255,.85);color:var(--ink);outline:none;transition:border-color .2s}
+.form-row input:focus{border-color:var(--terra)}
+.form-row input::placeholder{color:#b8a996}
+.consent-row{display:flex;align-items:flex-start;gap:9px;margin-bottom:16px;cursor:pointer}
+.consent-row input[type="checkbox"]{width:17px;height:17px;flex-shrink:0;margin-top:2px;accent-color:var(--terra);cursor:pointer}
+.consent-row span{font-size:12px;color:var(--muted);line-height:1.55}
+.consent-row a{color:var(--terra-deep);text-decoration:underline;text-underline-offset:2px}
+
+/* quiz */
+.q-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.q-count{font-size:12px;font-weight:600;color:var(--muted);font-family:var(--fm)}
+.progress-track{flex:1;height:6px;background:rgba(0,0,0,.08);border-radius:20px;overflow:hidden;margin:0 14px}
+.progress-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,var(--terra),var(--gold));transition:width .4s ease}
+.q-text{font-family:var(--fd);font-size:clamp(18px,3.5vw,23px);color:var(--ink);line-height:1.35;font-weight:600;margin-bottom:8px}
+.q-sub{font-size:13px;color:var(--muted);margin-bottom:20px}
+.multi-hint{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--terra);opacity:.85;margin-bottom:10px}
+.options{display:flex;flex-direction:column;gap:10px}
+.option{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:15px 16px;background:rgba(255,255,255,.7);border:1.5px solid rgba(255,252,247,.7);border-radius:14px;cursor:pointer;font-size:14px;line-height:1.5;color:var(--ink);transition:all .2s ease;position:relative}
+.option::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--terra);transform:scaleY(0);transition:transform .2s ease;border-radius:3px 0 0 3px}
+.option:hover{background:#fff;border-color:rgba(188,90,51,.28)}
+.option:hover::before{transform:scaleY(1)}
+.option.selected{background:rgba(188,90,51,.07);border-color:var(--terra)}
+.option.selected::before{transform:scaleY(1)}
+.opt-text{flex:1}
+.opt-check{width:22px;height:22px;border-radius:6px;border:2px solid rgba(0,0,0,.15);flex-shrink:0;margin-top:1px;display:grid;place-items:center;font-size:13px;font-weight:700;color:#fff;transition:all .2s}
+.option.selected .opt-check{background:var(--terra);border-color:var(--terra)}
+.btn-continue{width:100%;padding:15px;margin-top:18px;background:var(--ink);color:#fff;border:none;border-radius:12px;font-family:var(--fb);font-size:15px;font-weight:700;cursor:pointer;opacity:0;pointer-events:none;transform:translateY(6px);transition:all .25s}
+.btn-continue.visible{opacity:1;pointer-events:auto;transform:translateY(0)}
+.btn-continue:hover{background:var(--terra)}
+
+/* analysis */
+.analysis-wrap{text-align:center;padding:20px 0}
+.analysis-wrap h2{font-family:var(--fd);font-size:22px;color:var(--ink);margin:16px 0 8px}
+.analysis-wrap p{font-size:14px;color:var(--muted);margin-bottom:22px}
+.dots-row{display:flex;justify-content:center;gap:8px;margin-bottom:22px}
+.pdot{width:9px;height:9px;border-radius:50%;background:var(--terra);animation:pulse 1.2s ease-in-out infinite}
+.pdot:nth-child(2){animation-delay:.2s;background:var(--sage)}
+.pdot:nth-child(3){animation-delay:.4s;background:var(--gold)}
+@keyframes pulse{0%,100%{opacity:.3;transform:scale(.85)}50%{opacity:1;transform:scale(1.1)}}
+.scan-list{display:flex;flex-direction:column;gap:10px;text-align:left;max-width:400px;margin:0 auto}
+.scan-item{font-size:13px;color:var(--muted);background:rgba(255,255,255,.5);border-radius:10px;padding:11px 14px}
+
+/* result */
+.result-banner{padding:36px 28px;border-radius:20px 20px 0 0;text-align:center}
+.type-badge{display:inline-block;font-family:var(--fm);font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:5px 14px;border-radius:20px;background:rgba(255,255,255,.5);margin-bottom:14px}
+.result-banner h1{font-family:var(--fd);font-size:clamp(24px,4.5vw,32px);font-weight:700;margin-bottom:10px}
+.prevalence{font-size:13px;opacity:.82;max-width:440px;margin:0 auto}
+.gut-banner{background:var(--gut-bg);color:var(--terra-deep)}
+.nerv-banner{background:var(--nerv-bg);color:var(--pine)}
+.acou-banner{background:var(--acou-bg);color:#7A5C1E}
+.result-body{background:var(--glass);backdrop-filter:blur(20px);padding:8px 28px 6px;border:1px solid rgba(255,252,247,.6);border-top:none}
+.result-section{padding:22px 0;border-bottom:1px solid rgba(0,0,0,.07)}
+.section-label{font-family:var(--fm);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-soft);margin-bottom:12px}
+.headline{font-family:var(--fd);font-size:19px;font-weight:700;color:var(--ink);margin-bottom:10px}
+.science-text{font-size:14px;color:var(--muted);line-height:1.7}
+.mistakes-list{display:flex;flex-direction:column;gap:12px}
+.mistake-item{display:flex;gap:10px;font-size:13.5px;color:var(--muted);line-height:1.6}
+.mistake-num{font-family:var(--fd);font-weight:700;color:var(--terra);flex-shrink:0}
+.steps-list-result{display:flex;flex-direction:column;gap:14px}
+.step-card{display:flex;gap:14px}
+.step-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--fm);font-size:13px;font-weight:700;flex-shrink:0;color:#fff}
+.gut-sn{background:var(--gut)} .nerv-sn{background:var(--nerv)} .acou-sn{background:var(--acou)}
+.step-title{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.step-body{font-size:13.5px;color:var(--muted);line-height:1.6}
+
+.cta-section{background:var(--glass);backdrop-filter:blur(20px);border:1px solid rgba(255,252,247,.6);border-top:none;border-radius:0 0 20px 20px;padding:26px 28px 32px}
+.cta-hook{font-family:var(--fd);font-size:18px;font-weight:700;color:var(--ink);margin-bottom:10px;line-height:1.35}
+.cta-body{font-size:14px;color:var(--muted);line-height:1.68;margin-bottom:16px}
+.consequence-box{background:rgba(188,90,51,.08);border-left:3px solid var(--terra);border-radius:0 10px 10px 0;padding:14px 16px;margin-bottom:20px}
+.consequence-box p{font-size:13px;color:var(--terra-deep);line-height:1.65}
+.what-inside-label{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:12px}
+.protocol-list{display:flex;flex-direction:column;gap:9px;margin-bottom:20px}
+.protocol-list li{display:flex;align-items:flex-start;gap:9px;font-size:13.5px;color:var(--ink);line-height:1.55}
+.protocol-list .check{color:var(--sage);font-weight:700;flex-shrink:0}
+.proof-box{background:rgba(255,255,255,.6);border-radius:14px;padding:16px 18px;margin-bottom:18px}
+.proof-quote{font-size:13px;font-style:italic;color:var(--muted);line-height:1.65;margin-bottom:6px}
+.proof-name{font-size:11px;color:var(--muted-soft);font-family:var(--fm)}
+.urgency-box{background:rgba(192,150,63,.14);border-radius:10px;padding:12px 14px;font-size:12.5px;color:#7A5C1E;line-height:1.6;margin-bottom:22px}
+.btn-cta{width:100%;padding:18px;background:linear-gradient(135deg,var(--terra),var(--terra-deep));color:#fff;border:none;border-radius:14px;font-family:var(--fb);font-size:16px;font-weight:700;cursor:pointer;margin-bottom:10px;transition:transform .2s,box-shadow .2s}
+.btn-cta:hover{transform:scale(1.01);box-shadow:0 12px 32px rgba(188,90,51,.4)}
+.cta-sub{display:block;font-size:11.5px;font-weight:500;opacity:.85;margin-top:3px}
+.btn-pdf{width:100%;padding:13px;background:transparent;border:1.5px solid rgba(0,0,0,.14);color:var(--ink);border-radius:12px;font-family:var(--fb);font-size:13.5px;font-weight:600;cursor:pointer;margin-bottom:14px}
+.btn-pdf:hover{background:rgba(0,0,0,.03)}
+.guarantee{font-size:11.5px;color:var(--muted-soft);text-align:center;line-height:1.6}
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div class="glow" aria-hidden="true"></div>
+<div class="glow2" aria-hidden="true"></div>
+
+<nav class="quiz-nav">
+  <div class="qnav-inner">
+    <a href="/" class="qn-logo" aria-label="Colic Protocol home">
+      <svg width="22" height="20" viewBox="0 0 40 36"><circle cx="15" cy="14" r="10.5" fill="none" stroke="#BC5A33" stroke-width="3" opacity=".9"/><circle cx="25" cy="14" r="10.5" fill="none" stroke="#6C8759" stroke-width="3" opacity=".9"/><circle cx="20" cy="23" r="10.5" fill="none" stroke="#C0963F" stroke-width="3" opacity=".9"/></svg>
+      <span class="qn-name">Colic Protocol</span>
+    </a>
+    <a href="/" class="qn-back">Exit</a>
+  </div>
+</nav>
+
+<main id="main-content" class="wrap">
+
+  <!-- SCREEN 0: LANDING -->
+  <div id="landingScreen" class="card landing">
+    <span class="eyebrow">Free · 90 Seconds · No Payment Required</span>
+    <h1>Which of the <em>three systems</em> is driving her crying?</h1>
+    <p class="sub">Gut, nervous system, or acoustic. Most colic content picks one and treats it as the whole answer. This assessment weighs your answers against all three and tells you which is primary for your baby, with the mechanism explained, not just a label.</p>
+    <div class="stat-row">
+      <div class="stat-box"><span class="num">3</span><span class="lbl">Root systems assessed</span></div>
+      <div class="stat-box"><span class="num">90s</span><span class="lbl">Average time to complete</span></div>
+    </div>
+    <div class="trust-strip" aria-label="Trust signals">
+      <span class="trust-item">Built by an epidemiologist</span>
+      <span class="trust-item">Peer-reviewed evidence</span>
+      <span class="trust-item">5 questions</span>
+    </div>
+    <div class="form-row">
+      <input id="nameInput" type="text" placeholder="Your first name" autocomplete="given-name"/>
+      <input id="emailInput" type="email" placeholder="Your email address" autocomplete="email"/>
+      <!-- Honeypot: hidden from real users, catches simple bots. Do not remove. -->
+      <input id="hpField" type="text" name="website" autocomplete="off" tabindex="-1" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" aria-hidden="true"/>
+    </div>
+    <label class="consent-row" for="consentCheck">
+      <input type="checkbox" id="consentCheck" aria-describedby="consentText"/>
+      <span id="consentText">I agree to receive my result and occasional emails from Colic Protocol. See our <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a>.</span>
+    </label>
+    <button class="btn-primary" onclick="beginQuiz()">Start the Assessment →</button>
+    <p class="disclaimer">Educational purposes only. Not a medical diagnosis. For guidance specific to your baby's health, consult your pediatrician. Unsubscribe at any time.</p>
+  </div>
+
+  <!-- SCREEN 1: QUIZ -->
+  <div id="quizScreen" class="card hidden">
+    <div class="q-meta">
+      <span class="q-count" id="qCount">1 / 5</span>
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+    <div class="q-text" id="qText"></div>
+    <div class="q-sub" id="qSub"></div>
+    <div class="multi-hint">Select all that apply</div>
+    <div class="options" id="optionsBox"></div>
+    <button class="btn-continue" id="continueBtn" onclick="advanceQ()">Continue</button>
+  </div>
+
+  <!-- SCREEN 2: ANALYSIS -->
+  <div id="analysisScreen" class="card hidden">
+    <div class="analysis-wrap">
+      <h2>Weighing your answers against all three systems...</h2>
+      <p>Mapping your responses against gut, nervous system, and acoustic patterns.</p>
+      <div class="dots-row" aria-hidden="true"><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div></div>
+      <div class="scan-list" aria-live="polite">
+        <div class="scan-item">Reviewing feeding and gut signals</div>
+        <div class="scan-item">Checking nervous-system and startle patterns</div>
+        <div class="scan-item">Weighing environmental and acoustic factors</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 3: RESULT -->
+  <div id="resultScreen" class="hidden">
+    <div class="result-banner" id="resultBanner">
+      <div class="type-badge" id="resultBadge"></div>
+      <h1 id="resultTitle"></h1>
+      <div class="prevalence" id="resultPrevalence"></div>
+    </div>
+    <div class="result-body">
+      <div class="result-section">
+        <div class="section-label">What's actually happening</div>
+        <div class="headline" id="resultHeadline"></div>
+        <div class="science-text" id="resultScience"></div>
+      </div>
+      <div class="result-section">
+        <div class="section-label">3 mistakes parents commonly make with this system</div>
+        <div class="mistakes-list" id="resultMistakes"></div>
+      </div>
+      <div class="result-section" style="border-bottom:none;">
+        <div class="section-label">Your starting point for tonight</div>
+        <div class="steps-list-result" id="resultSteps"></div>
+      </div>
+    </div>
+    <div class="cta-section">
+      <div class="cta-hook" id="ctaHook"></div>
+      <div class="cta-body" id="ctaBody"></div>
+      <div class="consequence-box"><p id="ctaConsequence"></p></div>
+      <div class="what-inside-label">The Calm Baby Blueprint gives you:</div>
+      <ul class="protocol-list" id="protocolList"></ul>
+      <div class="proof-box">
+        <div class="proof-quote" id="proofQuote"></div>
+        <div class="proof-name">Peer-reviewed evidence</div>
+      </div>
+      <div class="urgency-box"><span id="urgencyText"></span></div>
+      <button class="btn-cta" id="ctaBtn" onclick="goToProduct()">
+        <span id="ctaBtnText"></span>
+        <span class="cta-sub">$47 one time. 72-hour guarantee. Keep it either way.</span>
+      </button>
+      <button class="btn-pdf" onclick="downloadPDF()">↓ Save My Result (PDF)</button>
+      <p class="guarantee">Evidence-based, not opinion &nbsp;|&nbsp; System-specific, not generic &nbsp;|&nbsp; 72-hour guarantee</p>
+    </div>
+  </div>
+</main>
+
+<footer style="text-align:center;padding:24px 16px 40px;position:relative;z-index:2;">
+  <p style="font-size:11px;color:var(--muted-soft);line-height:1.6;max-width:480px;margin:0 auto;">
+    Educational content only, not medical advice. &copy; 2026 Colic Protocol ·
+    <a href="privacy.html" style="color:var(--muted-soft);text-decoration:underline;">Privacy Policy</a>
+  </p>
+</footer>
+
+<script>
+/* ── CONFIG ──────────────────────────────────────────────────────────────
+   API key is NEVER here. All email subscriptions go through /api/subscribe,
+   a Cloudflare Pages Function that reads MailerLite credentials from
+   environment variables set in the Cloudflare dashboard.
+   ─────────────────────────────────────────────────────────────────────── */
+const CFG = {
+  productUrl: 'https://colicprotocol.gumroad.com/l/TheCalmBabyBlueprint?utm_source=quiz',
+};
+
+/* ── UTM ATTRIBUTION ─────────────────────────────────────────────────── */
+function captureUTMs(){
+  const params = new URLSearchParams(window.location.search);
+  const keys = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'];
+  if(keys.some(k => params.has(k))){
+    const utm = {};
+    keys.forEach(k => { utm[k] = params.get(k) || ''; });
+    try { sessionStorage.setItem('cp_utm', JSON.stringify(utm)); } catch(e){}
+  }
+}
+function getStoredUTMs(){
+  try {
+    const raw = sessionStorage.getItem('cp_utm');
+    if(raw) return JSON.parse(raw);
+  } catch(e){}
+  return { utm_source:'', utm_medium:'', utm_campaign:'', utm_term:'', utm_content:'' };
+}
+captureUTMs();
+
+/* ── SECURE SUBSCRIPTION ─────────────────────────────────────────────── */
+async function subscribeToList(name, email, colicType, quizStatus, consent) {
+  // colicType is the short key: 'GUT', 'NERV', or 'ACOU', matches the
+  // MailerLite automation conditions and the colic_type custom field.
+  // quizStatus is 'started' (captured at landing, before any question) or
+  // 'completed' (captured once a result exists). This is what two separate
+  // MailerLite automations key off of, one nudges an incomplete quiz, one
+  // delivers the actual result.
+  const utm = getStoredUTMs();
+  try {
+    await fetch('/api/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, colic_type: colicType, quiz_status: quizStatus, website: '', consent: !!consent, ...utm })
+    });
+  } catch(e) { console.warn('Subscription error (non-fatal):', e); }
+}
+
+/* ── STATE ───────────────────────────────────────────────────────────── */
+let userName='', userEmail='', qIndex=0;
+let scores={ GUT:0, NERV:0, ACOU:0 };
+const selectedMap = new Map();
+
+/* ── QUESTIONS ───────────────────────────────────────────────────────── */
+const QUESTIONS = [
+  { q:"When does the crying happen, and what does it look like?",
+    sub:"Choose everything that matches your baby",
+    opts:[
+      ["Tightly clustered around feeding times, arching or pulling her legs to her chest.",{GUT:3,NERV:0,ACOU:0}],
+      ["Any time, triggered by almost anything, sound, light, or being put down.",{GUT:0,NERV:2,ACOU:2}],
+      ["Worse in loud, bright, or busy environments. Calmer in a dim, quiet room.",{GUT:0,NERV:1,ACOU:3}],
+      ["The classic evening window, 5 to 9pm, regardless of feeding or environment.",{GUT:1,NERV:1,ACOU:1}],
+    ]},
+  { q:"What have you already tried, and what actually happened?",
+    sub:"Select all that apply",
+    opts:[
+      ["Gas drops or gripe water helped for a few minutes, then wore off completely.",{GUT:3,NERV:0,ACOU:0}],
+      ["Swaddling and rocking calm her, but she escalates again the moment either stops.",{GUT:0,NERV:3,ACOU:0}],
+      ["Moving to a darker, quieter room helped more than any hold or feed did.",{GUT:0,NERV:0,ACOU:3}],
+      ["Nothing has made a real difference yet.",{GUT:1,NERV:1,ACOU:1}],
+    ]},
+  { q:"What do you notice around feeding specifically?",
+    sub:"Think about the last week",
+    opts:[
+      ["Lots of gas, frequent burping needed, spit-up, or green or frothy stool.",{GUT:3,NERV:0,ACOU:0}],
+      ["She startles awake mid-feed, or seems tense and wired right after eating.",{GUT:0,NERV:3,ACOU:0}],
+      ["Feeding itself seems fine, but noise or light nearby during feeds sets her off.",{GUT:0,NERV:0,ACOU:2}],
+      ["A tight, distended, or rumbling belly, especially in the evening.",{GUT:2,NERV:0,ACOU:0}],
+    ]},
+  { q:"How would you describe her physical state most of the day?",
+    sub:"Not just during the crying episodes",
+    opts:[
+      ["Clenched fists, arched back, and a startle reflex that fires at almost anything.",{GUT:0,NERV:3,ACOU:1}],
+      ["Generally settled, except tummy discomfort clusters her crying around feeds.",{GUT:3,NERV:0,ACOU:0}],
+      ["Noticeably calmer in low light and quiet, worse with siblings, TV, or visitors around.",{GUT:0,NERV:1,ACOU:3}],
+      ["Hard to find a consistent pattern either way.",{GUT:1,NERV:1,ACOU:1}],
+    ]},
+  { q:"What's actually helped, even a little?",
+    sub:"Choose everything that's made a real difference, however small",
+    opts:[
+      ["Changing something about feeding, formula, diet, or someone mentioning a probiotic.",{GUT:3,NERV:0,ACOU:0}],
+      ["A firm, consistent hold or swaddle with a steady rhythm.",{GUT:0,NERV:3,ACOU:0}],
+      ["Consistent background sound and a dark, calm environment.",{GUT:0,NERV:0,ACOU:3}],
+      ["Nothing has helped in any noticeable way yet.",{GUT:0,NERV:0,ACOU:0}],
+    ]},
+];
+
+/* ── RESULTS DATA ────────────────────────────────────────────────────── */
+const RESULTS = {
+  GUT:{
+    type:"Gut Microbiome, Primary System", subtitle:"Gut Root",
+    bannerClass:"gut-banner", stepClass:"gut-sn",
+    prevalence:"The most common of the three. Shows up as the primary driver in an estimated 60 to 70% of colic cases.",
+    headline:"Her gut is very likely the primary system tonight.",
+    science:"An imbalanced gut microbiome creates fermentation gas and inflammation, and inflammation raises how intensely a baby feels ordinary digestive sensations. This isn't about how much she's eating. It responds to gut-targeted intervention specifically, not to swaddling or sound changes alone.",
+    mistakes:["Relying on gas drops. A Cochrane review found no statistically significant benefit for simethicone over placebo.","Relying on gripe water. It has never passed a randomized controlled trial for colic.","Trying a generic probiotic without the specific colic-studied strain. Most store-shelf probiotics were never tested for this."],
+    steps:[{title:"Check feeding mechanics first",body:"Reducing air intake during feeding, through paced feeding or a latch check, lowers the fermentation load before you add anything else. It's the fastest lever, and it costs nothing."},{title:"Gut-support protocol",body:"The specific strain studied in the Savino 2010 trial, with the dose and timing calibrated to breastfeeding or formula, is inside the Blueprint. That detail matters enough that we don't publish the exact dose generically."},{title:"Track the pattern for 3 to 5 days",body:"Log feeds against crying episodes. If the gut protocol is working, the tight clustering around feeding times is usually the first thing to loosen."}],
+    ctaHook:"You just identified the system most likely driving tonight's crying.",
+    ctaBody:"The 3 steps above are the starting point. The complete gut-support protocol, calibrated to your feeding method with the exact strain and dose, is inside the <strong>Calm Baby Blueprint</strong>.",
+    ctaConsequence:"Without the right target, this usually doesn't resolve itself faster. It costs more nights of guessing, more money spent on remedies aimed at the wrong system, and more of the sleep and patience you don't have to spare.",
+    ctaBtnText:"Get My Gut-Support Protocol",
+    protocol:["Diagnostic protocol, refined beyond this free assessment","Gut-support protocol: exact strain, dose, and timing for your feeding method","Physical techniques: Tiger Hold, ILU massage, and positioning by system","Acoustic design specs for the evening window","Bloom Baby Tracker, log what's working in real time","60-minute brown noise soundscape, ready tonight","Cry Decoder Masterclass"],
+    proofQuote:"Savino et al., Pediatrics 2010: a randomized controlled trial found a 74% reduction in daily crying by Day 21 using L. reuteri DSM 17938, in breastfed infants specifically.",
+    urgency:"The gut environment doesn't reliably correct itself on its own timeline. The earlier it's addressed directly, the shorter the window usually is.",
+  },
+  NERV:{
+    type:"Nervous System, Primary System", subtitle:"Nervous System Root",
+    bannerClass:"nerv-banner", stepClass:"nerv-sn",
+    prevalence:"One of the three primary patterns we see. Often missed, because it can look like ordinary fussiness rather than a distinct system.",
+    headline:"Her nervous system is very likely the primary system tonight.",
+    science:"A newborn's threat-detection system is still developing, with no self-soothing capacity yet to counter the startle reflex once it fires. Once triggered, the crying tends to escalate fast, regardless of feeding or gas. This responds to rhythm and consistent containment, not primarily to gut or environment changes alone.",
+    mistakes:["Aggressive patting or bouncing to 'burp it out faster.' It adds startle-reflex activation on top of an already dysregulated system.","Bright light and active play in the evening, on the theory that more stimulation will tire her out. It compounds the dysregulation instead.","Assuming one swaddle or hold should work indefinitely. Consistency of rhythm matters more than which exact technique you use."],
+    steps:[{title:"Firm, rhythmic containment",body:"A hold with steady, consistent pressure at a slow rhythm, done the same way every time, gives the startle reflex less to fire against."},{title:"Consistent evening wind-down",body:"Dim the room 30 to 60 minutes before her usual crying window starts. Consistency is what trains the nervous system to expect calm, not any single technique alone."},{title:"The full regulation sequence",body:"The Blueprint's Tiger Hold and nervous-system regulation sequence is built specifically for this system, not adapted from a general soothing list."}],
+    ctaHook:"You just identified the system most likely driving tonight's crying.",
+    ctaBody:"The 3 steps above are the starting point. The complete nervous-system regulation sequence, timed and sequenced specifically for this system, is inside the <strong>Calm Baby Blueprint</strong>.",
+    ctaConsequence:"An undertrained nervous system doesn't reliably settle itself faster through more random soothing attempts. It tends to need the same consistent input repeated enough times to learn it's safe, and every inconsistent night is a night that learning doesn't happen.",
+    ctaBtnText:"Get My Regulation Protocol",
+    protocol:["Diagnostic protocol, refined beyond this free assessment","Nervous-system regulation sequence: Tiger Hold and consistent containment technique","Gut-support protocol in case a second system is also contributing","Acoustic design specs for the evening wind-down","Bloom Baby Tracker, log what's working in real time","60-minute brown noise soundscape, ready tonight","Cry Decoder Masterclass"],
+    proofQuote:"The Moro startle reflex is a normal newborn reflex. A rhythmic, consistent hold can dampen it directly, giving an underdeveloped self-soothing system external support while it matures.",
+    urgency:"This system doesn't mature faster just because you're waiting it out. Consistent input is what trains it, night by night.",
+  },
+  ACOU:{
+    type:"Acoustic, Primary System", subtitle:"Acoustic Root",
+    bannerClass:"acou-banner", stepClass:"acou-sn",
+    prevalence:"One of the three primary patterns we see. Easy to overlook, since the environment is rarely the first thing anyone checks.",
+    headline:"Her environment is very likely the primary system tonight.",
+    science:"Your baby's nervous system is still calibrated to the low, constant frequency environment of the womb. A room that's louder, brighter, or more acoustically inconsistent than that keeps a background alarm signal switched on, even when nothing else is wrong.",
+    mistakes:["Using a screen as 'soothing background noise.' It adds visual stimulation on top of sound, compounding the mismatch rather than resolving it.","An inconsistent sound environment, sometimes on, sometimes off, different device or volume each time. Consistency matters more than any single source.","The wrong frequency and volume band entirely. Not every 'soothing sound' is calibrated to what a newborn's nervous system actually expects."],
+    steps:[{title:"Match the frequency, not just the volume",body:"A specific frequency band placed at a specific distance from the crib does more than simply playing something in the background. The exact specs are inside the Blueprint."},{title:"Dim the room on a consistent schedule",body:"Start 30 to 60 minutes before her usual crying window, at the same time every evening. Consistency is the mechanism, not the exact light level."},{title:"Remove competing stimulation",body:"Screens, siblings' activity, and bright overhead light all compete with the environment you're trying to establish. Reducing the competition matters as much as adding the right sound."}],
+    ctaHook:"You just identified the system most likely driving tonight's crying.",
+    ctaBody:"The 3 steps above are the starting point. The complete acoustic design spec, frequency, volume, distance, and timing, is inside the <strong>Calm Baby Blueprint</strong>, along with a ready-to-use soundscape.",
+    ctaConsequence:"An environment that stays mismatched doesn't correct itself simply by waiting it out. It keeps the alarm signal available to fire every evening until the environment itself changes.",
+    ctaBtnText:"Get My Acoustic Protocol",
+    protocol:["Diagnostic protocol, refined beyond this free assessment","Acoustic design: frequency, volume, distance, and timing specs","Gut-support protocol in case a second system is also contributing","Nervous-system regulation technique for the evening window","Bloom Baby Tracker, log what's working in real time","60-minute brown noise soundscape, ready tonight","Cry Decoder Masterclass"],
+    proofQuote:"Newborns show measurable calming responses to consistent, low-frequency sound environments that approximate the intrauterine acoustic environment, more so than to higher-frequency or inconsistent background sound.",
+    urgency:"The mismatch doesn't resolve with more time in the same environment. It resolves when the environment itself is corrected.",
+  },
+};
+
+/* ── HELPERS ─────────────────────────────────────────────────────────── */
+const show = id => document.getElementById(id).classList.remove('hidden');
+const hide = id => document.getElementById(id).classList.add('hidden');
+function shake(id, msg){
+  const el = document.getElementById(id);
+  el.style.borderColor='#c2513a'; el.placeholder=msg;
+  setTimeout(()=>{ el.style.borderColor=''; el.placeholder=id==='nameInput'?'Your first name':'Your email address'; },2500);
+}
+
+/* ── FLOW ────────────────────────────────────────────────────────────── */
+const quizStartedAt = Date.now(); // simple bot-speed trap
+
+function beginQuiz(){
+  const name=document.getElementById('nameInput').value.trim();
+  const email=document.getElementById('emailInput').value.trim();
+  const honeypot=document.getElementById('hpField').value;
+  const consentBox=document.getElementById('consentCheck');
+
+  if(!name) return shake('nameInput','Please enter your name');
+  if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return shake('emailInput','Please enter a valid email');
+  if(!consentBox.checked){
+    consentBox.closest('.consent-row').style.outline='1.5px solid #c2513a';
+    consentBox.closest('.consent-row').style.borderRadius='8px';
+    setTimeout(()=>{ consentBox.closest('.consent-row').style.outline=''; }, 2000);
+    consentBox.focus();
+    return;
+  }
+
+  userName=name; userEmail=email;
+  scores={GUT:0,NERV:0,ACOU:0}; qIndex=0; selectedMap.clear();
+
+  if(honeypot || (Date.now() - quizStartedAt) < 1500){
+    console.warn('Submission flagged as likely automated, proceeding without subscribing.');
+  } else {
+    // Fires immediately, before any question is answered. This is the
+    // "started" capture, the one that lets an incomplete quiz still
+    // trigger a MailerLite follow-up even if the visitor never comes back.
+    subscribeToList(userName, userEmail, '', 'started', true);
+  }
+
+  hide('landingScreen'); show('quizScreen'); renderQuestion();
+}
+
+function renderQuestion(){
+  const q=QUESTIONS[qIndex];
+  document.getElementById('qCount').textContent=`${qIndex+1} / ${QUESTIONS.length}`;
+  document.getElementById('progressFill').style.width=`${(qIndex/QUESTIONS.length)*100}%`;
+  document.getElementById('qText').textContent=q.q;
+  document.getElementById('qSub').textContent=q.sub;
+  const box=document.getElementById('optionsBox'); box.innerHTML='';
+  selectedMap.clear();
+  const btn=document.getElementById('continueBtn');
+  btn.classList.remove('visible'); btn.textContent='Continue';
+  q.opts.forEach((o,i)=>{
+    const div=document.createElement('div');
+    div.className='option'; div.setAttribute('role','checkbox'); div.setAttribute('aria-checked','false');
+    div.innerHTML=`<span class="opt-text">${o[0]}</span><span class="opt-check" id="chk${i}" aria-hidden="true"></span>`;
+    div.style.animation=`rise .35s ${i*.07}s ease both`;
+    div.onclick=()=>toggleOption(i,o[1],div);
+    box.appendChild(div);
+  });
+}
+
+function toggleOption(idx,weights,el){
+  if(selectedMap.has(idx)){
+    selectedMap.delete(idx); el.classList.remove('selected');
+    el.setAttribute('aria-checked','false');
+    el.querySelector('.opt-check').textContent='';
+  } else {
+    selectedMap.set(idx,weights); el.classList.add('selected');
+    el.setAttribute('aria-checked','true');
+    el.querySelector('.opt-check').textContent='✓';
+  }
+  const btn=document.getElementById('continueBtn');
+  if(selectedMap.size>0){
+    btn.classList.add('visible');
+    btn.textContent=selectedMap.size===1?'Continue':`Continue (${selectedMap.size} selected)`;
+  } else { btn.classList.remove('visible'); }
+}
+
+function advanceQ(){
+  selectedMap.forEach(weights=>{ Object.keys(weights).forEach(k=>{scores[k]+=weights[k];}); });
+  qIndex++; selectedMap.clear();
+  const card=document.getElementById('quizScreen');
+  card.style.opacity='0'; card.style.transform='translateY(-8px)';
+  setTimeout(()=>{
+    if(qIndex<QUESTIONS.length){ renderQuestion(); } else { hide('quizScreen'); showAnalysis(); return; }
+    card.style.transition='none'; card.style.opacity='1'; card.style.transform='translateY(0)';
+    requestAnimationFrame(()=>{ card.style.transition='opacity .3s,transform .3s'; });
+  },200);
+}
+
+function showAnalysis(){
+  show('analysisScreen');
+  setTimeout(showResult, 2800);
+}
+
+async function showResult(){
+  hide('analysisScreen');
+  const type = Object.keys(scores).reduce((a,b)=>scores[a]>=scores[b]?a:b);
+  // Second capture: same subscriber, now with the actual result. This is
+  // what a MailerLite automation keyed on quiz_status=completed uses to
+  // send the real result email instead of the started nudge.
+  subscribeToList(userName, userEmail, type, 'completed', true);
+  const R=RESULTS[type];
+  const banner=document.getElementById('resultBanner');
+  banner.className=`result-banner ${R.bannerClass}`;
+  document.getElementById('resultBadge').textContent=R.subtitle;
+  document.getElementById('resultTitle').textContent=R.type;
+  document.getElementById('resultPrevalence').textContent=R.prevalence;
+  document.getElementById('resultHeadline').textContent=R.headline;
+  document.getElementById('resultScience').textContent=R.science;
+  const mBox=document.getElementById('resultMistakes'); mBox.innerHTML='';
+  R.mistakes.forEach((m,i)=>{ mBox.innerHTML+=`<div class="mistake-item"><span class="mistake-num">${i+1}.</span><span>${m}</span></div>`; });
+  const sBox=document.getElementById('resultSteps'); sBox.innerHTML='';
+  R.steps.forEach((s,i)=>{ sBox.innerHTML+=`<div class="step-card"><div class="step-num ${R.stepClass}">${i+1}</div><div><div class="step-title">${s.title}</div><div class="step-body">${s.body}</div></div></div>`; });
+  document.getElementById('ctaHook').textContent=`${userName}, ${R.ctaHook}`;
+  document.getElementById('ctaBody').innerHTML=R.ctaBody;
+  document.getElementById('ctaConsequence').textContent=R.ctaConsequence;
+  const pBox=document.getElementById('protocolList'); pBox.innerHTML='';
+  R.protocol.forEach(item=>{ pBox.innerHTML+=`<li><span class="check" aria-hidden="true">&#10003;</span>${item}</li>`; });
+  document.getElementById('proofQuote').textContent=R.proofQuote;
+  document.getElementById('ctaBtnText').textContent=R.ctaBtnText;
+  document.getElementById('urgencyText').textContent=R.urgency;
+  show('resultScreen');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function goToProduct(){
+  window.open(CFG.productUrl,'_blank','noopener,noreferrer');
+}
+
+/* ── PDF REPORT ──────────────────────────────────────────────────────── */
+function downloadPDF(){
+  const{jsPDF}=window.jspdf;
+  const doc=new jsPDF();
+  const resultTitle=document.getElementById('resultTitle').textContent;
+  let typeKey='GUT';
+  if(resultTitle.includes('Nervous'))typeKey='NERV';
+  else if(resultTitle.includes('Acoustic'))typeKey='ACOU';
+  const R=RESULTS[typeKey];
+  let y=20;
+  doc.setFont('helvetica','bold'); doc.setFontSize(18);
+  doc.text('Colic Protocol, Your Assessment Result', 20, y); y+=10;
+  doc.setFontSize(14); doc.text(R.type, 20, y); y+=8;
+  doc.setFont('helvetica','normal'); doc.setFontSize(10);
+  const wrap = (text, width=170) => doc.splitTextToSize(text, width);
+  doc.text(wrap(R.prevalence), 20, y); y+=14;
+  doc.setFont('helvetica','bold'); doc.setFontSize(12); doc.text('What is happening', 20, y); y+=6;
+  doc.setFont('helvetica','normal'); doc.setFontSize(10);
+  const scienceLines = wrap(R.science); doc.text(scienceLines, 20, y); y+= scienceLines.length*5+8;
+  doc.setFont('helvetica','bold'); doc.setFontSize(12); doc.text('Common mistakes', 20, y); y+=6;
+  doc.setFont('helvetica','normal'); doc.setFontSize(10);
+  R.mistakes.forEach((m,i)=>{ const lines=wrap(`${i+1}. ${m}`); doc.text(lines,20,y); y+=lines.length*5+3; });
+  y+=5;
+  if(y>250){doc.addPage();y=20;}
+  doc.setFont('helvetica','bold'); doc.setFontSize(12); doc.text('Your starting point tonight', 20, y); y+=6;
+  doc.setFont('helvetica','normal'); doc.setFontSize(10);
+  R.steps.forEach((s,i)=>{
+    if(y>265){doc.addPage();y=20;}
+    doc.setFont('helvetica','bold'); doc.text(`${i+1}. ${s.title}`,20,y); y+=5;
+    doc.setFont('helvetica','normal');
+    const lines=wrap(s.body); doc.text(lines,20,y); y+=lines.length*5+4;
+  });
+  if(y>255){doc.addPage();y=20;}
+  y+=4;
+  doc.setFont('helvetica','italic'); doc.setFontSize(9);
+  doc.text(wrap('Educational content only, not medical advice. Consult your pediatrician for guidance specific to your baby.'),20,y);
+  doc.save('colic-protocol-assessment-result.pdf');
+}
+</script>
+</body>
+</html>

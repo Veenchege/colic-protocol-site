@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Colic Protocol: Which of the 3 Root Causes Is Driving Your Baby's Crying?</title>
+<meta name="description" content="Colic isn't one problem. It's gut, nervous system, or acoustic overload, and each needs a different first move. Take the free 90-second assessment to find out which one is yours.">
+<meta property="og:title" content="Colic isn't one problem. It's three. Free 90-second assessment.">
+<meta property="og:description" content="Find out whether your baby's crying is gut, nervous system, or acoustic in origin, before you try another remedy that was never built for her system.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://colicprotocol.baby">
+<meta property="og:image" content="https://colicprotocol.baby/images/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://colicprotocol.baby/images/og-image.jpg">
+<link rel="icon" type="image/svg+xml" href="/images/mark.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-180.png">
+<link rel="canonical" href="https://colicprotocol.baby">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Colic Protocol",
+  "url": "https://colicprotocol.baby",
+  "logo": "https://colicprotocol.baby/images/og-image.jpg"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Colic Protocol",
+  "url": "https://colicprotocol.baby"
+}
+</script>
+<style>
+/* ══ TOKENS ═══════════════════════════════════════════════════════════════ */
+:root{
+  --paper:#FBF4EA; --paper-alt:#F1E5D3; --card:#FFFCF7;
+  --ink:#241A12; --ink-soft:#4A3B2E; --muted:#7A6A56; --muted2:#9C8C77;
+  --terra:#BC5A33; --terra-deep:#8A3F22; --terra-d:rgba(188,90,51,.10);
+  --pine:#37452F; --pine-deep:#232B1E; --pine-d:rgba(55,69,47,.08);
+  --sage:#6C8759; --sage-d:rgba(108,135,89,.12);
+  --gold:#C0963F; --gold-d:rgba(192,150,63,.14);
+  --border:rgba(36,26,18,.10); --border2:rgba(36,26,18,.17);
+  --shadow:0 10px 34px rgba(33,43,32,.12);
+  --radius:16px;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+  --mono:'DM Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink-soft);line-height:1.65;overflow-x:hidden;font-size:16px}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+.skip-link{position:absolute;left:-9999px;top:0;z-index:200;background:var(--pine-deep);color:#fff;padding:12px 20px;border-radius:0 0 10px 0;font-size:14px;font-weight:600}
+.skip-link:focus{left:0}
+.wrap{max-width:1100px;margin:0 auto;padding:0 24px}
+.sec{padding:clamp(58px,8vw,100px) 0}
+h1,h2,h3{font-family:var(--serif);color:var(--ink);font-weight:700}
+h2{font-size:clamp(28px,3.6vw,42px);line-height:1.15}
+h2 em,h1 em{font-style:italic;color:var(--terra)}
+h3{font-size:19px;line-height:1.3;margin-bottom:8px}
+p{font-size:15.5px;line-height:1.75;color:var(--muted)}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--terra);display:block;margin-bottom:12px}
+.section-header{max-width:640px;margin:0 auto 44px;text-align:center}
+.section-header p{margin-top:12px;font-size:16px}
+/* buttons */
+.btn{display:inline-block;font-family:var(--sans);font-weight:700;border-radius:12px;cursor:pointer;border:none;text-align:center;transition:transform .2s,box-shadow .2s;letter-spacing:.1px}
+.btn:hover{transform:translateY(-2px)}
+.btn-lg{padding:19px 42px;font-size:17px}
+.btn-terra{background:linear-gradient(135deg,var(--terra),var(--terra-deep));color:#fff;box-shadow:0 8px 26px rgba(140,64,35,.34)}
+.btn-terra:hover{box-shadow:0 14px 38px rgba(140,64,35,.48)}
+.btn-pine{background:linear-gradient(135deg,var(--pine),var(--pine-deep));color:#fff;box-shadow:0 8px 26px rgba(33,43,32,.34)}
+.btn-pine:hover{box-shadow:0 14px 38px rgba(33,43,32,.46)}
+.btn-md{padding:14px 28px;font-size:15px}
+.btn-outline{background:transparent;border:1.5px solid rgba(36,26,18,.28);color:var(--ink);padding:11px 22px;font-size:14px;font-weight:600;border-radius:10px}
+.btn-outline:hover{background:rgba(36,26,18,.05)}
+.btn-outline-lt{background:transparent;border:1.5px solid rgba(255,255,255,.3);color:rgba(255,255,255,.92);padding:11px 22px;font-size:14px;font-weight:600;border-radius:10px}
+.btn-outline-lt:hover{background:rgba(255,255,255,.09)}
+.link-soft{font-size:14px;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+.link-soft:hover{color:var(--ink)}
+/* nav (matches about.html / blueprint.html / quiz.html) */
+.site-nav{position:sticky;top:0;z-index:100;background:rgba(251,244,234,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:1100px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-mark{width:28px;height:28px;flex-shrink:0}
+.nav-name{font-family:var(--serif);font-size:17px;font-weight:700;color:var(--ink)}
+.nav-links{display:flex;align-items:center;gap:26px}
+.nav-links a{color:var(--muted);font-size:14px;font-weight:500}
+.nav-links a:hover{color:var(--ink)}
+.nav-pill{background:var(--ink);border:none;border-radius:9px;padding:9px 18px;color:#fff!important;font-weight:700!important}
+.nav-pill:hover{background:var(--terra)!important}
+.nav-toggle{display:none;background:none;border:none;color:var(--ink);font-size:22px;cursor:pointer;padding:4px}
+.mobile-nav{display:none;background:var(--paper);padding:6px 24px 22px;flex-direction:column;gap:15px;border-top:1px solid var(--border)}
+.mobile-nav.open{display:flex}
+.mobile-nav a{color:var(--ink);font-size:16px;font-weight:500}
+.mob-cta{background:var(--terra);color:#fff!important;padding:13px;border-radius:10px;text-align:center;font-weight:700!important}
+/* hero */
+.hero{background:linear-gradient(150deg,var(--pine-deep) 0%,var(--pine) 100%);padding:clamp(52px,8vw,90px) 0 clamp(70px,9vw,110px);position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;top:-130px;right:-130px;width:460px;height:460px;background:radial-gradient(circle,rgba(200,154,68,.16) 0%,transparent 68%);pointer-events:none}
+.hero-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:56px;align-items:center;position:relative;z-index:1}
+.hero-ey{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.5);display:block;margin-bottom:18px}
+.hero h1{color:#fff;font-size:clamp(32px,4.3vw,50px);line-height:1.12;margin-bottom:20px}
+.hero h1 em{color:#E3A57C;font-style:italic}
+.hero-body{font-size:16.5px;color:rgba(255,255,255,.68);line-height:1.75;margin-bottom:26px;max-width:490px}
+.hero-body strong{color:rgba(255,255,255,.92);font-weight:600}
+.hero-trust{display:flex;flex-wrap:wrap;gap:6px 20px;margin-bottom:30px;padding-top:22px;border-top:1px solid rgba(255,255,255,.12)}
+.hero-trust span{font-size:12.5px;color:rgba(255,255,255,.5);font-weight:500}
+.hero-micro{font-size:12.5px;color:rgba(255,255,255,.34);margin-top:13px}
+/* three system cards, triangular cluster */
+.tri-cluster{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:420px;margin:0 auto;position:relative}
+.tri-cluster .tcard:nth-child(3){grid-column:1/3;width:78%;margin:0 auto}
+.tcard{border-radius:13px;overflow:hidden;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.055);animation:floaty 4s ease-in-out infinite}
+.tcard:nth-child(2){animation-delay:1.1s}.tcard:nth-child(3){animation-delay:2.2s}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@media(prefers-reduced-motion:reduce){.tcard{animation:none}}
+.tc-bar{height:3px}
+.tc-gut .tc-bar{background:var(--terra)} .tc-nerv .tc-bar{background:#9FBB8E} .tc-acou .tc-bar{background:var(--gold)}
+.tc-body{padding:15px 14px}
+.tc-tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;color:rgba(255,255,255,.42);display:block;margin-bottom:6px}
+.tc-name{font-family:var(--serif);font-size:15px;font-weight:600;color:rgba(255,255,255,.94);display:block;margin-bottom:5px}
+.tc-sig{font-size:11.5px;color:rgba(255,255,255,.46);font-style:italic;line-height:1.4}
+.tri-footer{text-align:center;margin-top:16px;font-size:13px;color:rgba(255,255,255,.4);font-style:italic}
+/* position band */
+.pos-band{background:var(--pine-deep);padding:clamp(46px,6vw,72px) 0}
+.pos-grid{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center}
+.pos-band h2{color:rgba(255,255,255,.95);margin-bottom:16px}
+.pos-band h2 em{color:var(--gold)}
+.pos-band p{color:rgba(255,255,255,.62);margin-bottom:22px}
+.pos-img{border-radius:14px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.35);aspect-ratio:4/5;object-fit:cover;object-position:top center}
+/* problem cards */
+.prob-sec{background:var(--paper)}
+.prob-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:18px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px 24px}
+.prob-card p{font-size:14.5px}
+.prob-num{font-family:var(--mono);font-size:11px;color:var(--muted2);letter-spacing:.1em;margin-bottom:14px;display:block}
+/* three systems deep */
+.sys-sec{background:var(--paper-alt)}
+.sys-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:38px}
+@media(max-width:860px){.sys-grid{grid-template-columns:1fr}}
+.sys-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:transform .2s,box-shadow .2s}
+.sys-card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.sys-img{width:100%;aspect-ratio:4/5;object-fit:cover;object-position:top center}
+.sys-bar{height:4px}
+.sys-gut .sys-bar{background:var(--terra)} .sys-nerv .sys-bar{background:var(--sage)} .sys-acou .sys-bar{background:var(--gold)}
+.sys-b{padding:22px 20px}
+.sys-pct{font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted2);display:block;margin-bottom:10px}
+.sys-b p{font-size:13.5px;margin-bottom:14px}
+.sig-row{display:flex;flex-wrap:wrap;gap:6px}
+.sig{font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px}
+.sys-gut .sig{background:var(--terra-d);color:var(--terra-deep)}
+.sys-nerv .sig{background:var(--sage-d);color:var(--pine)}
+.sys-acou .sig{background:var(--gold-d);color:#8a6a1f}
+.sys-cta{text-align:center}
+.sys-cta p{font-size:13px;margin-top:12px}
+/* founder */
+.found-sec{background:var(--paper)}
+.found-grid{display:grid;grid-template-columns:1fr auto;gap:56px;align-items:center}
+@media(max-width:860px){.found-grid{grid-template-columns:1fr}}
+.found-avatar{width:132px;height:132px;border-radius:50%;background:linear-gradient(135deg,var(--terra),var(--pine));display:flex;align-items:center;justify-content:center;margin:0 auto 16px;border:3px solid rgba(189,91,52,.2);flex-shrink:0}
+.found-initials{font-family:var(--serif);font-size:30px;color:#fff;font-weight:700}
+.found-vis{text-align:center}
+.found-creds strong{display:block;font-size:14px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.found-creds span{display:block;font-size:12px;color:var(--muted);line-height:1.6;max-width:190px}
+.found-hl{font-family:var(--serif);font-size:19px;font-style:italic;font-weight:600;color:var(--ink);line-height:1.45;display:block;border-left:3px solid var(--terra);padding-left:18px;margin:20px 0}
+.found-text p{margin-bottom:14px}
+.scope-box{background:var(--sage-d);border:1px solid rgba(107,138,94,.25);border-radius:12px;padding:16px 18px;margin:20px 0;font-size:13.5px}
+.scope-box strong{color:var(--pine)}
+/* assessment steps */
+.step-sec{background:var(--paper-alt)}
+.step-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin-bottom:20px}
+.step-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:26px 22px}
+.step-num{font-family:var(--serif);font-size:42px;color:rgba(59,74,56,.12);font-weight:700;line-height:1;display:block;margin-bottom:8px}
+.step-card p{font-size:13.5px}
+/* science */
+.sci-sec{background:var(--paper)}
+.sci-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:44px;align-items:start}
+@media(max-width:860px){.sci-grid{grid-template-columns:1fr}}
+.cite-card{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--terra);border-radius:12px;padding:18px 20px;margin-bottom:14px}
+.cite-card .cite-name{font-family:var(--mono);font-size:11px;color:var(--muted2);letter-spacing:.02em;display:block;margin-bottom:6px}
+.cite-card p{font-size:14px;margin:0}
+.sci-imgs{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.sci-imgs img{border-radius:12px;box-shadow:var(--shadow);aspect-ratio:3/4;object-fit:cover;object-position:top center}
+.scope-note{background:var(--card);border:1px solid var(--border2);border-radius:var(--radius);padding:22px 24px;margin-top:18px}
+.scope-note h4{font-family:var(--serif);font-size:16px;color:var(--ink);margin-bottom:8px}
+.scope-note p{font-size:13.5px}
+/* testimonials */
+.test-sec{background:var(--paper-alt)}
+.test-wrap{max-width:640px;margin:0 auto}
+.test-card{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:var(--radius);padding:30px 30px}
+.test-stars{color:var(--gold);font-size:14px;display:block;margin-bottom:14px}
+.test-card p{font-family:var(--serif);font-size:19px;font-style:italic;color:var(--ink);line-height:1.5;margin-bottom:16px}
+.test-name{font-family:var(--mono);font-size:12px;color:var(--muted2)}
+.test-note{text-align:center;font-size:12.5px;color:var(--muted2);margin-top:16px;font-style:italic}
+/* loss aversion */
+.loss-sec{background:var(--pine-deep)}
+.loss-sec .section-header h2{color:rgba(255,255,255,.95)}
+.loss-sec .section-header h2 em{color:var(--gold)}
+.loss-lede{max-width:680px;margin:0 auto 46px;text-align:center}
+.loss-lede p{color:rgba(255,255,255,.68);font-size:16.5px;line-height:1.8}
+.loss-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:28px;align-items:center;max-width:900px;margin:0 auto}
+@media(max-width:780px){.loss-grid{grid-template-columns:1fr;gap:18px}}
+.loss-col{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius);padding:26px 24px}
+.loss-col h4{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.42);margin-bottom:18px}
+.loss-row{display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.08);font-size:13.5px;color:rgba(255,255,255,.72)}
+.loss-row:last-of-type{border-bottom:none}
+.loss-row span:last-child{font-family:var(--mono);color:rgba(255,255,255,.55)}
+.loss-total{display:flex;justify-content:space-between;padding-top:14px;margin-top:6px;border-top:1px solid rgba(255,255,255,.16);font-weight:700;color:#fff;font-size:14.5px}
+.loss-vs{text-align:center;font-family:var(--serif);font-style:italic;color:rgba(255,255,255,.3);font-size:15px}
+.loss-col.win{background:rgba(200,154,68,.1);border-color:rgba(200,154,68,.3)}
+.loss-col.win .loss-total{color:var(--gold)}
+.loss-col.win h4{color:var(--gold)}
+.loss-foot{text-align:center;margin-top:34px}
+.loss-foot p{color:rgba(255,255,255,.4);font-size:12.5px;margin-top:12px}
+/* guarantee */
+.guar-sec{background:var(--paper)}
+.guar-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+@media(max-width:860px){.guar-grid{grid-template-columns:1fr}}
+.guar-img{border-radius:14px;box-shadow:var(--shadow);aspect-ratio:4/5;object-fit:cover;object-position:top center}
+.guar-list{list-style:none;display:flex;flex-direction:column;gap:12px;margin:20px 0}
+.guar-list li{display:flex;gap:10px;font-size:14.5px;color:var(--ink-soft)}
+.guar-list li::before{content:'✓';color:var(--sage);font-weight:700;flex-shrink:0}
+/* blueprint bridge */
+.bp-sec{background:var(--paper-alt)}
+.bp-grid{display:grid;grid-template-columns:auto 1fr;gap:52px;align-items:center}
+@media(max-width:860px){.bp-grid{grid-template-columns:1fr}.bp-cover{margin:0 auto}}
+.bp-cover{width:220px;border-radius:9px;box-shadow:16px 20px 50px rgba(0,0,0,.32);transform:perspective(900px) rotateY(-7deg)}
+.bp-price{font-family:var(--serif);font-size:32px;color:var(--ink);font-weight:700;display:block}
+.bp-otp{font-size:11.5px;color:var(--muted2);display:block;margin-top:2px}
+.bp-list{list-style:none;display:flex;flex-direction:column;gap:10px;margin:20px 0 26px}
+.bp-list li{display:flex;gap:10px;font-size:14px;color:var(--ink-soft)}
+.bp-list li::before{content:'✓';color:var(--sage);font-weight:700;flex-shrink:0}
+.bp-note{font-size:13px;color:var(--muted2);margin-top:6px}
+.bp-secondary{margin-top:14px;font-size:13.5px}
+/* final cta */
+.fcta{background:linear-gradient(150deg,var(--pine-deep) 0%,var(--pine) 100%);padding:clamp(64px,9vw,104px) 0;text-align:center;position:relative;overflow:hidden}
+.fcta::before{content:'';position:absolute;top:-70px;left:50%;transform:translateX(-50%);width:600px;height:300px;background:radial-gradient(circle,rgba(200,154,68,.12) 0%,transparent 70%)}
+.fcta h2{color:#fff;margin-bottom:14px;position:relative}
+.fcta h2 em{color:#E3A57C}
+.fcta>div>p{color:rgba(255,255,255,.6);font-size:16px;margin-bottom:32px;max-width:480px;margin-left:auto;margin-right:auto;position:relative}
+.fcta-micro{font-size:12px;color:rgba(255,255,255,.32);margin-top:16px;position:relative}
+/* footer */
+.site-footer{background:var(--pine-deep);padding:40px 0}
+.footer-inner{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:20px}
+.footer-brand{display:flex;align-items:center;gap:10px}
+.footer-brand-name{font-family:var(--serif);font-size:15px;color:rgba(255,255,255,.82)}
+.footer-links{display:flex;flex-wrap:wrap;gap:7px 20px}
+.footer-links a{color:rgba(255,255,255,.46);font-size:13px}
+.footer-links a:hover{color:rgba(255,255,255,.85)}
+.footer-disc{font-size:11px;color:rgba(255,255,255,.24);width:100%;line-height:1.7;margin-top:16px;border-top:1px solid rgba(255,255,255,.07);padding-top:16px}
+/* sticky mobile cta */
+.sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:90;background:var(--pine-deep);border-top:1px solid rgba(255,255,255,.1);padding:12px 16px;padding-bottom:max(12px,env(safe-area-inset-bottom));transform:translateY(100%);transition:transform .3s ease;box-shadow:0 -8px 28px rgba(0,0,0,.28);display:none}
+.sticky-cta.visible{transform:translateY(0)}
+.sticky-cta a{display:block;width:100%;text-align:center;padding:14px;background:linear-gradient(135deg,var(--terra),var(--terra-deep));color:#fff;border-radius:10px;font-weight:700;font-size:15px}
+@media(max-width:720px){.sticky-cta{display:block}}
+/* scroll reveal */
+.rv{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}
+.rv.in{opacity:1;transform:none}
+/* responsive */
+@media(max-width:860px){
+  .hero-grid{grid-template-columns:1fr;gap:36px}
+  .hero-vis{order:-1}
+  .nav-links{display:none}
+  .nav-toggle{display:block}
+  .pos-grid{grid-template-columns:1fr}
+  .pos-img{max-width:320px;margin:0 auto}
+  .guar-grid{grid-template-columns:1fr}
+  .guar-img{max-width:320px;margin:0 auto}
+}
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!-- ══ NAV ══ -->
+<nav class="site-nav" id="siteNav" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo" aria-label="Colic Protocol home">
+      <svg width="30" height="27" viewBox="0 0 40 36" class="nav-mark" aria-hidden="true"><circle cx="15" cy="14" r="10.5" fill="none" stroke="#BC5A33" stroke-width="2.4" opacity=".92"/><circle cx="25" cy="14" r="10.5" fill="none" stroke="#6C8759" stroke-width="2.4" opacity=".92"/><circle cx="20" cy="23" r="10.5" fill="none" stroke="#C0963F" stroke-width="2.4" opacity=".92"/></svg>
+      <span class="nav-name">Colic Protocol</span>
+    </a>
+    <div class="nav-links">
+      <a href="about.html">About Vincent</a>
+      <a href="blog.html">Blog</a>
+      <a href="blueprint.html">The Blueprint</a>
+      <a href="quiz.html" class="nav-pill">Take the Free Assessment →</a>
+    </div>
+    <button class="nav-toggle" onclick="toggleMenu()" aria-expanded="false" aria-controls="mobileNav" aria-label="Open menu">&#9776;</button>
+  </div>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="about.html">About Vincent</a>
+    <a href="blog.html">Blog</a>
+    <a href="blueprint.html">The Blueprint</a>
+    <a href="quiz.html" class="mob-cta">Take the Free Assessment →</a>
+  </div>
+</nav>
+
+<main id="main-content">
+
+<!-- ══ HERO ══ -->
+<section class="hero" aria-label="Hero">
+  <div class="wrap hero-grid">
+    <div class="hero-text">
+      <span class="hero-ey">Free Root Cause Assessment · 90 Seconds</span>
+      <h1>Colic isn't one problem. It's <em>three.</em></h1>
+      <p class="hero-body">Gut microbiome imbalance, nervous system dysregulation, or acoustic overload: each one looks like "colic" from the outside, and each one needs a different first move. Most advice, and most products, guess. This tells you which one you're actually dealing with, <strong>before</strong> you spend another evening on a remedy that was never built for your baby's system.</p>
+      <a href="quiz.html" class="btn btn-terra btn-lg">Find My Baby's Root Cause →</a>
+      <p class="hero-micro">Free, no payment required · Result sent to your email · Takes about 90 seconds</p>
+      <div class="hero-trust">
+        <span>Epidemiologist-reviewed literature</span>
+        <span>Named clinical citations</span>
+        <span>72-hour guarantee</span>
+      </div>
+    </div>
+    <div class="hero-vis" aria-label="The three root-cause systems">
+      <div class="tri-cluster">
+        <div class="tcard tc-gut">
+          <div class="tc-bar"></div>
+          <div class="tc-body">
+            <span class="tc-tag">System 1</span>
+            <span class="tc-name">Gut</span>
+            <span class="tc-sig">"Gassy, straining, worse after feeds"</span>
+          </div>
+        </div>
+        <div class="tcard tc-nerv">
+          <div class="tc-bar"></div>
+          <div class="tc-body">
+            <span class="tc-tag">System 2</span>
+            <span class="tc-name">Nervous System</span>
+            <span class="tc-sig">"Startles awake, can't self-settle"</span>
+          </div>
+        </div>
+        <div class="tcard tc-acou">
+          <div class="tc-bar"></div>
+          <div class="tc-body">
+            <span class="tc-tag">System 3</span>
+            <span class="tc-name">Acoustic</span>
+            <span class="tc-sig">"Only calms in the exact right sound and light"</span>
+          </div>
+        </div>
+      </div>
+      <p class="tri-footer">Which one is your baby?</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ POSITION BAND ══ -->
+<section class="pos-band" aria-labelledby="pos-h2">
+  <div class="wrap pos-grid">
+    <div class="rv">
+      <span class="eyebrow" style="color:var(--gold)">The Actual Problem With Most Colic Advice</span>
+      <h2 id="pos-h2">Most content picks <em>one</em> root cause and treats it like the whole picture.</h2>
+      <p>A hold that works because it calms a dysregulated nervous system will do very little for a baby whose primary issue is gut inflammation. A probiotic that fixes fermentation gas won't touch a baby who's simply overloaded by the wrong sound and light environment. Colic Protocol starts by identifying which of the three is actually driving your baby's crying, then hands you the specific first steps for that system, not a generic list of things that work for somebody else's baby.</p>
+      <a href="quiz.html" class="btn-outline-lt">Find your root cause →</a>
+    </div>
+    <div class="rv">
+      <img src="images/three-system-model.jpg" alt="The three-system model: gut, nervous system, and acoustic, usually one is primary" class="pos-img">
+    </div>
+  </div>
+</section>
+
+<!-- ══ PROBLEM SECTION ══ -->
+<section class="sec prob-sec" aria-labelledby="prob-h2">
+  <div class="wrap">
+    <div class="section-header rv">
+      <span class="eyebrow">Why the Standard Advice Falls Short</span>
+      <h2 id="prob-h2">Three reasons you can do everything "right" and still be up at 2AM</h2>
+      <p>None of this means you're doing something wrong. It usually means the advice was never diagnostic in the first place.</p>
+    </div>
+    <div class="prob-grid">
+      <div class="card prob-card rv">
+        <span class="prob-num">01 · The symptom trap</span>
+        <h3>One remedy, aimed at the wrong system</h3>
+        <p>Gripe water has never passed a randomized controlled trial against placebo. Simethicone gas drops failed to show a statistically significant benefit in a Cochrane review. Both treat gas as the problem. For a baby whose primary system is nervous system dysregulation or acoustic overload, gas was never the actual driver, so neither product had a mechanism to work through.</p>
+      </div>
+      <div class="card prob-card rv">
+        <span class="prob-num">02 · The reassurance trap</span>
+        <h3>True, and not the same thing as useful</h3>
+        <p>Most colic does resolve with time, and reassurance that it will pass is honest. But "it will pass" doesn't tell you which of the three systems is active tonight, it just tells you to keep enduring one of them a little longer than you might need to.</p>
+      </div>
+      <div class="card prob-card rv">
+        <span class="prob-num">03 · The one-size trap</span>
+        <h3>A protocol built for someone else's baby</h3>
+        <p>The environment fix that settles an acoustic-overload baby does nothing for a baby whose issue is gut inflammation. Almost no piece of generic colic content tells you which baby it's actually written for. Yours might not be it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ THREE SYSTEMS DEEP ══ -->
+<section class="sec sys-sec" aria-labelledby="sys-h2">
+  <div class="wrap">
+    <div class="section-header rv">
+      <span class="eyebrow">The Three Root Causes</span>
+      <h2 id="sys-h2">Which one is doing the most damage tonight?</h2>
+      <p>Most babies have some overlap. Usually one system is primary, and that's the one worth addressing first.</p>
+    </div>
+    <div class="sys-grid">
+      <article class="sys-card sys-gut rv">
+        <img src="images/gut-microbiome-diagram.jpg" alt="Gut microbiome and probiotic strain specificity diagram" class="sys-img">
+        <div class="sys-bar"></div>
+        <div class="sys-b">
+          <span class="sys-pct">Most common presentation</span>
+          <h3>Gut</h3>
+          <p>Microbiome imbalance and fermentation gas. Crying tends to build after feeds, alongside straining, arching, or visible discomfort passing gas. This is the system most colic products aim at, whether or not it's actually the one at play.</p>
+          <div class="sig-row">
+            <span class="sig">Worse after feeds</span>
+            <span class="sig">Straining</span>
+            <span class="sig">Leg-pulling</span>
+          </div>
+        </div>
+      </article>
+      <article class="sys-card sys-nerv rv">
+        <img src="images/nervous-system-diagram.jpg" alt="Nervous system dysregulation diagram" class="sys-img">
+        <div class="sys-bar"></div>
+        <div class="sys-b">
+          <span class="sys-pct">Frequently missed</span>
+          <h3>Nervous System</h3>
+          <p>A threat-detection loop that hasn't yet learned to self-soothe. Any change in handling, sound, or position can trigger a full reset of the crying, regardless of whether gas or feeding is involved at all.</p>
+          <div class="sig-row">
+            <span class="sig">Hard startle</span>
+            <span class="sig">Escalates fast</span>
+            <span class="sig">Can't self-settle</span>
+          </div>
+        </div>
+      </article>
+      <article class="sys-card sys-acou rv">
+        <img src="images/womb-frequency-diagram.jpg" alt="Womb frequency and acoustic environment diagram" class="sys-img">
+        <div class="sys-bar"></div>
+        <div class="sys-b">
+          <span class="sys-pct">Easy to overlook</span>
+          <h3>Acoustic</h3>
+          <p>An environment mismatched to womb-frequency calibration: the wrong sound, the wrong distance, too much light. These babies often settle fast in exactly the right setup, and unravel the moment it changes.</p>
+          <div class="sig-row">
+            <span class="sig">Setup-sensitive</span>
+            <span class="sig">Fast to settle right</span>
+            <span class="sig">Fast to unravel</span>
+          </div>
+        </div>
+      </article>
+    </div>
+    <div class="sys-cta rv" style="text-align:center">
+      <a href="quiz.html" class="btn btn-terra btn-md">Take the 90-Second Assessment, Free →</a>
+      <p>Answer a few questions about tonight, not a generic history.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOUNDER ══ -->
+<section class="sec found-sec" aria-labelledby="found-h2">
+  <div class="wrap found-grid">
+    <div class="found-text rv">
+      <span class="eyebrow">Why This Exists</span>
+      <h2 id="found-h2">My daughter Zion was the reason I went back to the research.</h2>
+      <p>Zion's colic started in her third week. Some evenings were three or four hours of crying that nothing seemed to touch. I heard the same reassurance most parents hear: it's normal, it will pass. It was true, and it didn't help at 2AM.</p>
+      <span class="found-hl">"So instead of trying one more product, I went back to the primary literature and read it the way I'm actually trained to: as an epidemiologist, not as a parent hoping something would stick."</span>
+      <p>Within 48 hours of running a protocol built around Zion's actual primary system, not a generic one, our evenings changed. Colic Protocol is that same process, built so another parent doesn't have to spend weeks and a few hundred dollars finding it by trial and error.</p>
+      <div class="scope-box">
+        <strong>What "epidemiologist" actually means here:</strong> I'm trained to read, weigh, and synthesize population-level clinical research, which is exactly the skill used to separate strong colic trials from weak ones and match a study's population to your baby's situation. It is not a pediatric, gastroenterology, or lactation credential, and this protocol doesn't ask it to be one. If anything here concerns your baby's health, that's a conversation for your pediatrician, not this website.
+      </div>
+      <a href="about.html" class="btn-outline">Read the full story →</a>
+    </div>
+    <div class="found-vis rv">
+      <div class="found-avatar" aria-hidden="true"><span class="found-initials">V</span></div>
+      <div class="found-creds">
+        <strong>Vincent</strong>
+        <span>Epidemiologist &amp; Data Analyst · Colic Protocol founder</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ ASSESSMENT PROMISE ══ -->
+<section class="sec step-sec" aria-labelledby="step-h2">
+  <div class="wrap">
+    <div class="section-header rv">
+      <span class="eyebrow">What Actually Happens in 90 Seconds</span>
+      <h2 id="step-h2">No email required to start. No sales pitch in between.</h2>
+    </div>
+    <div class="step-grid">
+      <div class="step-card rv">
+        <span class="step-num">1</span>
+        <h3>Answer 5 short questions</h3>
+        <p>About tonight's crying pattern specifically, not a long intake form. Weighted, not multiple choice trivia.</p>
+      </div>
+      <div class="step-card rv">
+        <span class="step-num">2</span>
+        <h3>See your primary system</h3>
+        <p>Gut, nervous system, or acoustic, scored from your actual answers, with a plain explanation of why.</p>
+      </div>
+      <div class="step-card rv">
+        <span class="step-num">3</span>
+        <h3>Get 3 starting steps by email</h3>
+        <p>Specific to your result. Free. Nothing in the free result requires a purchase to try tonight.</p>
+      </div>
+      <div class="step-card rv">
+        <span class="step-num">4</span>
+        <h3>Decide about the full protocol</h3>
+        <p>The Blueprint is there if you want the complete system. No pressure either way.</p>
+      </div>
+    </div>
+    <div style="text-align:center">
+      <img src="images/assessment-diagram.jpg" alt="What's behind the 90-second assessment: weighted scoring across gut, nervous system, and acoustic" style="max-width:360px;border-radius:14px;box-shadow:var(--shadow);margin:8px auto 0;aspect-ratio:4/5;object-fit:cover;object-position:top center">
+    </div>
+  </div>
+</section>
+
+<!-- ══ SCIENCE ══ -->
+<section class="sec sci-sec" aria-labelledby="sci-h2">
+  <div class="wrap sci-grid">
+    <div class="rv">
+      <span class="eyebrow">The Evidence, Not Just the Credential</span>
+      <h2 id="sci-h2">Named studies you can go verify yourself.</h2>
+      <p style="margin-bottom:22px">We'd rather you check these than take our word for it.</p>
+      <div class="cite-card">
+        <span class="cite-name">Savino et al., Pediatrics, 2010</span>
+        <p>Randomized controlled trial reporting a 74% reduction in daily crying time by Day 21 using a specific L. reuteri strain. Conducted in <strong>breastfed infants specifically</strong>: if your baby is formula-fed or mixed-fed, this particular trial's population doesn't match yours, and the Blueprint's formula-feeding track uses different, broader evidence instead.</p>
+      </div>
+      <div class="cite-card">
+        <span class="cite-name">Network meta-analysis, 32 RCTs, 2,242 infants</span>
+        <p>Comparing colic interventions head to head, this specific L. reuteri strain ranked first across the pooled trials. We name the strain publicly because the research is public. The exact dose and timing protocol calibrated by feeding method is inside the Blueprint.</p>
+      </div>
+      <div class="cite-card">
+        <span class="cite-name">Ellwood et al., BMJ Open, 2020 · Hjern et al., Acta Paediatrica, 2020</span>
+        <p>Two independent systematic reviews reaching the same conclusion as Savino 2010, which is the part that matters more than any single trial: it's been replicated, not just published once.</p>
+      </div>
+    </div>
+    <div class="rv">
+      <div class="sci-imgs">
+        <img src="images/citation-card.jpg" alt="How to verify a colic citation yourself">
+        <img src="images/evidence-hierarchy.jpg" alt="Evidence hierarchy diagram">
+      </div>
+      <div class="scope-note">
+        <h4>Why we name the strain but not the exact dose here</h4>
+        <p>The specific probiotic strain has real research behind it, and hiding which one would just make you search for it yourself, so we don't. The exact dose, timing, and how it's calibrated differently for breastfed versus formula-fed babies is the part that took the actual clinical reading to get right, and it's what's inside the Blueprint.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TESTIMONIALS ══ -->
+<section class="sec test-sec" aria-labelledby="test-h2">
+  <div class="wrap">
+    <div class="section-header rv">
+      <span class="eyebrow">From Parents Who've Used It</span>
+      <h2 id="test-h2">Early days. Real words.</h2>
+      <p>We'd rather show you one real story than fill this section with quotes we can't stand behind.</p>
+    </div>
+    <div class="test-wrap rv">
+      <div class="test-card">
+        <span class="test-stars">★★★★★</span>
+        <p>"I wish I came across your page five weeks ago. I could have just read your blueprint."</p>
+        <span class="test-name">Cassie, mum of an 11-week-old</span>
+      </div>
+      <p class="test-note">More stories will be added here as they come in.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ LOSS AVERSION / COST COMPARISON ══ -->
+<section class="sec loss-sec" aria-labelledby="loss-h2">
+  <div class="wrap">
+    <div class="section-header rv">
+      <span class="eyebrow" style="color:var(--gold)">What This Has Probably Already Cost You</span>
+      <h2 id="loss-h2">It isn't only money. Money is just the part with a receipt.</h2>
+    </div>
+    <div class="loss-lede rv">
+      <p>It's the two hours of sleep you didn't get last night. It's the version of yourself you expected to be by now, the one who had this figured out already. It's snapping at your partner over the monitor volume, and feeling guilty about it thirty seconds later. The money is the easy part to add up. Here's that part, at least.</p>
+    </div>
+    <div class="loss-grid rv">
+      <div class="loss-col">
+        <h4>What You May Have Already Spent</h4>
+        <div class="loss-row"><span>Gripe water, a few rounds</span><span>$24–54</span></div>
+        <div class="loss-row"><span>Gas drops, a few rounds</span><span>$16–45</span></div>
+        <div class="loss-row"><span>A single pediatric consult</span><span>$300–500</span></div>
+        <div class="loss-row"><span>Lactation consultant visit</span><span>$100–250</span></div>
+        <div class="loss-total"><span>Typical total</span><span>$150–450+</span></div>
+      </div>
+      <div class="loss-vs">vs</div>
+      <div class="loss-col win">
+        <h4>The Blueprint</h4>
+        <div class="loss-row"><span>Diagnostic protocol</span><span>Included</span></div>
+        <div class="loss-row"><span>Gut, nervous system &amp; feeding protocols</span><span>Included</span></div>
+        <div class="loss-row"><span>Tracker, soundscape &amp; cry decoder</span><span>Included</span></div>
+        <div class="loss-row"><span>72-hour guarantee</span><span>Included</span></div>
+        <div class="loss-total"><span>One-time</span><span>$47</span></div>
+      </div>
+    </div>
+    <div class="loss-foot rv">
+      <a href="blueprint.html" class="btn btn-terra btn-md">See What's Inside the Blueprint →</a>
+      <p>Not a discount, not a sale. Just what the same $47 gets you instead.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ GUARANTEE ══ -->
+<section class="sec guar-sec" aria-labelledby="guar-h2">
+  <div class="wrap guar-grid">
+    <div class="rv">
+      <span class="eyebrow">The Guarantee, Plainly</span>
+      <h2 id="guar-h2">72 hours. Full refund. Keep the Blueprint either way.</h2>
+      <p>If your baby isn't noticeably calmer within 72 hours of starting the parts of the protocol that match her primary system, email hello@colicprotocol.baby. You'll get a full refund. No form, no argument, no asking for the PDF back.</p>
+      <ul class="guar-list">
+        <li>No conditions on how exactly you followed it</li>
+        <li>No restocking fee, no partial refund</li>
+        <li>You keep every bonus regardless</li>
+      </ul>
+      <a href="quiz.html" class="btn btn-pine btn-md">Start With the Free Assessment →</a>
+    </div>
+    <div class="rv">
+      <img src="images/guarantee-explained.jpg" alt="The 72-hour guarantee explained plainly" class="guar-img">
+    </div>
+  </div>
+</section>
+
+<!-- ══ BLUEPRINT BRIDGE ══ -->
+<section class="sec bp-sec" aria-labelledby="bp-h2">
+  <div class="wrap bp-grid">
+    <div class="rv" style="text-align:center">
+      <img src="images/blueprint-cover.jpg" alt="The Calm Baby Blueprint cover" class="bp-cover">
+      <span class="bp-price">$47</span>
+      <span class="bp-otp">One-time · instant download</span>
+    </div>
+    <div class="rv">
+      <span class="eyebrow">The Complete System</span>
+      <h2 id="bp-h2">The Calm Baby Blueprint</h2>
+      <p>Everything the assessment points toward, in full: the diagnostic protocol, the system-specific interventions, and the tools to track what's actually working.</p>
+      <ul class="bp-list">
+        <li>Diagnostic protocol, identify which system is primary</li>
+        <li>Gut reset protocol, exact strain, dose &amp; timing by feeding method</li>
+        <li>Tiger Hold, ILU massage &amp; nervous system regulation techniques</li>
+        <li>Acoustic design specs: frequency, volume, distance, duration</li>
+        <li>Bloom Baby Tracker, one-tap logging that reveals patterns fast</li>
+        <li>60-Minute Brown Noise Soundscape, calibrated to womb frequency</li>
+        <li>Cry Decoder Masterclass, tell gas cry from overtired cry from colic cry</li>
+        <li>72-Hour Zero-Cry Guarantee</li>
+      </ul>
+      <a href="quiz.html" class="btn btn-terra btn-md">Take the Free Assessment First →</a>
+      <p class="bp-secondary">Already know your system? <a href="blueprint.html" class="link-soft">Go straight to the Blueprint →</a></p>
+      <p class="bp-note">Whether you're breastfeeding, formula-feeding, or mixed matters here: the Blueprint includes a separate track for each.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FINAL CTA ══ -->
+<section class="fcta" aria-labelledby="fcta-h2">
+  <div class="wrap">
+    <h2 id="fcta-h2">Find out which one your baby has. <em>Free.</em></h2>
+    <p>5 questions. About 90 seconds. Your result, sent straight to your email.</p>
+    <a href="quiz.html" class="btn btn-terra btn-lg">Start the Free Assessment →</a>
+    <p class="fcta-micro">No payment required · Instant result · Nothing else to buy to get it</p>
+  </div>
+</section>
+
+</main>
+
+<!-- ══ STICKY MOBILE CTA ══ -->
+<div class="sticky-cta" id="stickyCta">
+  <a href="quiz.html">Take the Free Assessment, 90 Seconds →</a>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<footer class="site-footer" role="contentinfo">
+  <div class="wrap footer-inner">
+    <div class="footer-brand">
+      <svg width="26" height="23" viewBox="0 0 40 36" aria-hidden="true"><circle cx="15" cy="14" r="10.5" fill="none" stroke="#BC5A33" stroke-width="2.6" opacity=".85"/><circle cx="25" cy="14" r="10.5" fill="none" stroke="#6C8759" stroke-width="2.6" opacity=".85"/><circle cx="20" cy="23" r="10.5" fill="none" stroke="#C0963F" stroke-width="2.6" opacity=".85"/></svg>
+      <span class="footer-brand-name">Colic Protocol</span>
+    </div>
+    <nav class="footer-links" aria-label="Footer navigation">
+      <a href="about.html">About Vincent</a>
+      <a href="quiz.html">Free Assessment</a>
+      <a href="blueprint.html">The Blueprint</a>
+      <a href="blog.html">Blog</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms</a>
+      <a href="medical-disclaimer.html">Medical Disclaimer</a>
+    </nav>
+    <p class="footer-disc">Educational content only, not medical advice. Always consult your pediatrician about your baby's health, especially before changing feeding, introducing a supplement, or if you have any safety concerns. Contact: hello@colicprotocol.baby &middot; &copy; 2026 Colic Protocol.</p>
+  </div>
+</footer>
+
+<script>
+/* UTM attribution, first-touch, shared across pages via sessionStorage */
+(function(){
+  const params = new URLSearchParams(window.location.search);
+  const keys = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'];
+  if(keys.some(k => params.has(k))){
+    const utm = {};
+    keys.forEach(k => { utm[k] = params.get(k) || ''; });
+    try { sessionStorage.setItem('cp_utm', JSON.stringify(utm)); } catch(e){}
+  }
+})();
+
+/* mobile menu */
+const navToggle = document.querySelector('.nav-toggle');
+const mobileNav = document.getElementById('mobileNav');
+function toggleMenu(){
+  const isOpen = mobileNav.classList.toggle('open');
+  navToggle.setAttribute('aria-expanded', isOpen);
+}
+
+/* sticky mobile cta: show after hero, hide near footer */
+const stickyCta = document.getElementById('stickyCta');
+const siteFooter = document.querySelector('.site-footer');
+window.addEventListener('scroll', () => {
+  const pastHero = window.scrollY > window.innerHeight * 0.7;
+  const nearFooter = siteFooter && (siteFooter.getBoundingClientRect().top < window.innerHeight);
+  stickyCta.classList.toggle('visible', pastHero && !nearFooter);
+}, { passive: true });
+
+/* scroll reveal */
+const rvEls = document.querySelectorAll('.rv');
+if ('IntersectionObserver' in window) {
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+  rvEls.forEach(el => io.observe(el));
+} else {
+  rvEls.forEach(el => el.classList.add('in'));
+}
+</script>
+</body>
+</html>

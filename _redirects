@@ -1,0 +1,15 @@
+# Cloudflare Pages automatically strips .html and maps index.html to / —
+# no redirect rules are required for the pages in this build to also work
+# as clean URLs (/quiz, /about, /blueprint, /privacy, /terms all resolve
+# automatically alongside their .html versions).
+#
+# IMPORTANT — retiring the old funnel:
+# Master Document v11 flags colic-code-website.vercel.app and its
+# /colic-code-quiz.html route as retired. Once this build is live at
+# colicprotocol.baby and every bio link (TikTok, Instagram, Facebook,
+# Pinterest) is repointed here, add a redirect on the OLD Vercel project
+# pointing at this domain, not the other way around, since redirect rules
+# only apply to requests that already reach this project.
+#
+# Add any future one-off redirects below this line, e.g.:
+#   /old-page   /new-page   301
