@@ -33,6 +33,7 @@
   --terra:#BC5A33; --terra-deep:#8A3F22; --terra-d:rgba(188,90,51,.10);
   --pine:#37452F; --pine-deep:#232B1E; --pine-d:rgba(55,69,47,.08);
   --sage:#6C8759; --sage-d:rgba(108,135,89,.12);
+  --mauve:#8A6A7A; --mauve-d:rgba(138,106,122,.12);
   --gold:#C0963F; --gold-d:rgba(192,150,63,.14);
   --border:rgba(36,26,18,.10); --border2:rgba(36,26,18,.17);
   --shadow:0 10px 34px rgba(33,43,32,.12);
@@ -86,6 +87,7 @@ p{font-size:15.5px;line-height:1.75;color:var(--muted)}
 .tag-timeline .post-tag-bar{background:var(--gold)}
 .tag-techniques .post-tag-bar{background:var(--sage)}
 .tag-evidence .post-tag-bar{background:var(--pine)}
+.tag-support .post-tag-bar{background:var(--mauve)}
 .post-body{padding:24px 22px;display:flex;flex-direction:column;flex:1}
 .post-meta{display:flex;gap:10px;align-items:center;margin-bottom:10px}
 .post-cat{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--terra);font-weight:600}
@@ -145,9 +147,80 @@ p{font-size:15.5px;line-height:1.75;color:var(--muted)}
     <button class="filter-chip" data-filter="evidence">Evidence</button>
     <button class="filter-chip" data-filter="techniques">Techniques</button>
     <button class="filter-chip" data-filter="timeline">Timeline</button>
+    <button class="filter-chip" data-filter="support">Support</button>
   </div>
 
   <div class="post-grid" id="postGrid">
+
+    <a href="blog/infant-gut-microbiome-colic.html" class="post-card tag-evidence" data-cat="evidence">
+      <div class="post-tag-bar"></div>
+      <div class="post-body">
+        <div class="post-meta"><span class="post-cat">Evidence</span><span class="post-dot"></span><span class="post-read">8 min read</span></div>
+        <h2>Infant Gut Microbiome and Colic: What the Research Shows</h2>
+        <p>The full evidence base, including the 32-trial meta-analysis most content never cites, and why strain specificity is the detail that actually matters.</p>
+        <span class="post-link">Read the post →</span>
+      </div>
+    </a>
+
+    <a href="blog/gripe-water-vs-gas-drops.html" class="post-card tag-evidence" data-cat="evidence">
+      <div class="post-tag-bar"></div>
+      <div class="post-body">
+        <div class="post-meta"><span class="post-cat">Evidence</span><span class="post-dot"></span><span class="post-read">8 min read</span></div>
+        <h2>Gripe Water vs Gas Drops for Colic: What the Research Actually Shows</h2>
+        <p>Neither product has passed a randomized controlled trial for colic. Comparing two evidence-free products is the wrong question. Here's the right one.</p>
+        <span class="post-link">Read the post →</span>
+      </div>
+    </a>
+
+    <a href="blog/does-gripe-water-work.html" class="post-card tag-evidence" data-cat="evidence">
+      <div class="post-tag-bar"></div>
+      <div class="post-body">
+        <div class="post-meta"><span class="post-cat">Evidence</span><span class="post-dot"></span><span class="post-read">6 min read</span></div>
+        <h2>Does Gripe Water Work for Colic? A Parent's Guide to the Evidence</h2>
+        <p>It calmed the baby for fifteen minutes, then the crying came back. That's not a coincidence. What to try tonight instead.</p>
+        <span class="post-link">Read the post →</span>
+      </div>
+    </a>
+
+    <a href="blog/gut-vs-nervous-system-colic.html" class="post-card tag-diagnosis" data-cat="diagnosis">
+      <div class="post-tag-bar"></div>
+      <div class="post-body">
+        <div class="post-meta"><span class="post-cat">Diagnosis</span><span class="post-dot"></span><span class="post-read">8 min read</span></div>
+        <h2>Gut Colic vs Nervous System Colic: What's Actually Causing the Crying</h2>
+        <p>The two most common root-cause types, compared directly. Why the same technique can help one baby and do nothing for the other.</p>
+        <span class="post-link">Read the post →</span>
+      </div>
+    </a>
+
+    <a href="blog/acoustic-overload-newborn.html" class="post-card tag-diagnosis" data-cat="diagnosis">
+      <div class="post-tag-bar"></div>
+      <div class="post-body">
+        <div class="post-meta"><span class="post-cat">Diagnosis</span><span class="post-dot"></span><span class="post-read">7 min read</span></div>
+        <h2>Acoustic Overload in Newborns: The Colic Trigger Nobody Talks About</h2>
+        <p>The least-known of the three root-cause systems. Why brown noise works and white noise doesn't, and the common soothing mistakes.</p>
+        <span class="post-link">Read the post →</span>
+      </div>
+    </a>
+
+    <a href="blog/why-colic-remedies-stop-working.html" class="post-card tag-diagnosis" data-cat="diagnosis">
+      <div class="post-tag-bar"></div>
+      <div class="post-body">
+        <div class="post-meta"><span class="post-cat">Diagnosis</span><span class="post-dot"></span><span class="post-read">7 min read</span></div>
+        <h2>Why Colic Remedies Stop Working (And What's Actually Going On)</h2>
+        <p>You're not doing it wrong. Single-system fixes applied to a multi-system problem create temporary relief, not resolution.</p>
+        <span class="post-link">Read the post →</span>
+      </div>
+    </a>
+
+    <a href="blog/how-to-survive-colic.html" class="post-card tag-support" data-cat="support">
+      <div class="post-tag-bar"></div>
+      <div class="post-body">
+        <div class="post-meta"><span class="post-cat">Support</span><span class="post-dot"></span><span class="post-read">7 min read</span></div>
+        <h2>How to Survive Colic Without Losing Your Mind</h2>
+        <p>Your stress is part of the picture, not a side issue. What genuinely helps, what to tell your partner, and the decision tree for tonight.</p>
+        <span class="post-link">Read the post →</span>
+      </div>
+    </a>
 
     <a href="blog/nervous-system-dysregulation-colic.html" class="post-card tag-diagnosis" data-cat="diagnosis">
       <div class="post-tag-bar"></div>
