@@ -220,7 +220,7 @@ a{color:inherit}
     </div>
     <div class="q-text" id="qText"></div>
     <div class="q-sub" id="qSub"></div>
-    <div class="multi-hint">Select all that apply</div>
+    <div class="multi-hint" id="multiHint">Select all that apply</div>
     <div class="options" id="optionsBox"></div>
     <button class="btn-continue" id="continueBtn" onclick="advanceQ()">Continue</button>
   </div>
@@ -403,12 +403,13 @@ const QUESTIONS = [
   },
   {
     q: "What is your baby's feeding situation?",
-    sub: "Feeding method affects which interventions are most effective.",
+    sub: "Feeding method affects which interventions are most effective. Pick one.",
+    single: true,
     opts: [
-      ["Exclusively breastfed",                                                            {GUT:1,NS:0,AC:0}],
-      ["Formula-fed — has been from birth or switched recently",                           {GUT:1,NS:0,AC:0}],
-      ["Mixed feeding — breast and formula",                                               {GUT:1,NS:0,AC:0}],
-      ["I've eliminated dairy from my diet already and the crying hasn't changed",         {GUT:0,NS:1,AC:1}],
+      ["Exclusively breastfed",                                                            {GUT:1,NS:0,AC:0}, "Breastfed"],
+      ["Formula-fed — has been from birth or switched recently",                           {GUT:1,NS:0,AC:0}, "Formula-fed"],
+      ["Mixed feeding — breast and formula",                                               {GUT:1,NS:0,AC:0}, "Mixed"],
+      ["I've eliminated dairy from my diet already and the crying hasn't changed",         {GUT:0,NS:1,AC:1}, "Breastfed"],
     ]
   },
 ];
@@ -529,6 +530,7 @@ const ASSESSMENT_ID = (() => {
 
 /* ── STATE ───────────────────────────────────────────────────────────── */
 let userName = '', userEmail = '', userConsent = false, babyAgeWeeks = null, qIndex = 0;
+let feedingMethod = '';
 let scores = {GUT:0, NS:0, AC:0};
 const selectedMap = new Map();
 const quizStartedAt = Date.now(); // simple bot-speed trap
@@ -554,6 +556,7 @@ async function subscribeToMailerLite(name, email, colcType, detail, status) {
         colic_type_detail: detail,
         confidence_pct:     confidencePct,
         baby_age_weeks:    babyAgeWeeks,
+        feeding_method:    feedingMethod || 'Not specified',
         group_id:          CFG.group_id,
         // Session tracking
         assessment_id:     ASSESSMENT_ID,
@@ -616,6 +619,7 @@ function startQuiz() {
   babyAgeWeeks = ageNum;
 
   scores = {GUT:0, NS:0, AC:0};
+  feedingMethod = '';
   qIndex = 0;
   selectedMap.clear();
 
@@ -640,6 +644,9 @@ function renderQuestion() {
   document.getElementById('qText').textContent = q.q;
   document.getElementById('qSub').textContent  = q.sub;
 
+  const hintEl = document.getElementById('multiHint');
+  if (hintEl) hintEl.textContent = q.single ? 'Select one' : 'Select all that apply';
+
   const box = document.getElementById('optionsBox');
   box.innerHTML = '';
   selectedMap.clear();
@@ -651,29 +658,49 @@ function renderQuestion() {
   q.opts.forEach((o, i) => {
     const div = document.createElement('div');
     div.className = 'option';
-    div.setAttribute('role', 'checkbox');
+    div.setAttribute('role', q.single ? 'radio' : 'checkbox');
     div.setAttribute('aria-checked', 'false');
     div.setAttribute('tabindex', '0');
     div.innerHTML = `<span class="opt-text">${o[0]}</span><span class="opt-check" id="chk${i}" aria-hidden="true"></span>`;
     div.style.animation = `rise .35s ${i * .07}s ease both`;
-    div.onclick = () => toggleOption(i, o[1], div);
-    div.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleOption(i, o[1], div); } };
+    div.onclick = () => toggleOption(i, o[1], div, !!q.single, o[2] || null);
+    div.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleOption(i, o[1], div, !!q.single, o[2] || null); } };
     box.appendChild(div);
   });
 }
 
-function toggleOption(idx, weights, el) {
-  if (selectedMap.has(idx)) {
-    selectedMap.delete(idx);
-    el.classList.remove('selected');
-    el.setAttribute('aria-checked', 'false');
-    el.querySelector('.opt-check').textContent = '';
+function toggleOption(idx, weights, el, single, feeding) {
+  const deselect = (node) => {
+    node.classList.remove('selected');
+    node.setAttribute('aria-checked', 'false');
+    node.querySelector('.opt-check').textContent = '';
+  };
+  const select = (node) => {
+    node.classList.add('selected');
+    node.setAttribute('aria-checked', 'true');
+    node.querySelector('.opt-check').textContent = '✓';
+  };
+
+  if (single) {
+    // Radio behavior: at most one selection. Re-clicking the selected
+    // option clears it, clicking a different option swaps to it.
+    const wasSelected = selectedMap.has(idx);
+    document.querySelectorAll('#optionsBox .option').forEach(deselect);
+    selectedMap.clear();
+    if (!wasSelected) {
+      selectedMap.set(idx, { weights, feeding });
+      select(el);
+    }
   } else {
-    selectedMap.set(idx, weights);
-    el.classList.add('selected');
-    el.setAttribute('aria-checked', 'true');
-    el.querySelector('.opt-check').textContent = '✓';
+    if (selectedMap.has(idx)) {
+      selectedMap.delete(idx);
+      deselect(el);
+    } else {
+      selectedMap.set(idx, { weights, feeding });
+      select(el);
+    }
   }
+
   const btn = document.getElementById('continueBtn');
   if (selectedMap.size > 0) {
     btn.classList.add('visible');
@@ -684,8 +711,9 @@ function toggleOption(idx, weights, el) {
 }
 
 function advanceQ() {
-  selectedMap.forEach(weights => {
-    Object.keys(weights).forEach(k => { scores[k] += weights[k]; });
+  selectedMap.forEach(sel => {
+    Object.keys(sel.weights).forEach(k => { scores[k] += sel.weights[k]; });
+    if (sel.feeding) feedingMethod = sel.feeding;
   });
   qIndex++;
   selectedMap.clear();

@@ -31,6 +31,18 @@ const VALID_COLIC_TYPES = [
   'Acoustic Environment Overload',
 ];
 
+// Accept only the exact values sent by quiz.html's Q7 (single-select).
+// 'Not specified' covers the early "quiz started" call, fired before
+// Q7 has been answered, and any legacy client that doesn't send this
+// field at all.
+const VALID_FEEDING_METHODS = [
+  '',
+  'Not specified',
+  'Breastfed',
+  'Formula-fed',
+  'Mixed',
+];
+
 export async function onRequestOptions(context) {
   const allowed = context.env.ALLOWED_ORIGIN || '*';
 
@@ -57,6 +69,7 @@ export async function onRequestPost(context) {
     email,
     colic_type,
     colic_type_detail,
+    feeding_method,
     quiz_status,
     website,
     consent,
@@ -103,6 +116,15 @@ export async function onRequestPost(context) {
   if (!VALID_COLIC_TYPES.includes(cleanType)) {
     return json(400, { error: 'Invalid colic type' }, allowed);
   }
+
+  // Feeding method: validate against the known set, but don't hard-fail
+  // the whole submission on an unrecognized value, since that would
+  // reject legitimate leads from any client build that predates this
+  // field. Fall back to 'Not specified' instead.
+  const cleanFeeding =
+    typeof feeding_method === 'string' && VALID_FEEDING_METHODS.includes(feeding_method.trim())
+      ? feeding_method.trim()
+      : 'Not specified';
 
   // Quiz status validation
   const validStatuses = ['started', 'completed'];
@@ -156,7 +178,7 @@ export async function onRequestPost(context) {
   console.log(
     `[subscribe] ${new Date().toISOString()} email=${email
       .trim()
-      .toLowerCase()} status=${cleanStatus} type=${cleanType || 'none'}`
+      .toLowerCase()} status=${cleanStatus} type=${cleanType || 'none'} feeding=${cleanFeeding}`
   );
 
   const API_KEY = env.MAILERLITE_API_KEY;
@@ -190,6 +212,7 @@ export async function onRequestPost(context) {
             name: name.trim(),
             colic_type: cleanType,
             colic_type_detail: cleanStr(colic_type_detail),
+            feeding_method: cleanFeeding,
             quiz_status: cleanStatus,
             confidence_pct: cleanNum(confidence_pct),
             baby_age_weeks: cleanNum(baby_age_weeks),
