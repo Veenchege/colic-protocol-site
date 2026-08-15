@@ -152,6 +152,16 @@ a{color:inherit}
 .cta-sub{display:block;font-size:11.5px;font-weight:500;opacity:.85;margin-top:3px}
 .guarantee-note{font-size:11.5px;color:var(--muted-soft);text-align:center;line-height:1.6}
 
+/* checklist hand-off, sits between the 3-step preview and the sales
+   section so it reads as "here's the free next step" not a second
+   pitch — sage on purpose, so it never gets mistaken for the $47 CTA */
+.checklist-bridge{background:var(--sage-soft);border:1px solid rgba(108,135,89,.35);border-radius:14px;padding:16px 18px;margin-top:2px}
+.checklist-bridge-text{margin-bottom:12px}
+.checklist-bridge-text strong{display:block;font-family:var(--fd);font-size:15px;font-weight:700;color:var(--pine-deep);margin-bottom:4px;line-height:1.4}
+.checklist-bridge-text span{font-size:12px;color:var(--muted);line-height:1.55}
+.btn-checklist{width:100%;padding:14px;background:linear-gradient(135deg,var(--sage),var(--pine-mid));color:#fff;border:none;border-radius:11px;font-family:var(--fb);font-size:14.5px;font-weight:700;cursor:pointer;transition:transform .2s,box-shadow .2s}
+.btn-checklist:hover{transform:scale(1.01);box-shadow:0 10px 24px rgba(108,135,89,.35)}
+
 @media(max-width:480px){
   .card{padding:24px 18px}
   .stat-row{grid-template-columns:1fr 1fr}
@@ -260,6 +270,16 @@ a{color:inherit}
         <div class="section-label">Your 3-step type-specific protocol, start tonight</div>
         <div class="steps-list-result" id="resultSteps"></div>
       </div>
+      <div class="result-section" style="border-bottom:none; padding-top:6px;">
+        <div class="section-label">If baby is crying right now</div>
+        <div class="checklist-bridge">
+          <div class="checklist-bridge-text">
+            <strong id="checklistHook"></strong>
+            <span>Free. The same three steps above, guided one at a time, with built-in timers, for tonight specifically.</span>
+          </div>
+          <button class="btn-checklist" id="checklistBtn" onclick="goToChecklist()">Start Tonight's Protocol →</button>
+        </div>
+      </div>
     </div>
     <div class="cta-section">
       <div class="cta-hook" id="ctaHook"></div>
@@ -297,6 +317,9 @@ a{color:inherit}
 const CFG = {
   group_id: '190431733303215887',
   productUrl: 'https://colicprotocol.gumroad.com/l/TheCalmBabyBlueprint',
+  // Wherever midnight-protocol.html actually ends up deployed on
+  // colicprotocol.baby, update this one line, nothing else needs to change.
+  checklistUrl: '/midnight-protocol',
 };
 
 /* ── UTM ATTRIBUTION ─────────────────────────────────────────────────── */
@@ -798,6 +821,7 @@ async function showResult() {
   });
 
   // CTA
+  document.getElementById('checklistHook').textContent = `Run tonight's ${R.type} sequence, step by step.`;
   document.getElementById('ctaHook').textContent  = R.ctaHook(userName);
   document.getElementById('ctaBody').innerHTML    = R.ctaBody;
   document.getElementById('ctaConsequence').textContent = R.ctaConsequence;
@@ -821,6 +845,24 @@ function goToProduct() {
   // Android builds. This avoids that failure mode instead of hoping
   // around it.
   const url = `${CFG.productUrl}?ref=${ASSESSMENT_ID}&utm_source=quiz&utm_medium=assessment&utm_campaign=${UTM_SOURCE}`;
+  window.location.href = url;
+}
+
+function goToChecklist() {
+  // Same window.location.href reasoning as goToProduct(). type=
+  // reuses the exact short code (GUT/NS/AC) getPrimaryType() already
+  // returns, so the checklist doesn't need its own lookup. name/age
+  // travel too so the checklist's capture form can pre-fill them
+  // instead of asking twice, this is meant to feel like one
+  // experience, not two tools. Email deliberately does not travel in
+  // the URL (query strings end up in browser history and referrer
+  // headers, an email address doesn't belong there), so the checklist
+  // still asks for it once, with its own consent checkbox.
+  const type = getPrimaryType(scores);
+  const url = `${CFG.checklistUrl}?type=${type}` +
+    `&name=${encodeURIComponent(userName)}` +
+    `&age=${encodeURIComponent(babyAgeWeeks != null ? babyAgeWeeks : '')}` +
+    `&utm_source=quiz&utm_medium=result_page&utm_campaign=checklist_handoff`;
   window.location.href = url;
 }
 </script>
