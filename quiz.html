@@ -317,9 +317,10 @@ a{color:inherit}
 const CFG = {
   group_id: '190431733303215887',
   productUrl: 'https://colicprotocol.gumroad.com/l/TheCalmBabyBlueprint',
-  // Wherever midnight-protocol.html actually ends up deployed on
-  // colicprotocol.baby, update this one line, nothing else needs to change.
-  checklistUrl: '/midnight-protocol',
+  // Confirmed against the real site (index.html, checklist.html use
+  // bare relative filenames throughout, e.g. href="quiz.html", not
+  // clean routes) — this was a guess last pass, now corrected.
+  checklistUrl: 'midnight-protocol.html',
 };
 
 /* ── UTM ATTRIBUTION ─────────────────────────────────────────────────── */
