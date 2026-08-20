@@ -111,6 +111,23 @@ img{max-width:100%;display:block}
 .footer-links a{color:rgba(255,255,255,.46);font-size:13px;text-decoration:none}
 .footer-links a:hover{color:rgba(255,255,255,.85)}
 .footer-disc{font-size:11px;color:rgba(255,255,255,.24);width:100%;line-height:1.7;margin-top:16px;border-top:1px solid rgba(255,255,255,.07);padding-top:16px}
+.blog-figure{margin:34px 0;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border2);background:var(--card);box-shadow:var(--shadow)}
+.blog-figure .fig-media{width:100%;aspect-ratio:4/5;background:var(--paper-alt) center/cover no-repeat;background-color:var(--paper-alt)}
+.blog-figure.fig-wide .fig-media{aspect-ratio:16/10}
+.blog-figure figcaption{padding:14px 20px 16px;border-top:1px solid var(--border)}
+.blog-figure figcaption .fig-label{display:block;font-family:var(--sans);font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.blog-figure figcaption .fig-desc{display:block;font-family:var(--mono);font-size:12px;color:var(--muted);line-height:1.6}
+.fig-pair{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:34px 0}
+.fig-pair .blog-figure{margin:0}
+.fig-pair .blog-figure .fig-media{aspect-ratio:1/1}
+@media(max-width:640px){.fig-pair{grid-template-columns:1fr}}
+.fig-trio{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:34px 0}
+.fig-trio .blog-figure{margin:0}
+.fig-trio .blog-figure .fig-media{aspect-ratio:3/4}
+.fig-trio .blog-figure figcaption{padding:10px 12px 12px}
+.fig-trio .blog-figure figcaption .fig-label{font-size:12px}
+.fig-trio .blog-figure figcaption .fig-desc{font-size:10.5px}
+@media(max-width:640px){.fig-trio{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -159,8 +176,49 @@ img{max-width:100%;display:block}
       <a href="../quiz.html">Take the free assessment →</a>
     </div>
 
+    
+    <div class="fig-trio">
+      <!-- IMAGE PROMPT for cry-hunger-pattern.jpg:
+      Premium pediatric medical editorial composition, 4:5 vertical, sophisticated clinical investigation aesthetic. Warm cream paper background (#FBF4EA tone), deep espresso-brown typography space, muted terracotta (#BC5A33) accents for the problem/warning element, sage green (#6C8759) accents for the resolved/correct element, occasional soft gold (#C0963F) for a neutral marker. Elegant serif editorial design, Scandinavian medical-journal sensibility, realistic newborn and parent photography blended with restrained scientific illustration where indicated. Minimal, premium, no childish graphics, no cartoon style, no logos, no watermark, no readable text on the image itself. Small clean realistic photograph, newborn showing early rooting/hand-to-mouth hunger cue rather than full crying yet, gold observation marker, calm waveform motif beneath suggesting a gradual, low, rhythmic build.
+      -->
+      <figure class="blog-figure">
+        <div class="fig-media" style="background-image:url('../images/blog/cry-hunger-pattern.jpg')"></div>
+        <figcaption><span class="fig-label">Hunger cry</span><span class="fig-desc">Starts low and rhythmic, builds gradually. Rooting cues appear first.</span></figcaption>
+      </figure>
+      <!-- IMAGE PROMPT for cry-pain-pattern.jpg:
+      Premium pediatric medical editorial composition, 4:5 vertical, sophisticated clinical investigation aesthetic. Warm cream paper background (#FBF4EA tone), deep espresso-brown typography space, muted terracotta (#BC5A33) accents for the problem/warning element, sage green (#6C8759) accents for the resolved/correct element, occasional soft gold (#C0963F) for a neutral marker. Elegant serif editorial design, Scandinavian medical-journal sensibility, realistic newborn and parent photography blended with restrained scientific illustration where indicated. Minimal, premium, no childish graphics, no cartoon style, no logos, no watermark, no readable text on the image itself. Small clean realistic photograph, newborn with a clenched fist and stiffened body mid-sudden-cry, terracotta observation marker, sharp jagged waveform motif beneath suggesting sudden onset.
+      -->
+      <figure class="blog-figure">
+        <div class="fig-media" style="background-image:url('../images/blog/cry-pain-pattern.jpg')"></div>
+        <figcaption><span class="fig-label">Pain or discomfort cry</span><span class="fig-desc">Arrives suddenly, sharper pitch, sometimes a breath-holding pause.</span></figcaption>
+      </figure>
+      <!-- IMAGE PROMPT for cry-overtired-pattern.jpg:
+      Premium pediatric medical editorial composition, 4:5 vertical, sophisticated clinical investigation aesthetic. Warm cream paper background (#FBF4EA tone), deep espresso-brown typography space, muted terracotta (#BC5A33) accents for the problem/warning element, sage green (#6C8759) accents for the resolved/correct element, occasional soft gold (#C0963F) for a neutral marker. Elegant serif editorial design, Scandinavian medical-journal sensibility, realistic newborn and parent photography blended with restrained scientific illustration where indicated. Minimal, premium, no childish graphics, no cartoon style, no logos, no watermark, no readable text on the image itself. Small clean realistic photograph, newborn mid-yawn or eye-rub with a glassy, unfocused expression rather than full crying yet, sage-green observation marker, soft ascending waveform motif beneath suggesting a gradual whine building.
+      -->
+      <figure class="blog-figure">
+        <div class="fig-media" style="background-image:url('../images/blog/cry-overtired-pattern.jpg')"></div>
+        <figcaption><span class="fig-label">Overtired cry</span><span class="fig-desc">Escalating whine, eye-rubbing, glassy stare. Worsens with more stimulation.</span></figcaption>
+      </figure>
+    </div>
     <h2>Where it gets genuinely hard: a colic cry vs. a pain cry</h2>
     <p>This is the distinction most parents actually struggle with, and it's a reasonable thing to struggle with, since the two can sound similar in isolation. A colic-pattern cry tends to cluster at a predictable time of day, most often the evening, and follows the same general shape night after night. A cry caused by an acute illness or injury is more often sudden in onset, doesn't follow the baby's usual daily pattern, and tends not to respond even briefly to the soothing techniques that usually work, holding, motion, sound.</p>
+    
+    <div class="fig-pair">
+      <!-- IMAGE PROMPT for colic-cry-pattern-cluster.jpg:
+      Premium pediatric medical editorial composition, 4:5 vertical, sophisticated clinical investigation aesthetic. Warm cream paper background (#FBF4EA tone), deep espresso-brown typography space, muted terracotta (#BC5A33) accents for the problem/warning element, sage green (#6C8759) accents for the resolved/correct element, occasional soft gold (#C0963F) for a neutral marker. Elegant serif editorial design, Scandinavian medical-journal sensibility, realistic newborn and parent photography blended with restrained scientific illustration where indicated. Minimal, premium, no childish graphics, no cartoon style, no logos, no watermark, no readable text on the image itself. Realistic photograph, newborn crying during a warm evening-lit scene, sage-green observation marker with a subtle recurring-pattern motif (three small evenly spaced dots) suggesting nightly repetition.
+      -->
+      <figure class="blog-figure">
+        <div class="fig-media" style="background-image:url('../images/blog/colic-cry-pattern-cluster.jpg')"></div>
+        <figcaption><span class="fig-label">Colic-pattern cry</span><span class="fig-desc">Clusters at a predictable evening time, same general shape night after night.</span></figcaption>
+      </figure>
+      <!-- IMAGE PROMPT for acute-illness-cry-pattern.jpg:
+      Premium pediatric medical editorial composition, 4:5 vertical, sophisticated clinical investigation aesthetic. Warm cream paper background (#FBF4EA tone), deep espresso-brown typography space, muted terracotta (#BC5A33) accents for the problem/warning element, sage green (#6C8759) accents for the resolved/correct element, occasional soft gold (#C0963F) for a neutral marker. Elegant serif editorial design, Scandinavian medical-journal sensibility, realistic newborn and parent photography blended with restrained scientific illustration where indicated. Minimal, premium, no childish graphics, no cartoon style, no logos, no watermark, no readable text on the image itself. Realistic photograph, newborn crying at an atypical time of day (bright midday light, distinct from the evening panel), terracotta observation marker with a single irregular motif (an isolated dot, not a repeating pattern) suggesting a one-off, non-cluster event. Convey 'worth a pediatrician call' tone without being frightening.
+      -->
+      <figure class="blog-figure">
+        <div class="fig-media" style="background-image:url('../images/blog/acute-illness-cry-pattern.jpg')"></div>
+        <figcaption><span class="fig-label">Acute illness or injury cry</span><span class="fig-desc">Sudden onset, off the baby's usual pattern, doesn't respond even briefly to soothing.</span></figcaption>
+      </figure>
+    </div>
     <div class="ibox-flag">
       <strong>When to stop pattern-matching and call your pediatrician</strong>
       <p>A sudden, unusually high-pitched cry, especially alongside fever, unusual lethargy, poor feeding, or a cry that nothing at all seems to touch, warrants a call to your pediatrician rather than working through a soothing checklist first. Pattern recognition is a useful tool. It is not a substitute for medical judgment when something feels genuinely different.</p>

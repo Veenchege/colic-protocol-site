@@ -84,6 +84,23 @@ a{color:var(--terra-deep);text-decoration:underline;text-underline-offset:2px}
 .footer-links a{color:rgba(255,255,255,.46);font-size:13px;text-decoration:none}
 .footer-links a:hover{color:rgba(255,255,255,.85)}
 .footer-disc{font-size:11px;color:rgba(255,255,255,.24);width:100%;line-height:1.7;margin-top:16px;border-top:1px solid rgba(255,255,255,.07);padding-top:16px}
+.blog-figure{margin:34px 0;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border2);background:var(--card);box-shadow:var(--shadow)}
+.blog-figure .fig-media{width:100%;aspect-ratio:4/5;background:var(--paper-alt) center/cover no-repeat;background-color:var(--paper-alt)}
+.blog-figure.fig-wide .fig-media{aspect-ratio:16/10}
+.blog-figure figcaption{padding:14px 20px 16px;border-top:1px solid var(--border)}
+.blog-figure figcaption .fig-label{display:block;font-family:var(--sans);font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.blog-figure figcaption .fig-desc{display:block;font-family:var(--mono);font-size:12px;color:var(--muted);line-height:1.6}
+.fig-pair{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:34px 0}
+.fig-pair .blog-figure{margin:0}
+.fig-pair .blog-figure .fig-media{aspect-ratio:1/1}
+@media(max-width:640px){.fig-pair{grid-template-columns:1fr}}
+.fig-trio{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:34px 0}
+.fig-trio .blog-figure{margin:0}
+.fig-trio .blog-figure .fig-media{aspect-ratio:3/4}
+.fig-trio .blog-figure figcaption{padding:10px 12px 12px}
+.fig-trio .blog-figure figcaption .fig-label{font-size:12px}
+.fig-trio .blog-figure figcaption .fig-desc{font-size:10.5px}
+@media(max-width:640px){.fig-trio{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -118,6 +135,23 @@ a{color:var(--terra-deep);text-decoration:underline;text-underline-offset:2px}
     <h2>How the confusion happens</h2>
     <p>Both presentations can involve a baby who arches, resists soothing, and cries hardest in the evening. Both can involve legs pulling up. From the outside, in the middle of an episode, they can look nearly identical for a stretch of minutes. The difference shows up in the pattern across a day and across techniques, not in any single moment of the crying itself.</p>
 
+    
+    <div class="fig-pair">
+      <!-- IMAGE PROMPT for gut-driven-presentation.jpg:
+      Premium pediatric medical editorial composition, 4:5 vertical, sophisticated clinical investigation aesthetic. Warm cream paper background (#FBF4EA tone), deep espresso-brown typography space, muted terracotta (#BC5A33) accents for the problem/warning element, sage green (#6C8759) accents for the resolved/correct element, occasional soft gold (#C0963F) for a neutral marker. Elegant serif editorial design, Scandinavian medical-journal sensibility, realistic newborn and parent photography blended with restrained scientific illustration where indicated. Minimal, premium, no childish graphics, no cartoon style, no logos, no watermark, no readable text on the image itself. Realistic photograph, newborn on their back with knees drawn up tightly toward a visibly tense abdomen, face showing gradual building discomfort rather than peak distress. Restrained terracotta observation circle around the abdomen area.
+      -->
+      <figure class="blog-figure">
+        <div class="fig-media" style="background-image:url('../images/blog/gut-driven-presentation.jpg')"></div>
+        <figcaption><span class="fig-label">Gut microbiome imbalance</span><span class="fig-desc">Correlates with feeding. Knees to chest, distended belly. Builds gradually.</span></figcaption>
+      </figure>
+      <!-- IMAGE PROMPT for nervous-system-driven-presentation.jpg:
+      Premium pediatric medical editorial composition, 4:5 vertical, sophisticated clinical investigation aesthetic. Warm cream paper background (#FBF4EA tone), deep espresso-brown typography space, muted terracotta (#BC5A33) accents for the problem/warning element, sage green (#6C8759) accents for the resolved/correct element, occasional soft gold (#C0963F) for a neutral marker. Elegant serif editorial design, Scandinavian medical-journal sensibility, realistic newborn and parent photography blended with restrained scientific illustration where indicated. Minimal, premium, no childish graphics, no cartoon style, no logos, no watermark, no readable text on the image itself. Realistic photograph, newborn with back arched and body stiffened, fists clenched, full-intensity crying from the first moment rather than a gradual build. Restrained sage-green observation circle around the shoulders and back.
+      -->
+      <figure class="blog-figure">
+        <div class="fig-media" style="background-image:url('../images/blog/nervous-system-driven-presentation.jpg')"></div>
+        <figcaption><span class="fig-label">Nervous system dysregulation</span><span class="fig-desc">Independent of feeding. Arching, stiffening. Arrives at full intensity.</span></figcaption>
+      </figure>
+    </div>
     <h2>Gut microbiome imbalance: what it looks like</h2>
     <p>A gut-driven presentation tends to correlate with feeding, crying during or shortly after feeds, or building gradually as gas accumulates over one to two hours. The body language leans toward legs pulled to the chest against a tight, distended belly, and stool is often a useful signal, green, frothy, or passed with visible straining. Burping or gentle abdominal pressure tends to bring at least partial, if temporary, relief, because it's addressing the actual mechanical source of the discomfort.</p>
 

@@ -108,6 +108,23 @@ img{max-width:100%;display:block}
 .footer-links a{color:rgba(255,255,255,.46);font-size:13px;text-decoration:none}
 .footer-links a:hover{color:rgba(255,255,255,.85)}
 .footer-disc{font-size:11px;color:rgba(255,255,255,.24);width:100%;line-height:1.7;margin-top:16px;border-top:1px solid rgba(255,255,255,.07);padding-top:16px}
+.blog-figure{margin:34px 0;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border2);background:var(--card);box-shadow:var(--shadow)}
+.blog-figure .fig-media{width:100%;aspect-ratio:4/5;background:var(--paper-alt) center/cover no-repeat;background-color:var(--paper-alt)}
+.blog-figure.fig-wide .fig-media{aspect-ratio:16/10}
+.blog-figure figcaption{padding:14px 20px 16px;border-top:1px solid var(--border)}
+.blog-figure figcaption .fig-label{display:block;font-family:var(--sans);font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.blog-figure figcaption .fig-desc{display:block;font-family:var(--mono);font-size:12px;color:var(--muted);line-height:1.6}
+.fig-pair{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:34px 0}
+.fig-pair .blog-figure{margin:0}
+.fig-pair .blog-figure .fig-media{aspect-ratio:1/1}
+@media(max-width:640px){.fig-pair{grid-template-columns:1fr}}
+.fig-trio{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:34px 0}
+.fig-trio .blog-figure{margin:0}
+.fig-trio .blog-figure .fig-media{aspect-ratio:3/4}
+.fig-trio .blog-figure figcaption{padding:10px 12px 12px}
+.fig-trio .blog-figure figcaption .fig-label{font-size:12px}
+.fig-trio .blog-figure figcaption .fig-desc{font-size:10.5px}
+@media(max-width:640px){.fig-trio{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -163,9 +180,25 @@ img{max-width:100%;display:block}
     </div>
 
     <h2>Why the instinct to add more stimulation backfires</h2>
+
+    <!-- IMAGE PROMPT for stimulation-backfire-pathway.jpg:
+    Premium pediatric medical editorial composition, 4:5 vertical, sophisticated clinical investigation aesthetic. Warm cream paper background (#FBF4EA tone), deep espresso-brown typography space, muted terracotta (#BC5A33) accents for the problem/warning element, sage green (#6C8759) accents for the resolved/correct element, occasional soft gold (#C0963F) for a neutral marker. Elegant serif editorial design, Scandinavian medical-journal sensibility, realistic newborn and parent photography blended with restrained scientific illustration where indicated. Minimal, premium, no childish graphics, no cartoon style, no logos, no watermark, no readable text on the image itself. Elegant cause-and-effect pathway diagram, two branching paths from a single 'already activated' starting icon. Terracotta path: more light/motion/noise icons stacking upward toward a peak-distress icon. Sage path: a dimming light icon and a single calm waveform leading toward a settled icon. Clean editorial diagram, no readable text.
+    -->
+    <figure class="blog-figure fig-wide">
+      <div class="fig-media" style="background-image:url('../images/blog/stimulation-backfire-pathway.jpg')"></div>
+      <figcaption><span class="fig-label">More input compounds the activation</span><span class="fig-desc">A heightened stress state needs a reduction in input, not a redirection of it.</span></figcaption>
+    </figure>
     <p>A common, reasonable-seeming instinct is to keep a fussy baby active in the evening, bright lights, more handling, more activity, on the theory that it will tire them into sleeping better. For a nervous-system-driven presentation, this does close to the opposite of what's needed. The baby is already in a heightened stress state. Adding more sensory input compounds the activation instead of resolving it. What the system actually needs at that point is a reduction in input, not a redirection of it.</p>
 
     <h2>Why brown noise, not white noise, and why the rhythm matters</h2>
+
+    <!-- IMAGE PROMPT for rhythm-heartbeat-pace.jpg:
+    Premium pediatric medical editorial composition, 4:5 vertical, sophisticated clinical investigation aesthetic. Warm cream paper background (#FBF4EA tone), deep espresso-brown typography space, muted terracotta (#BC5A33) accents for the problem/warning element, sage green (#6C8759) accents for the resolved/correct element, occasional soft gold (#C0963F) for a neutral marker. Elegant serif editorial design, Scandinavian medical-journal sensibility, realistic newborn and parent photography blended with restrained scientific illustration where indicated. Minimal, premium, no childish graphics, no cartoon style, no logos, no watermark, no readable text on the image itself. Restrained clinical illustration: a simple heartbeat waveform rendered in sage green with consistent, evenly spaced peaks, overlaid subtly behind a small realistic detail of a parent's hand in a steady rhythmic hold position on a newborn's back. Calm, minimal, no readable text or numerals on the waveform.
+    -->
+    <figure class="blog-figure">
+      <div class="fig-media" style="background-image:url('../images/blog/rhythm-heartbeat-pace.jpg')"></div>
+      <figcaption><span class="fig-label">Rhythm close to a resting heartbeat</span><span class="fig-desc">Steady, even pressure at a heartbeat-adjacent pace signals safety. Faster, erratic motion doesn't.</span></figcaption>
+    </figure>
     <p>Brown noise sits at a lower frequency range than white noise, closer to the frequencies a baby was exposed to constantly in utero, heartbeat, blood flow, digestion. White noise sits above that range, and for an already-activated nervous system, it functions as additional stimulation rather than a calming signal, even though it's marketed as soothing. This is why the specific frequency matters and "any background noise" is not an interchangeable substitute.</p>
     <p>The same logic applies to physical technique. A steady, rhythmic pressure at a pace close to a resting heartbeat, the mechanism behind the <a href="tiger-hold-guide.html">Tiger Hold position</a>, signals safety to a dysregulated nervous system in a way that faster, more erratic bouncing does not. The rhythm is doing the work, not the motion itself.</p>
 

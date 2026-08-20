@@ -78,6 +78,23 @@ a{color:var(--terra-deep);text-decoration:underline;text-underline-offset:2px}
 .footer-links a{color:rgba(255,255,255,.46);font-size:13px;text-decoration:none}
 .footer-links a:hover{color:rgba(255,255,255,.85)}
 .footer-disc{font-size:11px;color:rgba(255,255,255,.24);width:100%;line-height:1.7;margin-top:16px;border-top:1px solid rgba(255,255,255,.07);padding-top:16px}
+.blog-figure{margin:34px 0;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border2);background:var(--card);box-shadow:var(--shadow)}
+.blog-figure .fig-media{width:100%;aspect-ratio:4/5;background:var(--paper-alt) center/cover no-repeat;background-color:var(--paper-alt)}
+.blog-figure.fig-wide .fig-media{aspect-ratio:16/10}
+.blog-figure figcaption{padding:14px 20px 16px;border-top:1px solid var(--border)}
+.blog-figure figcaption .fig-label{display:block;font-family:var(--sans);font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.blog-figure figcaption .fig-desc{display:block;font-family:var(--mono);font-size:12px;color:var(--muted);line-height:1.6}
+.fig-pair{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:34px 0}
+.fig-pair .blog-figure{margin:0}
+.fig-pair .blog-figure .fig-media{aspect-ratio:1/1}
+@media(max-width:640px){.fig-pair{grid-template-columns:1fr}}
+.fig-trio{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:34px 0}
+.fig-trio .blog-figure{margin:0}
+.fig-trio .blog-figure .fig-media{aspect-ratio:3/4}
+.fig-trio .blog-figure figcaption{padding:10px 12px 12px}
+.fig-trio .blog-figure figcaption .fig-label{font-size:12px}
+.fig-trio .blog-figure figcaption .fig-desc{font-size:10.5px}
+@media(max-width:640px){.fig-trio{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -112,6 +129,14 @@ a{color:var(--terra-deep);text-decoration:underline;text-underline-offset:2px}
     <h2>The part nobody tells you</h2>
     <p>Here is the piece that usually gets left out entirely. Your own stress state is not separate from your baby's experience. It transmits, physically, through touch, through the tension in your arms and shoulders when you're holding a crying baby for the fortieth minute, through your tone even when you're trying to sound calm. A parent in a heightened stress state, holding a baby who is also dysregulated, is not adding a calming influence to the situation, however much they want to be. This is not a guilt-inducing fact. It's the opposite. It means your own regulation is part of the actual protocol, not a nice-to-have on top of it, which means taking care of your own state isn't indulgent, it's mechanically relevant to what's happening with your baby.</p>
 
+    
+    <!-- IMAGE PROMPT for parent-stress-transmission.jpg:
+    Premium pediatric medical editorial composition, 4:5 vertical, sophisticated clinical investigation aesthetic. Warm cream paper background (#FBF4EA tone), deep espresso-brown typography space, muted terracotta (#BC5A33) accents for the problem/warning element, sage green (#6C8759) accents for the resolved/correct element, occasional soft gold (#C0963F) for a neutral marker. Elegant serif editorial design, Scandinavian medical-journal sensibility, realistic newborn and parent photography blended with restrained scientific illustration where indicated. Minimal, premium, no childish graphics, no cartoon style, no logos, no watermark, no readable text on the image itself. Realistic, tender photograph of an exhausted parent at night holding a crying newborn, warm low lamp light, parent's shoulders visibly tense. Overlay a very subtle, soft sage-green breathing-cycle indicator (a gentle expanding ring, not literal text) near the parent's chest to suggest the four-in six-out breath cycle mentioned in the article. Emotionally warm, not clinical, this one leans toward warmth over competence in the visual register.
+    -->
+    <figure class="blog-figure">
+      <div class="fig-media" style="background-image:url('../images/blog/parent-stress-transmission.jpg')"></div>
+      <figcaption><span class="fig-label">Your own state is part of the protocol</span><span class="fig-desc">Stress transmits through touch, tone, and tension in the arms and shoulders, physically, not metaphorically.</span></figcaption>
+    </figure>
     <h2>What genuinely helps</h2>
     <p>Not the generic advice to take a break, which usually isn't available anyway at eleven at night with a screaming infant and a partner who's also exhausted. What actually helps is smaller and more specific than that. A single, deliberate breath cycle, four seconds in, six seconds out, held for even thirty seconds before picking your baby back up, measurably shifts your own physiological state before you re-enter the interaction. Handing off for even ten minutes, not because the other person will magically succeed where you didn't, but because a fresh nervous system in the room changes the dynamic more than another attempt from an already-depleted one. And having an actual sequence to follow, rather than improvising in the moment, removes a layer of decision fatigue that is quietly exhausting in a way most parents don't notice until it's gone.</p>
 
@@ -119,19 +144,27 @@ a{color:var(--terra-deep);text-decoration:underline;text-underline-offset:2px}
     <p>The conversation that tends to help most isn't an emotional check-in, as valuable as those are separately. It's a mechanical handoff plan, agreed on ahead of time, not negotiated in the moment when everyone is already at their limit. Decide in advance who takes the first two hours of the evening window and who takes the second, so neither of you is guessing or resenting the other for not offering first. Decide what the signal is for "I need to tap out right now," a specific word or gesture, so it doesn't have to be explained mid-crisis. The goal isn't dividing the suffering evenly. It's removing the negotiation from the hardest moments, so the actual hard moments can be about your baby instead of about the two of you figuring out logistics under pressure.</p>
 
     <h2>The decision tree for tonight, when nothing is working</h2>
+
+    <!-- IMAGE PROMPT for tonight-decision-flow.jpg:
+    Premium pediatric medical editorial composition, 4:5 vertical, sophisticated clinical investigation aesthetic. Warm cream paper background (#FBF4EA tone), deep espresso-brown typography space, muted terracotta (#BC5A33) accents for the problem/warning element, sage green (#6C8759) accents for the resolved/correct element, occasional soft gold (#C0963F) for a neutral marker. Elegant serif editorial design, Scandinavian medical-journal sensibility, realistic newborn and parent photography blended with restrained scientific illustration where indicated. Minimal, premium, no childish graphics, no cartoon style, no logos, no watermark, no readable text on the image itself. Elegant, minimal decision-flow diagram, three simple sequential nodes connected by thin lines: a clock-adjacent icon suggesting time passing (abstract, not a literal readable clock face), an icon suggesting 'switch approach' (two overlapping arrows), and a calm icon suggesting 'set baby down safely, step back sixty seconds' (a soft outlined crib shape). Use gold as the connecting accent, terracotta only on the final protective-pause node. No readable text anywhere in the image.
+    -->
+    <figure class="blog-figure fig-wide">
+      <div class="fig-media" style="background-image:url('../images/blog/tonight-decision-flow.jpg')"></div>
+      <figcaption><span class="fig-label">When twenty minutes in, nothing has helped</span><span class="fig-desc">Switch systems entirely rather than pushing harder on the same approach.</span></figcaption>
+    </figure>
     <p>If you've been at it for twenty minutes and nothing has helped even briefly, the most useful move usually isn't trying harder at the same thing. It's switching systems entirely, moving from a gut-focused attempt to a nervous-system one, or vice versa, since continuing to push on an approach that clearly isn't landing tends to raise everyone's stress further without changing the outcome. And if you notice your own state sliding past frustration into something that feels genuinely unsafe, for you or for how you might handle the next few minutes, putting your baby down safely and stepping into another room for sixty seconds is not a failure. It's the single most protective thing available to you in that moment, for both of you.</p>
 
     <div class="cta-compact">
-      <p>The Midnight Checklist includes a parent-regulation sequence in Stage 1, not as an afterthought.</p>
-      <a href="../checklist.html">Get the free checklist →</a>
+      <p>The guided Midnight Protocol tool includes a parent-regulation sequence in Stage 1, not as an afterthought.</p>
+      <a href="https://colicprotocol.baby/midnight-protocol?utm_source=website&utm_medium=blog_how_to_survive_colic" target="_blank" rel="noopener">Take the 90-second assessment →</a>
     </div>
 
     <p>This season ends. That's true and it's also not very comforting at two in the morning, which is exactly why it's worth having something more specific than "it gets better" to hold onto in the meantime. You are not failing at this. You are living through one of the genuinely hardest, least-talked-about stretches of early parenting, and the fact that it's hard for you says nothing about your competence as a parent. It says something about what this particular season actually asks of a person.</p>
 
     <div class="cta-default">
       <h3>You don't have to keep guessing what to try</h3>
-      <p>The free Midnight Emergency Checklist includes a parent-regulation sequence alongside the baby-facing protocol. Both matter.</p>
-      <a href="../checklist.html">Get the Free Checklist →</a>
+      <p>The 90-second assessment hands you into the guided Midnight Protocol tool, parent-regulation sequence alongside the baby-facing protocol. Both matter.</p>
+      <a href="https://colicprotocol.baby/midnight-protocol?utm_source=website&utm_medium=blog_how_to_survive_colic" target="_blank" rel="noopener">Take the 90-Second Assessment →</a>
     </div>
   </article>
 </div>

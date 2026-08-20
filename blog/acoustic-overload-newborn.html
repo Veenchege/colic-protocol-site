@@ -83,6 +83,23 @@ a{color:var(--terra-deep);text-decoration:underline;text-underline-offset:2px}
 .footer-links a{color:rgba(255,255,255,.46);font-size:13px;text-decoration:none}
 .footer-links a:hover{color:rgba(255,255,255,.85)}
 .footer-disc{font-size:11px;color:rgba(255,255,255,.24);width:100%;line-height:1.7;margin-top:16px;border-top:1px solid rgba(255,255,255,.07);padding-top:16px}
+.blog-figure{margin:34px 0;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border2);background:var(--card);box-shadow:var(--shadow)}
+.blog-figure .fig-media{width:100%;aspect-ratio:4/5;background:var(--paper-alt) center/cover no-repeat;background-color:var(--paper-alt)}
+.blog-figure.fig-wide .fig-media{aspect-ratio:16/10}
+.blog-figure figcaption{padding:14px 20px 16px;border-top:1px solid var(--border)}
+.blog-figure figcaption .fig-label{display:block;font-family:var(--sans);font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.blog-figure figcaption .fig-desc{display:block;font-family:var(--mono);font-size:12px;color:var(--muted);line-height:1.6}
+.fig-pair{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:34px 0}
+.fig-pair .blog-figure{margin:0}
+.fig-pair .blog-figure .fig-media{aspect-ratio:1/1}
+@media(max-width:640px){.fig-pair{grid-template-columns:1fr}}
+.fig-trio{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:34px 0}
+.fig-trio .blog-figure{margin:0}
+.fig-trio .blog-figure .fig-media{aspect-ratio:3/4}
+.fig-trio .blog-figure figcaption{padding:10px 12px 12px}
+.fig-trio .blog-figure figcaption .fig-label{font-size:12px}
+.fig-trio .blog-figure figcaption .fig-desc{font-size:10.5px}
+@media(max-width:640px){.fig-trio{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -128,6 +145,23 @@ a{color:var(--terra-deep);text-decoration:underline;text-underline-offset:2px}
       <a href="../quiz.html">Take the free assessment →</a>
     </div>
 
+    
+    <div class="fig-pair">
+      <!-- IMAGE PROMPT for acoustic-white-noise-overload.jpg:
+      Premium pediatric medical editorial composition, 4:5 vertical, sophisticated clinical investigation aesthetic. Warm cream paper background (#FBF4EA tone), deep espresso-brown typography space, muted terracotta (#BC5A33) accents for the problem/warning element, sage green (#6C8759) accents for the resolved/correct element, occasional soft gold (#C0963F) for a neutral marker. Elegant serif editorial design, Scandinavian medical-journal sensibility, realistic newborn and parent photography blended with restrained scientific illustration where indicated. Minimal, premium, no childish graphics, no cartoon style, no logos, no watermark, no readable text on the image itself. Clinical waveform visualization panel: an abstract soundwave illustration in terracotta showing a broad, jagged, high-frequency waveform layered densely, suggestive of overstimulation. Include a small realistic newborn silhouette at the edge of frame with a subtly tensed expression, softly out of focus.
+      -->
+      <figure class="blog-figure">
+        <div class="fig-media" style="background-image:url('../images/blog/acoustic-white-noise-overload.jpg')"></div>
+        <figcaption><span class="fig-label">White noise: above the womb range</span><span class="fig-desc">Broader, higher frequency spread reads as added input, not a familiar signal.</span></figcaption>
+      </figure>
+      <!-- IMAGE PROMPT for acoustic-brown-noise-calibrated.jpg:
+      Premium pediatric medical editorial composition, 4:5 vertical, sophisticated clinical investigation aesthetic. Warm cream paper background (#FBF4EA tone), deep espresso-brown typography space, muted terracotta (#BC5A33) accents for the problem/warning element, sage green (#6C8759) accents for the resolved/correct element, occasional soft gold (#C0963F) for a neutral marker. Elegant serif editorial design, Scandinavian medical-journal sensibility, realistic newborn and parent photography blended with restrained scientific illustration where indicated. Minimal, premium, no childish graphics, no cartoon style, no logos, no watermark, no readable text on the image itself. Clinical waveform visualization panel: an abstract soundwave illustration in sage green showing a smooth, low, rounded waveform with gentle consistent amplitude. Include a small realistic sleeping newborn silhouette at the edge of frame, calm and relaxed, softly out of focus.
+      -->
+      <figure class="blog-figure">
+        <div class="fig-media" style="background-image:url('../images/blog/acoustic-brown-noise-calibrated.jpg')"></div>
+        <figcaption><span class="fig-label">Brown noise: womb-frequency range</span><span class="fig-desc">Lower frequency, closer to blood flow and heartbeat sound the baby already knows.</span></figcaption>
+      </figure>
+    </div>
     <h2>The witching hour as an acoustic problem</h2>
     <p>The predictable evening crying window that most parents describe isn't only about time of day, it's also about accumulated sensory load. By late afternoon, a sensitive baby has absorbed an entire day's worth of sound, light, and handling, and the evening crying is often the accumulated total spilling over, not a fresh, isolated trigger. That reframes the fix: the goal for the hour before the usual crying window isn't a single soothing trick, it's reducing total sensory input before the threshold gets crossed.</p>
 
@@ -139,6 +173,14 @@ a{color:var(--terra-deep);text-decoration:underline;text-underline-offset:2px}
     </ul>
 
     <h2>What the fully calibrated version looks like</h2>
+
+    <!-- IMAGE PROMPT for acoustic-calibration-diagram.jpg:
+    Premium pediatric medical editorial composition, 4:5 vertical, sophisticated clinical investigation aesthetic. Warm cream paper background (#FBF4EA tone), deep espresso-brown typography space, muted terracotta (#BC5A33) accents for the problem/warning element, sage green (#6C8759) accents for the resolved/correct element, occasional soft gold (#C0963F) for a neutral marker. Elegant serif editorial design, Scandinavian medical-journal sensibility, realistic newborn and parent photography blended with restrained scientific illustration where indicated. Minimal, premium, no childish graphics, no cartoon style, no logos, no watermark, no readable text on the image itself. Sophisticated clinical diagram, top-down illustration of a nursery crib scene from above showing a sound-machine icon positioned at a measured distance from the crib with a soft sage-green radius circle indicating correct placement, alongside small restrained annotation markers for volume level and warm dim lighting. Keep it diagrammatic and elegant, not literal or busy, in the premium pediatric medical-journal style.
+    -->
+    <figure class="blog-figure fig-wide">
+      <div class="fig-media" style="background-image:url('../images/blog/acoustic-calibration-diagram.jpg')"></div>
+      <figcaption><span class="fig-label">Frequency, volume, distance, duration</span><span class="fig-desc">Getting one variable wrong undoes the benefit of getting the noise color right.</span></figcaption>
+    </figure>
     <p>Frequency, volume, distance from the crib, and duration all interact, and the exact calibration is protocol-level detail rather than a single generic tip. Getting even one of those variables wrong, brown noise at the wrong volume, at the wrong distance, undoes most of the benefit of getting the noise color right in the first place.</p>
 
     <div class="cta-default">

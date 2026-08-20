@@ -111,6 +111,23 @@ img{max-width:100%;display:block}
 .footer-links a{color:rgba(255,255,255,.46);font-size:13px;text-decoration:none}
 .footer-links a:hover{color:rgba(255,255,255,.85)}
 .footer-disc{font-size:11px;color:rgba(255,255,255,.24);width:100%;line-height:1.7;margin-top:16px;border-top:1px solid rgba(255,255,255,.07);padding-top:16px}
+.blog-figure{margin:34px 0;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border2);background:var(--card);box-shadow:var(--shadow)}
+.blog-figure .fig-media{width:100%;aspect-ratio:4/5;background:var(--paper-alt) center/cover no-repeat;background-color:var(--paper-alt)}
+.blog-figure.fig-wide .fig-media{aspect-ratio:16/10}
+.blog-figure figcaption{padding:14px 20px 16px;border-top:1px solid var(--border)}
+.blog-figure figcaption .fig-label{display:block;font-family:var(--sans);font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.blog-figure figcaption .fig-desc{display:block;font-family:var(--mono);font-size:12px;color:var(--muted);line-height:1.6}
+.fig-pair{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:34px 0}
+.fig-pair .blog-figure{margin:0}
+.fig-pair .blog-figure .fig-media{aspect-ratio:1/1}
+@media(max-width:640px){.fig-pair{grid-template-columns:1fr}}
+.fig-trio{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:34px 0}
+.fig-trio .blog-figure{margin:0}
+.fig-trio .blog-figure .fig-media{aspect-ratio:3/4}
+.fig-trio .blog-figure figcaption{padding:10px 12px 12px}
+.fig-trio .blog-figure figcaption .fig-label{font-size:12px}
+.fig-trio .blog-figure figcaption .fig-desc{font-size:10.5px}
+@media(max-width:640px){.fig-trio{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -154,6 +171,23 @@ img{max-width:100%;display:block}
     <p><strong>Volume-driven overfeeding.</strong> A bottle can deliver milk faster than a baby's own satiety signal can keep pace with, independent of the air-swallowing issue covered in bottle-mechanics content. A baby who empties a bottle in under ten minutes is often not pacing intake at all, and overfeeding by volume produces genuine digestive discomfort that looks a great deal like colic.</p>
     <p><strong>Cow's milk protein sensitivity.</strong> This is a distinct issue from colic, not a variant of it, and most standard formulas are cow's milk protein based. Overlapping symptoms make it easy to miss the distinction. This is not something to self-diagnose or self-correct by switching formulas on your own; it's a conversation for your pediatrician, since an elimination trial and any formula change should be guided rather than guessed at.</p>
 
+    
+    <div class="fig-pair">
+      <!-- IMAGE PROMPT for formula-overfeeding-signal.jpg:
+      Premium pediatric medical editorial composition, 4:5 vertical, sophisticated clinical investigation aesthetic. Warm cream paper background (#FBF4EA tone), deep espresso-brown typography space, muted terracotta (#BC5A33) accents for the problem/warning element, sage green (#6C8759) accents for the resolved/correct element, occasional soft gold (#C0963F) for a neutral marker. Elegant serif editorial design, Scandinavian medical-journal sensibility, realistic newborn and parent photography blended with restrained scientific illustration where indicated. Minimal, premium, no childish graphics, no cartoon style, no logos, no watermark, no readable text on the image itself. Realistic photograph of a bottle-feeding scene from a slightly elevated angle, showing the bottle nearly empty in under what should be a slower feed, baby's body language slightly uncomfortable post-feed. Subtle terracotta annotation marker near the bottle indicating flow speed.
+      -->
+      <figure class="blog-figure">
+        <div class="fig-media" style="background-image:url('../images/blog/formula-overfeeding-signal.jpg')"></div>
+        <figcaption><span class="fig-label">Volume-driven overfeeding</span><span class="fig-desc">A bottle can outpace a baby's satiety signal, independent of air intake.</span></figcaption>
+      </figure>
+      <!-- IMAGE PROMPT for formula-cows-milk-signal.jpg:
+      Premium pediatric medical editorial composition, 4:5 vertical, sophisticated clinical investigation aesthetic. Warm cream paper background (#FBF4EA tone), deep espresso-brown typography space, muted terracotta (#BC5A33) accents for the problem/warning element, sage green (#6C8759) accents for the resolved/correct element, occasional soft gold (#C0963F) for a neutral marker. Elegant serif editorial design, Scandinavian medical-journal sensibility, realistic newborn and parent photography blended with restrained scientific illustration where indicated. Minimal, premium, no childish graphics, no cartoon style, no logos, no watermark, no readable text on the image itself. Restrained clinical still-life composition: a formula bottle and a small clipboard/notepad icon suggested abstractly (no readable text), soft gold accent marker suggesting 'flag for discussion' rather than alarm. Calm, informational tone, not urgent or frightening.
+      -->
+      <figure class="blog-figure">
+        <div class="fig-media" style="background-image:url('../images/blog/formula-cows-milk-signal.jpg')"></div>
+        <figcaption><span class="fig-label">Cow's milk protein sensitivity</span><span class="fig-desc">A distinct issue from colic. Needs a pediatrician conversation, not a formula switch on your own.</span></figcaption>
+      </figure>
+    </div>
     <div class="ibox-flag">
       <strong>Worth ruling out with your pediatrician, not guessing at</strong>
       <p>Persistent blood or unusual mucus in stool, a rash alongside digestive symptoms, or a pattern that doesn't respond to any mechanical correction are reasons to raise cow's milk protein sensitivity directly with your pediatrician, rather than working through formula changes on your own.</p>

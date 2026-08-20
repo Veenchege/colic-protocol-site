@@ -109,6 +109,23 @@ img{max-width:100%;display:block}
 .footer-links a{color:rgba(255,255,255,.46);font-size:13px;text-decoration:none}
 .footer-links a:hover{color:rgba(255,255,255,.85)}
 .footer-disc{font-size:11px;color:rgba(255,255,255,.24);width:100%;line-height:1.7;margin-top:16px;border-top:1px solid rgba(255,255,255,.07);padding-top:16px}
+.blog-figure{margin:34px 0;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border2);background:var(--card);box-shadow:var(--shadow)}
+.blog-figure .fig-media{width:100%;aspect-ratio:4/5;background:var(--paper-alt) center/cover no-repeat;background-color:var(--paper-alt)}
+.blog-figure.fig-wide .fig-media{aspect-ratio:16/10}
+.blog-figure figcaption{padding:14px 20px 16px;border-top:1px solid var(--border)}
+.blog-figure figcaption .fig-label{display:block;font-family:var(--sans);font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.blog-figure figcaption .fig-desc{display:block;font-family:var(--mono);font-size:12px;color:var(--muted);line-height:1.6}
+.fig-pair{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:34px 0}
+.fig-pair .blog-figure{margin:0}
+.fig-pair .blog-figure .fig-media{aspect-ratio:1/1}
+@media(max-width:640px){.fig-pair{grid-template-columns:1fr}}
+.fig-trio{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:34px 0}
+.fig-trio .blog-figure{margin:0}
+.fig-trio .blog-figure .fig-media{aspect-ratio:3/4}
+.fig-trio .blog-figure figcaption{padding:10px 12px 12px}
+.fig-trio .blog-figure figcaption .fig-label{font-size:12px}
+.fig-trio .blog-figure figcaption .fig-desc{font-size:10.5px}
+@media(max-width:640px){.fig-trio{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -146,6 +163,14 @@ img{max-width:100%;display:block}
     <h2>The 74% figure, sourced properly</h2>
     <p>You have probably seen some version of this claim: a specific probiotic strain reduces colic crying by 74%. It traces back to one real, findable trial: <strong>Savino et al., "Lactobacillus reuteri DSM 17938 in Infantile Colic: A Randomized, Double-Blind, Placebo-Controlled Trial," Pediatrics, 2010.</strong> Worth reading what it actually did, rather than just repeating the headline number.</p>
 
+    
+    <!-- IMAGE PROMPT for savino-2010-crying-reduction.jpg:
+    Premium pediatric medical editorial composition, 4:5 vertical, sophisticated clinical investigation aesthetic. Warm cream paper background (#FBF4EA tone), deep espresso-brown typography space, muted terracotta (#BC5A33) accents for the problem/warning element, sage green (#6C8759) accents for the resolved/correct element, occasional soft gold (#C0963F) for a neutral marker. Elegant serif editorial design, Scandinavian medical-journal sensibility, realistic newborn and parent photography blended with restrained scientific illustration where indicated. Minimal, premium, no childish graphics, no cartoon style, no logos, no watermark, no readable text on the image itself. Elegant clinical data visualization, a simple descending bar or line chart showing two lines diverging over a 21-day axis, one line in sage green dropping sharply (treatment group), one line in muted gold dropping more gradually and staying higher (placebo group). Minimal axis ticks only, no readable numerals, premium statistical-editorial style matching a clinical journal figure.
+    -->
+    <figure class="blog-figure fig-wide">
+      <div class="fig-media" style="background-image:url('../images/blog/savino-2010-crying-reduction.jpg')"></div>
+      <figcaption><span class="fig-label">Median crying time, day 0 to day 21</span><span class="fig-desc">Roughly 370 minutes down to roughly 35 minutes in the treatment group by day 21.</span></figcaption>
+    </figure>
     <h2>What the trial actually tested</h2>
     <p>The trial enrolled exclusively breastfed infants meeting the Wessel criteria for colic, the standard clinical definition (crying for more than three hours a day, more than three days a week, for more than three weeks, in an otherwise healthy, well-fed infant). Infants were randomized to receive either L. reuteri DSM 17938 at a dose of 10<sup>8</sup> colony-forming units daily, delivered in five drops, or a placebo, for 21 days.</p>
     <p>By day 21, the treatment group showed a median reduction in daily crying time from roughly 370 minutes to roughly 35 minutes. The placebo group's reduction was smaller and slower. That gap, the difference in how much and how fast crying time dropped, is where the 74% figure comes from.</p>
@@ -155,6 +180,14 @@ img{max-width:100%;display:block}
       <a href="../quiz.html">Take the free assessment →</a>
     </div>
 
+    
+    <!-- IMAGE PROMPT for breastfed-only-caveat.jpg:
+    Premium pediatric medical editorial composition, 4:5 vertical, sophisticated clinical investigation aesthetic. Warm cream paper background (#FBF4EA tone), deep espresso-brown typography space, muted terracotta (#BC5A33) accents for the problem/warning element, sage green (#6C8759) accents for the resolved/correct element, occasional soft gold (#C0963F) for a neutral marker. Elegant serif editorial design, Scandinavian medical-journal sensibility, realistic newborn and parent photography blended with restrained scientific illustration where indicated. Minimal, premium, no childish graphics, no cartoon style, no logos, no watermark, no readable text on the image itself. Restrained split composition: LEFT side a realistic breastfeeding scene with a small sage-green 'studied population' marker; RIGHT side a realistic bottle-feeding scene rendered slightly desaturated with a soft gold 'evidence gap, not proof of absence' marker, conveying an honest caveat rather than exclusion. Thin elegant vertical divider between the two.
+    -->
+    <figure class="blog-figure">
+      <div class="fig-media" style="background-image:url('../images/blog/breastfed-only-caveat.jpg')"></div>
+      <figcaption><span class="fig-label">Conducted exclusively in breastfed infants</span><span class="fig-desc">The single most important caveat, and the one most often dropped when this finding gets repeated.</span></figcaption>
+    </figure>
     <h2>What it does not tell you</h2>
     <p><strong>It was conducted in breastfed infants specifically.</strong> This is the single most important caveat and the one most often dropped when the finding gets repeated online. If your baby is formula-fed or mixed-fed, this trial's population does not match yours, and the mechanism, timing, and even the specific strain's behavior in a different feeding context have not been established by this study. A separate, broader evidence base covers formula-feeding, and it is not this trial.</p>
     <p><strong>It tested one specific strain, at one specific dose.</strong> "Probiotic" is not a single thing. Strain specificity is the entire point: L. reuteri DSM 17938 is a particular, patented strain (the commercial product built around it is BioGaia Protectis), and the trial's results do not generalize to "a probiotic" in the way marketing for other probiotic products sometimes implies.</p>

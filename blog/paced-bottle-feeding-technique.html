@@ -106,6 +106,23 @@ img{max-width:100%;display:block}
 .footer-links a{color:rgba(255,255,255,.46);font-size:13px;text-decoration:none}
 .footer-links a:hover{color:rgba(255,255,255,.85)}
 .footer-disc{font-size:11px;color:rgba(255,255,255,.24);width:100%;line-height:1.7;margin-top:16px;border-top:1px solid rgba(255,255,255,.07);padding-top:16px}
+.blog-figure{margin:34px 0;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border2);background:var(--card);box-shadow:var(--shadow)}
+.blog-figure .fig-media{width:100%;aspect-ratio:4/5;background:var(--paper-alt) center/cover no-repeat;background-color:var(--paper-alt)}
+.blog-figure.fig-wide .fig-media{aspect-ratio:16/10}
+.blog-figure figcaption{padding:14px 20px 16px;border-top:1px solid var(--border)}
+.blog-figure figcaption .fig-label{display:block;font-family:var(--sans);font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.blog-figure figcaption .fig-desc{display:block;font-family:var(--mono);font-size:12px;color:var(--muted);line-height:1.6}
+.fig-pair{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:34px 0}
+.fig-pair .blog-figure{margin:0}
+.fig-pair .blog-figure .fig-media{aspect-ratio:1/1}
+@media(max-width:640px){.fig-pair{grid-template-columns:1fr}}
+.fig-trio{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:34px 0}
+.fig-trio .blog-figure{margin:0}
+.fig-trio .blog-figure .fig-media{aspect-ratio:3/4}
+.fig-trio .blog-figure figcaption{padding:10px 12px 12px}
+.fig-trio .blog-figure figcaption .fig-label{font-size:12px}
+.fig-trio .blog-figure figcaption .fig-desc{font-size:10.5px}
+@media(max-width:640px){.fig-trio{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -149,6 +166,23 @@ img{max-width:100%;display:block}
       <a href="../quiz.html">Take the free assessment →</a>
     </div>
 
+    
+    <div class="fig-pair">
+      <!-- IMAGE PROMPT for bottle-angle-too-steep.jpg:
+      Premium pediatric medical editorial composition, 4:5 vertical, sophisticated clinical investigation aesthetic. Warm cream paper background (#FBF4EA tone), deep espresso-brown typography space, muted terracotta (#BC5A33) accents for the problem/warning element, sage green (#6C8759) accents for the resolved/correct element, occasional soft gold (#C0963F) for a neutral marker. Elegant serif editorial design, Scandinavian medical-journal sensibility, realistic newborn and parent photography blended with restrained scientific illustration where indicated. Minimal, premium, no childish graphics, no cartoon style, no logos, no watermark, no readable text on the image itself. Realistic photograph, a baby bottle held at a steep downward angle to a reclined newborn, nipple fully saturated with milk, directional terracotta flow arrows indicating fast, continuous, gravity-driven flow entering the baby's mouth.
+      -->
+      <figure class="blog-figure">
+        <div class="fig-media" style="background-image:url('../images/blog/bottle-angle-too-steep.jpg')"></div>
+        <figcaption><span class="fig-label">Too steep, fully tilted</span><span class="fig-desc">Continuous gravity-driven flow overrides the baby's suck-swallow-breathe coordination.</span></figcaption>
+      </figure>
+      <!-- IMAGE PROMPT for bottle-angle-correct-paced.jpg:
+      Premium pediatric medical editorial composition, 4:5 vertical, sophisticated clinical investigation aesthetic. Warm cream paper background (#FBF4EA tone), deep espresso-brown typography space, muted terracotta (#BC5A33) accents for the problem/warning element, sage green (#6C8759) accents for the resolved/correct element, occasional soft gold (#C0963F) for a neutral marker. Elegant serif editorial design, Scandinavian medical-journal sensibility, realistic newborn and parent photography blended with restrained scientific illustration where indicated. Minimal, premium, no childish graphics, no cartoon style, no logos, no watermark, no readable text on the image itself. Realistic photograph, a baby bottle held nearly horizontal to a near-upright newborn, nipple visibly only half-filled with milk (the rest air), calmer sage-green flow arrows indicating slower, baby-controlled intake.
+      -->
+      <figure class="blog-figure">
+        <div class="fig-media" style="background-image:url('../images/blog/bottle-angle-correct-paced.jpg')"></div>
+        <figcaption><span class="fig-label">Near-horizontal, half-full nipple</span><span class="fig-desc">Baby actively sucks to draw milk out. Active sucking limits air intake.</span></figcaption>
+      </figure>
+    </div>
     <h2>The actual technique</h2>
     <p><strong>Position:</strong> Hold your baby near-upright, not reclined. A 45-degree recline is a common default and is more reclined than it needs to be for this purpose specifically.</p>
     <p><strong>Bottle angle:</strong> Horizontal, not tilted steeply downward. This is the counterintuitive part. A horizontal bottle held to a near-upright baby means the nipple is only partially filled with milk, which is exactly the point.</p>
@@ -161,6 +195,14 @@ img{max-width:100%;display:block}
       <a href="../blueprint.html">See what's included →</a>
     </div>
 
+    
+    <!-- IMAGE PROMPT for paced-feeding-4-step-sequence.jpg:
+    Premium pediatric medical editorial composition, 4:5 vertical, sophisticated clinical investigation aesthetic. Warm cream paper background (#FBF4EA tone), deep espresso-brown typography space, muted terracotta (#BC5A33) accents for the problem/warning element, sage green (#6C8759) accents for the resolved/correct element, occasional soft gold (#C0963F) for a neutral marker. Elegant serif editorial design, Scandinavian medical-journal sensibility, realistic newborn and parent photography blended with restrained scientific illustration where indicated. Minimal, premium, no childish graphics, no cartoon style, no logos, no watermark, no readable text on the image itself. Elegant four-step horizontal sequence diagram, small clean icons connected by a thin line: step one a near-upright baby silhouette icon, step two a horizontal bottle icon, step three a small pause/wait icon, step four a simple duration marker (an abstract soft arc, no readable clock numerals). Sage green throughout to indicate the correct sequence, premium minimal editorial diagram style.
+    -->
+    <figure class="blog-figure fig-wide">
+      <div class="fig-media" style="background-image:url('../images/blog/paced-feeding-4-step-sequence.jpg')"></div>
+      <figcaption><span class="fig-label">Position, angle, pacing pause, duration</span><span class="fig-desc">Near-upright hold. Horizontal bottle. Pause every 20 to 30 seconds. 15 to 20 minutes total.</span></figcaption>
+    </figure>
     <h2>What changes, and on what timeline</h2>
     <p>The effect of correcting bottle mechanics is not instant. The air already swallowed during a mis-paced feed has already entered the gut by the time you notice discomfort, so a single corrected feed will not undo an already-uncomfortable evening. What changes is the pattern over the next several feeds: less air intake per feed compounds into less total gas load across the day, and most parents notice a real difference within 24 to 48 hours of consistent paced feeding, not immediately.</p>
     <p>This is worth separating clearly from a gut microbiome intervention like a targeted probiotic strain. Paced feeding addresses air intake at the mechanical source. It does not correct an underlying fermentation imbalance if one is present. Babies with a primarily gut-driven presentation often need both running at once: paced feeding to stop adding to the problem, and the gut-specific protocol to correct what is already imbalanced.</p>

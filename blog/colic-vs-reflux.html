@@ -114,6 +114,23 @@ img{max-width:100%;display:block}
 .footer-links a{color:rgba(255,255,255,.46);font-size:13px;text-decoration:none}
 .footer-links a:hover{color:rgba(255,255,255,.85)}
 .footer-disc{font-size:11px;color:rgba(255,255,255,.24);width:100%;line-height:1.7;margin-top:16px;border-top:1px solid rgba(255,255,255,.07);padding-top:16px}
+.blog-figure{margin:34px 0;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border2);background:var(--card);box-shadow:var(--shadow)}
+.blog-figure .fig-media{width:100%;aspect-ratio:4/5;background:var(--paper-alt) center/cover no-repeat;background-color:var(--paper-alt)}
+.blog-figure.fig-wide .fig-media{aspect-ratio:16/10}
+.blog-figure figcaption{padding:14px 20px 16px;border-top:1px solid var(--border)}
+.blog-figure figcaption .fig-label{display:block;font-family:var(--sans);font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.blog-figure figcaption .fig-desc{display:block;font-family:var(--mono);font-size:12px;color:var(--muted);line-height:1.6}
+.fig-pair{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:34px 0}
+.fig-pair .blog-figure{margin:0}
+.fig-pair .blog-figure .fig-media{aspect-ratio:1/1}
+@media(max-width:640px){.fig-pair{grid-template-columns:1fr}}
+.fig-trio{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:34px 0}
+.fig-trio .blog-figure{margin:0}
+.fig-trio .blog-figure .fig-media{aspect-ratio:3/4}
+.fig-trio .blog-figure figcaption{padding:10px 12px 12px}
+.fig-trio .blog-figure figcaption .fig-label{font-size:12px}
+.fig-trio .blog-figure figcaption .fig-desc{font-size:10.5px}
+@media(max-width:640px){.fig-trio{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -171,6 +188,23 @@ img{max-width:100%;display:block}
     </div>
 
     <h2>Where this crosses into a pediatrician conversation, not a protocol conversation</h2>
+    
+    <div class="fig-pair">
+      <!-- IMAGE PROMPT for reflux-vs-colic-reflux-signal.jpg:
+      Premium pediatric medical editorial composition, 4:5 vertical, sophisticated clinical investigation aesthetic. Warm cream paper background (#FBF4EA tone), deep espresso-brown typography space, muted terracotta (#BC5A33) accents for the problem/warning element, sage green (#6C8759) accents for the resolved/correct element, occasional soft gold (#C0963F) for a neutral marker. Elegant serif editorial design, Scandinavian medical-journal sensibility, realistic newborn and parent photography blended with restrained scientific illustration where indicated. Minimal, premium, no childish graphics, no cartoon style, no logos, no watermark, no readable text on the image itself. Realistic photograph, newborn immediately post-feed held upright against a parent's shoulder, visible slight spit-up at the mouth, baby's body tensed and arching away from the shoulder. Restrained terracotta observation circle near the mouth and upper torso.
+      -->
+      <figure class="blog-figure">
+        <div class="fig-media" style="background-image:url('../images/blog/reflux-vs-colic-reflux-signal.jpg')"></div>
+        <figcaption><span class="fig-label">Points toward reflux</span><span class="fig-desc">Worse during or right after feeds. Often frequent, sometimes forceful spit-up.</span></figcaption>
+      </figure>
+      <!-- IMAGE PROMPT for reflux-vs-colic-colic-signal.jpg:
+      Premium pediatric medical editorial composition, 4:5 vertical, sophisticated clinical investigation aesthetic. Warm cream paper background (#FBF4EA tone), deep espresso-brown typography space, muted terracotta (#BC5A33) accents for the problem/warning element, sage green (#6C8759) accents for the resolved/correct element, occasional soft gold (#C0963F) for a neutral marker. Elegant serif editorial design, Scandinavian medical-journal sensibility, realistic newborn and parent photography blended with restrained scientific illustration where indicated. Minimal, premium, no childish graphics, no cartoon style, no logos, no watermark, no readable text on the image itself. Realistic photograph, newborn mid-evening crying episode with no feeding cues present (no bottle, no burp cloth at mouth), knees drawn slightly toward the chest, a small clock or warm-toned evening-light cue subtly present in the background to suggest time of day. Restrained sage-green observation circle near the torso.
+      -->
+      <figure class="blog-figure">
+        <div class="fig-media" style="background-image:url('../images/blog/reflux-vs-colic-colic-signal.jpg')"></div>
+        <figcaption><span class="fig-label">Points toward colic</span><span class="fig-desc">Not tied to feeding. Clusters at a predictable evening window regardless of the last feed.</span></figcaption>
+      </figure>
+    </div>
     <div class="ibox-flag">
       <strong>These need medical evaluation, not a management technique</strong>
       <p>Poor or stalled weight gain, blood in spit-up or stool, forceful or projectile vomiting, persistent feeding refusal, or severe, consistent arching specifically during feeds are signs that warrant a pediatrician visit before trying anything else. A confirmed reflux diagnosis (GER or GERD) is its own medical condition with its own management plan, and it is a different situation from colic, not a more severe version of the same one. If that's what you're dealing with, this protocol is not built for it, and your pediatrician is the right next step, not a workaround here.</p>

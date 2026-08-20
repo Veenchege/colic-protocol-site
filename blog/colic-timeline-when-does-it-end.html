@@ -106,6 +106,23 @@ img{max-width:100%;display:block}
 .footer-links a{color:rgba(255,255,255,.46);font-size:13px;text-decoration:none}
 .footer-links a:hover{color:rgba(255,255,255,.85)}
 .footer-disc{font-size:11px;color:rgba(255,255,255,.24);width:100%;line-height:1.7;margin-top:16px;border-top:1px solid rgba(255,255,255,.07);padding-top:16px}
+.blog-figure{margin:34px 0;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border2);background:var(--card);box-shadow:var(--shadow)}
+.blog-figure .fig-media{width:100%;aspect-ratio:4/5;background:var(--paper-alt) center/cover no-repeat;background-color:var(--paper-alt)}
+.blog-figure.fig-wide .fig-media{aspect-ratio:16/10}
+.blog-figure figcaption{padding:14px 20px 16px;border-top:1px solid var(--border)}
+.blog-figure figcaption .fig-label{display:block;font-family:var(--sans);font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.blog-figure figcaption .fig-desc{display:block;font-family:var(--mono);font-size:12px;color:var(--muted);line-height:1.6}
+.fig-pair{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:34px 0}
+.fig-pair .blog-figure{margin:0}
+.fig-pair .blog-figure .fig-media{aspect-ratio:1/1}
+@media(max-width:640px){.fig-pair{grid-template-columns:1fr}}
+.fig-trio{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:34px 0}
+.fig-trio .blog-figure{margin:0}
+.fig-trio .blog-figure .fig-media{aspect-ratio:3/4}
+.fig-trio .blog-figure figcaption{padding:10px 12px 12px}
+.fig-trio .blog-figure figcaption .fig-label{font-size:12px}
+.fig-trio .blog-figure figcaption .fig-desc{font-size:10.5px}
+@media(max-width:640px){.fig-trio{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -143,6 +160,14 @@ img{max-width:100%;display:block}
     <h2>The honest answer first</h2>
     <p>Most colic resolves on its own by 12 weeks, regardless of what a parent does or does not try in the meantime. That is true, and it is also not the same thing as useful advice for the evening currently in progress. The timeline below is worth knowing because it tells you whether you are near the start, the peak, or the end of the window, and that changes what is actually worth doing right now.</p>
 
+    
+    <!-- IMAGE PROMPT for colic-intensity-timeline.jpg:
+    Premium pediatric medical editorial composition, 4:5 vertical, sophisticated clinical investigation aesthetic. Warm cream paper background (#FBF4EA tone), deep espresso-brown typography space, muted terracotta (#BC5A33) accents for the problem/warning element, sage green (#6C8759) accents for the resolved/correct element, occasional soft gold (#C0963F) for a neutral marker. Elegant serif editorial design, Scandinavian medical-journal sensibility, realistic newborn and parent photography blended with restrained scientific illustration where indicated. Minimal, premium, no childish graphics, no cartoon style, no logos, no watermark, no readable text on the image itself. Elegant editorial timeline chart spanning weeks 1 through 12, rendered as a smooth rising-and-falling arc. Color-graded along the curve: pale warm orange at week 1-2, deepening amber through week 3-4, dark burgundy/terracotta at the week 5-7 peak, softening back through lighter amber at week 8-9, resolving to soft sage green by week 10-12. Minimal axis labeling suggested only through subtle tick marks, no readable numerals or text. Wide horizontal composition, premium editorial infographic style.
+    -->
+    <figure class="blog-figure fig-wide">
+      <div class="fig-media" style="background-image:url('../images/blog/colic-intensity-timeline.jpg')"></div>
+      <figcaption><span class="fig-label">The colic intensity arc, week 1 to 12</span><span class="fig-desc">Week 6 is the statistical peak for most infants. The curve has a known shape.</span></figcaption>
+    </figure>
     <h2>Weeks 0 to 3: before it has a name yet</h2>
     <p>Fussiness in this window is common and does not automatically mean colic. Feeding is still being established, sleep is unpredictable for reasons that have nothing to do with colic specifically, and some extra gas and a shorter fuse in the evening is close to universal.</p>
     <p>What is worth tracking even this early: does the fussiness cluster at a specific time of day, or is it scattered randomly. A cluster starting to form in the late afternoon or evening is the first real signal that a colic pattern, rather than generic newborn adjustment, is beginning.</p>
@@ -172,6 +197,14 @@ img{max-width:100%;display:block}
     <p>By week 12, the large majority of infants have resolved out of the acute colic pattern. Evenings become more predictable, sleep stretches lengthen further, and the crisis-level intensity of weeks 5 to 7 is, for most families, a memory rather than a current experience.</p>
     <p>For the minority where crying persists meaningfully past 12 weeks, it is worth revisiting the diagnostic question directly rather than assuming it will resolve on the same timeline as everyone else's. A persistent, unresolved gut microbiome imbalance, in particular, does not reliably self-correct on the same schedule as the nervous system and acoustic components tend to.</p>
 
+    
+    <!-- IMAGE PROMPT for colic-timeline-two-babies.jpg:
+    Premium pediatric medical editorial composition, 4:5 vertical, sophisticated clinical investigation aesthetic. Warm cream paper background (#FBF4EA tone), deep espresso-brown typography space, muted terracotta (#BC5A33) accents for the problem/warning element, sage green (#6C8759) accents for the resolved/correct element, occasional soft gold (#C0963F) for a neutral marker. Elegant serif editorial design, Scandinavian medical-journal sensibility, realistic newborn and parent photography blended with restrained scientific illustration where indicated. Minimal, premium, no childish graphics, no cartoon style, no logos, no watermark, no readable text on the image itself. Split-screen realistic photography, two separate newborns each at a peak crying moment, positioned side by side with a thin elegant vertical divider. LEFT baby shows knees pulled to chest with a distended-belly cue (subtle terracotta observation marker near the abdomen). RIGHT baby shows an arched back and stiffened posture (subtle sage observation marker near the shoulders). Both babies at the same visual intensity of distress, emphasizing that surface presentation looks identical while the underlying driver differs.
+    -->
+    <figure class="blog-figure">
+      <div class="fig-media" style="background-image:url('../images/blog/colic-timeline-two-babies.jpg')"></div>
+      <figcaption><span class="fig-label">Same week 6 peak, different primary system</span><span class="fig-desc">The timeline describes the population average. It doesn't diagnose which system is driving it.</span></figcaption>
+    </figure>
     <h2>What the timeline does not tell you</h2>
     <p>The curve above describes the population average. It does not diagnose your baby, and it is not a reason to defer finding out which of the three systems is primary for her specifically. Two babies at the identical week-6 peak can have entirely different primary drivers, and the timeline is silent on which one yours is.</p>
     <p>That is a separate question from timing, and it is the one worth actually answering, since it is the one that determines what to do tonight rather than just how many weeks remain.</p>

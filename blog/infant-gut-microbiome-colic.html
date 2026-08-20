@@ -77,6 +77,23 @@ a{color:var(--terra-deep);text-decoration:underline;text-underline-offset:2px}
 .footer-links a{color:rgba(255,255,255,.46);font-size:13px;text-decoration:none}
 .footer-links a:hover{color:rgba(255,255,255,.85)}
 .footer-disc{font-size:11px;color:rgba(255,255,255,.24);width:100%;line-height:1.7;margin-top:16px;border-top:1px solid rgba(255,255,255,.07);padding-top:16px}
+.blog-figure{margin:34px 0;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border2);background:var(--card);box-shadow:var(--shadow)}
+.blog-figure .fig-media{width:100%;aspect-ratio:4/5;background:var(--paper-alt) center/cover no-repeat;background-color:var(--paper-alt)}
+.blog-figure.fig-wide .fig-media{aspect-ratio:16/10}
+.blog-figure figcaption{padding:14px 20px 16px;border-top:1px solid var(--border)}
+.blog-figure figcaption .fig-label{display:block;font-family:var(--sans);font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.blog-figure figcaption .fig-desc{display:block;font-family:var(--mono);font-size:12px;color:var(--muted);line-height:1.6}
+.fig-pair{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:34px 0}
+.fig-pair .blog-figure{margin:0}
+.fig-pair .blog-figure .fig-media{aspect-ratio:1/1}
+@media(max-width:640px){.fig-pair{grid-template-columns:1fr}}
+.fig-trio{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:34px 0}
+.fig-trio .blog-figure{margin:0}
+.fig-trio .blog-figure .fig-media{aspect-ratio:3/4}
+.fig-trio .blog-figure figcaption{padding:10px 12px 12px}
+.fig-trio .blog-figure figcaption .fig-label{font-size:12px}
+.fig-trio .blog-figure figcaption .fig-desc{font-size:10.5px}
+@media(max-width:640px){.fig-trio{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -109,6 +126,14 @@ a{color:var(--terra-deep);text-decoration:underline;text-underline-offset:2px}
     <p>For a meaningful share of colicky infants, the driver isn't gas in the moment, it's an underlying imbalance in the gut microbiome that produces excess fermentation, inflammation, and heightened pain perception on an ongoing basis. That's a different problem than "gas after a feed," and it responds to a different kind of intervention.</p>
 
     <h2>What gut microbiome disruption actually looks like</h2>
+
+    <!-- IMAGE PROMPT for gut-fermentation-pathway.jpg:
+    Premium pediatric medical editorial composition, 4:5 vertical, sophisticated clinical investigation aesthetic. Warm cream paper background (#FBF4EA tone), deep espresso-brown typography space, muted terracotta (#BC5A33) accents for the problem/warning element, sage green (#6C8759) accents for the resolved/correct element, occasional soft gold (#C0963F) for a neutral marker. Elegant serif editorial design, Scandinavian medical-journal sensibility, realistic newborn and parent photography blended with restrained scientific illustration where indicated. Minimal, premium, no childish graphics, no cartoon style, no logos, no watermark, no readable text on the image itself. Sophisticated internal cross-section illustration of a newborn's digestive system, restrained and non-graphic, showing a simplified gut lining with small gas-bubble motifs and a subtle inflammation-tint gradient in terracotta along the lining. Clinical, editorial, textbook-adjacent illustration style, not literal or unsettling.
+    -->
+    <figure class="blog-figure">
+      <div class="fig-media" style="background-image:url('../images/blog/gut-fermentation-pathway.jpg')"></div>
+      <figcaption><span class="fig-label">Fermentation and inflammation, not just gas</span><span class="fig-desc">Excess fermentation plus a more reactive gut lining is why the same amount of gas can produce very different crying responses.</span></figcaption>
+    </figure>
     <p>In the first weeks of life, an infant's gut microbiome is still establishing itself, and in some babies that process runs into imbalance, specifically a shortage of certain protective bacterial strains relative to gas-producing ones. The result is excess fermentation of feed contents, which produces gas, and a gut lining more reactive to normal digestive activity than it would be otherwise, which raises how much pain a given amount of gas or distension actually produces. This is why two babies can have what looks like a similar amount of gas and have very different crying responses to it. The gas isn't the whole story. The gut's reactivity to it is doing real work too.</p>
 
     <h2>The evidence base, in full</h2>
@@ -116,6 +141,14 @@ a{color:var(--terra-deep);text-decoration:underline;text-underline-offset:2px}
     <p>What's less commonly cited, and worth naming directly, is the broader evidence behind it. A network meta-analysis (Gutiérrez-Castrellón et al., 2017, published in Medicine, Baltimore) pooled 32 trials and 2,242 patients across colic interventions and ranked this specific probiotic strain first among them. That's a considerably larger evidence base than a single trial, and it's the citation that should be behind the "network meta-analysis" claim whenever it gets referenced, rather than a vague, unattributed mention of it. Systematic reviews since then, Ellwood, Draper-Rodi and Carnes (BMJ Open, 2020) and Hjern, Lindblom, Reuter and Silfverdal (Acta Paediatrica, 2020), have reinforced the same direction of evidence.</p>
 
     <h2>Why "any probiotic" doesn't work the same way</h2>
+
+    <!-- IMAGE PROMPT for strain-specificity-l-reuteri.jpg:
+    Premium pediatric medical editorial composition, 4:5 vertical, sophisticated clinical investigation aesthetic. Warm cream paper background (#FBF4EA tone), deep espresso-brown typography space, muted terracotta (#BC5A33) accents for the problem/warning element, sage green (#6C8759) accents for the resolved/correct element, occasional soft gold (#C0963F) for a neutral marker. Elegant serif editorial design, Scandinavian medical-journal sensibility, realistic newborn and parent photography blended with restrained scientific illustration where indicated. Minimal, premium, no childish graphics, no cartoon style, no logos, no watermark, no readable text on the image itself. Restrained clinical still-life, a single probiotic drop bottle labeled with an abstract, non-readable strain marker rendered in sage green, positioned distinctly apart from three faded, deliberately generic-looking probiotic bottles in muted grey-brown, emphasizing one specific studied product against an undifferentiated category. No readable brand names.
+    -->
+    <figure class="blog-figure">
+      <div class="fig-media" style="background-image:url('../images/blog/strain-specificity-l-reuteri.jpg')"></div>
+      <figcaption><span class="fig-label">One studied strain, not a category</span><span class="fig-desc">L. reuteri DSM 17938, sold as BioGaia Protectis. A different strain hasn't inherited this evidence.</span></figcaption>
+    </figure>
     <p>This is the detail that gets lost the most in casual coverage of this research. The evidence base isn't for "probiotics" as a category. It's specific to one strain: <strong>Lactobacillus reuteri DSM 17938</strong>, the strain studied in the trials above and sold commercially as <strong>BioGaia Protectis</strong>. A different Lactobacillus strain, or a generic multi-strain probiotic blend, has not been tested in this population and doesn't inherit the evidence from a strain it isn't. Strain specificity is not a minor technicality here, it's the difference between an evidence-based intervention and a product riding on the general credibility of the word "probiotic."</p>
 
     <h2>The breastfed vs formula-fed difference, stated plainly</h2>

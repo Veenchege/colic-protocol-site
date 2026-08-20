@@ -273,11 +273,15 @@ var CONFIG = {
    what lets one MailerLite record built from a quiz visit and
    a checklist visit agree with each other. Keyed by the same
    short codes getPrimaryType() in quiz.html already returns,
-   so a quiz→checklist link only ever has to pass ?type=GUT. */
+   so a quiz→checklist link only ever has to pass ?type=GUT.
+   TAXONOMY MIGRATION (Aug 2026): AC (Acoustic Environment
+   Overload) is retired as a standalone type, replaced by FM
+   (Feeding Mechanics), per the Master Document v12 decision
+   log. quiz.html's RESULTS object made this same change. */
 var TYPE_MAP = {
   GUT: { label:'Gut Microbiome Imbalance', emoji:'\uD83E\uDD20', short:'gut' },
   NS:  { label:'Nervous System Dysregulation', emoji:'\u26A1', short:'nervous' },
-  AC:  { label:'Acoustic Environment Overload', emoji:'\uD83C\uDFB5', short:'acoustic' }
+  FM:  { label:'Feeding Mechanics', emoji:'\uD83C\uDF7C', short:'feeding' }
 };
 
 /* Session identifier, same shape as the quiz's ASSESSMENT_ID
@@ -297,7 +301,7 @@ var state = {
   screen: 'welcome',
   lead: { name:'', email:'', babyAgeWeeks:'', consent:false },
   utm: { utm_source: CONFIG.SOURCE, utm_medium:'', utm_campaign:'', utm_term:'', utm_content:'' },
-  colicType: '',           // '' | 'GUT' | 'NS' | 'AC' | 'UNSURE'
+  colicType: '',           // '' | 'GUT' | 'NS' | 'FM' | 'UNSURE'
   colicTypeFromQuiz: false,// true if it arrived pre-filled via ?type=
   quick: { diaper:null, fed:null },
   outcomes: { environment:null, tigerHold:null, final:null },
@@ -402,6 +406,7 @@ var ICONS = {
   gut: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v4a3 3 0 0 0 3 3 3 3 0 0 1 3 3 3 3 0 0 0 3 3 3 3 0 0 1 3 3v2"/><circle cx="6" cy="3" r="1.4" fill="currentColor" stroke="none"/></svg>',
   nervous: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h3.5l1.8-6 3.4 12 2.2-9 1.6 5.5h2.3l1.7-3 1.5 3H22"/></svg>',
   acoustic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14v-4a8 8 0 0 1 16 0v4"/><path d="M4 14a2 2 0 0 0 2 2h1v-6H6a2 2 0 0 0-2 2Z"/><path d="M20 14a2 2 0 0 1-2 2h-1v-6h1a2 2 0 0 1 2 2Z"/></svg>',
+  feeding: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2h6"/><path d="M10 2v3.3c0 .9-.4 1.4-1 2-.9.9-1 1.8-1 3v9.7a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-9.7c0-1.2-.1-2.1-1-3-.6-.6-1-1.1-1-2V2"/><path d="M7.5 13.5h9"/></svg>',
   leaf: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21c8 0 14-6 14-16-10 0-14 6-14 16Z"/><path d="M5 21c2-6 5-10 10-13"/></svg>',
   shield: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 5-3 8-7 9-4-1-7-4-7-9V6l7-3Z"/></svg>',
   clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>',
@@ -623,8 +628,8 @@ var SYSTEMS = [
     signs:'Pulls legs to tummy, frequent gas, crying after feeds, brief relief after passing gas.' },
   { code:'NS', key:'nervous', name:'Nervous System Dysregulation', icon:ICONS.nervous, tint:'gold',
     signs:'Startles easily, hard to settle, overtired but won\u2019t sleep, sensitive to stimulation.' },
-  { code:'AC', key:'acoustic', name:'Acoustic Environment Overload', icon:ICONS.acoustic, tint:'sage',
-    signs:'Worse in noisy rooms, evening peaks, calmer in quiet, easily overstimulated.' }
+  { code:'FM', key:'feeding', name:'Feeding Mechanics', icon:ICONS.feeding, tint:'sage',
+    signs:'Gulping or choking sounds during feeds, pulls off the breast or bottle repeatedly, crying within an hour of most feeds.' }
 ];
 
 /* ============================================================
@@ -746,7 +751,7 @@ function renderStopScan(){
    "this matters most for your baby" badge.
    ============================================================ */
 function renderColicType(){
-  var order = ['GUT','NS','AC'];
+  var order = ['GUT','NS','FM'];
   var fromQuiz = state.colicTypeFromQuiz && TYPE_MAP[state.colicType];
   var cardsHtml = order.map(function(code){
     var t = TYPE_MAP[code];
@@ -818,7 +823,23 @@ function renderEnvironment(){
     '<div class="screen-body">' +
       '<div class="dots">' + dotsHTML(2) + '</div>' +
       '<div class="eyebrow" style="color:var(--sage)">Stage 2 · Environment Reset</div>' +
-      typeBadgeHtml('AC','Highest-leverage step for acoustic-type babies') +
+      /* Re-badged from AC to NS this version (taxonomy migration): brown
+         noise and dim lighting are acoustic/environmental techniques,
+         but per the Master Document v12 decision log they're folded
+         into Nervous System Dysregulation as supporting content now,
+         not a standalone diagnostic type. AC no longer exists as a
+         type in TYPE_MAP/SYSTEMS, so this step can't badge for it.
+         KNOWN GAP, not silently resolved: the guided protocol below
+         (Environment Reset -> Tiger Hold -> Bicycle Legs/ILU Massage)
+         has no step specific to Feeding Mechanics (paced feeding,
+         burp-hold check). A parent who selects Feeding Mechanics on
+         the colicType screen currently gets zero badged "matters most
+         for your baby" steps anywhere in tonight's protocol. Adding a
+         real Feed & Burp Check screen is scoped follow-up work, not
+         done here, to avoid rewiring the stage/outcome flow (dots,
+         stepbar numbering, state.outcomes.*, BRIDGE_COPY scoring)
+         without full regression coverage on a single pass. */
+      typeBadgeHtml('NS','Highest-leverage step for nervous-system-type babies') +
       '<h1 class="h1" style="font-size:25px;">Reset the room<br>before the baby.</h1>' +
       '<p class="sub">Sound before touch. The nervous system needs to hear safety before it can feel it.</p>' +
       '<div class="card" style="margin-top:16px;">' + rowsHtml + '</div>' +

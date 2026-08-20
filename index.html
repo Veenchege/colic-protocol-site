@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Colic Protocol: Which of the 3 Root Causes Is Driving Your Baby's Crying?</title>
-<meta name="description" content="Colic isn't one problem. It's gut, nervous system, or acoustic overload, and each needs a different first move. Take the free 90-second assessment to find out which one is yours.">
+<meta name="description" content="Colic isn't one problem. It's gut, nervous system, or feeding mechanics, and each needs a different first move. Take the free 90-second assessment to find out which one is yours.">
 <meta property="og:title" content="Colic isn't one problem. It's three. Free 90-second assessment.">
-<meta property="og:description" content="Find out whether your baby's crying is gut, nervous system, or acoustic in origin, before you try another remedy that was never built for her system.">
+<meta property="og:description" content="Find out whether your baby's crying is gut, nervous system, or feeding-mechanics in origin, before you try another remedy that was never built for her system.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://colicprotocol.baby">
 <meta property="og:image" content="https://colicprotocol.baby/images/og-image.jpg">
@@ -125,7 +125,7 @@ p{font-size:15.5px;line-height:1.75;color:var(--muted)}
 @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
 @media(prefers-reduced-motion:reduce){.tcard{animation:none}}
 .tc-bar{height:3px}
-.tc-gut .tc-bar{background:var(--terra)} .tc-nerv .tc-bar{background:#9FBB8E} .tc-acou .tc-bar{background:var(--gold)}
+.tc-gut .tc-bar{background:var(--terra)} .tc-nerv .tc-bar{background:#9FBB8E} .tc-acou .tc-bar{background:var(--gold)} .tc-feed .tc-bar{background:#5A7FA6}
 .tc-body{padding:15px 14px}
 .tc-tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;color:rgba(255,255,255,.42);display:block;margin-bottom:6px}
 .tc-name{font-family:var(--serif);font-size:15px;font-weight:600;color:rgba(255,255,255,.94);display:block;margin-bottom:5px}
@@ -152,7 +152,7 @@ p{font-size:15.5px;line-height:1.75;color:var(--muted)}
 .sys-card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
 .sys-img{width:100%;aspect-ratio:4/5;object-fit:cover;object-position:top center}
 .sys-bar{height:4px}
-.sys-gut .sys-bar{background:var(--terra)} .sys-nerv .sys-bar{background:var(--sage)} .sys-acou .sys-bar{background:var(--gold)}
+.sys-gut .sys-bar{background:var(--terra)} .sys-nerv .sys-bar{background:var(--sage)} .sys-acou .sys-bar{background:var(--gold)} .sys-feed .sys-bar{background:#5A7FA6}
 .sys-b{padding:22px 20px}
 .sys-pct{font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted2);display:block;margin-bottom:10px}
 .sys-b p{font-size:13.5px;margin-bottom:14px}
@@ -161,6 +161,7 @@ p{font-size:15.5px;line-height:1.75;color:var(--muted)}
 .sys-gut .sig{background:var(--terra-d);color:var(--terra-deep)}
 .sys-nerv .sig{background:var(--sage-d);color:var(--pine)}
 .sys-acou .sig{background:var(--gold-d);color:#8a6a1f}
+.sys-feed .sig{background:#DCE6F0;color:#2F4A66}
 .sys-cta{text-align:center}
 .sys-cta p{font-size:13px;margin-top:12px}
 /* founder */
@@ -315,7 +316,7 @@ p{font-size:15.5px;line-height:1.75;color:var(--muted)}
     <div class="hero-text">
       <span class="hero-ey">Free Root Cause Assessment · 90 Seconds</span>
       <h1>Colic isn't one problem. It's <em>three.</em></h1>
-      <p class="hero-body">Gut microbiome imbalance, nervous system dysregulation, or acoustic overload: each one looks like "colic" from the outside, and each one needs a different first move. Most advice, and most products, guess. This tells you which one you're actually dealing with, <strong>before</strong> you spend another evening on a remedy that was never built for your baby's system.</p>
+      <p class="hero-body">Gut microbiome imbalance, nervous system dysregulation, or feeding mechanics: each one looks like "colic" from the outside, and each one needs a different first move. Most advice, and most products, guess. This tells you which one you're actually dealing with, <strong>before</strong> you spend another evening on a remedy that was never built for your baby's system.</p>
       <a href="quiz.html" class="btn btn-terra btn-lg">Find My Baby's Root Cause →</a>
       <p class="hero-micro">Free, no payment required · Result sent to your email · Takes about 90 seconds</p>
       <p class="hero-crisis">Baby crying right now? <a href="midnight-protocol.html">Skip straight to tonight's protocol →</a></p>
@@ -343,12 +344,12 @@ p{font-size:15.5px;line-height:1.75;color:var(--muted)}
             <span class="tc-sig">"Startles awake, can't self-settle"</span>
           </div>
         </div>
-        <div class="tcard tc-acou">
+        <div class="tcard tc-feed">
           <div class="tc-bar"></div>
           <div class="tc-body">
             <span class="tc-tag">System 3</span>
-            <span class="tc-name">Acoustic</span>
-            <span class="tc-sig">"Only calms in the exact right sound and light"</span>
+            <span class="tc-name">Feeding Mechanics</span>
+            <span class="tc-sig">"Gulps and gasps mid-feed, cries within the hour"</span>
           </div>
         </div>
       </div>
@@ -363,11 +364,11 @@ p{font-size:15.5px;line-height:1.75;color:var(--muted)}
     <div class="rv">
       <span class="eyebrow" style="color:var(--gold)">The Actual Problem With Most Colic Advice</span>
       <h2 id="pos-h2">Most content picks <em>one</em> root cause and treats it like the whole picture.</h2>
-      <p>A hold that works because it calms a dysregulated nervous system will do very little for a baby whose primary issue is gut inflammation. A probiotic that fixes fermentation gas won't touch a baby who's simply overloaded by the wrong sound and light environment. Colic Protocol starts by identifying which of the three is actually driving your baby's crying, then hands you the specific first steps for that system, not a generic list of things that work for somebody else's baby.</p>
+      <p>A hold that works because it calms a dysregulated nervous system will do very little for a baby whose primary issue is gut inflammation. A probiotic that fixes fermentation gas won't touch a baby who's simply swallowing too much air at every feed. Colic Protocol starts by identifying which of the three is actually driving your baby's crying, then hands you the specific first steps for that system, not a generic list of things that work for somebody else's baby.</p>
       <a href="quiz.html" class="btn-outline-lt">Find your root cause →</a>
     </div>
     <div class="rv">
-      <img src="images/three-system-model.jpg" alt="The three-system model: gut, nervous system, and acoustic, usually one is primary" class="pos-img">
+      <img src="images/three-system-model.jpg" alt="The three-system model: gut, nervous system, and feeding mechanics, usually one is primary" class="pos-img">
     </div>
   </div>
 </section>
@@ -384,7 +385,7 @@ p{font-size:15.5px;line-height:1.75;color:var(--muted)}
       <div class="card prob-card rv">
         <span class="prob-num">01 · The symptom trap</span>
         <h3>One remedy, aimed at the wrong system</h3>
-        <p>Gripe water has never passed a randomized controlled trial against placebo. Simethicone gas drops failed to show a statistically significant benefit in a Cochrane review. Both treat gas as the problem. For a baby whose primary system is nervous system dysregulation or acoustic overload, gas was never the actual driver, so neither product had a mechanism to work through.</p>
+        <p>Gripe water has never passed a randomized controlled trial against placebo. Simethicone gas drops failed to show a statistically significant benefit in a Cochrane review. Both treat gas as the problem. For a baby whose primary system is nervous system dysregulation or feeding mechanics, gas was never the actual driver, so neither product had a mechanism to work through.</p>
       </div>
       <div class="card prob-card rv">
         <span class="prob-num">02 · The reassurance trap</span>
@@ -394,7 +395,7 @@ p{font-size:15.5px;line-height:1.75;color:var(--muted)}
       <div class="card prob-card rv">
         <span class="prob-num">03 · The one-size trap</span>
         <h3>A protocol built for someone else's baby</h3>
-        <p>The environment fix that settles an acoustic-overload baby does nothing for a baby whose issue is gut inflammation. Almost no piece of generic colic content tells you which baby it's actually written for. Yours might not be it.</p>
+        <p>The paced-feeding fix that settles a feeding-mechanics baby does nothing for a baby whose issue is gut inflammation. Almost no piece of generic colic content tells you which baby it's actually written for. Yours might not be it.</p>
       </div>
     </div>
   </div>
@@ -413,7 +414,7 @@ p{font-size:15.5px;line-height:1.75;color:var(--muted)}
         <img src="images/gut-microbiome-diagram.jpg" alt="Gut microbiome and probiotic strain specificity diagram" class="sys-img">
         <div class="sys-bar"></div>
         <div class="sys-b">
-          <span class="sys-pct">Most common presentation</span>
+          <span class="sys-pct">Second most common in our assessment data</span>
           <h3>Gut</h3>
           <p>Microbiome imbalance and fermentation gas. Crying tends to build after feeds, alongside straining, arching, or visible discomfort passing gas. This is the system most colic products aim at, whether or not it's actually the one at play.</p>
           <div class="sig-row">
@@ -427,7 +428,7 @@ p{font-size:15.5px;line-height:1.75;color:var(--muted)}
         <img src="images/nervous-system-diagram.jpg" alt="Nervous system dysregulation diagram" class="sys-img">
         <div class="sys-bar"></div>
         <div class="sys-b">
-          <span class="sys-pct">Frequently missed</span>
+          <span class="sys-pct">Most common in our assessment data, still frequently missed by mainstream advice</span>
           <h3>Nervous System</h3>
           <p>A threat-detection loop that hasn't yet learned to self-soothe. Any change in handling, sound, or position can trigger a full reset of the crying, regardless of whether gas or feeding is involved at all.</p>
           <div class="sig-row">
@@ -437,17 +438,17 @@ p{font-size:15.5px;line-height:1.75;color:var(--muted)}
           </div>
         </div>
       </article>
-      <article class="sys-card sys-acou rv">
-        <img src="images/womb-frequency-diagram.jpg" alt="Womb frequency and acoustic environment diagram" class="sys-img">
+      <article class="sys-card sys-feed rv">
+        <img src="images/feeding-mechanics-diagram.jpg" alt="Paced feeding and air-intake diagram" class="sys-img">
         <div class="sys-bar"></div>
         <div class="sys-b">
-          <span class="sys-pct">Easy to overlook</span>
-          <h3>Acoustic</h3>
-          <p>An environment mismatched to womb-frequency calibration: the wrong sound, the wrong distance, too much light. These babies often settle fast in exactly the right setup, and unravel the moment it changes.</p>
+          <span class="sys-pct">New this version, no track record yet</span>
+          <h3>Feeding Mechanics</h3>
+          <p>Air swallowed faster than an immature suck-swallow-breathe reflex can pace, from a steep bottle angle, a fast-flow nipple, or a shallow latch. The air doesn't cause a problem right away, it ferments over the next two to four hours and shows up as the evening crying window.</p>
           <div class="sig-row">
-            <span class="sig">Setup-sensitive</span>
-            <span class="sig">Fast to settle right</span>
-            <span class="sig">Fast to unravel</span>
+            <span class="sig">Gulps or gasps mid-feed</span>
+            <span class="sig">Cries within the hour</span>
+            <span class="sig">Burping doesn't fully help</span>
           </div>
         </div>
       </article>
@@ -499,7 +500,7 @@ p{font-size:15.5px;line-height:1.75;color:var(--muted)}
       <div class="step-card rv">
         <span class="step-num">2</span>
         <h3>See your primary system</h3>
-        <p>Gut, nervous system, or acoustic, scored from your actual answers, with a plain explanation of why.</p>
+        <p>Gut, nervous system, or feeding mechanics, scored from your actual answers, with a plain explanation of why.</p>
       </div>
       <div class="step-card rv">
         <span class="step-num">3</span>
@@ -513,7 +514,7 @@ p{font-size:15.5px;line-height:1.75;color:var(--muted)}
       </div>
     </div>
     <div style="text-align:center">
-      <img src="images/assessment-diagram.jpg" alt="What's behind the 90-second assessment: weighted scoring across gut, nervous system, and acoustic" style="max-width:360px;border-radius:14px;box-shadow:var(--shadow);margin:8px auto 0;aspect-ratio:4/5;object-fit:cover;object-position:top center">
+      <img src="images/assessment-diagram.jpg" alt="What's behind the 90-second assessment: weighted scoring across gut, nervous system, and feeding mechanics" style="max-width:360px;border-radius:14px;box-shadow:var(--shadow);margin:8px auto 0;aspect-ratio:4/5;object-fit:cover;object-position:top center">
     </div>
   </div>
 </section>
@@ -642,7 +643,7 @@ p{font-size:15.5px;line-height:1.75;color:var(--muted)}
         <li>Diagnostic protocol, identify which system is primary</li>
         <li>Gut reset protocol, exact strain, dose &amp; timing by feeding method</li>
         <li>Tiger Hold, ILU massage &amp; nervous system regulation techniques</li>
-        <li>Acoustic design specs: frequency, volume, distance, duration</li>
+        <li>Paced feeding &amp; latch assessment guide, calibrated by feeding method</li>
         <li>Bloom Baby Tracker, one-tap logging that reveals patterns fast</li>
         <li>60-Minute Brown Noise Soundscape, calibrated to womb frequency</li>
         <li>Cry Decoder Masterclass, tell gas cry from overtired cry from colic cry</li>

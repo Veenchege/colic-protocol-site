@@ -77,6 +77,23 @@ a{color:var(--terra-deep);text-decoration:underline;text-underline-offset:2px}
 .footer-links a{color:rgba(255,255,255,.46);font-size:13px;text-decoration:none}
 .footer-links a:hover{color:rgba(255,255,255,.85)}
 .footer-disc{font-size:11px;color:rgba(255,255,255,.24);width:100%;line-height:1.7;margin-top:16px;border-top:1px solid rgba(255,255,255,.07);padding-top:16px}
+.blog-figure{margin:34px 0;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border2);background:var(--card);box-shadow:var(--shadow)}
+.blog-figure .fig-media{width:100%;aspect-ratio:4/5;background:var(--paper-alt) center/cover no-repeat;background-color:var(--paper-alt)}
+.blog-figure.fig-wide .fig-media{aspect-ratio:16/10}
+.blog-figure figcaption{padding:14px 20px 16px;border-top:1px solid var(--border)}
+.blog-figure figcaption .fig-label{display:block;font-family:var(--sans);font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.blog-figure figcaption .fig-desc{display:block;font-family:var(--mono);font-size:12px;color:var(--muted);line-height:1.6}
+.fig-pair{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:34px 0}
+.fig-pair .blog-figure{margin:0}
+.fig-pair .blog-figure .fig-media{aspect-ratio:1/1}
+@media(max-width:640px){.fig-pair{grid-template-columns:1fr}}
+.fig-trio{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:34px 0}
+.fig-trio .blog-figure{margin:0}
+.fig-trio .blog-figure .fig-media{aspect-ratio:3/4}
+.fig-trio .blog-figure figcaption{padding:10px 12px 12px}
+.fig-trio .blog-figure figcaption .fig-label{font-size:12px}
+.fig-trio .blog-figure figcaption .fig-desc{font-size:10.5px}
+@media(max-width:640px){.fig-trio{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -108,10 +125,26 @@ a{color:var(--terra-deep);text-decoration:underline;text-underline-offset:2px}
   <article class="article-body">
     <p>By week five, most parents have a familiar list: gripe water, gas drops, two or three hold techniques, a sound machine, maybe a formula switch. Each one seemed to work, briefly, and then stopped. If that's where you are, the natural conclusion is "nothing works for my baby" or "I must be doing it wrong." Neither is accurate. The remedies did exactly what they were designed to do. It just wasn't enough, and the reason why is mechanical, not a reflection of your effort.</p>
 
+    
+    <!-- IMAGE PROMPT for three-overlapping-systems-venn.jpg:
+    Premium pediatric medical editorial composition, 4:5 vertical, sophisticated clinical investigation aesthetic. Warm cream paper background (#FBF4EA tone), deep espresso-brown typography space, muted terracotta (#BC5A33) accents for the problem/warning element, sage green (#6C8759) accents for the resolved/correct element, occasional soft gold (#C0963F) for a neutral marker. Elegant serif editorial design, Scandinavian medical-journal sensibility, realistic newborn and parent photography blended with restrained scientific illustration where indicated. Minimal, premium, no childish graphics, no cartoon style, no logos, no watermark, no readable text on the image itself. Elegant three-circle Venn diagram, minimal line-art style, circles labeled visually (not textually) with a gut motif in terracotta, a nervous-system motif in a deep plum-adjacent tone, and an acoustic motif in sage green, all three overlapping in the center. A single small highlighted dot sits inside just one circle, away from the overlap, to represent a single remedy addressing only one system. Premium clinical-editorial diagram, no readable text.
+    -->
+    <figure class="blog-figure fig-wide">
+      <div class="fig-media" style="background-image:url('../images/blog/three-overlapping-systems-venn.jpg')"></div>
+      <figcaption><span class="fig-label">One remedy, one circle</span><span class="fig-desc">Gas drops, a hold, a sound machine each address at most one of three overlapping systems.</span></figcaption>
+    </figure>
     <h2>Why techniques work temporarily, and only partially</h2>
     <p>Colic crying is rarely produced by a single mechanism. Most presentations trace back to some combination of three overlapping systems: gut microbiome imbalance, nervous system dysregulation, and acoustic or sensory overload. Any single technique, gas drops, a specific hold, a sound machine, addresses at most one of those three. If it happens to be the primary driver, you'll see real relief. If it's a secondary factor, you'll see partial, temporary relief before the untreated systems reassert themselves. That's not the technique failing. That's the technique doing its narrow job correctly while the rest of the problem continues unaddressed.</p>
 
     <h2>The compounding problem nobody mentions</h2>
+
+    <!-- IMAGE PROMPT for stress-feedback-loop.jpg:
+    Premium pediatric medical editorial composition, 4:5 vertical, sophisticated clinical investigation aesthetic. Warm cream paper background (#FBF4EA tone), deep espresso-brown typography space, muted terracotta (#BC5A33) accents for the problem/warning element, sage green (#6C8759) accents for the resolved/correct element, occasional soft gold (#C0963F) for a neutral marker. Elegant serif editorial design, Scandinavian medical-journal sensibility, realistic newborn and parent photography blended with restrained scientific illustration where indicated. Minimal, premium, no childish graphics, no cartoon style, no logos, no watermark, no readable text on the image itself. Restrained circular feedback-loop diagram, two connected arcs forming a loop: one arc shows a small realistic detail of tense parent hands, the other shows a small realistic newborn face mid-cry, connected by a thin looping terracotta line with a subtle arrowhead indicating the cycle repeating. Calm, non-alarming, clinical-editorial tone.
+    -->
+    <figure class="blog-figure">
+      <div class="fig-media" style="background-image:url('../images/blog/stress-feedback-loop.jpg')"></div>
+      <figcaption><span class="fig-label">A feedback loop, not a flaw in the parent</span><span class="fig-desc">Anxious handling adds a stress signal on top of what the baby's own system was already managing.</span></figcaption>
+    </figure>
     <p>There's a second layer that makes this worse over time. Each remedy that doesn't hold raises parental stress and anxiety a little further, understandably. What often gets missed is that a parent's own physiological stress state transmits to an infant through touch, tone, and handling, not metaphorically, but through observable, measurable pathways. A baby held by an increasingly anxious parent is receiving an additional stress signal on top of whatever their own system was already dealing with. The remedies aren't just failing to resolve the original problem, the failed attempts themselves can be adding to it.</p>
 
     <h2>What to do instead of trying the next remedy</h2>

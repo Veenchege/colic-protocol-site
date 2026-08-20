@@ -77,6 +77,23 @@ a{color:var(--terra-deep);text-decoration:underline;text-underline-offset:2px}
 .footer-links a{color:rgba(255,255,255,.46);font-size:13px;text-decoration:none}
 .footer-links a:hover{color:rgba(255,255,255,.85)}
 .footer-disc{font-size:11px;color:rgba(255,255,255,.24);width:100%;line-height:1.7;margin-top:16px;border-top:1px solid rgba(255,255,255,.07);padding-top:16px}
+.blog-figure{margin:34px 0;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border2);background:var(--card);box-shadow:var(--shadow)}
+.blog-figure .fig-media{width:100%;aspect-ratio:4/5;background:var(--paper-alt) center/cover no-repeat;background-color:var(--paper-alt)}
+.blog-figure.fig-wide .fig-media{aspect-ratio:16/10}
+.blog-figure figcaption{padding:14px 20px 16px;border-top:1px solid var(--border)}
+.blog-figure figcaption .fig-label{display:block;font-family:var(--sans);font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.blog-figure figcaption .fig-desc{display:block;font-family:var(--mono);font-size:12px;color:var(--muted);line-height:1.6}
+.fig-pair{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:34px 0}
+.fig-pair .blog-figure{margin:0}
+.fig-pair .blog-figure .fig-media{aspect-ratio:1/1}
+@media(max-width:640px){.fig-pair{grid-template-columns:1fr}}
+.fig-trio{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:34px 0}
+.fig-trio .blog-figure{margin:0}
+.fig-trio .blog-figure .fig-media{aspect-ratio:3/4}
+.fig-trio .blog-figure figcaption{padding:10px 12px 12px}
+.fig-trio .blog-figure figcaption .fig-label{font-size:12px}
+.fig-trio .blog-figure figcaption .fig-desc{font-size:10.5px}
+@media(max-width:640px){.fig-trio{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -109,6 +126,14 @@ a{color:var(--terra-deep);text-decoration:underline;text-underline-offset:2px}
     <p>You tried it. It calmed things down for maybe fifteen minutes. Then the crying came back, at close to the same intensity as before, like the bottle had never happened. If that's roughly what you've seen, you're not doing anything wrong, and the product didn't fail because of bad luck. That pattern is exactly what the mechanism behind gripe water predicts.</p>
 
     <h2>What it claims versus what it actually does</h2>
+
+    <!-- IMAGE PROMPT for gripe-water-mechanism-pathway.jpg:
+    Premium pediatric medical editorial composition, 4:5 vertical, sophisticated clinical investigation aesthetic. Warm cream paper background (#FBF4EA tone), deep espresso-brown typography space, muted terracotta (#BC5A33) accents for the problem/warning element, sage green (#6C8759) accents for the resolved/correct element, occasional soft gold (#C0963F) for a neutral marker. Elegant serif editorial design, Scandinavian medical-journal sensibility, realistic newborn and parent photography blended with restrained scientific illustration where indicated. Minimal, premium, no childish graphics, no cartoon style, no logos, no watermark, no readable text on the image itself. Elegant vertical cause-and-effect pathway diagram in three stages, connected by thin directional lines: stage one shows a small realistic illustration of a dropper bottle near a newborn's mouth, stage two shows an abstract 'distraction' icon (a soft radiating burst, not literal), stage three shows the same newborn crying again, slightly faded/desaturated to suggest a returning baseline. Use terracotta for the full pathway to indicate the mechanism doesn't hold. No readable text or icons resembling clock faces with numbers.
+    -->
+    <figure class="blog-figure fig-wide">
+      <div class="fig-media" style="background-image:url('../images/blog/gripe-water-mechanism-pathway.jpg')"></div>
+      <figcaption><span class="fig-label">Why the calm doesn't hold</span><span class="fig-desc">Dose given → sensory distraction, not a physiological change → relief fades on a predictable timer.</span></figcaption>
+    </figure>
     <p>Gripe water is sold on the promise of digestive relief, something that calms an upset stomach directly. There is no randomized controlled trial showing that gripe water changes anything physiologically in the gut. The calm you saw was real, but the most likely explanation is sensory distraction, a new taste, a change in handling and attention during the dose, not an actual shift in whatever was producing the discomfort. Distraction works, briefly, on almost anything. It doesn't resolve an underlying cause, which is why it wears off on a predictable timer instead of holding.</p>
 
     <h2>What "no evidence" actually means, holding a screaming baby at midnight</h2>
@@ -127,8 +152,8 @@ a{color:var(--terra-deep);text-decoration:underline;text-underline-offset:2px}
 
     <div class="cta-default">
       <h3>Get tonight's protocol, not another product to try</h3>
-      <p>The free Midnight Emergency Checklist walks through the nervous-system and gut-pressure sequences step by step, for right now.</p>
-      <a href="../checklist.html">Get the Free Checklist →</a>
+      <p>The 90-second assessment sorts out which system is primary, then hands you straight into tonight's guided protocol.</p>
+      <a href="https://colicprotocol.baby/midnight-protocol?utm_source=website&utm_medium=blog_does_gripe_water_work" target="_blank" rel="noopener">Take the 90-Second Assessment →</a>
     </div>
   </article>
 </div>

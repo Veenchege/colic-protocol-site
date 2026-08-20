@@ -110,6 +110,23 @@ img{max-width:100%;display:block}
 .footer-links a{color:rgba(255,255,255,.46);font-size:13px;text-decoration:none}
 .footer-links a:hover{color:rgba(255,255,255,.85)}
 .footer-disc{font-size:11px;color:rgba(255,255,255,.24);width:100%;line-height:1.7;margin-top:16px;border-top:1px solid rgba(255,255,255,.07);padding-top:16px}
+.blog-figure{margin:34px 0;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border2);background:var(--card);box-shadow:var(--shadow)}
+.blog-figure .fig-media{width:100%;aspect-ratio:4/5;background:var(--paper-alt) center/cover no-repeat;background-color:var(--paper-alt)}
+.blog-figure.fig-wide .fig-media{aspect-ratio:16/10}
+.blog-figure figcaption{padding:14px 20px 16px;border-top:1px solid var(--border)}
+.blog-figure figcaption .fig-label{display:block;font-family:var(--sans);font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.blog-figure figcaption .fig-desc{display:block;font-family:var(--mono);font-size:12px;color:var(--muted);line-height:1.6}
+.fig-pair{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:34px 0}
+.fig-pair .blog-figure{margin:0}
+.fig-pair .blog-figure .fig-media{aspect-ratio:1/1}
+@media(max-width:640px){.fig-pair{grid-template-columns:1fr}}
+.fig-trio{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:34px 0}
+.fig-trio .blog-figure{margin:0}
+.fig-trio .blog-figure .fig-media{aspect-ratio:3/4}
+.fig-trio .blog-figure figcaption{padding:10px 12px 12px}
+.fig-trio .blog-figure figcaption .fig-label{font-size:12px}
+.fig-trio .blog-figure figcaption .fig-desc{font-size:10.5px}
+@media(max-width:640px){.fig-trio{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -157,6 +174,14 @@ img{max-width:100%;display:block}
       <li><strong>Rock at roughly one motion per second,</strong> a slow, even rhythm, not a bounce. Consistency of rhythm matters more than the exact speed.</li>
     </ol>
 
+    <!-- IMAGE PROMPT for tiger-hold-position.jpg:
+    Premium pediatric medical editorial composition, 4:5 vertical, sophisticated clinical investigation aesthetic. Warm cream paper background (#FBF4EA tone), deep espresso-brown typography space, muted terracotta (#BC5A33) accents for the problem/warning element, sage green (#6C8759) accents for the resolved/correct element, occasional soft gold (#C0963F) for a neutral marker. Elegant serif editorial design, Scandinavian medical-journal sensibility, realistic newborn and parent photography blended with restrained scientific illustration where indicated. Minimal, premium, no childish graphics, no cartoon style, no logos, no watermark, no readable text on the image itself. Realistic photograph of a parent's forearm supporting a newborn face-down along its length, baby's head resting in the crook of the elbow and turned to the side with the airway clearly visible and unobstructed, the parent's other hand spread flat across the baby's back applying calm even pressure. Add a restrained sage-green annotation line indicating the 60bpm rhythmic motion path, and a small terracotta circle highlighting the head-turned-to-side airway detail. Soft warm natural light, close, intimate framing.
+    -->
+    <figure class="blog-figure">
+      <div class="fig-media" style="background-image:url('../images/blog/tiger-hold-position.jpg')"></div>
+      <figcaption><span class="fig-label">The correct Tiger Hold position</span><span class="fig-desc">Forearm support, head turned to the side, palm under the chest, even pressure across the back.</span></figcaption>
+    </figure>
+
     <div class="warn-box">
       <strong>Airway first, always.</strong> Her face should be turned to the side, never pressed straight down into your arm, and you should be able to see her face and confirm clear breathing throughout. If she seems more distressed in this position rather than less within the first thirty seconds or so, stop and try a different approach, this position doesn't suit every baby every time.
     </div>
@@ -170,6 +195,23 @@ img{max-width:100%;display:block}
     <p><strong>Gripping too tightly.</strong> The instinct when a baby is crying hard is to hold on firmly, but a tense, gripping hold transmits your own tension through touch, working against the calming effect you're going for. The pressure should be steady and even, not a tight squeeze.</p>
     <p><strong>Bouncing instead of rocking.</strong> A bounce is a fast, jarring motion. The mechanism here depends on a slow, even, predictable rhythm, since an erratic motion can add stimulation rather than settle it, which is closer to the acoustic-overload mistake than the nervous-system fix this hold is meant to be.</p>
 
+    
+    <div class="fig-pair">
+      <!-- IMAGE PROMPT for tiger-hold-error-tight-fast.jpg:
+      Premium pediatric medical editorial composition, 4:5 vertical, sophisticated clinical investigation aesthetic. Warm cream paper background (#FBF4EA tone), deep espresso-brown typography space, muted terracotta (#BC5A33) accents for the problem/warning element, sage green (#6C8759) accents for the resolved/correct element, occasional soft gold (#C0963F) for a neutral marker. Elegant serif editorial design, Scandinavian medical-journal sensibility, realistic newborn and parent photography blended with restrained scientific illustration where indicated. Minimal, premium, no childish graphics, no cartoon style, no logos, no watermark, no readable text on the image itself. LEFT-style single panel: realistic photograph of a parent's hands holding a newborn in the Tiger Hold position but with visibly tense, gripping fingers and slightly hunched, rigid shoulders suggesting a fast jarring motion. Use terracotta as the single accent color, a subtle motion-blur or sharp directional arrow behind the hand to suggest a too-fast bounce.
+      -->
+      <figure class="blog-figure">
+        <div class="fig-media" style="background-image:url('../images/blog/tiger-hold-error-tight-fast.jpg')"></div>
+        <figcaption><span class="fig-label">Gripping tight, bouncing fast</span><span class="fig-desc">Tension transmits through touch. A jarring bounce adds stimulation instead of settling it.</span></figcaption>
+      </figure>
+      <!-- IMAGE PROMPT for tiger-hold-error-steady-even.jpg:
+      Premium pediatric medical editorial composition, 4:5 vertical, sophisticated clinical investigation aesthetic. Warm cream paper background (#FBF4EA tone), deep espresso-brown typography space, muted terracotta (#BC5A33) accents for the problem/warning element, sage green (#6C8759) accents for the resolved/correct element, occasional soft gold (#C0963F) for a neutral marker. Elegant serif editorial design, Scandinavian medical-journal sensibility, realistic newborn and parent photography blended with restrained scientific illustration where indicated. Minimal, premium, no childish graphics, no cartoon style, no logos, no watermark, no readable text on the image itself. RIGHT-style single panel: the same Tiger Hold position, but with visibly relaxed open fingers, calm rounded shoulders, and a slow steady rhythm suggested by a soft, evenly spaced sage-green dotted motion path beneath the parent's arm.
+      -->
+      <figure class="blog-figure">
+        <div class="fig-media" style="background-image:url('../images/blog/tiger-hold-error-steady-even.jpg')"></div>
+        <figcaption><span class="fig-label">Steady, even, calm</span><span class="fig-desc">One motion per second. Consistency of rhythm matters more than speed.</span></figcaption>
+      </figure>
+    </div>
     <h2>What to expect, and what not to</h2>
     <p>For a baby whose primary system is nervous system dysregulation, this hold often produces a noticeable settling within the first one to two minutes, though the crying may restart once you stop, since the hold is providing external regulation a still-developing nervous system can't yet provide for itself. That's expected, not a sign it isn't working, consistency over the following days is what actually trains the underlying system, not any single successful hold.</p>
     <p>For a baby whose primary system is gut-driven, this hold may ease things somewhat through the abdominal pressure component, but it is not a substitute for addressing the underlying gut microbiome imbalance directly. Treating this hold as the complete fix for a gut-primary presentation is a common way it ends up feeling like "it worked for a few minutes and then stopped."</p>

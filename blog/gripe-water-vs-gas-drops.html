@@ -83,6 +83,23 @@ a{color:var(--terra-deep);text-decoration:underline;text-underline-offset:2px}
 .footer-links a{color:rgba(255,255,255,.46);font-size:13px;text-decoration:none}
 .footer-links a:hover{color:rgba(255,255,255,.85)}
 .footer-disc{font-size:11px;color:rgba(255,255,255,.24);width:100%;line-height:1.7;margin-top:16px;border-top:1px solid rgba(255,255,255,.07);padding-top:16px}
+.blog-figure{margin:34px 0;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border2);background:var(--card);box-shadow:var(--shadow)}
+.blog-figure .fig-media{width:100%;aspect-ratio:4/5;background:var(--paper-alt) center/cover no-repeat;background-color:var(--paper-alt)}
+.blog-figure.fig-wide .fig-media{aspect-ratio:16/10}
+.blog-figure figcaption{padding:14px 20px 16px;border-top:1px solid var(--border)}
+.blog-figure figcaption .fig-label{display:block;font-family:var(--sans);font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.blog-figure figcaption .fig-desc{display:block;font-family:var(--mono);font-size:12px;color:var(--muted);line-height:1.6}
+.fig-pair{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:34px 0}
+.fig-pair .blog-figure{margin:0}
+.fig-pair .blog-figure .fig-media{aspect-ratio:1/1}
+@media(max-width:640px){.fig-pair{grid-template-columns:1fr}}
+.fig-trio{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:34px 0}
+.fig-trio .blog-figure{margin:0}
+.fig-trio .blog-figure .fig-media{aspect-ratio:3/4}
+.fig-trio .blog-figure figcaption{padding:10px 12px 12px}
+.fig-trio .blog-figure figcaption .fig-label{font-size:12px}
+.fig-trio .blog-figure figcaption .fig-desc{font-size:10.5px}
+@media(max-width:640px){.fig-trio{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -117,6 +134,23 @@ a{color:var(--terra-deep);text-decoration:underline;text-underline-offset:2px}
     <h2>The false binary</h2>
     <p>Comparing two products assumes both are legitimate contenders and the only job left is picking the better one. That assumption doesn't survive contact with the actual research record. Neither gripe water nor simethicone gas drops has ever passed a randomized controlled trial for infant colic. Not "the trials were mixed." Not "more research is needed." The rigorous trial evidence for both products, individually, does not show a benefit over placebo. Comparing them head to head is comparing two products that haven't demonstrated they work at all, which makes the comparison itself the wrong exercise.</p>
 
+    
+    <div class="fig-pair">
+      <!-- IMAGE PROMPT for gripe-water-no-evidence.jpg:
+      Premium pediatric medical editorial composition, 4:5 vertical, sophisticated clinical investigation aesthetic. Warm cream paper background (#FBF4EA tone), deep espresso-brown typography space, muted terracotta (#BC5A33) accents for the problem/warning element, sage green (#6C8759) accents for the resolved/correct element, occasional soft gold (#C0963F) for a neutral marker. Elegant serif editorial design, Scandinavian medical-journal sensibility, realistic newborn and parent photography blended with restrained scientific illustration where indicated. Minimal, premium, no childish graphics, no cartoon style, no logos, no watermark, no readable text on the image itself. Realistic still-life photograph of a gripe water bottle and dropper beside a fussy newborn, softly desaturated, single restrained terracotta 'no evidence' marker (a simple outlined circle with a horizontal line through it, not a literal X icon, no text) positioned near the bottle.
+      -->
+      <figure class="blog-figure">
+        <div class="fig-media" style="background-image:url('../images/blog/gripe-water-no-evidence.jpg')"></div>
+        <figcaption><span class="fig-label">Gripe water</span><span class="fig-desc">Zero RCTs showing efficacy versus placebo. Relief is brief sensory distraction.</span></figcaption>
+      </figure>
+      <!-- IMAGE PROMPT for gas-drops-no-evidence.jpg:
+      Premium pediatric medical editorial composition, 4:5 vertical, sophisticated clinical investigation aesthetic. Warm cream paper background (#FBF4EA tone), deep espresso-brown typography space, muted terracotta (#BC5A33) accents for the problem/warning element, sage green (#6C8759) accents for the resolved/correct element, occasional soft gold (#C0963F) for a neutral marker. Elegant serif editorial design, Scandinavian medical-journal sensibility, realistic newborn and parent photography blended with restrained scientific illustration where indicated. Minimal, premium, no childish graphics, no cartoon style, no logos, no watermark, no readable text on the image itself. Realistic still-life photograph of a simethicone gas-drops bottle beside a fussy newborn, softly desaturated, matching restrained terracotta 'no evidence' marker near the bottle, visually paired to the gripe water panel as two equally unproven products, not a winner-versus-loser framing.
+      -->
+      <figure class="blog-figure">
+        <div class="fig-media" style="background-image:url('../images/blog/gas-drops-no-evidence.jpg')"></div>
+        <figcaption><span class="fig-label">Gas drops</span><span class="fig-desc">Cochrane review found no statistically significant benefit over placebo.</span></figcaption>
+      </figure>
+    </div>
     <h2>Gripe water: what it claims, and what the trial record actually shows</h2>
     <p>Gripe water is marketed as a digestive settler, something that calms an upset stomach and reduces gas. There is no randomized controlled trial demonstrating that effect. The calm that follows a dose is real, parents aren't imagining it, but the mechanism is almost certainly sensory distraction, a new taste, a change in position and attention during administration, not a physiological change in the gut. That's why the calm tends to run fifteen to thirty minutes and then the crying resumes at roughly the same intensity as before. The product interrupted the moment. It didn't change the underlying driver.</p>
 
@@ -132,6 +166,14 @@ a{color:var(--terra-deep);text-decoration:underline;text-underline-offset:2px}
     <p>Colic isn't produced by one mechanism. The crying you're seeing tonight is most often driven by one of three overlapping systems: a gut microbiome imbalance producing inflammation and fermentation, nervous system dysregulation that has nothing to do with digestion at all, or acoustic and sensory overload from an environment that's more stimulating than a still-immature nervous system can process. Gripe water and gas drops, even in the most generous reading of their intended function, address only a mechanical symptom that sits downstream of, at most, one of those three systems. If gas was never the primary driver, no amount of gas-targeted intervention was going to resolve much.</p>
 
     <h2>What the actual research points toward</h2>
+
+    <!-- IMAGE PROMPT for probiotic-strain-vs-symptom-products.jpg:
+    Premium pediatric medical editorial composition, 4:5 vertical, sophisticated clinical investigation aesthetic. Warm cream paper background (#FBF4EA tone), deep espresso-brown typography space, muted terracotta (#BC5A33) accents for the problem/warning element, sage green (#6C8759) accents for the resolved/correct element, occasional soft gold (#C0963F) for a neutral marker. Elegant serif editorial design, Scandinavian medical-journal sensibility, realistic newborn and parent photography blended with restrained scientific illustration where indicated. Minimal, premium, no childish graphics, no cartoon style, no logos, no watermark, no readable text on the image itself. Elegant comparison diagram, three small still-life product vignettes arranged left to right: gripe water bottle and gas-drops bottle rendered in muted terracotta with a faint downward arrow beneath each (declining evidence weight), a probiotic drop bottle rendered in sage green with a distinct upward arrow beneath it (stronger evidence weight). Clean editorial layout, no readable brand names or text.
+    -->
+    <figure class="blog-figure fig-wide">
+      <div class="fig-media" style="background-image:url('../images/blog/probiotic-strain-vs-symptom-products.jpg')"></div>
+      <figcaption><span class="fig-label">Where the real evidence actually points</span><span class="fig-desc">Gut-targeted, strain-specific intervention outperforms mechanical, symptom-chasing products.</span></figcaption>
+    </figure>
     <p>Where there is real trial evidence in this space, it points somewhere different entirely. Savino et al. (Pediatrics, 2010) found a specific probiotic strain, in a study of exclusively breastfed infants, produced a significant reduction in daily crying time over three weeks, a genuinely different evidence tier than anything gripe water or gas drops has produced. Broader systematic reviews since then, Ellwood, Draper-Rodi and Carnes (BMJ Open, 2020) and Hjern, Lindblom, Reuter and Silfverdal (Acta Paediatrica, 2020), have reinforced that gut-targeted, evidence-based intervention outperforms the mechanical, symptom-chasing approach that gripe water and gas drops both represent. None of that is a reason to assume gut is your baby's driver specifically, only a reason to notice that the research keeps pointing toward diagnosing the system first, not toward either product on your pharmacy shelf.</p>
 
     <h2>Before you try another product</h2>
