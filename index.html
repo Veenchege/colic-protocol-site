@@ -137,7 +137,7 @@ p{font-size:15.5px;line-height:1.75;color:var(--muted)}
 .pos-band h2{color:rgba(255,255,255,.95);margin-bottom:16px}
 .pos-band h2 em{color:var(--gold)}
 .pos-band p{color:rgba(255,255,255,.62);margin-bottom:22px}
-.pos-img{border-radius:14px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.35);aspect-ratio:4/5;object-fit:cover;object-position:top center}
+.pos-img{border-radius:14px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.35);aspect-ratio:4/5;object-fit:contain;object-position:center;background:var(--paper-alt)}
 /* problem cards */
 .prob-sec{background:var(--paper)}
 .prob-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:18px}
@@ -150,7 +150,7 @@ p{font-size:15.5px;line-height:1.75;color:var(--muted)}
 @media(max-width:860px){.sys-grid{grid-template-columns:1fr}}
 .sys-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:transform .2s,box-shadow .2s}
 .sys-card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
-.sys-img{width:100%;aspect-ratio:4/5;object-fit:cover;object-position:top center}
+.sys-img{width:100%;aspect-ratio:4/5;object-fit:contain;object-position:center;background:var(--paper-alt)}
 .sys-bar{height:4px}
 .sys-gut .sys-bar{background:var(--terra)} .sys-nerv .sys-bar{background:var(--sage)} .sys-acou .sys-bar{background:var(--gold)} .sys-feed .sys-bar{background:#5A7FA6}
 .sys-b{padding:22px 20px}
@@ -191,7 +191,7 @@ p{font-size:15.5px;line-height:1.75;color:var(--muted)}
 .cite-card .cite-name{font-family:var(--mono);font-size:11px;color:var(--muted2);letter-spacing:.02em;display:block;margin-bottom:6px}
 .cite-card p{font-size:14px;margin:0}
 .sci-imgs{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.sci-imgs img{border-radius:12px;box-shadow:var(--shadow);aspect-ratio:3/4;object-fit:cover;object-position:top center}
+.sci-imgs img{border-radius:12px;box-shadow:var(--shadow);aspect-ratio:3/4;object-fit:contain;object-position:center;background:var(--paper-alt)}
 .scope-note{background:var(--card);border:1px solid var(--border2);border-radius:var(--radius);padding:22px 24px;margin-top:18px}
 .scope-note h4{font-family:var(--serif);font-size:16px;color:var(--ink);margin-bottom:8px}
 .scope-note p{font-size:13.5px}
@@ -227,7 +227,7 @@ p{font-size:15.5px;line-height:1.75;color:var(--muted)}
 .guar-sec{background:var(--paper)}
 .guar-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
 @media(max-width:860px){.guar-grid{grid-template-columns:1fr}}
-.guar-img{border-radius:14px;box-shadow:var(--shadow);aspect-ratio:4/5;object-fit:cover;object-position:top center}
+.guar-img{border-radius:14px;box-shadow:var(--shadow);aspect-ratio:4/5;object-fit:contain;object-position:center;background:var(--paper-alt)}
 .guar-list{list-style:none;display:flex;flex-direction:column;gap:12px;margin:20px 0}
 .guar-list li{display:flex;gap:10px;font-size:14.5px;color:var(--ink-soft)}
 .guar-list li::before{content:'✓';color:var(--sage);font-weight:700;flex-shrink:0}
@@ -489,7 +489,7 @@ p{font-size:15.5px;line-height:1.75;color:var(--muted)}
   <div class="wrap">
     <div class="section-header rv">
       <span class="eyebrow">What Actually Happens in 90 Seconds</span>
-      <h2 id="step-h2">No email required to start. No sales pitch in between.</h2>
+      <h2 id="step-h2">Free to start. Your email unlocks tonight's 3 steps.</h2>
     </div>
     <div class="step-grid">
       <div class="step-card rv">
@@ -514,7 +514,7 @@ p{font-size:15.5px;line-height:1.75;color:var(--muted)}
       </div>
     </div>
     <div style="text-align:center">
-      <img src="images/assessment-diagram.jpg" alt="What's behind the 90-second assessment: weighted scoring across gut, nervous system, and feeding mechanics" style="max-width:360px;border-radius:14px;box-shadow:var(--shadow);margin:8px auto 0;aspect-ratio:4/5;object-fit:cover;object-position:top center">
+      <img src="images/assessment-diagram.jpg" alt="What's behind the 90-second assessment: weighted scoring across gut, nervous system, and feeding mechanics" style="max-width:360px;border-radius:14px;box-shadow:var(--shadow);margin:8px auto 0;aspect-ratio:4/5;object-fit:contain;object-position:center;background:var(--paper-alt)">
     </div>
   </div>
 </section>

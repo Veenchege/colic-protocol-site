@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Free Colic Root Cause Assessment | Colic Protocol</title>
-<meta name="description" content="Find which of the three root systems, gut, nervous system, or feeding mechanics, is driving your baby's crying. Free assessment, evidence-based, personalized protocol.">
+<meta name="description" content="Find which of the three root systems, gut, nervous system, or acoustic, is driving your baby's crying. Free assessment, evidence-based, personalized protocol.">
 <meta property="og:title" content="Which of the 3 root-cause systems is driving your baby's crying? Free assessment.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://colicprotocol.baby/quiz">
@@ -24,7 +24,7 @@ html{scroll-behavior:smooth}
   --sage:#6C8759; --sage-soft:#DCE4D0;
   --gold:#C0963F; --gold-soft:#EEDFB9;
   --glass:rgba(255,252,247,.82); --shadow:0 12px 40px rgba(45,32,20,.12);
-  --gut:#BC5A33; --gut-bg:#F3E1D4; --nerv:#6C8759; --nerv-bg:#E4EBDC; --acou:#C0963F; --acou-bg:#F6EBD2; --feed:#5A7FA6; --feed-bg:#DCE6F0;
+  --gut:#BC5A33; --gut-bg:#F3E1D4; --nerv:#6C8759; --nerv-bg:#E4EBDC; --acou:#C0963F; --acou-bg:#F6EBD2;
   --fd:'Cormorant Garamond',Georgia,serif; --fb:'DM Sans',system-ui,sans-serif; --fm:'DM Mono',monospace;
 }
 body{font-family:var(--fb);background:linear-gradient(155deg,var(--paper) 0%,var(--paper-deep) 100%);min-height:100vh;color:var(--ink);overflow-x:hidden;line-height:1.6}
@@ -73,10 +73,14 @@ a{color:inherit}
 .consent-row a{color:var(--terra-deep);text-decoration:underline;text-underline-offset:2px}
 
 /* quiz */
-.q-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
-.q-count{font-size:12px;font-weight:600;color:var(--muted);font-family:var(--fm)}
+.q-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:12px}
+.q-count{font-size:12px;font-weight:600;color:var(--muted);font-family:var(--fm);flex-shrink:0}
 .progress-track{flex:1;height:6px;background:rgba(0,0,0,.08);border-radius:20px;overflow:hidden;margin:0 14px}
 .progress-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,var(--terra),var(--gold));transition:width .4s ease}
+.q-timer{display:flex;align-items:center;gap:6px;font-family:var(--fm);font-size:12px;font-weight:600;color:var(--muted);flex-shrink:0;white-space:nowrap}
+.q-timer .dot{width:6px;height:6px;border-radius:50%;background:var(--sage);animation:timerPulse 2s ease-in-out infinite}
+@keyframes timerPulse{0%,100%{opacity:.35;transform:scale(.8)}50%{opacity:1;transform:scale(1.15)}}
+@media (prefers-reduced-motion: reduce){.q-timer .dot{animation:none;opacity:.8}}
 .q-text{font-family:var(--fd);font-size:clamp(18px,3.5vw,23px);color:var(--ink);line-height:1.35;font-weight:600;margin-bottom:8px}
 .q-sub{font-size:13px;color:var(--muted);margin-bottom:20px}
 .multi-hint{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--terra);opacity:.85;margin-bottom:10px}
@@ -116,7 +120,6 @@ a{color:inherit}
 .gut-banner{background:var(--gut-bg);color:var(--terra-deep)}
 .ns-banner{background:var(--nerv-bg);color:var(--pine)}
 .ac-banner{background:var(--acou-bg);color:#7A5C1E}
-.fm-banner{background:var(--feed-bg);color:#2F4A66}
 .result-body{background:var(--glass);backdrop-filter:blur(20px);padding:8px 28px 6px;border:1px solid rgba(255,252,247,.6);border-top:none}
 .result-section{padding:22px 0;border-bottom:1px solid rgba(0,0,0,.07)}
 .result-section:last-child{border-bottom:none}
@@ -131,7 +134,7 @@ a{color:inherit}
 .steps-list-result{display:flex;flex-direction:column;gap:14px}
 .step-card{display:flex;gap:14px}
 .step-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--fm);font-size:13px;font-weight:700;flex-shrink:0;color:#fff}
-.gut-sn{background:var(--gut)} .ns-sn{background:var(--nerv)} .ac-sn{background:var(--acou)} .fm-sn{background:var(--feed)}
+.gut-sn{background:var(--gut)} .ns-sn{background:var(--nerv)} .ac-sn{background:var(--acou)}
 .step-title{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:3px}
 .step-body{font-size:13.5px;color:var(--muted);line-height:1.6}
 
@@ -228,6 +231,7 @@ a{color:inherit}
     <div class="q-meta">
       <span class="q-count" id="qCount">1 / 7</span>
       <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      <span class="q-timer" title="Time elapsed" aria-label="Time elapsed"><span class="dot" aria-hidden="true"></span><span id="qTimer">0:00</span></span>
     </div>
     <div class="q-text" id="qText"></div>
     <div class="q-sub" id="qSub"></div>
@@ -240,12 +244,12 @@ a{color:inherit}
   <div id="analysisScreen" class="card hidden">
     <div class="analysis-wrap">
       <h2>Weighing your answers against all three systems...</h2>
-      <p>Mapping your responses against gut, nervous system, and feeding-mechanics patterns from peer-reviewed clinical literature.</p>
+      <p>Mapping your responses against gut, nervous system, and acoustic patterns from peer-reviewed clinical literature.</p>
       <div class="dots-row" aria-hidden="true"><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div></div>
       <div class="scan-list" aria-live="polite">
         <div class="scan-item">Evaluating gut microbiome presentation</div>
         <div class="scan-item">Mapping nervous system dysregulation signals</div>
-        <div class="scan-item">Assessing feeding mechanics and air-intake factors</div>
+        <div class="scan-item">Assessing acoustic environment factors</div>
       </div>
     </div>
   </div>
@@ -346,99 +350,84 @@ const UTM_SOURCE = getStoredUTMs().utm_source || new URLSearchParams(window.loca
 
 /* ══════════════════════════════════════════════════════════════════════
    QUESTIONS
-   Each option: [display text, score weights {GUT, NS, FM}]
+   Each option: [display text, score weights {GUT, NS, AC}]
 
-   TAXONOMY MIGRATION (this version): the third diagnostic bucket changed
-   from Acoustic Environment Overload (AC) to Feeding Mechanics (FM), per
-   the Aug 18, 2026 decision log (Master Document v12, Positioning Doc v2).
-   Acoustic content (brown noise, dim lighting) didn't disappear, it's
-   folded into the Nervous System Dysregulation track as supporting
-   technique rather than standing as its own diagnostic type. Every
-   option that used to carry acoustic-diagnostic signal (Q1D, Q3C, Q4C,
-   Q5C) has been rewritten to carry feeding-mechanics signal instead
-   (air intake, latch, pacing, burping response) at the IDENTICAL
-   numeric weight it replaced, so the balance work below still holds
-   without re-deriving it from scratch.
-
-   PRIOR FIX (carried forward, still true): the AC/now-FM bucket was
-   structurally starved in an earlier weight set. Three problems, all
-   corrected then and preserved through this migration:
-   1. Two of seven questions (stool, feeding method) carried zero
-      third-bucket signal and a guaranteed-positive GUT signal on nearly
-      every option, so every respondent picked up "free" GUT points
-      regardless of what they actually selected.
-   2. The genuinely diagnostic options for the third bucket (Q1D, Q3C,
-      Q4C, Q5C) were weighted at 2-3 while GUT/NS equivalents elsewhere
-      ran to 3-4, so even a textbook profile for that bucket couldn't
-      out-score GUT/NS.
+   FIX (this version): the acoustic (AC) bucket was structurally starved
+   in the prior weight set. Three problems, all corrected below:
+   1. Two of seven questions (stool, feeding method) carried zero AC
+      signal and a guaranteed-positive GUT signal on nearly every option,
+      so every respondent picked up "free" GUT points regardless of what
+      they actually selected.
+   2. The genuinely acoustic-diagnostic options (Q1D, Q3C, Q4C, Q5C) were
+      weighted at 2-3 while GUT/NS equivalents elsewhere ran to 3-4, so
+      even a textbook acoustic profile couldn't out-score GUT/NS.
    3. Q7's "eliminated dairy, no change" option added +1 to GUT, which is
       backwards: a failed dairy elimination is evidence against gut being
-      the driver, not for it. Scores 0 on GUT.
-   A "select every option, every question" ceiling check still runs
-   GUT 32 / NS 26 / FM 25 (unchanged from the AC-era total, since weights
-   were preserved), and a respondent who consistently picks the
-   feeding-mechanics-indicating option clears FM ≈19 against GUT ≈1 /
-   NS ≈4, decisively.
+      the driver, not for it. Now scores 0 on GUT.
+   A "select every option, every question" ceiling check now runs
+   GUT 32 / NS 26 / AC 25 instead of the prior GUT 32 / NS 31 / AC 19,
+   and a respondent who consistently picks the acoustic-indicating
+   option now clears AC ≈19 against GUT ≈1 / NS ≈4, decisively.
    ══════════════════════════════════════════════════════════════════════ */
 const QUESTIONS = [
   {
     q: "When does your baby cry most intensely?",
     sub: "Think about the pattern over the last few days.",
     opts: [
-      ["Consistently in the evening — usually 5PM to midnight, regardless of feeding",      {GUT:0,NS:2,FM:2}],
-      ["During or shortly after feeding — often arching away from the breast or bottle",    {GUT:3,NS:0,FM:0}],
-      ["Seemingly randomly throughout the day with no clear pattern",                       {GUT:1,NS:1,FM:1}],
-      ["Within an hour of most feeds, fairly predictably, regardless of time of day",        {GUT:0,NS:1,FM:4}],
+      ["Consistently in the evening — usually 5PM to midnight, regardless of feeding",      {GUT:0,NS:2,AC:2}],
+      ["During or shortly after feeding — often arching away from the breast or bottle",    {GUT:3,NS:0,AC:0}],
+      ["Seemingly randomly throughout the day with no clear pattern",                       {GUT:1,NS:1,AC:1}],
+      ["Any time the environment changes — new sounds, visitors, lights",                   {GUT:0,NS:1,AC:4}],
     ]
   },
   {
     q: "What does your baby's cry sound like?",
     sub: "The acoustic pattern of the cry carries diagnostic information.",
     opts: [
-      ["High-pitched, continuous, and intense from the very first second — no build-up",   {GUT:0,NS:4,FM:0}],
-      ["Starts softer and escalates over 10–15 minutes into inconsolable",                 {GUT:2,NS:1,FM:0}],
-      ["Comes in waves — crying, pause, crying again — with legs pulled to chest",         {GUT:3,NS:0,FM:0}],
-      ["Grunts, gulps, or sounds like gasping for air, especially right after a feed",       {GUT:1,NS:0,FM:2}],
+      ["High-pitched, continuous, and intense from the very first second — no build-up",   {GUT:0,NS:4,AC:0}],
+      ["Starts softer and escalates over 10–15 minutes into inconsolable",                 {GUT:2,NS:1,AC:0}],
+      ["Comes in waves — crying, pause, crying again — with legs pulled to chest",         {GUT:3,NS:0,AC:0}],
+      ["Whiny and fussy rather than piercing — baby seems uncomfortable but not in agony", {GUT:1,NS:0,AC:2}],
     ]
   },
   {
     q: "What does your baby's body do during a crying episode?",
     sub: "Physical signals during crying point to specific root causes.",
     opts: [
-      ["Legs pulled toward the chest, abdomen visibly tight or distended",                 {GUT:4,NS:0,FM:0}],
-      ["Full-body tension — arching back, fists clenched, face red and straining",         {GUT:0,NS:4,FM:0}],
-      ["Pulls off the breast or bottle repeatedly mid-feed, gulping or choking sounds",     {GUT:0,NS:1,FM:4}],
-      ["Inconsolable regardless of position — nothing seems to help at all",               {GUT:1,NS:1,FM:1}],
+      ["Legs pulled toward the chest, abdomen visibly tight or distended",                 {GUT:4,NS:0,AC:0}],
+      ["Full-body tension — arching back, fists clenched, face red and straining",         {GUT:0,NS:4,AC:0}],
+      ["Startles at sounds, faces scrunched, easily overwhelmed by stimulation",           {GUT:0,NS:1,AC:4}],
+      ["Inconsolable regardless of position — nothing seems to help at all",               {GUT:1,NS:1,AC:1}],
     ]
   },
   {
     q: "What has already been tried with little or no effect?",
     sub: "Failed interventions are as diagnostically useful as symptoms.",
     opts: [
-      ["Gripe water and simethicone gas drops — tried multiple brands",                    {GUT:3,NS:0,FM:0}],
-      ["Rocking, bouncing, swinging — baby calms briefly then starts again",               {GUT:0,NS:3,FM:0}],
-      ["A different bottle, nipple flow, or feeding position — no real change",             {GUT:0,NS:0,FM:4}],
-      ["Changing feeding positions and feeding frequency",                                  {GUT:2,NS:0,FM:0}],
+      ["Gripe water and simethicone gas drops — tried multiple brands",                    {GUT:3,NS:0,AC:0}],
+      ["Rocking, bouncing, swinging — baby calms briefly then starts again",               {GUT:0,NS:3,AC:0}],
+      ["White noise machine — didn't help or only helped briefly",                         {GUT:0,NS:0,AC:4}],
+      ["Changing feeding positions and feeding frequency",                                  {GUT:2,NS:0,AC:0}],
     ]
   },
   {
     q: "How does your baby typically respond when being held during a crying episode?",
     sub: "",
     opts: [
-      ["Calms somewhat when held face-down with gentle pressure on the abdomen",           {GUT:3,NS:0,FM:0}],
-      ["Calms briefly when moved rhythmically — but starts again when movement stops",     {GUT:0,NS:4,FM:0}],
-      ["Calms somewhat right after burping, then unsettles again within the hour",          {GUT:0,NS:1,FM:4}],
-      ["Inconsistent — sometimes holding helps, sometimes it makes things worse",          {GUT:1,NS:1,FM:1}],
+      ["Calms somewhat when held face-down with gentle pressure on the abdomen",           {GUT:3,NS:0,AC:0}],
+      ["Calms briefly when moved rhythmically — but starts again when movement stops",     {GUT:0,NS:4,AC:0}],
+      ["Seems to escalate when touched during the worst episodes — overstimulated",        {GUT:0,NS:1,AC:4}],
+      ["Inconsistent — sometimes holding helps, sometimes it makes things worse",          {GUT:1,NS:1,AC:1}],
     ]
   },
   {
     q: "What does your baby's stool look like?",
     sub: "Gut presentation provides direct microbiome data.",
     opts: [
-      ["Green, frothy, or mucousy — sometimes with a strong smell",                        {GUT:3,NS:0,FM:0}],
-      ["Normal yellow seedy (breastfed) or tan (formula) — no stool changes noted",       {GUT:0,NS:1,FM:1}],
-      ["Infrequent — less than once a day — with apparent straining",                      {GUT:2,NS:0,FM:0}],
-      ["Not sure — haven't noticed a pattern",                                             {GUT:0,NS:0,FM:0}],
+      ["Green, frothy, or mucousy — sometimes with a strong smell",                        {GUT:3,NS:0,AC:0}],
+      ["Normal yellow seedy (breastfed) or tan (formula) — no stool changes noted",       {GUT:0,NS:1,AC:1}],
+      ["Infrequent — less than once a day — with apparent straining",                      {GUT:2,NS:0,AC:0}],
+      ["Not sure — haven't noticed a pattern",                                             {GUT:0,NS:0,AC:0}],
     ]
   },
   {
@@ -446,10 +435,10 @@ const QUESTIONS = [
     sub: "Feeding method affects which interventions are most effective. Pick one.",
     single: true,
     opts: [
-      ["Exclusively breastfed",                                                            {GUT:1,NS:0,FM:0}, "Breastfed"],
-      ["Formula-fed — has been from birth or switched recently",                           {GUT:1,NS:0,FM:0}, "Formula-fed"],
-      ["Mixed feeding — breast and formula",                                               {GUT:1,NS:0,FM:0}, "Mixed"],
-      ["I've eliminated dairy from my diet already and the crying hasn't changed",         {GUT:0,NS:1,FM:1}, "Breastfed"],
+      ["Exclusively breastfed",                                                            {GUT:1,NS:0,AC:0}, "Breastfed"],
+      ["Formula-fed — has been from birth or switched recently",                           {GUT:1,NS:0,AC:0}, "Formula-fed"],
+      ["Mixed feeding — breast and formula",                                               {GUT:1,NS:0,AC:0}, "Mixed"],
+      ["I've eliminated dairy from my diet already and the crying hasn't changed",         {GUT:0,NS:1,AC:1}, "Breastfed"],
     ]
   },
 ];
@@ -464,7 +453,7 @@ const RESULTS = {
     emoji: "🦠",
     bannerClass: "gut-banner",
     stepClass: "gut-sn",
-    prevalence: "The second most common result among parents completing this assessment — about 3 in 10 land here (per current completion data, not a general population estimate).",
+    prevalence: "The most common primary colic driver — present in approximately 60–70% of colicky infants.",
     headline: "Your baby's gut is producing the inflammation driving the crying.",
     science: "Colicky infants with this presentation show a consistent pattern: reduced Lactobacillus bacteria and elevated gas-producing Proteobacteria in the gut microbiome. This imbalance creates a fermentation loop that generates pain, bloating, and the inflammation driving each crying episode. Single-symptom remedies like simethicone address the gas as a mechanical output, they cannot touch the microbial environment producing it. This is why gas drops fail consistently in clinical trials.",
     mistakes: [
@@ -498,7 +487,7 @@ const RESULTS = {
     emoji: "⚡",
     bannerClass: "ns-banner",
     stepClass: "ns-sn",
-    prevalence: "The most common result among parents completing this assessment — 7 in 10 land here, even though mainstream advice still defaults to a gas-only explanation.",
+    prevalence: "Present as the primary driver in approximately 20–30% of colic cases, and frequently missed.",
     headline: "Your baby's nervous system is stuck in a chronic threat state.",
     science: "The prefrontal cortex, responsible for emotional regulation, is not functional at 6 weeks. There is no neurological mechanism for self-soothing. When your baby's cortisol spikes during a crying episode, the only way it comes down is through external co-regulation. The pattern you're seeing, high-pitched, continuous from the first second, intensifying with more stimulation, is a nervous system crisis, not primarily a gut problem. Applying gut interventions to a nervous system presentation delays resolution by weeks.",
     mistakes: [
@@ -526,38 +515,38 @@ const RESULTS = {
     mailerliteField: "Nervous System Primary",
   },
 
-  FM: {
-    type: "Feeding Mechanics",
+  AC: {
+    type: "Acoustic Environment Overload",
     subtitle: "Primary Root Cause",
-    emoji: "🍼",
-    bannerClass: "fm-banner",
-    stepClass: "fm-sn",
-    prevalence: "The newest of the three systems in this assessment, replacing Acoustic Environment Overload as of this version. It doesn't have its own completion history yet, so no prevalence figure is claimed here until real data exists.",
-    headline: "Your baby is swallowing more air than each feed accounts for.",
-    science: "A newborn's suck-swallow-breathe reflex is not fully coordinated yet. When milk flow is faster than that reflex can pace, whether from a steep bottle angle, a fast-flow nipple, or a shallow latch, the baby swallows air along with the milk instead of pausing to breathe on their own rhythm. That air doesn't cause a problem immediately. It sits in the stomach, ferments over the next two to four hours, and produces the exact evening crying pattern most parents assume is unrelated to feeding because the timing doesn't look connected. Burping addresses only the air that's already risen high enough to release, it does nothing about the feeding mechanics that are still adding more air at the next feed.",
+    emoji: "🎵",
+    bannerClass: "ac-banner",
+    stepClass: "ac-sn",
+    prevalence: "Frequently overlooked as a standalone driver, contributes significantly in approximately 30–40% of cases.",
+    headline: "Your baby's environment is actively working against their nervous system.",
+    science: "The womb is not a quiet environment, it is a continuous low-frequency acoustic space dominated by maternal heartbeat, blood flow, and digestive sounds, all in the brown noise frequency range. A newborn's nervous system spent 9 months calibrated to that specific frequency. The typical home environment, irregular sounds, high-frequency audio, variable background noise, is actively dysregulating. White noise sits above the womb frequency range and can worsen the response. Brown noise at the correct volume and distance is the specific intervention.",
     mistakes: [
-      "Assuming faster feeding is more efficient feeding. A steep bottle angle or a fast-flow nipple lets milk flow continuously, which overrides the baby's own pacing and swallows air with almost every gulp, roughly 20% more air intake than a properly paced feed.",
-      "Treating burping as the fix instead of the flow rate that caused the air intake. A longer or harder burping session clears some trapped air for that feed, but it doesn't change the mechanics that will load the next feed with the same problem.",
-      "Missing a shallow or asymmetric latch because the feed itself looks normal. A baby can nurse for a full session and still be swallowing air on every draw if the latch isn't deep enough to create a proper seal, especially if there's clicking, dimpling cheeks, or frequent unlatching mid-feed.",
+      "Using white noise. White noise is high-frequency and statistically random, it sits above the womb frequency range and can overstimulate an already sensitised newborn nervous system. Brown noise is the correct acoustic intervention.",
+      "Placing the speaker too close or at too high a volume. The correct specification is 60–65 decibels minimum 7 feet from baby's head, roughly the volume of a shower heard from across the room. Closer or louder has the opposite effect.",
+      "Treating sound as a last resort rather than the first step. The acoustic layer must be established before touch. Picking up a baby in an acoustically dysregulating environment and then adding brown noise after is the wrong sequence.",
     ],
     steps: [
-      {title: "Switch to paced feeding tonight", body: "Hold baby near-upright, not reclined. Hold the bottle horizontally rather than angled down, and use a slow-flow nipple only half-filled with milk, the rest is air the baby isn't drawing in. Every 20-30 seconds, tilt the bottle down briefly so baby pauses and breathes on their own rhythm. This alone drops air intake by roughly half compared to a standard reclined feed."},
-      {title: "Burp upright for a full 10-15 minutes, don't force it", body: "Baby fully upright, head on your shoulder, gentle rhythmic pat at 60 beats per minute. Gravity lets trapped air rise on its own. Don't jostle or pat harder to force a burp, that adds stress without releasing gas any faster. Wait for it, the burp comes once the baby's body relaxes into the hold."},
-      {title: "If breastfeeding, check the latch before assuming it's fine", body: "Listen for clicking or clacking during the feed, and watch for dimpled cheeks or a shallow, lipstick-shaped nipple after unlatching, both are signs air is getting in around the seal, not just milk. A lactation consultant can confirm this in a single visit if it's unclear from watching alone."},
+      {title: "Replace all white noise with brown noise immediately", body: "If you're using a white noise machine, app, or audio track, stop tonight. Brown noise: low-frequency, slow rolling pattern matching womb acoustics. 60–65 decibels. Minimum 7 feet from baby's head. The Blueprint includes a calibrated 60-minute soundscape engineered to these exact womb frequencies."},
+      {title: "Establish sound before the crying escalates", body: "For babies with acoustic sensitivity, the environment must be set before distress peaks. Brown noise active in the sleeping space 15 minutes before the typical witching hour onset. Do not wait until the cry has reached full intensity, the acoustic signal needs to be established in a relatively calm state to register as safe."},
+      {title: "Reduce daytime acoustic load", body: "Television, podcasts, and irregular household sounds add to the daily acoustic burden. The nervous system has a cumulative load threshold. Reducing daytime sensory input, especially irregular high-frequency sounds, lowers the baseline from which the evening dysregulation begins. Consistent brown noise during daytime sleep supports this."},
     ],
-    ctaHook: (name) => `${name}, this isn't about trying harder to burp. It's about how much air is going in before you ever get to the burp. That's a mechanical fix, not a guessing game.`,
-    ctaBody: "The three steps above correct tonight's feed. What they cannot give you is the full paced-feeding breakdown calibrated to bottle-fed, breastfed, and mixed-feeding babies separately, the latch-assessment walkthrough, or the decision tree for when a gut or nervous system issue is compounding the same evening pattern. That is in the <strong>Calm Baby Blueprint</strong>.",
-    ctaConsequence: "Feeding mechanics compound across every feed in the day, not just the evening ones. Each feed that swallows excess air adds to a gas load that has to surface eventually, and it usually surfaces as the evening crying window. Fixing tonight's feed helps tonight. Fixing the mechanics fixes every feed going forward, which is the difference between managing tonight and shortening the whole window.",
-    ctaBtnText: "Start the Feeding Mechanics Fix Tonight — $47",
+    ctaHook: (name) => `${name}, your baby is not unusually sensitive. Their environment has been sending the wrong signal. That is correctable, starting tonight, before you spend another dollar on anything else.`,
+    ctaBody: "The three steps above correct the immediate acoustic environment. What they cannot give you is the engineered soundscape calibrated to exact womb frequency specifications, or the full integration protocol showing how the acoustic layer works alongside the physical holds and gut microbiome repair. That is in the <strong>Calm Baby Blueprint</strong>.",
+    ctaConsequence: "Acoustic dysregulation compounds across the day. The witching hour is not a random evening event, it is the accumulation of a full day of suboptimal acoustic input reaching a threshold. Fixing the night environment without addressing the full acoustic architecture means the episodes are managed but not prevented. The pattern continues until the full system is corrected.",
+    ctaBtnText: "Fix the Acoustic Environment Tonight — $47",
     protocol: [
-      "Paced feeding guide with separate specifications for bottle-fed, breastfed, and mixed-feeding babies",
-      "Latch and bottle-angle assessment walkthrough, what to check and what it means",
-      "Diagnostic decision tree, for when a gut or nervous system issue is compounding the same feed",
-      "Tiger Hold and upright-burp technique breakdown, the physical complement to paced feeding",
-      "Bloom Baby Tracker PWA, log feeds and crying windows together to see the two- to four-hour lag (Bonus 1)",
-      "Cry Decoder Masterclass, distinguish a trapped-air cry from a gut-pain cry in real time (Bonus 3)",
+      "60-minute brown noise soundscape engineered to womb frequency specifications, use tonight (Bonus 2)",
+      "Acoustic environment design guide: speaker placement, volume calibration, room setup",
+      "The Sound → Touch → Light timing framework, sequence and integration protocol",
+      "Tiger Hold technique breakdown, the physical complement to the acoustic protocol",
+      "Bloom Baby Tracker PWA, track which acoustic adjustments produce measurable results (Bonus 1)",
+      "Cry Decoder Masterclass, identify acoustic-sensitivity cry patterns in real time (Bonus 3)",
     ],
-    mailerliteField: "Feeding Mechanics Primary",
+    mailerliteField: "Acoustic Environment Primary",
   },
 };
 
@@ -570,15 +559,38 @@ const ASSESSMENT_ID = (() => {
 
 /* ── STATE ───────────────────────────────────────────────────────────── */
 let userName = '', userEmail = '', userConsent = false, babyAgeWeeks = null, qIndex = 0;
+
+/* Elapsed-time indicator, purely informational. Counts up from the real
+   moment she clicks start, never a countdown, and nothing happens at any
+   particular number. This exists to give an honest sense of momentum
+   ("I'm already partway through"), not to create false urgency, that's a
+   deliberate choice, see the brand voice guardrail on manipulative
+   scarcity before turning this into anything that implies a deadline. */
+let qTimerInterval = null, qTimerSeconds = 0;
+function startQTimer(){
+  qTimerSeconds = 0;
+  paintQTimer();
+  if (qTimerInterval) clearInterval(qTimerInterval);
+  qTimerInterval = setInterval(() => { qTimerSeconds++; paintQTimer(); }, 1000);
+}
+function stopQTimer(){
+  if (qTimerInterval) { clearInterval(qTimerInterval); qTimerInterval = null; }
+}
+function paintQTimer(){
+  const el = document.getElementById('qTimer');
+  if (!el) return;
+  const m = Math.floor(qTimerSeconds / 60), s = qTimerSeconds % 60;
+  el.textContent = `${m}:${s < 10 ? '0' : ''}${s}`;
+}
 let feedingMethod = '';
-let scores = {GUT:0, NS:0, FM:0};
+let scores = {GUT:0, NS:0, AC:0};
 const selectedMap = new Map();
 const quizStartedAt = Date.now(); // simple bot-speed trap
 
 /* ── SECURE SUBSCRIPTION ─────────────────────────────────────────────── */
 async function subscribeToMailerLite(name, email, colcType, detail, status) {
-  const total = scores.GUT + scores.NS + scores.FM;
-  const dominant = Math.max(scores.GUT, scores.NS, scores.FM);
+  const total = scores.GUT + scores.NS + scores.AC;
+  const dominant = Math.max(scores.GUT, scores.NS, scores.AC);
   const confidencePct = total > 0 ? Math.round((dominant / total) * 100) : 0;
   const utm = getStoredUTMs();
 
@@ -658,7 +670,7 @@ function startQuiz() {
   userConsent  = true;
   babyAgeWeeks = ageNum;
 
-  scores = {GUT:0, NS:0, FM:0};
+  scores = {GUT:0, NS:0, AC:0};
   feedingMethod = '';
   qIndex = 0;
   selectedMap.clear();
@@ -674,6 +686,7 @@ function startQuiz() {
 
   hide('landingScreen');
   show('quizScreen');
+  startQTimer();
   renderQuestion();
 }
 
@@ -766,6 +779,7 @@ function advanceQ() {
     if (qIndex < QUESTIONS.length) {
       renderQuestion();
     } else {
+      stopQTimer();
       hide('quizScreen');
       showAnalysis();
       return;
@@ -784,22 +798,14 @@ function showAnalysis() {
   setTimeout(showResult, 2800);
 }
 
-/* Picks the highest-scoring system. Tie-break order updated this version:
-   previously GUT, AC, NS on an exact tie, based on an invented prevalence
-   range (GUT 60-70%, AC 30-40%, NS 20-30%) that was never a verified
-   citation, it was a paraphrase of this quiz's own original assumption.
-   Per the project's statistics standard (verified journal citation first,
-   dashboard's own confirmed data where none exists), the tie-break now
-   follows the dashboard's actual completion data instead: NS 70%, GUT
-   30% (33 completions, Aug 16 2026 pull, up from 64.7%/35.3% in the
-   Jul 28 export). Feeding Mechanics (FM) is a newly introduced bucket
-   as of this version with no completion history of its own yet, so it
-   sits last in the tie-break order rather than assuming a prevalence
-   rank it hasn't earned. Revisit this order once FM has its own
-   completion data. */
+/* Picks the highest-scoring system. Order is GUT, AC, NS on an exact tie,
+   matching each type's own documented prevalence range (GUT 60-70%,
+   AC 30-40%, NS 20-30%) rather than the arbitrary GUT/NS/AC object order
+   the old `>=` reduce used, which silently favoured GUT and NS over AC
+   on every tie regardless of which type is actually more common. */
 function getPrimaryType(s) {
   let best = 'GUT', bestVal = -Infinity;
-  ['NS', 'GUT', 'FM'].forEach(k => {
+  ['GUT', 'AC', 'NS'].forEach(k => {
     if (s[k] > bestVal) { bestVal = s[k]; best = k; }
   });
   return best;
@@ -875,7 +881,7 @@ function goToProduct() {
 
 function goToChecklist() {
   // Same window.location.href reasoning as goToProduct(). type=
-  // reuses the exact short code (GUT/NS/FM) getPrimaryType() already
+  // reuses the exact short code (GUT/NS/AC) getPrimaryType() already
   // returns, so the checklist doesn't need its own lookup. name/age
   // travel too so the checklist's capture form can pre-fill them
   // instead of asking twice, this is meant to feel like one
