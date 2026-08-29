@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Free Colic Root Cause Assessment | Colic Protocol</title>
-<meta name="description" content="Find which of the three root systems, gut, nervous system, or acoustic, is driving your baby's crying. Free assessment, evidence-based, personalized protocol.">
+<meta name="description" content="Find which of the three root systems, gut, nervous system, or feeding mechanics, is driving your baby's crying. Free assessment, evidence-based, personalized protocol.">
 <meta property="og:title" content="Which of the 3 root-cause systems is driving your baby's crying? Free assessment.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://colicprotocol.baby/quiz">
@@ -24,7 +24,7 @@ html{scroll-behavior:smooth}
   --sage:#6C8759; --sage-soft:#DCE4D0;
   --gold:#C0963F; --gold-soft:#EEDFB9;
   --glass:rgba(255,252,247,.82); --shadow:0 12px 40px rgba(45,32,20,.12);
-  --gut:#BC5A33; --gut-bg:#F3E1D4; --nerv:#6C8759; --nerv-bg:#E4EBDC; --acou:#C0963F; --acou-bg:#F6EBD2;
+  --gut:#BC5A33; --gut-bg:#F3E1D4; --nerv:#6C8759; --nerv-bg:#E4EBDC; --feed:#C0963F; --feed-bg:#F6EBD2;
   --fd:'Cormorant Garamond',Georgia,serif; --fb:'DM Sans',system-ui,sans-serif; --fm:'DM Mono',monospace;
 }
 body{font-family:var(--fb);background:linear-gradient(155deg,var(--paper) 0%,var(--paper-deep) 100%);min-height:100vh;color:var(--ink);overflow-x:hidden;line-height:1.6}
@@ -80,7 +80,7 @@ a{color:inherit}
 .q-timer{display:flex;align-items:center;gap:6px;font-family:var(--fm);font-size:12px;font-weight:600;color:var(--muted);flex-shrink:0;white-space:nowrap}
 .q-timer .dot{width:6px;height:6px;border-radius:50%;background:var(--sage);animation:timerPulse 2s ease-in-out infinite}
 @keyframes timerPulse{0%,100%{opacity:.35;transform:scale(.8)}50%{opacity:1;transform:scale(1.15)}}
-@media (prefers-reduced-motion: reduce){.q-timer .dot{animation:none;opacity:.8}}
+@media (prefers-reduced-motion: reduce){.q-timer .dot{animation:none;opacity:.8}.reveal{opacity:1;transform:none;transition:none}.stickybar{transition:none}}
 .q-text{font-family:var(--fd);font-size:clamp(18px,3.5vw,23px);color:var(--ink);line-height:1.35;font-weight:600;margin-bottom:8px}
 .q-sub{font-size:13px;color:var(--muted);margin-bottom:20px}
 .multi-hint{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--terra);opacity:.85;margin-bottom:10px}
@@ -114,18 +114,46 @@ a{color:inherit}
 /* result */
 .result-banner{padding:32px 28px;border-radius:20px 20px 0 0;text-align:center;margin-top:22px;position:relative;overflow:hidden}
 .result-banner::after{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;background:rgba(255,255,255,.10);border-radius:50%}
+.trust-badges{font-family:var(--fm);font-size:9px;letter-spacing:.1em;text-transform:uppercase;opacity:.7;margin-bottom:12px;position:relative}
 .type-badge{display:inline-block;font-family:var(--fm);font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:5px 14px;border-radius:20px;background:rgba(255,255,255,.5);margin-bottom:14px;position:relative}
 .result-banner h1{font-family:var(--fd);font-size:clamp(24px,4.5vw,32px);font-weight:700;margin-bottom:10px;position:relative}
 .prevalence{font-size:13px;opacity:.82;max-width:440px;margin:0 auto;position:relative}
 .gut-banner{background:var(--gut-bg);color:var(--terra-deep)}
 .ns-banner{background:var(--nerv-bg);color:var(--pine)}
-.ac-banner{background:var(--acou-bg);color:#7A5C1E}
+.feed-banner{background:var(--feed-bg);color:#7A5C1E}
 .result-body{background:var(--glass);backdrop-filter:blur(20px);padding:8px 28px 6px;border:1px solid rgba(255,252,247,.6);border-top:none}
 .result-section{padding:22px 0;border-bottom:1px solid rgba(0,0,0,.07)}
 .result-section:last-child{border-bottom:none}
 .section-label{font-family:var(--fm);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-soft);margin-bottom:12px}
 .headline{font-family:var(--fd);font-size:19px;font-weight:700;color:var(--ink);margin-bottom:10px}
 .science-text{font-size:14px;color:var(--muted);line-height:1.7}
+
+/* scroll-reveal, purely a polish layer, respects reduced-motion below */
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+
+/* prevalence — real numbers for GUT/NS (Master Baseline Dashboard,
+   completed-assessment sample), and a deliberate no-data admission for
+   FM rather than a made-up percentage, since that type genuinely has
+   zero completion history of its own as of this build. See
+   renderPrevalenceBar() for which state renders when. */
+.eyebrow-mini{font-family:var(--fm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--terra-deep);margin-bottom:8px}
+.prevalence-note{font-size:13.5px;color:var(--muted);line-height:1.65}
+.prevalence-note strong{color:var(--ink)}
+.prevalence-track{display:flex;height:12px;border-radius:999px;overflow:hidden;border:1px solid rgba(0,0,0,.08);margin-top:16px;background:rgba(0,0,0,.04)}
+.prevalence-fill{height:100%;background:linear-gradient(90deg,var(--terra),var(--terra-deep))}
+.prevalence-labels{display:flex;justify-content:space-between;margin-top:8px;font-size:11.5px;color:var(--muted-soft)}
+.prevalence-labels .here{color:var(--ink);font-weight:700}
+
+/* tried-line — the personalized "here's why what you already tried
+   didn't work" callback, built from her real Q4 answers, sits right
+   under the mechanism explanation, not duplicated in the offer card's
+   own why-tips-failed answer, which stays generic/type-level */
+.tried-line{font-size:13.5px;color:var(--ink);line-height:1.65;background:rgba(255,255,255,.5);border-left:3px solid var(--terra);border-radius:0 8px 8px 0;padding:10px 14px;margin-top:14px}
+.tried-line strong{color:var(--terra-deep)}
+
+.rules-box{background:rgba(200,150,60,.08);border:1px solid rgba(200,150,60,.3);border-radius:12px;padding:16px 18px}
+.rules-box p{font-size:14px;color:var(--muted);line-height:1.7;margin:0}
 
 .mistakes-list{display:flex;flex-direction:column;gap:12px}
 .mistake-item{display:flex;gap:10px;font-size:13.5px;color:var(--muted);line-height:1.6}
@@ -134,7 +162,7 @@ a{color:inherit}
 .steps-list-result{display:flex;flex-direction:column;gap:14px}
 .step-card{display:flex;gap:14px}
 .step-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--fm);font-size:13px;font-weight:700;flex-shrink:0;color:#fff}
-.gut-sn{background:var(--gut)} .ns-sn{background:var(--nerv)} .ac-sn{background:var(--acou)}
+.gut-sn{background:var(--gut)} .ns-sn{background:var(--nerv)} .feed-sn{background:var(--feed)}
 .step-title{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:3px}
 .step-body{font-size:13.5px;color:var(--muted);line-height:1.6}
 
@@ -151,20 +179,128 @@ a{color:inherit}
 .guarantee-box{background:rgba(192,150,63,.14);border:1px solid rgba(192,150,63,.3);border-radius:12px;padding:14px 16px;margin-bottom:20px}
 .guarantee-box strong{display:block;font-family:var(--fm);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:#7A5C1E;margin-bottom:5px}
 .guarantee-box p{font-size:12.5px;color:#5c4a1e;line-height:1.6}
-.btn-cta{width:100%;padding:18px;background:linear-gradient(135deg,var(--terra),var(--terra-deep));color:#fff;border:none;border-radius:14px;font-family:var(--fb);font-size:16px;font-weight:700;cursor:pointer;margin-bottom:10px;transition:transform .2s,box-shadow .2s}
+.btn-cta{width:100%;padding:11px 8px;background:linear-gradient(135deg,var(--terra),var(--terra-deep));color:#fff;border:none;border-radius:10px;font-family:var(--fb);font-size:12px;font-weight:700;cursor:pointer;margin-bottom:6px;line-height:1.3;transition:transform .2s,box-shadow .2s}
 .btn-cta:hover{transform:scale(1.01);box-shadow:0 12px 32px rgba(188,90,51,.4)}
-.cta-sub{display:block;font-size:11.5px;font-weight:500;opacity:.85;margin-top:3px}
+.cta-sub{display:none;font-size:11.5px;font-weight:500;opacity:.85;margin-top:3px}
 .guarantee-note{font-size:11.5px;color:var(--muted-soft);text-align:center;line-height:1.6}
 
-/* checklist hand-off, sits between the 3-step preview and the sales
-   section so it reads as "here's the free next step" not a second
-   pitch — sage on purpose, so it never gets mistaken for the $47 CTA */
-.checklist-bridge{background:var(--sage-soft);border:1px solid rgba(108,135,89,.35);border-radius:14px;padding:16px 18px;margin-top:2px}
-.checklist-bridge-text{margin-bottom:12px}
-.checklist-bridge-text strong{display:block;font-family:var(--fd);font-size:15px;font-weight:700;color:var(--pine-deep);margin-bottom:4px;line-height:1.4}
-.checklist-bridge-text span{font-size:12px;color:var(--muted);line-height:1.55}
-.btn-checklist{width:100%;padding:14px;background:linear-gradient(135deg,var(--sage),var(--pine-mid));color:#fff;border:none;border-radius:11px;font-family:var(--fb);font-size:14.5px;font-weight:700;cursor:pointer;transition:transform .2s,box-shadow .2s}
+/* profile strip — sits under the banner so the result reads as "your
+   baby's result" using only fields this quiz actually collects (parent
+   first name, baby age, feeding method, assessment id). Chips, not a
+   form or a table, deliberately light-touch, not clinical. */
+/* profile card — one warm, illustrated-feeling card instead of a row
+   of data chips. The warmth comes from the writing (a sentence built
+   from her own answers, including what she's already tried), not from
+   trying to fake an illustration in CSS. Soft two-tone gradient nods at
+   the book cover's terra/sage palette without copying it outright. */
+.profile-card{position:relative;overflow:hidden;border-radius:18px;padding:22px 22px 16px;margin:16px 0 4px;background:linear-gradient(135deg,var(--terra-soft) 0%,var(--sage-soft) 100%);border:1px solid rgba(0,0,0,.05)}
+.profile-card::before{content:'🤍';position:absolute;top:-14px;right:-6px;font-size:64px;opacity:.16;transform:rotate(12deg)}
+.profile-narrative{position:relative;font-family:var(--fd);font-size:17px;font-style:italic;font-weight:600;color:var(--ink);line-height:1.5;max-width:92%}
+.profile-narrative strong{font-style:normal;color:var(--terra-deep)}
+.profile-id{position:relative;font-family:var(--fm);font-size:10.5px;color:var(--muted-soft);margin-top:12px}
+.assessment-note{font-size:11.5px;color:var(--muted-soft);line-height:1.55;padding:6px 0 4px}
+
+/* bridge line — the pivot sentence between the free diagnostic
+   narrative and the offer below it, gets its own visual beat rather
+   than blending into either section */
+.bridge-line{font-family:var(--fd);font-size:16.5px;font-style:italic;color:var(--terra-deep);line-height:1.5;padding-bottom:16px;margin-bottom:16px;border-bottom:1px solid rgba(0,0,0,.08)}
+
+/* Two real quotes, that's genuinely all there are right now, this
+   section is written to hold exactly two well rather than padded out
+   to look like more. Cassie's quote is the specific sentences she gave
+   explicit permission to share, not the rest of that conversation. */
+.testimonial-strip{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:20px}
+@media(min-width:560px){.testimonial-strip{grid-template-columns:1fr 1fr}}
+.testimonial-card{background:rgba(255,255,255,.55);border:1px solid rgba(0,0,0,.06);border-radius:12px;padding:14px 16px}
+.testimonial-quote{font-family:var(--fd);font-style:italic;font-size:13.5px;color:var(--ink);line-height:1.55;margin-bottom:8px}
+.testimonial-attr{font-family:var(--fm);font-size:10.5px;color:var(--muted-soft);text-transform:uppercase;letter-spacing:.04em}
+
+/* offer Q&A — short labeled answers inside the paid card, replacing a
+   single long sales paragraph. Each answer is meant to be a sentence
+   or two, not a section, that's what keeps 8 of these from reading
+   like a dissertation. */
+.offer-qa{margin-bottom:14px}
+.offer-q{font-family:var(--fb);font-size:12.5px;font-weight:700;color:var(--terra-deep);margin-bottom:4px}
+.offer-a{font-size:13px;color:var(--muted);line-height:1.6}
+
+/* Side by side at every width on purpose, this is the actual "which
+   one" comparison moment, stacking it on mobile (where nearly all of
+   this traffic reads from) would remove the psychological effect the
+   layout exists for. What makes this fit on a ~360px phone: each card
+   only shows a short compact pitch by default (cover, kicker, one
+   line, button), the Blueprint's full 8-answer breakdown lives inside
+   a native <details> a tap away, not stacked inline. Grid over flex
+   here specifically so both columns stay locked at exactly 50/50
+   regardless of how much text either card's content happens to be. */
+.path-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:2px}
+.path-cover{width:100%;height:92px;object-fit:cover;border-radius:9px;margin-bottom:10px;display:block;background:rgba(0,0,0,.04)}
+.path-card-paid{position:relative}
+.price-badge{position:absolute;top:6px;right:6px;width:44px;height:44px;border-radius:50%;background:var(--terra);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(188,90,51,.4);transform:rotate(6deg);z-index:2}
+.price-badge b{font-size:13px;line-height:1;font-family:var(--fb)}
+.price-badge small{font-size:6.5px;letter-spacing:.04em;opacity:.9}
+@media(min-width:560px){.price-badge{width:58px;height:58px;top:10px;right:10px}.price-badge b{font-size:16px}.price-badge small{font-size:7.5px}}
+.path-card{display:flex;flex-direction:column;border-radius:14px;padding:14px 12px;border:1.5px solid;min-width:0}
+.path-card-free{background:var(--sage-soft);border-color:rgba(108,135,89,.35)}
+.path-card-paid{background:rgba(255,255,255,.62);border-color:rgba(188,90,51,.28)}
+.path-kicker{font-family:var(--fm);font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;margin-bottom:8px;display:block;line-height:1.3}
+.path-card-free .path-kicker{color:var(--pine)}
+.path-card-paid .path-kicker{color:var(--terra-deep)}
+.path-title{font-family:var(--fd);font-size:15.5px;font-weight:700;color:var(--ink);line-height:1.3;margin-bottom:6px}
+.path-desc{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:10px}
+.path-desc strong{color:var(--ink)}
+.path-card .btn-checklist,.path-card .btn-cta{margin-top:auto}
+.btn-checklist{width:100%;padding:12px 8px;background:linear-gradient(135deg,var(--sage),var(--pine-mid));color:#fff;border:none;border-radius:10px;font-family:var(--fb);font-size:12.5px;font-weight:700;cursor:pointer;transition:transform .2s,box-shadow .2s}
 .btn-checklist:hover{transform:scale(1.01);box-shadow:0 10px 24px rgba(108,135,89,.35)}
+
+/* wider screens get a little more breathing room, content doesn't
+   change shape, just spacing, so the "always side by side" promise
+   never quietly becomes a different layout at some breakpoint */
+@media(min-width:560px){
+  .path-grid{gap:16px}
+  .path-card{padding:20px 18px}
+  .path-cover{height:130px;margin-bottom:14px}
+  .path-title{font-size:18px}
+  .path-desc{font-size:13px}
+  .btn-cta{padding:18px;font-size:16px;border-radius:14px;margin-bottom:10px}
+  .cta-sub{display:block}
+}
+
+/* Blueprint's full answer set, collapsed by default so the compact
+   side-by-side comparison is what she sees first on both cards. A
+   native <details> element, not a JS toggle, works without a script
+   and is accessible by default. */
+.offer-details{margin:2px 0 12px}
+.offer-details summary{cursor:pointer;list-style:none;font-family:var(--fb);font-size:12px;font-weight:700;color:var(--terra-deep);padding:8px 0;border-top:1px dashed rgba(188,90,51,.25)}
+.offer-details summary::-webkit-details-marker{display:none}
+.offer-details summary::after{content:'  ▾ tap to see why';font-weight:500;opacity:.75}
+.offer-details[open] summary::after{content:'  ▴ hide details'}
+.offer-details[open] summary{border-bottom:1px dashed rgba(188,90,51,.25);margin-bottom:10px}
+
+/* DM path — third option below both cards, for someone who isn't
+   sure which of the two above fits tonight. Copy-then-paste, not a
+   pre-filled composer: plain ig.me links don't support that. */
+.dm-path{margin-top:18px;padding-top:18px;border-top:1px solid rgba(0,0,0,.07)}
+.dm-path-text strong{display:block;font-family:var(--fd);font-size:15px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.dm-path-text span{font-size:12.5px;color:var(--muted);line-height:1.55}
+.dm-message-box{font-size:12.5px;color:var(--ink);background:rgba(255,255,255,.6);border:1px dashed rgba(0,0,0,.16);border-radius:10px;padding:12px 14px;margin:12px 0;line-height:1.55}
+.dm-actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn-dm-copy,.btn-dm-open{flex:1;min-width:140px;padding:12px;border-radius:10px;font-family:var(--fb);font-size:13px;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-dm-copy{border:1.5px solid var(--terra);background:transparent;color:var(--terra-deep)}
+.btn-dm-copy:hover{background:rgba(188,90,51,.08)}
+.btn-dm-open{border:1.5px solid var(--ink);background:var(--ink);color:#fff}
+.btn-dm-open:hover{background:var(--terra-deep);border-color:var(--terra-deep)}
+.dm-note{font-size:11px;color:var(--muted-soft);margin-top:8px;line-height:1.5}
+
+/* sticky bottom bar — shows once she's scrolled past the result
+   banner, so the CTA is always one tap away without needing to
+   scroll back up or hunt through the page for it. Hidden near the
+   top on purpose, showing it immediately would just be another
+   banner competing with the actual result. */
+.stickybar{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(252,250,247,.95);backdrop-filter:blur(10px);border-top:1px solid rgba(0,0,0,.1);transform:translateY(100%);transition:transform .3s ease}
+.stickybar.show{transform:none}
+.stickybar .sb-info{font-size:12.5px;color:var(--muted);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.stickybar .sb-info b{color:var(--ink)}
+.stickybar button{flex:none;background:var(--terra);color:#fff;border:none;font-weight:700;font-size:13px;border-radius:999px;padding:11px 18px;cursor:pointer;white-space:nowrap}
 
 @media(max-width:480px){
   .card{padding:24px 18px}
@@ -244,12 +380,12 @@ a{color:inherit}
   <div id="analysisScreen" class="card hidden">
     <div class="analysis-wrap">
       <h2>Weighing your answers against all three systems...</h2>
-      <p>Mapping your responses against gut, nervous system, and acoustic patterns from peer-reviewed clinical literature.</p>
+      <p>Mapping your responses against gut, nervous system, and feeding-mechanics patterns from peer-reviewed clinical literature.</p>
       <div class="dots-row" aria-hidden="true"><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div></div>
       <div class="scan-list" aria-live="polite">
         <div class="scan-item">Evaluating gut microbiome presentation</div>
         <div class="scan-item">Mapping nervous system dysregulation signals</div>
-        <div class="scan-item">Assessing acoustic environment factors</div>
+        <div class="scan-item">Assessing feeding mechanics and air-intake patterns</div>
       </div>
     </div>
   </div>
@@ -257,53 +393,135 @@ a{color:inherit}
   <!-- SCREEN 4: RESULT -->
   <div id="resultScreen" class="hidden">
     <div class="result-banner" id="resultBanner">
+      <div class="trust-badges">Evidence-based &nbsp;·&nbsp; Diagnosis before protocol</div>
       <div class="type-badge" id="resultBadge"></div>
       <h1 id="resultTitle"></h1>
       <div class="prevalence" id="resultPrevalence"></div>
     </div>
     <div class="result-body">
-      <div class="result-section">
-        <div class="section-label">What is actually happening in your baby's body</div>
-        <div class="headline" id="resultHeadline"></div>
-        <div class="science-text" id="resultScience"></div>
+      <div class="profile-card" id="profileCard" aria-label="Your assessment, in your own words">
+        <p class="profile-narrative" id="profileNarrative"></p>
+        <p class="profile-id">Assessment <span id="profAssessmentId"></span></p>
       </div>
-      <div class="result-section">
-        <div class="section-label">3 mistakes parents with this root cause make</div>
-        <div class="mistakes-list" id="resultMistakes"></div>
+      <p class="assessment-note">This identifies your baby's most likely pattern for educational purposes. It is not a medical diagnosis.</p>
+
+      <div class="result-section reveal" id="prevalenceBox"></div>
+
+      <div class="result-section reveal">
+        <div class="section-label">Why this pattern points here</div>
+        <div class="headline" id="resultSeeing"></div>
       </div>
-      <div class="result-section" style="border-bottom:none;">
-        <div class="section-label">Your 3-step type-specific protocol, start tonight</div>
+      <div class="result-section reveal">
+        <div class="section-label">Why it happens</div>
+        <p class="science-text" id="resultWhy"></p>
+        <p class="tried-line" id="triedLine"></p>
+      </div>
+      <div class="result-section reveal">
+        <div class="section-label">What this rules out</div>
+        <div class="rules-box"><p id="resultRulesOut"></p></div>
+      </div>
+      <div class="result-section reveal" style="border-bottom:none;">
+        <div class="section-label">What to try tonight</div>
         <div class="steps-list-result" id="resultSteps"></div>
       </div>
-      <div class="result-section" style="border-bottom:none; padding-top:6px;">
-        <div class="section-label">If baby is crying right now</div>
-        <div class="checklist-bridge">
-          <div class="checklist-bridge-text">
-            <strong id="checklistHook"></strong>
-            <span>Free. The same three steps above, guided one at a time, with built-in timers, for tonight specifically.</span>
-          </div>
-          <button class="btn-checklist" id="checklistBtn" onclick="goToChecklist()">Start Tonight's Protocol →</button>
-        </div>
+      <div class="result-section reveal" style="border-bottom:none; padding-top:6px;">
+        <div class="section-label">What to monitor</div>
+        <p class="science-text" id="resultMonitor"></p>
       </div>
     </div>
     <div class="cta-section">
-      <div class="cta-hook" id="ctaHook"></div>
-      <div class="cta-body" id="ctaBody"></div>
-      <div class="consequence-box"><p id="ctaConsequence"></p></div>
-      <div class="what-inside-label">The Calm Baby Blueprint gives you:</div>
-      <ul class="protocol-list" id="protocolList"></ul>
-      <div class="guarantee-box">
-        <strong>72-Hour Zero-Cry Guarantee</strong>
-        <p>If your baby is not experiencing significantly reduced crying within 72 hours of implementing this protocol, email me. Full refund immediately. No forms. No questions. You keep the Blueprint.</p>
+      <p class="bridge-line" id="resultBridge"></p>
+
+      <div class="testimonial-strip reveal">
+        <div class="testimonial-card">
+          <p class="testimonial-quote">"Your blueprint is amazing and I wish I came across your page 5 weeks ago. I've had to learn most of that information on my own from endless hours of research when I could have just read your blueprint."</p>
+          <p class="testimonial-attr">Cassie R., via Instagram DM</p>
+        </div>
+        <div class="testimonial-card">
+          <p class="testimonial-quote">"Doing the methods you have posted have helped my son so much with his colic and gas, thank you!!!"</p>
+          <p class="testimonial-attr">Brittany, @brittanytrifone13</p>
+        </div>
       </div>
-      <button class="btn-cta" id="ctaBtn" onclick="goToProduct()">
-        <span id="ctaBtnText"></span>
-        <span class="cta-sub">$47 one time · 72-hour guarantee · Keep it either way</span>
-      </button>
+
+      <div class="section-label">Two ways to use this tonight</div>
+      <p class="path-desc">Same result, two starting points. Pick whichever matches how urgent tonight feels, or ask Vincent directly below if you're not sure.</p>
+
+      <div class="path-grid">
+        <div class="path-card path-card-free">
+          <img class="path-cover" src="/images/checklist-cover.jpg" alt="Midnight Emergency Checklist preview" loading="lazy" onerror="this.remove()">
+          <span class="path-kicker">Free · Right now</span>
+          <div class="path-title" id="checklistHook">Tonight's 3 steps, guided</div>
+          <p class="path-desc">Same steps above, with timers, for right now.</p>
+          <button class="btn-checklist" id="checklistBtn" type="button" onclick="goToChecklist()">Start Tonight →</button>
+        </div>
+
+        <div class="path-card path-card-paid">
+          <img class="path-cover" src="/images/blueprint-cover.jpg" alt="The Calm Baby Blueprint book cover" loading="lazy" onerror="this.remove()">
+          <span class="price-badge" aria-hidden="true"><b>$47</b><small>ONE TIME</small></span>
+          <span class="path-kicker">$47 · Complete system</span>
+          <p class="path-desc" id="offerForBaby"></p>
+
+          <details class="offer-details">
+            <summary>Why this, not just the checklist</summary>
+
+            <div class="offer-qa">
+              <div class="offer-q">Why haven't the usual tips worked?</div>
+              <p class="offer-a" id="offerWhyFailed"></p>
+            </div>
+            <div class="offer-qa">
+              <div class="offer-q">What makes this different?</div>
+              <p class="offer-a" id="offerDifferent"></p>
+            </div>
+            <div class="offer-qa">
+              <div class="offer-q">What exactly do I get?</div>
+              <ul class="protocol-list" id="protocolList"></ul>
+            </div>
+            <div class="offer-qa">
+              <div class="offer-q">Why trust Vincent?</div>
+              <p class="offer-a" id="offerTrust"></p>
+            </div>
+            <div class="offer-qa">
+              <div class="offer-q">What evidence supports it?</div>
+              <p class="offer-a" id="offerEvidence"></p>
+            </div>
+            <div class="offer-qa">
+              <div class="offer-q">What if it doesn't help?</div>
+              <div class="guarantee-box">
+                <strong>72-Hour Zero-Cry Guarantee</strong>
+                <p>If your baby is not experiencing significantly reduced crying within 72 hours of implementing this protocol, email me. Full refund immediately. No forms. No questions. You keep the Blueprint.</p>
+              </div>
+            </div>
+          </details>
+
+          <button class="btn-cta" id="ctaBtn" type="button" onclick="goToProduct()">
+            <span id="ctaBtnText"></span>
+            <span class="cta-sub">$47 one time · 72-hour guarantee · Keep it either way</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="dm-path">
+        <div class="dm-path-text">
+          <strong>Not sure which one fits tonight?</strong>
+          <span>Send Vincent your result and he'll help you understand what it means for your baby specifically.</span>
+        </div>
+        <div class="dm-message-box" id="dmMessageBox" aria-live="polite"></div>
+        <div class="dm-actions">
+          <button class="btn-dm-copy" id="dmCopyBtn" type="button" onclick="copyDMMessage()">Copy message</button>
+          <button class="btn-dm-open" id="dmOpenBtn" type="button" onclick="goToDM()">Message Vincent on Instagram →</button>
+        </div>
+        <p class="dm-note">Copies the message above to your clipboard and opens Instagram. Paste it into the chat and hit send, Instagram doesn't let a website fill that in automatically.</p>
+      </div>
+
       <p class="guarantee-note">Not medical advice. Consult your pediatrician for fever above 38&deg;C or breathing difficulty.</p>
     </div>
   </div>
 </main>
+
+<div class="stickybar" id="stickyBar">
+  <div class="sb-info">Your result: <b id="stickyType"></b></div>
+  <button type="button" onclick="goToProduct()">Get the Blueprint — $47</button>
+</div>
 
 <footer style="text-align:center;padding:24px 16px 40px;position:relative;z-index:2;">
   <p style="font-size:11px;color:var(--muted-soft);line-height:1.6;max-width:480px;margin:0 auto;">
@@ -326,6 +544,11 @@ const CFG = {
   // bare relative filenames throughout, e.g. href="quiz.html", not
   // clean routes) — this was a guess last pass, now corrected.
   checklistUrl: 'midnight-protocol.html',
+  // Plain ig.me links (no connected Messaging API app + Icebreakers)
+  // don't support a pre-filled composer message, only a `ref` param
+  // delivered via webhook to a bot. So this is copy-then-paste, not
+  // autofill — see copyDMMessage()/goToDM() below.
+  dmUrl: 'https://ig.me/m/colicprotocol',
 };
 
 /* ── UTM ATTRIBUTION ─────────────────────────────────────────────────── */
@@ -350,84 +573,94 @@ const UTM_SOURCE = getStoredUTMs().utm_source || new URLSearchParams(window.loca
 
 /* ══════════════════════════════════════════════════════════════════════
    QUESTIONS
-   Each option: [display text, score weights {GUT, NS, AC}]
+   Each option: [display text, score weights {GUT, NS, FM}, feeding tag
+   (Q7 only, null elsewhere), tried tag (Q4 only, null elsewhere)]
 
-   FIX (this version): the acoustic (AC) bucket was structurally starved
-   in the prior weight set. Three problems, all corrected below:
-   1. Two of seven questions (stool, feeding method) carried zero AC
-      signal and a guaranteed-positive GUT signal on nearly every option,
-      so every respondent picked up "free" GUT points regardless of what
-      they actually selected.
-   2. The genuinely acoustic-diagnostic options (Q1D, Q3C, Q4C, Q5C) were
-      weighted at 2-3 while GUT/NS equivalents elsewhere ran to 3-4, so
-      even a textbook acoustic profile couldn't out-score GUT/NS.
-   3. Q7's "eliminated dairy, no change" option added +1 to GUT, which is
-      backwards: a failed dairy elimination is evidence against gut being
-      the driver, not for it. Now scores 0 on GUT.
-   A "select every option, every question" ceiling check now runs
-   GUT 32 / NS 26 / AC 25 instead of the prior GUT 32 / NS 31 / AC 19,
-   and a respondent who consistently picks the acoustic-indicating
-   option now clears AC ≈19 against GUT ≈1 / NS ≈4, decisively.
+   MIGRATION (this version): Acoustic Environment Overload is retired as
+   a diagnostic bucket per the standing taxonomy decision (Master Doc
+   v12). It doesn't disappear as content, brown noise still lives inside
+   the Nervous System steps below, it just stops being something a baby
+   gets sorted into. Feeding Mechanics takes the third slot. The old
+   acoustic-diagnostic options (Q1D, Q2D, Q3C, Q5C) are replaced with
+   real feeding-mechanics signal, not relabeled AC options, since "worse
+   in noisy environments" and "swallows air on a steep bottle angle" are
+   not the same underlying claim and scoring one as a proxy for the
+   other would have quietly kept the retired bucket alive under a new
+   name.
+
+   FIX (this version): Q7 previously gave three of its four options a
+   free {GUT:1} regardless of which one she picked (only the "eliminated
+   dairy, no change" option had been corrected in the prior pass), so
+   almost every respondent picked up a GUT point on this question no
+   matter what her baby's feeding situation actually was. Formula and
+   mixed feeding now carry FM signal instead of automatic GUT signal,
+   since bottle-feeding is where the paced-feeding/air-intake mechanism
+   actually applies. A respondent answering consistently toward one type
+   clears GUT 19 / NS 20 / FM 21 (best-per-question sum), and the sum of
+   every option across all seven questions runs GUT 29 / NS 25 / FM 28,
+   verified by script, not by hand, before shipping this table. Close
+   enough across all three that no type is structurally favored the way
+   GUT was before this pass.
    ══════════════════════════════════════════════════════════════════════ */
 const QUESTIONS = [
   {
     q: "When does your baby cry most intensely?",
     sub: "Think about the pattern over the last few days.",
     opts: [
-      ["Consistently in the evening — usually 5PM to midnight, regardless of feeding",      {GUT:0,NS:2,AC:2}],
-      ["During or shortly after feeding — often arching away from the breast or bottle",    {GUT:3,NS:0,AC:0}],
-      ["Seemingly randomly throughout the day with no clear pattern",                       {GUT:1,NS:1,AC:1}],
-      ["Any time the environment changes — new sounds, visitors, lights",                   {GUT:0,NS:1,AC:4}],
+      ["Consistently in the evening — usually 5PM to midnight, regardless of feeding",      {GUT:0,NS:3,FM:0}],
+      ["During or shortly after feeding — often arching away from the breast or bottle",    {GUT:2,NS:0,FM:2}],
+      ["Seemingly randomly throughout the day with no clear pattern",                       {GUT:1,NS:1,FM:1}],
+      ["Consistently 1 to 3 hours after a feed, like clockwork",                            {GUT:1,NS:0,FM:4}],
     ]
   },
   {
     q: "What does your baby's cry sound like?",
-    sub: "The acoustic pattern of the cry carries diagnostic information.",
+    sub: "How a cry sounds carries real diagnostic information.",
     opts: [
-      ["High-pitched, continuous, and intense from the very first second — no build-up",   {GUT:0,NS:4,AC:0}],
-      ["Starts softer and escalates over 10–15 minutes into inconsolable",                 {GUT:2,NS:1,AC:0}],
-      ["Comes in waves — crying, pause, crying again — with legs pulled to chest",         {GUT:3,NS:0,AC:0}],
-      ["Whiny and fussy rather than piercing — baby seems uncomfortable but not in agony", {GUT:1,NS:0,AC:2}],
+      ["High-pitched, continuous, and intense from the very first second — no build-up",   {GUT:0,NS:4,FM:0}],
+      ["Starts softer and escalates over 10–15 minutes into inconsolable",                 {GUT:2,NS:1,FM:0}],
+      ["Comes in waves — crying, pause, crying again — with legs pulled to chest",         {GUT:3,NS:0,FM:0}],
+      ["Grunting, straining, or gulping sounds, especially in the first few minutes after a feed", {GUT:1,NS:0,FM:3}],
     ]
   },
   {
     q: "What does your baby's body do during a crying episode?",
     sub: "Physical signals during crying point to specific root causes.",
     opts: [
-      ["Legs pulled toward the chest, abdomen visibly tight or distended",                 {GUT:4,NS:0,AC:0}],
-      ["Full-body tension — arching back, fists clenched, face red and straining",         {GUT:0,NS:4,AC:0}],
-      ["Startles at sounds, faces scrunched, easily overwhelmed by stimulation",           {GUT:0,NS:1,AC:4}],
-      ["Inconsolable regardless of position — nothing seems to help at all",               {GUT:1,NS:1,AC:1}],
+      ["Legs pulled toward the chest, abdomen visibly tight or distended",                 {GUT:4,NS:0,FM:0}],
+      ["Full-body tension — arching back, fists clenched, face red and straining",         {GUT:0,NS:4,FM:0}],
+      ["Pulls off the breast or bottle repeatedly, coughs or sputters mid-feed",            {GUT:0,NS:0,FM:4}],
+      ["Inconsolable regardless of position — nothing seems to help at all",               {GUT:1,NS:1,FM:1}],
     ]
   },
   {
     q: "What has already been tried with little or no effect?",
     sub: "Failed interventions are as diagnostically useful as symptoms.",
     opts: [
-      ["Gripe water and simethicone gas drops — tried multiple brands",                    {GUT:3,NS:0,AC:0}],
-      ["Rocking, bouncing, swinging — baby calms briefly then starts again",               {GUT:0,NS:3,AC:0}],
-      ["White noise machine — didn't help or only helped briefly",                         {GUT:0,NS:0,AC:4}],
-      ["Changing feeding positions and feeding frequency",                                  {GUT:2,NS:0,AC:0}],
+      ["Gripe water and simethicone gas drops — tried multiple brands",                    {GUT:3,NS:0,FM:0}, null, "gripe water or gas drops"],
+      ["Rocking, bouncing, swinging — baby calms briefly then starts again",               {GUT:0,NS:3,FM:0}, null, "rocking, bouncing, or swinging"],
+      ["White noise machine — didn't help or only helped briefly",                         {GUT:0,NS:1,FM:0}, null, "a white noise machine"],
+      ["Changing feeding positions or how often you feed — didn't make a real difference", {GUT:1,NS:0,FM:3}, null, "changing feeding position or frequency"],
     ]
   },
   {
     q: "How does your baby typically respond when being held during a crying episode?",
     sub: "",
     opts: [
-      ["Calms somewhat when held face-down with gentle pressure on the abdomen",           {GUT:3,NS:0,AC:0}],
-      ["Calms briefly when moved rhythmically — but starts again when movement stops",     {GUT:0,NS:4,AC:0}],
-      ["Seems to escalate when touched during the worst episodes — overstimulated",        {GUT:0,NS:1,AC:4}],
-      ["Inconsistent — sometimes holding helps, sometimes it makes things worse",          {GUT:1,NS:1,AC:1}],
+      ["Calms somewhat when held face-down with gentle pressure on the abdomen",           {GUT:3,NS:0,FM:0}],
+      ["Calms briefly when moved rhythmically — but starts again when movement stops",     {GUT:0,NS:4,FM:0}],
+      ["Wants to stay upright after feeds — unsettled lying flat or being reclined",        {GUT:0,NS:0,FM:4}],
+      ["Inconsistent — sometimes holding helps, sometimes it makes things worse",          {GUT:1,NS:1,FM:1}],
     ]
   },
   {
     q: "What does your baby's stool look like?",
     sub: "Gut presentation provides direct microbiome data.",
     opts: [
-      ["Green, frothy, or mucousy — sometimes with a strong smell",                        {GUT:3,NS:0,AC:0}],
-      ["Normal yellow seedy (breastfed) or tan (formula) — no stool changes noted",       {GUT:0,NS:1,AC:1}],
-      ["Infrequent — less than once a day — with apparent straining",                      {GUT:2,NS:0,AC:0}],
-      ["Not sure — haven't noticed a pattern",                                             {GUT:0,NS:0,AC:0}],
+      ["Green, frothy, or mucousy — sometimes with a strong smell",                        {GUT:3,NS:0,FM:0}],
+      ["Normal yellow seedy (breastfed) or tan (formula) — no stool changes noted",       {GUT:0,NS:1,FM:1}],
+      ["Infrequent — less than once a day — with apparent straining",                      {GUT:2,NS:0,FM:0}],
+      ["Not sure — haven't noticed a pattern",                                             {GUT:0,NS:0,FM:0}],
     ]
   },
   {
@@ -435,10 +668,10 @@ const QUESTIONS = [
     sub: "Feeding method affects which interventions are most effective. Pick one.",
     single: true,
     opts: [
-      ["Exclusively breastfed",                                                            {GUT:1,NS:0,AC:0}, "Breastfed"],
-      ["Formula-fed — has been from birth or switched recently",                           {GUT:1,NS:0,AC:0}, "Formula-fed"],
-      ["Mixed feeding — breast and formula",                                               {GUT:1,NS:0,AC:0}, "Mixed"],
-      ["I've eliminated dairy from my diet already and the crying hasn't changed",         {GUT:0,NS:1,AC:1}, "Breastfed"],
+      ["Exclusively breastfed",                                                            {GUT:1,NS:0,FM:0}, "Breastfed"],
+      ["Formula-fed — has been from birth or switched recently",                           {GUT:0,NS:0,FM:2}, "Formula-fed"],
+      ["Mixed feeding — breast and formula",                                               {GUT:0,NS:0,FM:1}, "Mixed"],
+      ["I've eliminated dairy from my diet already and the crying hasn't changed",         {GUT:0,NS:1,FM:1}, "Breastfed"],
     ]
   },
 ];
@@ -446,30 +679,46 @@ const QUESTIONS = [
 /* ══════════════════════════════════════════════════════════════════════
    RESULTS
    ══════════════════════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════════════
+   RESULTS
+   Two jobs per type, kept deliberately separate:
+   1. The diagnostic narrative ("why this pattern points here"): seeing,
+      why, rulesOut, steps, monitor, bridgeLine. This is the free,
+      educational half, it has to stand on its own even if she never
+      looks at the offer below it.
+   2. The offer ("why move from tonight's protocol to the Blueprint"):
+      forBaby, whyTipsFailed, whatsDifferent, protocol, trustVincent,
+      evidence. Answers a different question than section 1, "what
+      should I try tonight" versus "what do I do when tonight's
+      solution isn't enough", so it isn't just section 1 repeated with
+      a price tag on it.
+   `evidence` is a function of feedingMethod on every type, even where
+   the answer doesn't actually change, so showResult() can call
+   R.evidence(feedingMethod) uniformly instead of branching on type.
+   ══════════════════════════════════════════════════════════════════════ */
 const RESULTS = {
   GUT: {
     type: "Gut Microbiome Imbalance",
-    subtitle: "Primary Root Cause",
+    subtitle: "Most Likely Pattern",
     emoji: "🦠",
     bannerClass: "gut-banner",
     stepClass: "gut-sn",
-    prevalence: "The most common primary colic driver — present in approximately 60–70% of colicky infants.",
-    headline: "Your baby's gut is producing the inflammation driving the crying.",
-    science: "Colicky infants with this presentation show a consistent pattern: reduced Lactobacillus bacteria and elevated gas-producing Proteobacteria in the gut microbiome. This imbalance creates a fermentation loop that generates pain, bloating, and the inflammation driving each crying episode. Single-symptom remedies like simethicone address the gas as a mechanical output, they cannot touch the microbial environment producing it. This is why gas drops fail consistently in clinical trials.",
-    mistakes: [
-      "Continuing with simethicone or gripe water. Neither has passed a randomised controlled trial for colic, and neither addresses the microbial imbalance driving the gas production.",
-      "Treating episodes in isolation without addressing the recurring root. Managing the crying each night without the microbiome repair means the pattern continues until it resolves naturally, typically at 12 weeks.",
-      "Using a generic probiotic. Strain specificity matters critically. The only probiotic strain with published RCT evidence for infant colic is L. reuteri DSM 17938, sold specifically as BioGaia Protectis. Generic probiotic blends do not carry this data.",
-    ],
+    prevalence: "The most common primary colic driver, present in approximately 60 to 70% of colicky infants.",
+
+    seeing: "What you're probably seeing tonight: crying that comes in waves, legs pulled up toward a tight or distended belly, and some relief right after a big burp or a bowel movement, then the same pattern building again a few hours later.",
+    why: "Colicky infants with this presentation show a consistent pattern: reduced Lactobacillus bacteria and elevated gas-producing bacteria in the gut microbiome. This imbalance creates a fermentation loop that generates pain, bloating, and the inflammation driving each crying episode. Single-symptom remedies like simethicone address the gas as a mechanical output, they cannot touch the microbial environment producing it, which is why gas drops fail consistently in clinical trials.",
+    rulesOut: "This pattern is less consistent with a pure nervous-system overload, which usually starts high-pitched and immediate rather than building in waves, or with feeding mechanics alone, which tends to track tightly with time-since-feed rather than showing up with visible bloating and stool changes. That doesn't rule out a second system being involved, it just tells you which one to address first.",
     steps: [
-      {title: "Start L. reuteri DSM 17938 immediately", body: "This is the specific strain, not a generic probiotic. Savino et al., Pediatrics 2010: 74% reduction in daily crying time by Day 21 in breastfed infants. Confirmed by two independent 2020 systematic reviews. The product is BioGaia Protectis Baby Drops. 5 drops daily. Added to expressed breast milk or formula cooled to body temperature. Begin tonight."},
-      {title: "Run the Tiger Hold for acute episodes", body: "Face-down across your forearm. Baby's belly on the muscle of your forearm, head resting in your palm. Pulse at 60 beats per minute, forward and back, not side to side. This simultaneously moves trapped gas using abdominal pressure and deactivates the Moro startle reflex. Hold for minimum 5 minutes before assessing."},
-      {title: "Brown noise at 60–65 dB before you pick them up", body: "Sound first, touch second. The womb acoustic environment is low-frequency, matching brown noise, not white noise. A dysregulated nervous system cannot receive touch as calming. Activate brown noise at 60–65 decibels, minimum 7 feet from baby's head, for 30 seconds before the Tiger Hold."},
+      {title: "Start L. reuteri DSM 17938 immediately", body: "This is the specific strain, not a generic probiotic. Savino et al., Pediatrics 2010: 74% reduction in daily crying time by Day 21 in breastfed infants. The product is BioGaia Protectis Baby Drops. 5 drops daily, added to expressed breast milk or formula cooled to body temperature. Begin tonight."},
+      {title: "Run the Tiger Hold for acute episodes", body: "Face-down across your forearm. Baby's belly on the muscle of your forearm, head resting in your palm. Pulse at 60 beats per minute, forward and back, not side to side. This moves trapped gas using abdominal pressure and deactivates the Moro startle reflex at the same time. Hold for a minimum of 5 minutes before assessing."},
+      {title: "Brown noise at 60 to 65 dB before you pick them up", body: "Sound first, touch second. A dysregulated nervous system cannot receive touch as calming, even when gut discomfort is the primary driver. Activate brown noise at 60 to 65 decibels, minimum 7 feet from baby's head, for 30 seconds before the Tiger Hold."},
     ],
-    ctaHook: (name) => `${name}, you now know what has been causing this. Not a guess, a specific physiological pattern that has a documented clinical solution.`,
-    ctaBody: "The three steps above begin the process tonight. What they cannot give you is the complete dosing protocol calibrated to your baby's feeding method, the diagnostic decision tree for when more than one system is involved, or the timing framework that tells you exactly when to assess whether the protocol is working. That is what the <strong>Calm Baby Blueprint</strong> provides.",
-    ctaConsequence: "Every week the gut microbiome imbalance runs without intervention is another week of the same pattern nightly. It resolves on its own at 10–12 weeks. The L. reuteri protocol compresses that window, but only if the correct strain, dosage, and timing are implemented. Generic probiotics do not carry this data. Starting tonight matters.",
-    ctaBtnText: "Start the Gut Reset Protocol Tonight — $47",
+    monitor: "Watch for whether the crying eases within 30 to 60 minutes of a bowel movement or a big burp, that link is the confirming sign for this pattern. If nothing changes regardless of gas or stool, or if you see blood in the stool, projectile vomiting, or your baby isn't gaining weight as expected, treat that as a signal to talk to your pediatrician directly rather than continuing to test home interventions.",
+    bridgeLine: (name) => `${name}, that's the pattern. If you want the complete management system instead of continuing to test individual techniques one at a time, that's what the Calm Baby Blueprint is for.`,
+
+    forBaby: "Gas and bloating between feeds, relief after a burp, gripe water that hasn't held.",
+    whyTipsFailed: "Gas drops have failed every randomized controlled trial run against them. Gripe water has never passed one either. Both treat the gas bubble, not the microbial imbalance producing it, which is why the relief never lasts more than a few minutes.",
+    whatsDifferent: "Not another single remedy. A sequenced protocol: the exact probiotic strain and dose calibrated to how your baby feeds, paired with the physical technique that moves gas mechanically, run in the order that actually matters.",
     protocol: [
       "Diagnostic decision tree, know your baby's primary system before applying any intervention",
       "Complete gut reset protocol with exact L. reuteri DSM 17938 dosing for breastfed and formula-fed infants",
@@ -478,75 +727,84 @@ const RESULTS = {
       "Bloom Baby Tracker PWA, one-tap logging at 3AM to identify trigger patterns (Bonus 1)",
       "Cry Decoder Masterclass, train your ear to distinguish gut pain from nervous system cries (Bonus 3)",
     ],
+    trustVincent: "Vincent is an epidemiologist, trained to read and weigh population-level research, not a pediatrician or a gastroenterologist. That's what the credential is actually for here: separating L. reuteri DSM 17938, the one strain with real trial data, from the dozens of generic probiotics riding on the word \"probiotic\" alone. He ran that same process on his own daughter Zion's colic first.",
+    evidence: (feeding) => (feeding === 'Formula-fed' || feeding === 'Mixed')
+      ? "The original 2010 trial (Savino et al., Pediatrics) was run in exclusively breastfed infants, so it isn't your baby's direct evidence and isn't cited to you as such. For bottle-fed and mixed-fed babies, the Blueprint's dosing instead draws on the broader 2020 systematic reviews (BMJ Open, Acta Paediatrica) covering the wider trial base, calibrated to feeding method."
+      : "Savino et al., Pediatrics 2010: a randomized trial in exclusively breastfed infants, 74% reduction in daily crying by Day 21. Two independent systematic reviews in 2020 (BMJ Open, Acta Paediatrica) reached the same conclusion across the wider evidence base.",
+    ctaBtnText: "Start the Gut Reset Protocol Tonight — $47",
     mailerliteField: "Gut Microbiome Primary",
   },
 
   NS: {
     type: "Nervous System Dysregulation",
-    subtitle: "Primary Root Cause",
+    subtitle: "Most Likely Pattern",
     emoji: "⚡",
     bannerClass: "ns-banner",
     stepClass: "ns-sn",
-    prevalence: "Present as the primary driver in approximately 20–30% of colic cases, and frequently missed.",
-    headline: "Your baby's nervous system is stuck in a chronic threat state.",
-    science: "The prefrontal cortex, responsible for emotional regulation, is not functional at 6 weeks. There is no neurological mechanism for self-soothing. When your baby's cortisol spikes during a crying episode, the only way it comes down is through external co-regulation. The pattern you're seeing, high-pitched, continuous from the first second, intensifying with more stimulation, is a nervous system crisis, not primarily a gut problem. Applying gut interventions to a nervous system presentation delays resolution by weeks.",
-    mistakes: [
-      "Waiting for the crying to peak and then trying to soothe. By the time the cry is at full intensity, the cortisol response is already cascading. Intervention is more effective in the first 30 seconds of distress.",
-      "Adding stimulation during episodes, talking, eye contact, multiple position changes. A dysregulated nervous system reads additional input as additional threat. Less is more during a nervous system crisis.",
-      "Running the Sound, Touch, Light sequence in the wrong order. Touch before sound adds a sensory demand to an already overloaded system. Sound must establish the safe acoustic signal before physical contact is introduced.",
-    ],
+    prevalence: "Present as the primary driver in approximately 20 to 30% of colic cases, and frequently missed.",
+
+    seeing: "What you're probably seeing tonight: crying that's high-pitched and intense almost from the first second, a body that goes rigid, fists clenched, back arching, and a baby who seems to escalate the more you try rather than settle.",
+    why: "The prefrontal cortex, responsible for emotional regulation, is not functional at 6 weeks. There is no neurological mechanism for self-soothing yet. When your baby's cortisol spikes during a crying episode, the only way it comes down is through external co-regulation. The pattern you're seeing is a nervous system crisis, not primarily a gut problem, and applying gut interventions to a nervous system presentation typically delays resolution by weeks rather than speeding it up.",
+    rulesOut: "This pattern is less consistent with gut discomfort alone, which usually shows visible bloating, comes in waves, and eases after gas or a bowel movement, or feeding mechanics alone, which tracks with time-since-feed more than with how fast stimulation escalates things. A nervous system pattern can still have gut or feeding issues layered underneath it, this just tells you which one to address first.",
     steps: [
-      {title: "Sound before touch, always", body: "Brown noise at 60–65 decibels, minimum 7 feet from baby's head. This is not optional sequencing. Activate the acoustic environment 30 seconds before you pick up your baby. The womb acoustic environment is brown noise, not white noise. This signals neurological safety before any additional sensory input."},
-      {title: "Tiger Hold at exactly 60 BPM, pulse, don't rock", body: "Face-down across your forearm. 60 beats per minute rhythmic pulse, forward and back. This specific rhythm matches the resting heartbeat and directly deactivates the Moro startle reflex that is keeping your baby's nervous system in a threat state. Rocking at irregular pace does not achieve this."},
-      {title: "Warm dim light, never darkness", body: "Darkness increases cortisol in newborns. Do not turn lights off during a nervous system episode. Use warm amber light at low intensity. After the brown noise and Tiger Hold are in place, dim and warm the light as the third step in the sequence. The full Sound → Touch → Light sequence is the protocol."},
+      {title: "Sound before touch, always", body: "Brown noise at 60 to 65 decibels, minimum 7 feet from baby's head. Activate it 30 seconds before you pick your baby up, not after. The womb environment is brown noise, not white noise, and this signals neurological safety before any additional sensory input arrives."},
+      {title: "Tiger Hold at exactly 60 BPM, pulse, don't rock", body: "Face-down across your forearm. 60 beats per minute rhythmic pulse, forward and back. This specific rhythm matches a resting heartbeat and directly deactivates the Moro startle reflex keeping your baby's nervous system in a threat state. Rocking at an irregular pace doesn't achieve the same thing."},
+      {title: "Warm dim light, never darkness", body: "Darkness increases cortisol in newborns. Use warm amber light at low intensity instead of turning lights off. After brown noise and the Tiger Hold are already in place, dim and warm the light as the third step, not the first."},
     ],
-    ctaHook: (name) => `${name}, you have not been soothing incorrectly. You have been soothing out of sequence. That is a completely different problem, and it has a specific fix.`,
-    ctaBody: "The three steps above give you the sequence for tonight. What they cannot give you is the 15-minute timing framework, how long to hold each layer before assessing, when to cycle back to Sound if Touch is not working, and how to adjust when the gut system is also involved simultaneously. That is in the <strong>Calm Baby Blueprint</strong>.",
-    ctaConsequence: "A dysregulated nervous system does not respond to more effort. It responds to the correct sequence, applied before the crying reaches full intensity. Parents who escalate, faster rocking, louder noise, more position changes, consistently find the episodes worsen. The sequence is the protocol. Starting it correctly tonight is the difference between managing the episode and shortening it.",
-    ctaBtnText: "Start the Nervous System Protocol Tonight — $47",
+    monitor: "Watch for whether the crying responds faster when you catch it in the first 30 seconds versus letting it build first, that responsiveness to early intervention is the confirming sign. If your baby seems inconsolable regardless of timing, feels unusually stiff or unusually floppy, or the pattern comes with very poor feeding or weight gain, that's worth a direct conversation with your pediatrician rather than more soothing attempts.",
+    bridgeLine: (name) => `${name}, you haven't been soothing incorrectly, you've been soothing out of sequence. If you want the complete management system instead of testing that sequence by trial and error, that's what the Calm Baby Blueprint is for.`,
+
+    forBaby: "High-pitched crying from second one, a rigid body, soothing that works briefly then stops.",
+    whyTipsFailed: "By night three, most parents start adding more, more bouncing, more sound, more movement, hoping something eventually lands. For a dysregulated nervous system, more input usually means more dysregulation, not less. The instinct to do more is completely understandable. It's also usually backwards.",
+    whatsDifferent: "Not a single technique. A timing framework: the exact sequence (sound, then touch, then light), how long to hold each layer before moving to the next, and when to cycle back if it isn't landing, calibrated to a nervous system that can't yet regulate itself.",
     protocol: [
       "The Sound → Touch → Light timing framework with assessment checkpoints at each stage",
       "Tiger Hold with 60 BPM calibration, technique breakdown with rhythm guidance",
       "Cry Decoder Masterclass, distinguish the nervous system cry from gut pain in real time (Bonus 3)",
       "60-minute brown noise soundscape engineered to womb frequencies, use it tonight (Bonus 2)",
-      "Parent regulation section, your cortisol transmits through touch, regulate yourself first",
+      "Parent regulation section, your own cortisol transmits through touch, regulate yourself first",
       "Bloom Baby Tracker PWA, log what's working at 3AM without turning on a light (Bonus 1)",
     ],
+    trustVincent: "Vincent is an epidemiologist, trained to read and weigh population-level developmental research, not a pediatrician. That's what the credential is actually for here: separating what's established about newborn cortisol regulation and the Moro startle reflex from the generic soothing advice that ignores both. He ran that same process on his own daughter Zion's colic first.",
+    evidence: () => "This isn't from one single colic trial the way the gut protocol is. Newborn cortisol co-regulation and the Moro startle reflex are established developmental neuroscience, applied here to a specific colic sequence, not a single study's headline number. The Sound → Touch → Light order follows directly from that physiology.",
+    ctaBtnText: "Start the Nervous System Protocol Tonight — $47",
     mailerliteField: "Nervous System Primary",
   },
 
-  AC: {
-    type: "Acoustic Environment Overload",
-    subtitle: "Primary Root Cause",
-    emoji: "🎵",
-    bannerClass: "ac-banner",
-    stepClass: "ac-sn",
-    prevalence: "Frequently overlooked as a standalone driver, contributes significantly in approximately 30–40% of cases.",
-    headline: "Your baby's environment is actively working against their nervous system.",
-    science: "The womb is not a quiet environment, it is a continuous low-frequency acoustic space dominated by maternal heartbeat, blood flow, and digestive sounds, all in the brown noise frequency range. A newborn's nervous system spent 9 months calibrated to that specific frequency. The typical home environment, irregular sounds, high-frequency audio, variable background noise, is actively dysregulating. White noise sits above the womb frequency range and can worsen the response. Brown noise at the correct volume and distance is the specific intervention.",
-    mistakes: [
-      "Using white noise. White noise is high-frequency and statistically random, it sits above the womb frequency range and can overstimulate an already sensitised newborn nervous system. Brown noise is the correct acoustic intervention.",
-      "Placing the speaker too close or at too high a volume. The correct specification is 60–65 decibels minimum 7 feet from baby's head, roughly the volume of a shower heard from across the room. Closer or louder has the opposite effect.",
-      "Treating sound as a last resort rather than the first step. The acoustic layer must be established before touch. Picking up a baby in an acoustically dysregulating environment and then adding brown noise after is the wrong sequence.",
-    ],
+  FM: {
+    type: "Feeding Mechanics",
+    subtitle: "Most Likely Pattern",
+    emoji: "🍼",
+    bannerClass: "feed-banner",
+    stepClass: "feed-sn",
+    prevalence: "Overlaps with both other systems in practice, and is the pattern most often missed entirely, since the crying shows up hours after the feed that actually caused it.",
+
+    seeing: "What you're probably seeing tonight: fussing or crying that starts predictably 1 to 3 hours after a feed, pulling off the breast or bottle mid-feed, audible gulping or coughing while feeding, and a baby who's noticeably more settled upright than lying flat.",
+    why: "A newborn's suck-swallow-breathe reflex is immature and easily overridden by a fast milk flow, a steep bottle angle, or a shallow latch. When that happens, air goes in with the milk on nearly every swallow, roughly 20% more air than a properly paced feed takes in. That air doesn't cause a problem at the feed itself. It sits, ferments over the next two to four hours, and shows up as crying that looks completely unrelated to feeding because the timing doesn't obviously connect the two.",
+    rulesOut: "This pattern is less consistent with a pure gut-microbiome picture, which usually comes with visible bloating and stool changes independent of feed timing, or a pure nervous-system picture, which tends to escalate with any stimulation rather than specifically around feeds. Burping longer or harder doesn't fix this pattern, it releases what's already trapped from that feed, it doesn't change how much air the next feed adds.",
     steps: [
-      {title: "Replace all white noise with brown noise immediately", body: "If you're using a white noise machine, app, or audio track, stop tonight. Brown noise: low-frequency, slow rolling pattern matching womb acoustics. 60–65 decibels. Minimum 7 feet from baby's head. The Blueprint includes a calibrated 60-minute soundscape engineered to these exact womb frequencies."},
-      {title: "Establish sound before the crying escalates", body: "For babies with acoustic sensitivity, the environment must be set before distress peaks. Brown noise active in the sleeping space 15 minutes before the typical witching hour onset. Do not wait until the cry has reached full intensity, the acoustic signal needs to be established in a relatively calm state to register as safe."},
-      {title: "Reduce daytime acoustic load", body: "Television, podcasts, and irregular household sounds add to the daily acoustic burden. The nervous system has a cumulative load threshold. Reducing daytime sensory input, especially irregular high-frequency sounds, lowers the baseline from which the evening dysregulation begins. Consistent brown noise during daytime sleep supports this."},
+      {title: "Slow the flow, don't just change the position", body: "Hold your baby near-upright, not reclined, with the bottle horizontal so she's sucking for milk rather than having it fall into her mouth. Fill the nipple only half with milk so the rest is air, and pause every 20 to 30 seconds to let her breathe. Breastfeeding: check that her mouth covers the full areola, not just the nipple, a shallow latch pulls in air the same way a steep bottle angle does."},
+      {title: "Burp upright, not reclined, and don't force it", body: "Hold her fully upright with her head on your shoulder, gentle patting at roughly 60 beats a minute, no jostling. Gravity lets trapped gas rise and escape on its own. Ten to fifteen minutes minimum. A burp that has to be forced usually means she was patted harder, not given the position gas actually needs to move."},
+      {title: "Give her 15 minutes upright after the feed, before laying her down", body: "The 1-to-3-hour delayed crying window is air working its way through, not a new problem starting from scratch. Holding her upright for the first 15 minutes after a feed gives that air a head start toward moving down and out instead of sitting and fermenting."},
     ],
-    ctaHook: (name) => `${name}, your baby is not unusually sensitive. Their environment has been sending the wrong signal. That is correctable, starting tonight, before you spend another dollar on anything else.`,
-    ctaBody: "The three steps above correct the immediate acoustic environment. What they cannot give you is the engineered soundscape calibrated to exact womb frequency specifications, or the full integration protocol showing how the acoustic layer works alongside the physical holds and gut microbiome repair. That is in the <strong>Calm Baby Blueprint</strong>.",
-    ctaConsequence: "Acoustic dysregulation compounds across the day. The witching hour is not a random evening event, it is the accumulation of a full day of suboptimal acoustic input reaching a threshold. Fixing the night environment without addressing the full acoustic architecture means the episodes are managed but not prevented. The pattern continues until the full system is corrected.",
-    ctaBtnText: "Fix the Acoustic Environment Tonight — $47",
+    monitor: "Watch for whether the crying tracks consistently with time-since-feed, that timing link is the confirming sign for this pattern. If instead she's arching and refusing feeds altogether, not gaining weight as expected, or the crying happens regardless of when she last ate, that's worth a direct conversation with your pediatrician about reflux or a feeding evaluation rather than more position changes at home.",
+    bridgeLine: (name) => `${name}, the mechanics are fixable, and most of it isn't about willpower, it's about flow rate and timing. If you want the complete system instead of guessing at bottle angles and burping harder, that's what the Calm Baby Blueprint is for.`,
+
+    forBaby: "Crying on a delay after feeds, gulping or pulling off mid-feed, settles better held upright.",
+    whyTipsFailed: "The advice you've probably already gotten, feed slower, burp longer, try a different bottle, treats the symptom instead of the mechanism: how fast the milk is arriving relative to what a newborn's own reflexes can pace on their own. A longer burping session clears what's already trapped. It doesn't change how much air the next feed adds.",
+    whatsDifferent: "Not a single tip about bottle angle. A full feeding-mechanics protocol: paced feeding technique for bottles, a latch check for breastfeeding, and the timing framework for how long to hold upright afterward, calibrated to whether your baby is breastfed, formula-fed, or mixed.",
     protocol: [
-      "60-minute brown noise soundscape engineered to womb frequency specifications, use tonight (Bonus 2)",
-      "Acoustic environment design guide: speaker placement, volume calibration, room setup",
-      "The Sound → Touch → Light timing framework, sequence and integration protocol",
-      "Tiger Hold technique breakdown, the physical complement to the acoustic protocol",
-      "Bloom Baby Tracker PWA, track which acoustic adjustments produce measurable results (Bonus 1)",
-      "Cry Decoder Masterclass, identify acoustic-sensitivity cry patterns in real time (Bonus 3)",
+      "Diagnostic decision tree, know your baby's primary system before applying any intervention",
+      "Complete paced-feeding protocol: bottle angle, nipple flow rate, and pacing breaks, plus a breastfeeding latch-assessment guide",
+      "Upright-hold burping technique and the 15-minute post-feed window, step by step",
+      "60-minute brown noise soundscape calibrated to womb frequencies (Bonus 2)",
+      "Bloom Baby Tracker PWA, log feeds and crying timing to confirm the pattern (Bonus 1)",
+      "Cry Decoder Masterclass, distinguish a feeding-mechanics cry from gut pain or nervous system distress (Bonus 3)",
     ],
-    mailerliteField: "Acoustic Environment Primary",
+    trustVincent: "Vincent is an epidemiologist, trained to read and weigh population-level research, not a lactation consultant or a pediatrician. That's what the credential is actually for here: separating the actual mechanism, flow rate versus a newborn's immature swallowing reflex, from generic \"just burp more\" advice. He ran that same process on his own daughter Zion's colic first.",
+    evidence: () => "This isn't from one single colic trial the way the gut protocol is. Paced feeding, controlling flow rate so a baby isn't out-swallowing her own suck-swallow-breathe reflex, is standard pediatric and lactation-consultant feeding guidance, not one study's finding. The Blueprint applies that established feeding physiology specifically to the delayed-crying timing pattern above.",
+    ctaBtnText: "Fix the Feeding Mechanics Tonight — $47",
+    mailerliteField: "Feeding Mechanics Primary",
   },
 };
 
@@ -583,14 +841,18 @@ function paintQTimer(){
   el.textContent = `${m}:${s < 10 ? '0' : ''}${s}`;
 }
 let feedingMethod = '';
-let scores = {GUT:0, NS:0, AC:0};
+let scores = {GUT:0, NS:0, FM:0};
+// Literal text of what's already been tried (Q4), captured separately
+// from scoring so the result page and the DM message can say it back
+// to her, not just score against it silently.
+let triedItems = [];
 const selectedMap = new Map();
 const quizStartedAt = Date.now(); // simple bot-speed trap
 
 /* ── SECURE SUBSCRIPTION ─────────────────────────────────────────────── */
 async function subscribeToMailerLite(name, email, colcType, detail, status) {
-  const total = scores.GUT + scores.NS + scores.AC;
-  const dominant = Math.max(scores.GUT, scores.NS, scores.AC);
+  const total = scores.GUT + scores.NS + scores.FM;
+  const dominant = Math.max(scores.GUT, scores.NS, scores.FM);
   const confidencePct = total > 0 ? Math.round((dominant / total) * 100) : 0;
   const utm = getStoredUTMs();
 
@@ -609,6 +871,7 @@ async function subscribeToMailerLite(name, email, colcType, detail, status) {
         confidence_pct:     confidencePct,
         baby_age_weeks:    babyAgeWeeks,
         feeding_method:    feedingMethod || 'Not specified',
+        tried_items:       triedItems.join(', '),
         group_id:          CFG.group_id,
         // Session tracking
         assessment_id:     ASSESSMENT_ID,
@@ -670,8 +933,9 @@ function startQuiz() {
   userConsent  = true;
   babyAgeWeeks = ageNum;
 
-  scores = {GUT:0, NS:0, AC:0};
+  scores = {GUT:0, NS:0, FM:0};
   feedingMethod = '';
+  triedItems = [];
   qIndex = 0;
   selectedMap.clear();
 
@@ -716,13 +980,13 @@ function renderQuestion() {
     div.setAttribute('tabindex', '0');
     div.innerHTML = `<span class="opt-text">${o[0]}</span><span class="opt-check" id="chk${i}" aria-hidden="true"></span>`;
     div.style.animation = `rise .35s ${i * .07}s ease both`;
-    div.onclick = () => toggleOption(i, o[1], div, !!q.single, o[2] || null);
-    div.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleOption(i, o[1], div, !!q.single, o[2] || null); } };
+    div.onclick = () => toggleOption(i, o[1], div, !!q.single, o[2] || null, o[3] || null);
+    div.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleOption(i, o[1], div, !!q.single, o[2] || null, o[3] || null); } };
     box.appendChild(div);
   });
 }
 
-function toggleOption(idx, weights, el, single, feeding) {
+function toggleOption(idx, weights, el, single, feeding, triedTag) {
   const deselect = (node) => {
     node.classList.remove('selected');
     node.setAttribute('aria-checked', 'false');
@@ -741,7 +1005,7 @@ function toggleOption(idx, weights, el, single, feeding) {
     document.querySelectorAll('#optionsBox .option').forEach(deselect);
     selectedMap.clear();
     if (!wasSelected) {
-      selectedMap.set(idx, { weights, feeding });
+      selectedMap.set(idx, { weights, feeding, triedTag });
       select(el);
     }
   } else {
@@ -749,7 +1013,7 @@ function toggleOption(idx, weights, el, single, feeding) {
       selectedMap.delete(idx);
       deselect(el);
     } else {
-      selectedMap.set(idx, { weights, feeding });
+      selectedMap.set(idx, { weights, feeding, triedTag });
       select(el);
     }
   }
@@ -767,6 +1031,7 @@ function advanceQ() {
   selectedMap.forEach(sel => {
     Object.keys(sel.weights).forEach(k => { scores[k] += sel.weights[k]; });
     if (sel.feeding) feedingMethod = sel.feeding;
+    if (sel.triedTag) triedItems.push(sel.triedTag);
   });
   qIndex++;
   selectedMap.clear();
@@ -798,14 +1063,17 @@ function showAnalysis() {
   setTimeout(showResult, 2800);
 }
 
-/* Picks the highest-scoring system. Order is GUT, AC, NS on an exact tie,
-   matching each type's own documented prevalence range (GUT 60-70%,
-   AC 30-40%, NS 20-30%) rather than the arbitrary GUT/NS/AC object order
-   the old `>=` reduce used, which silently favoured GUT and NS over AC
-   on every tie regardless of which type is actually more common. */
+/* Picks the highest-scoring system. Order on an exact tie is GUT, then
+   FM, then NS. GUT and NS keep their documented prevalence ranges (60
+   to 70% and 20 to 30%). FM doesn't have an equivalent published
+   colic-prevalence figure the way the other two do, it's a design
+   default for tie-breaking, not a citation-backed claim, so it isn't
+   stated as a percentage anywhere in this file. Ties themselves are
+   rare given how the weights are spread across seven questions; this
+   only matters at all on an exact score match. */
 function getPrimaryType(s) {
   let best = 'GUT', bestVal = -Infinity;
-  ['GUT', 'AC', 'NS'].forEach(k => {
+  ['GUT', 'FM', 'NS'].forEach(k => {
     if (s[k] > bestVal) { bestVal = s[k]; best = k; }
   });
   return best;
@@ -833,29 +1101,58 @@ async function showResult() {
   document.getElementById('resultTitle').textContent = R.type;
   document.getElementById('resultPrevalence').textContent = R.prevalence;
 
-  // Science section
-  document.getElementById('resultHeadline').textContent = R.headline;
-  document.getElementById('resultScience').textContent  = R.science;
+  // Profile card: one warm sentence built from what she actually told
+  // us (name, age, feeding method, what's already been tried), not a
+  // data table. innerHTML because buildProfileNarrative() wraps the
+  // tried-items list in <strong> on purpose, see its own comment.
+  document.getElementById('profileNarrative').innerHTML = buildProfileNarrative();
+  document.getElementById('profAssessmentId').textContent = ASSESSMENT_ID;
 
-  // Mistakes
-  const mBox = document.getElementById('resultMistakes');
-  mBox.innerHTML = '';
-  R.mistakes.forEach((m, i) => {
-    mBox.innerHTML += `<div class="mistake-item"><span class="mistake-num">${i+1}.</span><span class="mistake-text">${m}</span></div>`;
-  });
+  // DM message, prebuilt from the same result data (including what's
+  // been tried) so it's ready to copy the moment she wants to talk it
+  // through with real context already in it
+  document.getElementById('dmMessageBox').textContent = buildDMMessage(R);
 
-  // Steps
+  // "Why this pattern points here" — the five-part diagnostic
+  // narrative. This half has to stand on its own even for someone who
+  // never scrolls to the offer below it.
+  document.getElementById('resultSeeing').textContent   = R.seeing;
+  document.getElementById('resultWhy').textContent      = R.why;
+  document.getElementById('resultRulesOut').textContent = R.rulesOut;
+  document.getElementById('resultMonitor').textContent  = R.monitor;
+
+  renderPrevalenceBar(type);
+  const triedLine = buildTriedFailureLine(type);
+  const triedEl = document.getElementById('triedLine');
+  if (triedLine) { triedEl.innerHTML = triedLine; triedEl.style.display = ''; }
+  else { triedEl.style.display = 'none'; }
+
   const sBox = document.getElementById('resultSteps');
   sBox.innerHTML = '';
   R.steps.forEach((s, i) => {
     sBox.innerHTML += `<div class="step-card"><div class="step-num ${R.stepClass}">${i+1}</div><div><div class="step-title">${s.title}</div><div class="step-body">${s.body}</div></div></div>`;
   });
 
-  // CTA
-  document.getElementById('checklistHook').textContent = `Run tonight's ${R.type} sequence, step by step.`;
-  document.getElementById('ctaHook').textContent  = R.ctaHook(userName);
-  document.getElementById('ctaBody').innerHTML    = R.ctaBody;
-  document.getElementById('ctaConsequence').textContent = R.ctaConsequence;
+  // Bridge line, the pivot sentence into the offer
+  document.getElementById('resultBridge').textContent = R.bridgeLine(userName);
+
+  // Sticky bar reads the same type name as the banner
+  document.getElementById('stickyType').textContent = R.type;
+
+  // Checklist path (free)
+  // checklistHook stays static ("Tonight's 3 steps, guided") in the
+  // compact card now, the type name is already the banner headline
+  // above, repeating it here just wrapped badly at ~160px column width
+
+  // Blueprint path (offer) — the 8-answer structure: is this for my
+  // baby, why haven't the usual tips worked, what's different, what do
+  // I get, why trust Vincent, what evidence, what if it doesn't help
+  // (the guarantee box, static in HTML), buy (the button below).
+  document.getElementById('offerForBaby').textContent   = R.forBaby;
+  document.getElementById('offerWhyFailed').textContent = R.whyTipsFailed;
+  document.getElementById('offerDifferent').textContent = R.whatsDifferent;
+  document.getElementById('offerTrust').textContent     = R.trustVincent;
+  document.getElementById('offerEvidence').textContent  = R.evidence(feedingMethod);
   document.getElementById('ctaBtnText').textContent     = R.ctaBtnText;
 
   const pBox = document.getElementById('protocolList');
@@ -869,6 +1166,7 @@ async function showResult() {
 }
 
 function goToProduct() {
+  trackPathClick('blueprint');
   // Assessment ID travels into the Gumroad URL so Zapier can match
   // the purchase back to this subscriber record in MailerLite.
   // window.location.href, not window.open, since TikTok's in-app
@@ -880,8 +1178,9 @@ function goToProduct() {
 }
 
 function goToChecklist() {
+  trackPathClick('checklist');
   // Same window.location.href reasoning as goToProduct(). type=
-  // reuses the exact short code (GUT/NS/AC) getPrimaryType() already
+  // reuses the exact short code (GUT/NS/FM) getPrimaryType() already
   // returns, so the checklist doesn't need its own lookup. name/age
   // travel too so the checklist's capture form can pre-fill them
   // instead of asking twice, this is meant to feel like one
@@ -895,6 +1194,224 @@ function goToChecklist() {
     `&age=${encodeURIComponent(babyAgeWeeks != null ? babyAgeWeeks : '')}` +
     `&utm_source=quiz&utm_medium=result_page&utm_campaign=checklist_handoff`;
   window.location.href = url;
+}
+
+/* ── PATH-CLICK TRACKING ─────────────────────────────────────────────────
+   Separate from subscribeToMailerLite() on purpose, that call already has
+   one job (record the completed assessment). This records which of the
+   three result-page paths she actually took, so "does the on-page choice
+   convert better than the email links" is a question with an answer
+   instead of a guess. Requires a `path_clicked` custom field to exist in
+   MailerLite before this ships — see subscribe.js for why that matters. */
+/* ── PREVALENCE BAR ──────────────────────────────────────────────────────
+   Real numbers for GUT/NS, sourced from the Master Baseline Dashboard's
+   completed-assessment sample (70% NS / 30% GUT at last pull). That
+   sample predates Feeding Mechanics existing as a bucket at all, so FM
+   has zero completion history of its own, not a small number, zero. A
+   fabricated FM percentage would be exactly the kind of unsourced stat
+   this project's own QA process exists to catch, so FM gets an honest
+   admission instead of a bar. Update the two numbers below once a
+   fresh dashboard pull exists, don't leave last-quarter's split
+   quietly presented as current forever. */
+function renderPrevalenceBar(type) {
+  const box = document.getElementById('prevalenceBox');
+
+  if (type === 'FM') {
+    box.innerHTML = `
+      <div class="eyebrow-mini">Where you land</div>
+      <p class="prevalence-note">Feeding Mechanics is the newest of the three patterns in this assessment. There isn't a large enough sample of completed assessments yet to give you an honest percentage the way we can for the other two, so we're not going to invent one.</p>
+    `;
+    return;
+  }
+
+  const PREVALENCE = { NS: 70, GUT: 30 }; // real, from completed assessments, not a textbook estimate
+  const pct = PREVALENCE[type];
+  const otherType = type === 'NS' ? 'GUT' : 'NS';
+
+  box.innerHTML = `
+    <div class="eyebrow-mini">Where you land</div>
+    <p class="prevalence-note">About <strong>${pct} in 100</strong> parents who complete this assessment land on ${RESULTS[type].type} as the primary pattern, based on real completed assessments so far, not a textbook estimate. That number will keep moving as more parents complete it, this is where things stand right now.</p>
+    <div class="prevalence-track"><div class="prevalence-fill" style="width:${pct}%"></div></div>
+    <div class="prevalence-labels"><span class="here">● ${RESULTS[type].type}, you're here</span><span>${RESULTS[otherType].type}</span></div>
+  `;
+}
+
+/* ── TRIED-ITEMS FAILURE LINE ────────────────────────────────────────────
+   Distinct from RESULTS[type].whyTipsFailed (the generic, type-level
+   answer used in the offer card). This one is dynamic, built from her
+   actual Q4 selections, so it reads as a direct callback rather than a
+   templated paragraph that happens to apply to her. Returns null if Q4
+   was somehow skipped, showResult() hides the line entirely in that case
+   rather than showing an empty callout. */
+function buildTriedFailureLine(type) {
+  if (!triedItems.length) return null;
+
+  const list = triedItems.length === 1
+    ? triedItems[0]
+    : triedItems.slice(0, -1).join(', ') + ' and ' + triedItems[triedItems.length - 1];
+
+  const reasons = {
+    GUT: `work on the symptom, not the microbial imbalance producing it, that's the specific reason the relief never held.`,
+    NS: `all add stimulation or motion. For a nervous system already in overload, that's more input, not less, which is exactly why it worked for a few minutes and then stopped.`,
+    FM: `address what happens after the air is already in, not the flow rate that let it in during the feed, so the next feed just loads the same problem again.`,
+  };
+
+  return `You told us you'd already tried <strong>${list}</strong>. ${reasons[type]}`;
+}
+
+/* ── PROFILE CARD NARRATIVE ──────────────────────────────────────────────
+   One sentence built from what she actually told the quiz, instead of a
+   row of data chips. Returns HTML (not plain text) on purpose, the tried
+   items get wrapped in <strong> so they read as "yes, we heard you",
+   which is the actual point of surfacing them at all. */
+function buildProfileNarrative() {
+  const feedingPhrase = {
+    'Breastfed': 'breastfed',
+    'Formula-fed': 'formula-fed',
+    'Mixed': 'mixed breast and formula fed',
+  }[feedingMethod] || 'feeding';
+
+  let sentence = `${userName}, you told us about a ${babyAgeWeeks}-week-old who's ${feedingPhrase}`;
+
+  if (triedItems.length) {
+    const list = triedItems.length === 1
+      ? triedItems[0]
+      : triedItems.slice(0, -1).join(', ') + ' and ' + triedItems[triedItems.length - 1];
+    const verb = triedItems.length === 1 ? "hasn't" : "haven't";
+    sentence += `, and that <strong>${list}</strong> ${verb} been enough on ${triedItems.length === 1 ? 'its' : 'their'} own`;
+  }
+
+  sentence += `. Here's what that most likely points to.`;
+  return sentence;
+}
+
+function trackPathClick(path) {
+  try {
+    const type = getPrimaryType(scores);
+    const R = RESULTS[type];
+    fetch('/api/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      // keepalive: this fetch's page is about to navigate away via
+      // window.location.href right after this call. Without keepalive,
+      // the browser can cancel an in-flight fetch mid-navigation and
+      // the click never gets recorded, a classic silent-failure trap.
+      keepalive: true,
+      body: JSON.stringify({
+        email: userEmail,
+        name: userName,
+        website: '',
+        consent: !!userConsent,
+        colic_type: R.type,
+        colic_type_detail: R.mailerliteField,
+        feeding_method: feedingMethod || 'Not specified',
+        baby_age_weeks: babyAgeWeeks,
+        tried_items: triedItems.join(', '),
+        group_id: CFG.group_id,
+        assessment_id: ASSESSMENT_ID,
+        lead_source: UTM_SOURCE,
+        quiz_status: 'completed',
+        quiz_version: '2.0',
+        path_clicked: path, // 'checklist' | 'blueprint' | 'dm'
+        purchase_status: 'pending',
+        ...getStoredUTMs(),
+      }),
+    }).catch(e => console.warn('Path click tracking failed silently:', e));
+  } catch(e) {
+    console.warn('trackPathClick error:', e);
+  }
+}
+
+/* ── DM-TO-VINCENT PATH ──────────────────────────────────────────────────
+   Plain ig.me/m/ links only support a `ref` param delivered via webhook
+   to a connected Instagram Messaging API app with Icebreakers configured,
+   confirmed against Meta's own developer docs. There is no parameter
+   that pre-fills visible text in the DM composer for a regular link like
+   this one. So: build the message, offer it to copy, then open the
+   thread. She pastes it herself. That's the honest version of this
+   feature, not a promise the platform doesn't keep. */
+function buildDMMessage(R) {
+  const feeding = (feedingMethod || 'not specified').toLowerCase();
+  let msg = `Hi Vincent, I just completed the Colic Protocol assessment (${ASSESSMENT_ID}). My result was ${R.type}. My baby is ${babyAgeWeeks} weeks old and ${feeding}.`;
+  if (triedItems.length) {
+    msg += ` I've already tried ${triedItems.join(', ')}, without much luck.`;
+  }
+  msg += ` I'd like help understanding what this means.`;
+  return msg;
+}
+
+async function copyDMMessage() {
+  const text = document.getElementById('dmMessageBox').textContent;
+  const btn = document.getElementById('dmCopyBtn');
+  const original = btn.textContent;
+  let copied = false;
+
+  try {
+    await navigator.clipboard.writeText(text);
+    copied = true;
+  } catch(e) {
+    // Clipboard API is commonly blocked inside Instagram/TikTok's
+    // in-app browser without a user-gesture-adjacent permission
+    // prompt succeeding. Fall back to the old select+execCommand
+    // trick rather than just failing silently.
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      copied = document.execCommand('copy');
+      document.body.removeChild(ta);
+    } catch(e2) { copied = false; }
+  }
+
+  btn.textContent = copied ? 'Copied ✓' : 'Select the text above';
+  setTimeout(() => { btn.textContent = original; }, 2200);
+}
+
+function goToDM() {
+  trackPathClick('dm');
+  window.location.href = CFG.dmUrl;
+}
+
+/* ── SCROLL POLISH ────────────────────────────────────────────────────────
+   Two independent observers, set up once at load:
+   1. .reveal elements fade up as they enter the viewport. They live
+      inside #resultScreen, which is hidden (display:none) until
+      showResult() runs, IntersectionObserver handles that fine, it just
+      reports non-intersecting until the container becomes visible and
+      she scrolls to them.
+   2. The sticky bottom bar shows once the result banner scrolls out of
+      view and stays shown, it doesn't hide again further down the page,
+      the footer CTAs and this one are meant to coexist, not compete.
+   Both are feature-detected. No IntersectionObserver support just means
+   .reveal content shows immediately and the sticky bar never appears,
+   a strictly safe degrade, not a broken page. */
+if ('IntersectionObserver' in window) {
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  const banner = document.getElementById('resultBanner');
+  const stickyBar = document.getElementById('stickyBar');
+  if (banner && stickyBar) {
+    const bannerObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        stickyBar.classList.toggle('show', !entry.isIntersecting);
+      });
+    }, { threshold: 0 });
+    bannerObserver.observe(banner);
+  }
+} else {
+  document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
 }
 </script>
 </body>
