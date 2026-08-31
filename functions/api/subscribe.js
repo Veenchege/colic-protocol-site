@@ -22,13 +22,19 @@ function json(status, body, allowedOrigin) {
   });
 }
 
-// Accept only the exact values sent by quiz.html
+// Accept only the exact values sent by quiz.html. Migrated this version:
+// Acoustic Environment Overload -> Feeding Mechanics, matching quiz.html's
+// RESULTS.FM.type and the naming the email sequence (Colic_Protocol_
+// Email_Sequence_v3) already uses for its ?type=FM variant. Existing
+// MailerLite subscribers already tagged "Acoustic Environment Overload"
+// from before this migration are untouched by this list, historical
+// data, not retroactively relabeled, that's a separate decision.
 const VALID_COLIC_TYPES = [
   '',
   'Unassigned',
   'Gut Microbiome Imbalance',
   'Nervous System Dysregulation',
-  'Acoustic Environment Overload',
+  'Feeding Mechanics',
 ];
 
 // Accept only the exact values sent by quiz.html's Q7 (single-select).
@@ -41,6 +47,19 @@ const VALID_FEEDING_METHODS = [
   'Breastfed',
   'Formula-fed',
   'Mixed',
+];
+
+// Which of the two result-page paths (or the DM fallback) she actually
+// clicked. Same soft-fallback pattern as feeding method: an unrecognized
+// value shouldn't fail the whole subscription, it just doesn't get
+// tagged. NOTE: MailerLite needs a `path_clicked` custom field created
+// in the account before this will actually persist — see the comment
+// on the fields payload below for what happens if it isn't there yet.
+const VALID_PATH_CLICKS = [
+  '',
+  'checklist',
+  'blueprint',
+  'dm',
 ];
 
 export async function onRequestOptions(context) {
@@ -75,10 +94,12 @@ export async function onRequestPost(context) {
     consent,
     confidence_pct,
     baby_age_weeks,
+    tried_items,
     assessment_id,
     lead_source,
     quiz_version,
     purchase_status,
+    path_clicked,
     utm_source,
     utm_medium,
     utm_campaign,
@@ -125,6 +146,11 @@ export async function onRequestPost(context) {
     typeof feeding_method === 'string' && VALID_FEEDING_METHODS.includes(feeding_method.trim())
       ? feeding_method.trim()
       : 'Not specified';
+
+  const cleanPathClicked =
+    typeof path_clicked === 'string' && VALID_PATH_CLICKS.includes(path_clicked.trim())
+      ? path_clicked.trim()
+      : '';
 
   // Quiz status validation
   const validStatuses = ['started', 'completed'];
@@ -216,10 +242,12 @@ export async function onRequestPost(context) {
             quiz_status: cleanStatus,
             confidence_pct: cleanNum(confidence_pct),
             baby_age_weeks: cleanNum(baby_age_weeks),
+            tried_items: cleanStr(tried_items, 300),
             assessment_id: cleanStr(assessment_id),
             lead_source: cleanStr(lead_source),
             quiz_version: cleanStr(quiz_version, 20),
             purchase_status: cleanStr(purchase_status, 50),
+            path_clicked: cleanPathClicked,
             ...utm,
           },
           groups: [GROUP_ID],
@@ -242,6 +270,71 @@ export async function onRequestPost(context) {
         { error: 'Subscription failed, please try again' },
         allowed
       );
+    }
+
+    // Optional Supabase mirror. Inactive until SUPABASE_URL and
+    // SUPABASE_SERVICE_KEY are set as Cloudflare secrets — until then
+    // this block is a no-op, nothing to configure to keep shipping
+    // without it. When enabled, this upserts ONE evolving row per
+    // assessment_id (started -> completed -> path_clicked all merge
+    // into the same row), not an append-only event log. That's enough
+    // for "what happened with this assessment" lookups; if you later
+    // want exact click timestamps as separate rows, that's a second,
+    // deliberately separate table (assessment_events), not this one.
+    // Schema:
+    //   create table assessments (
+    //     assessment_id text primary key,
+    //     email text, name text,
+    //     colic_type text, feeding_method text,
+    //     baby_age_weeks numeric, confidence_pct numeric,
+    //     quiz_status text, path_clicked text,
+    //     tried_items text,
+    //     lead_source text,
+    //     utm_source text, utm_medium text, utm_campaign text,
+    //     utm_term text, utm_content text,
+    //     updated_at timestamptz
+    //   );
+    const SUPABASE_URL = env.SUPABASE_URL;
+    const SUPABASE_SERVICE_KEY = env.SUPABASE_SERVICE_KEY;
+
+    if (SUPABASE_URL && SUPABASE_SERVICE_KEY && cleanStr(assessment_id)) {
+      const supabaseWrite = fetch(
+        `${SUPABASE_URL}/rest/v1/assessments?on_conflict=assessment_id`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            apikey: SUPABASE_SERVICE_KEY,
+            Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`,
+            Prefer: 'resolution=merge-duplicates',
+          },
+          body: JSON.stringify({
+            assessment_id: cleanStr(assessment_id),
+            email: email.trim().toLowerCase(),
+            name: name.trim(),
+            colic_type: cleanType,
+            feeding_method: cleanFeeding,
+            baby_age_weeks: cleanNum(baby_age_weeks) || null,
+            confidence_pct: cleanNum(confidence_pct) || null,
+            quiz_status: cleanStatus,
+            path_clicked: cleanPathClicked || null,
+            tried_items: cleanStr(tried_items, 300) || null,
+            lead_source: cleanStr(lead_source),
+            updated_at: new Date().toISOString(),
+            ...utm,
+          }),
+        }
+      ).catch((err) => {
+        // Best-effort. A Supabase hiccup should never block the
+        // MailerLite subscription the person is actually waiting on.
+        console.warn('[subscribe] Supabase write failed silently:', err);
+      });
+
+      if (typeof context.waitUntil === 'function') {
+        context.waitUntil(supabaseWrite);
+      } else {
+        await supabaseWrite;
+      }
     }
 
     return json(200, {

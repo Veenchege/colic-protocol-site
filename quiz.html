@@ -310,6 +310,69 @@ a{color:inherit}
   .result-section{padding:18px 0}
   .cta-section{padding:22px 18px 26px}
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   SCORE PANEL — her own three scores, lab-report style, not a badge or
+   a colorful ring. Distinct from .prevalence-track (that compares her
+   to the population); this shows HER numbers across all three systems
+   side by side, so a secondary system that scored meaningfully doesn't
+   stay invisible just because the primary type won the tiebreak.
+   ═══════════════════════════════════════════════════════════════════════ */
+.score-panel{background:rgba(255,255,255,.6);border:1px solid rgba(0,0,0,.09);border-radius:14px;padding:20px 20px 16px;margin-bottom:4px}
+.score-panel-head{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid rgba(0,0,0,.08);padding-bottom:10px;margin-bottom:16px}
+.score-panel-title{font-family:var(--fm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-soft)}
+.score-panel-scale{font-family:var(--fm);font-size:9px;color:var(--muted-soft)}
+.score-row{margin-bottom:16px}
+.score-row:last-child{margin-bottom:2px}
+.score-row-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.score-name{font-size:13px;font-weight:700;color:var(--ink)}
+.score-name .primary-tag{font-family:var(--fm);font-size:8.5px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:#fff;background:var(--terra);border-radius:4px;padding:2px 6px;margin-left:7px;vertical-align:1px}
+.score-val{font-family:var(--fm);font-size:14px;font-weight:600;color:var(--ink)}
+.score-track{position:relative;height:7px;background:rgba(0,0,0,.08);border-radius:4px;overflow:hidden}
+.score-fill{position:absolute;left:0;top:0;height:100%;width:0%;background:var(--terra);border-radius:4px;transition:width 1s cubic-bezier(.22,.8,.32,1)}
+.score-row.is-secondary .score-fill{background:var(--muted-soft)}
+.score-panel-foot{font-family:var(--fm);font-size:10px;color:var(--muted-soft);line-height:1.6;border-top:1px solid rgba(0,0,0,.08);padding-top:12px;margin-top:14px}
+
+/* QUICK ACTION — "right now" as numbered micro-steps, not a paragraph.
+   Sits ahead of the deeper "why" content on purpose: most of this
+   traffic skims, so the first thing after the score panel is something
+   she can DO, not something she has to read carefully. */
+.quick-action{background:var(--sage-soft);border:1px solid rgba(108,135,89,.35);border-radius:14px;padding:20px 20px 18px;margin-bottom:4px}
+.qa-eyebrow{font-family:var(--fm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--pine);margin-bottom:8px}
+.qa-title{font-family:var(--fd);font-size:19px;font-weight:700;color:var(--ink);margin-bottom:14px;line-height:1.3}
+.qa-steps{list-style:none;counter-reset:qa;display:flex;flex-direction:column;gap:10px}
+.qa-steps li{counter-increment:qa;display:flex;gap:12px;font-size:13.5px;color:var(--ink);line-height:1.55}
+.qa-steps li::before{content:counter(qa);flex-shrink:0;width:22px;height:22px;border-radius:50%;background:var(--pine);color:#fff;font-family:var(--fm);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.qa-note{font-size:12px;color:var(--muted);margin-top:14px;line-height:1.6;border-top:1px dashed rgba(108,135,89,.4);padding-top:12px}
+
+/* REFRAME — one paragraph, no bullets, matching the Loss Inventory
+   rule (lists dilute the emotional weight of prose-form loss framing).
+   Bridges from "tonight" to "the window" before the mechanism section. */
+.reframe-block{font-size:14.5px;color:var(--ink);line-height:1.75;padding:2px 2px 4px}
+.reframe-block strong{color:var(--terra-deep)}
+
+/* ANGLE STRIP — Solution / Shortcut / Feeling, made explicit and
+   visible rather than left implicit in prose, sits right after the
+   bridge sentence as its direct payoff. */
+.angle-strip{display:flex;flex-direction:column;gap:11px;margin:2px 0 20px;padding:17px 18px;background:rgba(255,255,255,.55);border:1px solid rgba(0,0,0,.07);border-radius:12px}
+.angle-row{display:flex;gap:11px;align-items:baseline}
+.angle-tag{font-family:var(--fm);font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--terra-deep);min-width:74px;flex-shrink:0}
+.angle-text{font-size:13px;color:var(--ink);line-height:1.55}
+
+/* GUARANTEE CARD — bolder than the old inline guarantee-box on
+   purpose. The "conversational, not a badge" rule exists because a
+   sticker-style guarantee graphic next to a payment link was a
+   suspected trigger in a Meta account suspension. This is
+   colicprotocol.baby, not a Meta post or ad, that specific risk
+   doesn't apply here, so the guarantee gets full visual weight and
+   stays visible by default instead of hiding inside a details toggle. */
+.guarantee-card{background:linear-gradient(135deg,rgba(200,150,60,.16),rgba(200,150,60,.06));border:1.5px solid rgba(192,150,63,.4);border-radius:16px;padding:20px 20px 22px;margin:6px 0 16px}
+.guarantee-proof{font-size:12.5px;color:var(--muted);line-height:1.65;margin-bottom:14px;padding-bottom:14px;border-bottom:1px dashed rgba(192,150,63,.45)}
+.guarantee-proof strong{color:var(--ink)}
+.guarantee-card-label{font-family:var(--fd);font-size:21px;font-weight:700;color:#7A5C1E;margin-bottom:8px}
+.guarantee-card p.gc-body{font-size:13.5px;color:#5c4a1e;line-height:1.7}
+.guarantee-card p.gc-body strong{color:#463a17}
+.assessment-count-value{font-weight:700}
 </style>
 </head>
 <body>
@@ -345,6 +408,7 @@ a{color:inherit}
       <span class="trust-item"><span class="trust-dot"></span>Based on peer-reviewed RCT evidence</span>
       <span class="trust-item"><span class="trust-dot"></span>Built by an Epidemiologist</span>
       <span class="trust-item"><span class="trust-dot"></span>Start tonight, free</span>
+      <span class="trust-item"><span class="trust-dot"></span>Over <span class="assessment-count-value">250</span>+ assessments completed</span>
     </div>
 
     <div class="form-row">
@@ -405,6 +469,18 @@ a{color:inherit}
       </div>
       <p class="assessment-note">This identifies your baby's most likely pattern for educational purposes. It is not a medical diagnosis.</p>
 
+      <div class="result-section reveal">
+        <div class="score-panel" id="scorePanel"></div>
+      </div>
+
+      <div class="result-section reveal">
+        <div class="quick-action" id="quickAction"></div>
+      </div>
+
+      <div class="result-section reveal">
+        <div class="reframe-block" id="reframeBlock"></div>
+      </div>
+
       <div class="result-section reveal" id="prevalenceBox"></div>
 
       <div class="result-section reveal">
@@ -431,6 +507,8 @@ a{color:inherit}
     </div>
     <div class="cta-section">
       <p class="bridge-line" id="resultBridge"></p>
+
+      <div class="angle-strip reveal" id="angleStrip"></div>
 
       <div class="testimonial-strip reveal">
         <div class="testimonial-card">
@@ -486,12 +564,11 @@ a{color:inherit}
             </div>
             <div class="offer-qa">
               <div class="offer-q">What if it doesn't help?</div>
-              <div class="guarantee-box">
-                <strong>72-Hour Zero-Cry Guarantee</strong>
-                <p>If your baby is not experiencing significantly reduced crying within 72 hours of implementing this protocol, email me. Full refund immediately. No forms. No questions. You keep the Blueprint.</p>
-              </div>
+              <p class="offer-a">Covered by the 72-hour guarantee below, see it before you decide, not buried after checkout.</p>
             </div>
           </details>
+
+          <div class="guarantee-card" id="guaranteeCard"></div>
 
           <button class="btn-cta" id="ctaBtn" type="button" onclick="goToProduct()">
             <span id="ctaBtnText"></span>
@@ -570,6 +647,38 @@ function getStoredUTMs(){
 }
 captureUTMs();
 const UTM_SOURCE = getStoredUTMs().utm_source || new URLSearchParams(window.location.search).get('utm_source') || 'direct';
+
+/* ── ASSESSMENT COUNT, DATABASE-BACKED ────────────────────────────────────
+   /api/stats reads a real count from Supabase (see functions/api/stats.js)
+   with a floor of 250, the honest MailerLite-sourced figure as of this
+   build, confirm and update that floor if it's re-verified. The
+   Supabase mirror only starts counting from whenever SUPABASE_URL /
+   SUPABASE_SERVICE_KEY get set as secrets, it does not retroactively
+   contain the historical MailerLite total unless that's backfilled
+   separately, that's why this is a floor (max of live vs 250), not the
+   raw live number, showing "3 parents have completed this" on launch
+   day would be a real regression, not just an ugly number. Every
+   element with class="assessment-count-value" gets updated from the
+   same fetch, landing-screen trust strip and the result-page guarantee
+   card both read this one value, no separate copies to keep in sync. */
+let ASSESSMENT_COUNT_DISPLAY = 250;
+async function loadAssessmentCount() {
+  try {
+    const res = await fetch('/api/stats');
+    if (res.ok) {
+      const data = await res.json();
+      if (Number.isFinite(data.completed) && data.completed > 0) {
+        ASSESSMENT_COUNT_DISPLAY = Math.max(data.completed, ASSESSMENT_COUNT_DISPLAY);
+      }
+    }
+  } catch(e) {
+    // Silent fallback, the floor number is already showing in markup.
+  }
+  document.querySelectorAll('.assessment-count-value').forEach(el => {
+    el.textContent = ASSESSMENT_COUNT_DISPLAY;
+  });
+}
+loadAssessmentCount();
 
 /* ══════════════════════════════════════════════════════════════════════
    QUESTIONS
@@ -733,6 +842,17 @@ const RESULTS = {
       : "Savino et al., Pediatrics 2010: a randomized trial in exclusively breastfed infants, 74% reduction in daily crying by Day 21. Two independent systematic reviews in 2020 (BMJ Open, Acta Paediatrica) reached the same conclusion across the wider evidence base.",
     ctaBtnText: "Start the Gut Reset Protocol Tonight — $47",
     mailerliteField: "Gut Microbiome Primary",
+    quickTitle: "Do this in the next 10 minutes",
+    quickSteps: [
+      "Warm 5 drops of L. reuteri DSM 17938 (BioGaia Protectis) to body temperature, mixed into expressed breast milk or formula.",
+      "Give it now, don't wait for the next scheduled feed.",
+      "While it starts working, run the Tiger Hold for 5 minutes to help move what's already trapped.",
+    ],
+    angles: {
+      solution: "The exact strain, dose, and timing that address the microbial imbalance itself, not another gas drop treating the symptom on top of it.",
+      shortcut: "Skip the rounds of gripe water and simethicone most parents cycle through before finding what the trials actually support.",
+      feeling: "The gas stops being a mystery, and so does what to do about it.",
+    },
   },
 
   NS: {
@@ -769,6 +889,17 @@ const RESULTS = {
     evidence: () => "This isn't from one single colic trial the way the gut protocol is. Newborn cortisol co-regulation and the Moro startle reflex are established developmental neuroscience, applied here to a specific colic sequence, not a single study's headline number. The Sound → Touch → Light order follows directly from that physiology.",
     ctaBtnText: "Start the Nervous System Protocol Tonight — $47",
     mailerliteField: "Nervous System Primary",
+    quickTitle: "Do this in the next 10 minutes",
+    quickSteps: [
+      "Turn on brown noise at 60 to 65 dB, at least 7 feet from her head.",
+      "Wait 30 seconds before you pick her up, sound first, touch second.",
+      "Lay her face-down along your forearm and pulse gently at 60 beats a minute.",
+    ],
+    angles: {
+      solution: "The sequence that actually brings a dysregulated nervous system back down, sound then touch then light, not another single technique tested alone.",
+      shortcut: "Skip the nights most parents spend cycling through soothing methods in the wrong order before finding one that holds.",
+      feeling: "You stop wondering if you're doing something wrong. You start knowing exactly what tonight needs, in what order.",
+    },
   },
 
   FM: {
@@ -805,8 +936,26 @@ const RESULTS = {
     evidence: () => "This isn't from one single colic trial the way the gut protocol is. Paced feeding, controlling flow rate so a baby isn't out-swallowing her own suck-swallow-breathe reflex, is standard pediatric and lactation-consultant feeding guidance, not one study's finding. The Blueprint applies that established feeding physiology specifically to the delayed-crying timing pattern above.",
     ctaBtnText: "Fix the Feeding Mechanics Tonight — $47",
     mailerliteField: "Feeding Mechanics Primary",
+    quickTitle: "Do this at her next feed",
+    quickSteps: [
+      "Hold the bottle horizontal, not tipped down, so she controls the flow, not gravity.",
+      "Pause every 20 to 30 seconds so she can breathe and reset.",
+      "Hold her upright for 15 minutes after the feed before laying her down.",
+    ],
+    angles: {
+      solution: "The paced-feeding and latch protocol that fixes the flow rate causing the air intake, not just more burping after the fact.",
+      shortcut: "Skip the weeks of guessing at bottle angles and generic feeding advice that never names the actual mechanism.",
+      feeling: "Feeding stops feeling like something you're getting wrong three times a day.",
+    },
   },
 };
+
+/* Real, shared numbers, sourced from the Master Baseline Dashboard's
+   completed-assessment sample (70% NS / 30% GUT at last pull). Hoisted
+   here so renderPrevalenceBar() and buildGuaranteeProof() read the same
+   value instead of two copies that can quietly drift apart. Update both
+   uses automatically by changing this one object. */
+const PREVALENCE = { NS: 70, GUT: 30 };
 
 /* ── SESSION IDENTIFIERS ─────────────────────────────────────────────── */
 const ASSESSMENT_ID = (() => {
@@ -1121,7 +1270,12 @@ async function showResult() {
   document.getElementById('resultRulesOut').textContent = R.rulesOut;
   document.getElementById('resultMonitor').textContent  = R.monitor;
 
+  renderScorePanel(scores, type);
+  renderQuickAction(type);
+  document.getElementById('reframeBlock').innerHTML = buildReframeLine(type, userName);
   renderPrevalenceBar(type);
+  document.getElementById('angleStrip').innerHTML = buildAngleStrip(type);
+  renderGuaranteeCard(type, userName);
   const triedLine = buildTriedFailureLine(type);
   const triedEl = document.getElementById('triedLine');
   if (triedLine) { triedEl.innerHTML = triedLine; triedEl.style.display = ''; }
@@ -1224,8 +1378,7 @@ function renderPrevalenceBar(type) {
     return;
   }
 
-  const PREVALENCE = { NS: 70, GUT: 30 }; // real, from completed assessments, not a textbook estimate
-  const pct = PREVALENCE[type];
+  const pct = PREVALENCE[type]; // shared constant, defined near RESULTS
   const otherType = type === 'NS' ? 'GUT' : 'NS';
 
   box.innerHTML = `
@@ -1283,6 +1436,117 @@ function buildProfileNarrative() {
 
   sentence += `. Here's what that most likely points to.`;
   return sentence;
+}
+
+/* ── SCORE PANEL ──────────────────────────────────────────────────────────
+   Her own three scores, normalized to a 0-100 read against each other,
+   primary system tagged and rendered first. Distinct from the
+   prevalence bar (population comparison); this is her data specifically,
+   which is the actual IKEA-effect payoff of finishing seven questions,
+   a generic bucket label could have been shown after question one. */
+function renderScorePanel(s, primaryType) {
+  const total = s.GUT + s.NS + s.FM;
+  const pctOf = k => total > 0 ? Math.round((s[k] / total) * 100) : 0;
+  const order = ['GUT', 'NS', 'FM'].slice().sort((a, b) => s[b] - s[a]);
+
+  const rows = order.map(k => {
+    const isPrimary = k === primaryType;
+    return `
+      <div class="score-row${isPrimary ? '' : ' is-secondary'}">
+        <div class="score-row-head">
+          <div class="score-name">${RESULTS[k].type}${isPrimary ? '<span class="primary-tag">Primary</span>' : ''}</div>
+          <div class="score-val">${pctOf(k)}</div>
+        </div>
+        <div class="score-track"><div class="score-fill" data-pct="${pctOf(k)}"></div></div>
+      </div>`;
+  }).join('');
+
+  const box = document.getElementById('scorePanel');
+  box.innerHTML = `
+    <div class="score-panel-head">
+      <div class="score-panel-title">Your Baby's System Scores</div>
+      <div class="score-panel-scale">Scale: 0&ndash;100</div>
+    </div>
+    ${rows}
+    <div class="score-panel-foot">These reflect your specific answers, not the group average. The bar further down shows how common your primary pattern is across everyone who's completed this assessment.</div>
+  `;
+
+  // Fill after paint so the width transition actually animates instead
+  // of snapping straight to its end state.
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      box.querySelectorAll('.score-fill').forEach(f => {
+        f.style.width = f.getAttribute('data-pct') + '%';
+      });
+    }, 150);
+  });
+}
+
+/* ── QUICK ACTION ─────────────────────────────────────────────────────────
+   The free, ungated, do-it-now step, as numbered micro-steps rather
+   than a paragraph. This is the reciprocity move: something real
+   before any ask, and it's positioned ahead of the deeper explanation
+   on the assumption most of this traffic skims rather than reads. */
+function renderQuickAction(type) {
+  const R = RESULTS[type];
+  const stepsHtml = R.quickSteps.map(s => `<li>${s}</li>`).join('');
+  document.getElementById('quickAction').innerHTML = `
+    <div class="qa-eyebrow">Free, right now</div>
+    <div class="qa-title">${R.quickTitle}</div>
+    <ol class="qa-steps">${stepsHtml}</ol>
+    <p class="qa-note">This is the first move, not the whole protocol. The full sequence, with the reasoning behind each step, is in "What to try tonight" below.</p>
+  `;
+}
+
+/* ── REFRAME ──────────────────────────────────────────────────────────────
+   One paragraph, no bullets, per the Loss Inventory rule. The pivot
+   from "tonight" (the free step above) to "the window" (why tonight
+   alone doesn't close it), which is what keeps the free step and the
+   paid offer from competing instead of sequencing. */
+function buildReframeLine(type, name) {
+  const closingByType = {
+    GUT: `the fermentation loop resets after every feed until the microbiome itself is addressed`,
+    NS: `her nervous system will spike, drop, and spike again at roughly the same hour tomorrow, until it has a repeatable way back down`,
+    FM: `the same air load builds again at the next feed, and the same delayed window follows it`,
+  };
+  const parentPhrase = name ? `as ${name}` : `as her parent`;
+  return `What you just did above can quiet tonight. It won't stop this from happening again tomorrow evening, because ${closingByType[type]}. What that costs isn't only sleep. It's the version of the next few weeks you expected to have: a clear head, a partner who isn't running on the same empty tank you are, the sense that you know what you're doing ${parentPhrase}. <strong>The crying resolves on its own by around week 12 regardless.</strong> What you don't get back automatically is everything between now and then.`;
+}
+
+/* ── SOLUTION / SHORTCUT / FEELING ────────────────────────────────────────
+   Made explicit and visible rather than left implicit in the prose
+   around it, directly after the bridge sentence, as its payoff. */
+function buildAngleStrip(type) {
+  const a = RESULTS[type].angles;
+  return `
+    <div class="angle-row"><div class="angle-tag">Solution</div><div class="angle-text">${a.solution}</div></div>
+    <div class="angle-row"><div class="angle-tag">Shortcut</div><div class="angle-text">${a.shortcut}</div></div>
+    <div class="angle-row"><div class="angle-tag">Feeling</div><div class="angle-text">${a.feeling}</div></div>
+  `;
+}
+
+/* ── GUARANTEE PROOF LINE ─────────────────────────────────────────────────
+   Assessment-volume proof (how many parents have run this diagnostic),
+   kept deliberately separate from any claim about buyers or refunds.
+   Only 3 lifetime Blueprint sales exist as of this build, so a number
+   here must never be worded in a way that implies 250+ people bought
+   or were refunded, that would be a false, checkable claim the moment
+   anyone thinks about it for two seconds. */
+function buildGuaranteeProof(type, name) {
+  const countSpan = `<span class="assessment-count-value">${ASSESSMENT_COUNT_DISPLAY}</span>+`;
+  if (type === 'FM') {
+    return `You'd be one of over ${countSpan} parents who've run this exact assessment. Feeding Mechanics is the newest of the three patterns we score for, so there isn't a large enough completed sample yet to give you an honest percentage the way we can for the other two, we're not going to invent one.`;
+  }
+  const pct = PREVALENCE[type];
+  return `You'd be one of over ${countSpan} parents who've run this exact assessment. About <strong>${pct} in 100</strong> land on ${RESULTS[type].type} too, same as ${name || 'you'}, this isn't a rare or unusual read on your baby's pattern.`;
+}
+
+function renderGuaranteeCard(type, name) {
+  document.getElementById('guaranteeCard').innerHTML = `
+    <p class="guarantee-proof">${buildGuaranteeProof(type, name)}</p>
+    <div class="guarantee-card-label">72-Hour Guarantee</div>
+    <p class="gc-body">Start the full protocol tonight. If you're not seeing a <strong>measurable reduction in crying duration within 72 hours</strong>, email me directly and I'll refund it in full. No forms, no back-and-forth. You keep the Blueprint either way.</p>
+  `;
 }
 
 function trackPathClick(path) {
