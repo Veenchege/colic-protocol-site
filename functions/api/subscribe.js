@@ -330,10 +330,47 @@ export async function onRequestPost(context) {
         console.warn('[subscribe] Supabase write failed silently:', err);
       });
 
+      // Identity merge, added alongside the write above, not
+      // replacing it. Without this call, the `leads` table only ever
+      // gets populated from the Midnight Protocol side
+      // (midnight-subscribe.js), which means a quiz-only completion
+      // never creates a canonical identity row and the "same email
+      // used in both tools" merge silently doesn't happen for anyone
+      // who did the quiz first, which is the common path. Uses the
+      // same upsert_lead() function midnight-subscribe.js calls, so
+      // the two tools can't independently disagree on merge logic.
+      // colic_type is required for a 'completed' quiz submission
+      // (validated above), so there is no clobber risk from this call
+      // the way there is on the Midnight Protocol side.
+      const leadUpsert = fetch(`${SUPABASE_URL}/rest/v1/rpc/upsert_lead`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          apikey: SUPABASE_SERVICE_KEY,
+          Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`,
+        },
+        body: JSON.stringify({
+          p_email: email.trim().toLowerCase(),
+          p_name: name.trim(),
+          p_baby_age_weeks: cleanNum(baby_age_weeks) ? Number(cleanNum(baby_age_weeks)) : null,
+          p_colic_type: cleanType,
+          p_source: 'quiz',
+          p_lead_source: cleanStr(lead_source),
+          p_utm_medium: utm.utm_medium,
+          p_utm_campaign: utm.utm_campaign,
+          p_quiz_completed: cleanStatus === 'completed',
+          p_midnight_completed: false,
+        }),
+      }).catch((err) => {
+        console.warn('[subscribe] Lead upsert failed silently:', err);
+      });
+
       if (typeof context.waitUntil === 'function') {
         context.waitUntil(supabaseWrite);
+        context.waitUntil(leadUpsert);
       } else {
         await supabaseWrite;
+        await leadUpsert;
       }
     }
 

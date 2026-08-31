@@ -1,23 +1,22 @@
 /**
  * /functions/api/midnight-subscribe.js
- * Cloudflare Pages Function → MailerLite Subscriber Proxy
- * for the Midnight Protocol interactive checklist.
+ * Cloudflare Pages Function -> MailerLite + Supabase, for the
+ * Midnight Protocol interactive tool specifically. Deliberately a
+ * sibling of subscribe.js, not a shared route, so the quiz's already-
+ * working logic is never touched by anything built for this tool.
  *
- * Deliberately a SIBLING of /functions/api/subscribe.js, not a
- * merge into it. The two share the same MailerLite account, the
- * same API key, and the same small helpers (cleanStr, cleanNum,
- * corsHeaders, the honeypot + consent checks) — copied below
- * rather than imported, so this file has zero ability to change
- * the quiz's already-working behavior. What's genuinely new here
- * (the repeat-visit counter, the non-completion stage tracking)
- * lives only in the file that needs it.
- *
- * ENV VARS REQUIRED (Cloudflare Pages → Settings → Environment variables):
- *   MAILERLITE_API_KEY        — same key subscribe.js already uses
- *   MAILERLITE_GROUP_MIDNIGHT — a NEW group id, separate from
- *                                MAILERLITE_GROUP_ID (the quiz's group).
- *                                This is the 195728613189879425 group.
- *   ALLOWED_ORIGIN             — optional, defaults to '*', same as subscribe.js
+ * FIELD-CLOBBER FIX, READ BEFORE CHANGING THE PAYLOAD BELOW:
+ * MailerLite's subscriber upsert is non-destructive only for fields
+ * you omit from the request entirely. A field you DO include, even as
+ * an empty string, overwrites whatever was there before (confirmed
+ * against MailerLite's own API docs, not assumed). Midnight Protocol
+ * can legitimately have no colic_type (the visitor picked "not sure",
+ * or never got asked because they arrived without a quiz handoff). If
+ * this file sent colic_type: '' in that case, and the same email
+ * already has a real diagnosis from the quiz, this call would erase
+ * it in MailerLite. The fix: colic_type is only added to the outgoing
+ * fields object when it's a real, non-empty value. See buildFields()
+ * below, do not "simplify" this back to always sending the key.
  */
 
 function corsHeaders(allowedOrigin) {
@@ -32,41 +31,24 @@ function corsHeaders(allowedOrigin) {
 function json(status, body, allowedOrigin) {
   return new Response(JSON.stringify(body), {
     status,
-    headers: {
-      'Content-Type': 'application/json',
-      ...corsHeaders(allowedOrigin),
-    },
+    headers: { 'Content-Type': 'application/json', ...corsHeaders(allowedOrigin) },
   });
 }
 
 // Same three canonical labels quiz.html's RESULTS object and
-// subscribe.js's VALID_COLIC_TYPES already use, plus 'Unassigned'
-// for "not sure" — reusing the exact strings on purpose, so a
-// MailerLite record built partly by the quiz and partly by the
-// checklist agrees with itself instead of drifting into two
-// vocabularies for the same underlying field.
+// subscribe.js's VALID_COLIC_TYPES use. 'UNSURE' from the tool's own
+// state maps to '' before it ever reaches this file (see
+// midnight-protocol.html's TYPE_MAP handling), so this list matches
+// subscribe.js's list exactly, no fourth value to reconcile.
 const VALID_COLIC_TYPES = [
   '',
   'Unassigned',
   'Gut Microbiome Imbalance',
   'Nervous System Dysregulation',
-  'Acoustic Environment Overload',
+  'Feeding Mechanics',
 ];
 
 const VALID_CHECKLIST_STATUS = ['started', 'in_progress', 'completed'];
-
-const VALID_STAGES = [
-  'welcome',
-  'colic_type',
-  'emergency_shown',
-  'environment',
-  'tiger_hold',
-  'gas_release',
-  'final',
-  'bridge',
-];
-
-const VALID_OUTCOMES = ['', 'good', 'mid', 'low'];
 
 export async function onRequestOptions(context) {
   const allowed = context.env.ALLOWED_ORIGIN || '*';
@@ -87,20 +69,20 @@ export async function onRequestPost(context) {
   const {
     name,
     email,
-    website,               // honeypot
+    website, // honeypot
     consent,
     baby_age_weeks,
     colic_type,
     colic_type_detail,
     assessment_id,
     lead_source,
-    checklist_version,
-    purchase_status,
     checklist_status,
     checklist_last_stage,
+    checklist_version,
     environment_outcome,
-    tiger_hold_outcome,
+    tigerHold_outcome,
     final_outcome,
+    purchase_status,
     utm_source,
     utm_medium,
     utm_campaign,
@@ -108,9 +90,8 @@ export async function onRequestPost(context) {
     utm_content,
   } = body || {};
 
-  // Honeypot spam trap — identical pattern to subscribe.js
   if (typeof website === 'string' && website.trim().length > 0) {
-    return json(200, { success: true }, allowed);
+    return json(200, { success: true }, allowed); // honeypot, silently accept and drop
   }
 
   if (!name || typeof name !== 'string' || name.trim().length < 1) {
@@ -125,25 +106,17 @@ export async function onRequestPost(context) {
     return json(400, { error: 'Invalid email address' }, allowed);
   }
 
-  const cleanEmail = email.trim().toLowerCase();
+  if (consent !== true) {
+    return json(400, { error: 'Consent is required to subscribe' }, allowed);
+  }
 
-  const cleanType =
-    typeof colic_type === 'string' && VALID_COLIC_TYPES.includes(colic_type.trim())
-      ? colic_type.trim()
-      : '';
+  const cleanType = typeof colic_type === 'string' && VALID_COLIC_TYPES.includes(colic_type.trim())
+    ? colic_type.trim()
+    : '';
 
   const cleanStatus = VALID_CHECKLIST_STATUS.includes(checklist_status)
     ? checklist_status
     : 'started';
-
-  const cleanStage = VALID_STAGES.includes(checklist_last_stage)
-    ? checklist_last_stage
-    : 'welcome';
-
-  // Consent required — same hard rule as the quiz
-  if (consent !== true) {
-    return json(400, { error: 'Consent is required to subscribe' }, allowed);
-  }
 
   const cleanStr = (val, maxLen = 200) => {
     if (typeof val !== 'string') return '';
@@ -153,7 +126,6 @@ export async function onRequestPost(context) {
     const n = Number(val);
     return Number.isFinite(n) ? String(n) : '';
   };
-  const cleanOutcome = (val) => (VALID_OUTCOMES.includes(val) ? val : '');
 
   const utm = {
     utm_source: cleanStr(utm_source, 100),
@@ -163,88 +135,45 @@ export async function onRequestPost(context) {
     utm_content: cleanStr(utm_content, 100),
   };
 
-  console.log(
-    `[midnight-subscribe] ${new Date().toISOString()} email=${cleanEmail} ` +
-    `status=${cleanStatus} stage=${cleanStage} type=${cleanType || 'none'}`
-  );
-
   const API_KEY = env.MAILERLITE_API_KEY;
-  const GROUP_ID = env.MAILERLITE_GROUP_MIDNIGHT;
+  // Deliberately a separate env var from the quiz's group. See the
+  // reply this file shipped with: whether Midnight-only leads (no
+  // quiz completion) should land in the same nurture group as quiz
+  // completers is a call on which email Track fires for them, not a
+  // technical default I should make silently. Falls back to the
+  // quiz's group only so this doesn't hard-fail if the dedicated
+  // group hasn't been created yet, confirm this is actually what you
+  // want before relying on it.
+  const GROUP_ID = env.MAILERLITE_GROUP_ID_MIDNIGHT || env.MAILERLITE_GROUP_ID;
 
   if (!API_KEY || !GROUP_ID) {
-    console.error('[midnight-subscribe] Missing MAILERLITE_API_KEY or MAILERLITE_GROUP_MIDNIGHT');
+    console.error('[midnight-subscribe] Missing MAILERLITE_API_KEY or a group id');
     return json(500, { error: 'Server configuration error' }, allowed);
   }
 
-  // ----------------------------------------------------------------
-  // Repeat-visit counter. Only worth the extra round trip on the
-  // very first call of a session ("started"), not on every stage
-  // update — otherwise a single 15-screen run would cost 15 GET+POST
-  // pairs against a rate-limited endpoint for no added benefit.
-  // MailerLite's subscriber-upsert POST is documented as additive
-  // (omitted fields/groups are left alone, not wiped), so the stage
-  // updates later in this same run can safely POST only what changed.
-  // ----------------------------------------------------------------
-  let runCount = 1;
-  let firstStartedAt = new Date().toISOString();
-
-  if (cleanStatus === 'started') {
-    try {
-      const lookup = await fetch(
-        `https://connect.mailerlite.com/api/subscribers/${encodeURIComponent(cleanEmail)}`,
-        { headers: { Authorization: `Bearer ${API_KEY}`, Accept: 'application/json' } }
-      );
-      if (lookup.ok) {
-        const existing = await lookup.json();
-        const f = (existing && existing.data && existing.data.fields) || {};
-        const prevCount = Number(f.checklist_run_count) || 0;
-        runCount = prevCount + 1;
-        firstStartedAt = f.checklist_first_started_at || firstStartedAt;
-      }
-    } catch (err) {
-      // Lookup failing should never block the actual subscribe call —
-      // worst case a repeat visitor's count under-reports as 1.
-      console.error('[midnight-subscribe] run-count lookup failed:', err);
-    }
-  }
-
-  const nowIso = new Date().toISOString();
-
+  // Build the MailerLite fields payload. colic_type is added
+  // conditionally, everything else is always present since these
+  // fields are exclusive to this tool and can't clobber quiz data.
   const fields = {
     name: name.trim(),
     baby_age_weeks: cleanNum(baby_age_weeks),
-    assessment_id: cleanStr(assessment_id, 40),
+    assessment_id: cleanStr(assessment_id),
     lead_source: cleanStr(lead_source),
-    checklist_version: cleanStr(checklist_version, 20) || '1.0',
-    purchase_status: cleanStr(purchase_status, 50) || 'pending',
     checklist_status: cleanStatus,
-    checklist_last_stage: cleanStage,
-    checklist_last_updated_at: nowIso,
+    checklist_last_stage: cleanStr(checklist_last_stage),
+    checklist_version: cleanStr(checklist_version, 20),
+    environment_outcome: cleanStr(environment_outcome, 50),
+    tiger_hold_outcome: cleanStr(tigerHold_outcome, 50),
+    final_outcome: cleanStr(final_outcome, 50),
+    purchase_status: cleanStr(purchase_status, 50) || 'pending',
     ...utm,
   };
-
-  // Only set colic_type / colic_type_detail when this call actually
-  // carries a value — an empty string here would, per the "not sure"
-  // path, correctly overwrite a stale guess with Unassigned, but a
-  // plain stage-progress ping (environment check, tiger hold check)
-  // has nothing new to say about type and shouldn't touch the field.
-  if (cleanType || colic_type === '') {
-    fields.colic_type = cleanType || 'Unassigned';
+  if (cleanType) {
+    fields.colic_type = cleanType;
     fields.colic_type_detail = cleanStr(colic_type_detail);
   }
-
-  const eo = cleanOutcome(environment_outcome);
-  const to = cleanOutcome(tiger_hold_outcome);
-  const fo = cleanOutcome(final_outcome);
-  if (eo) fields.environment_outcome = eo;
-  if (to) fields.tiger_hold_outcome = to;
-  if (fo) fields.final_outcome = fo;
-
-  if (cleanStatus === 'started') {
-    fields.checklist_run_count = String(runCount);
-    fields.checklist_first_started_at = firstStartedAt;
-    fields.checklist_last_started_at = nowIso;
-  }
+  // else: key omitted entirely, existing MailerLite value (if any)
+  // from a prior quiz completion is left exactly as-is.
 
   try {
     const mlRes = await fetch('https://connect.mailerlite.com/api/subscribers', {
@@ -255,7 +184,7 @@ export async function onRequestPost(context) {
         Authorization: `Bearer ${API_KEY}`,
       },
       body: JSON.stringify({
-        email: cleanEmail,
+        email: email.trim().toLowerCase(),
         fields,
         groups: [GROUP_ID],
         status: 'active',
@@ -263,19 +192,84 @@ export async function onRequestPost(context) {
     });
 
     const data = await mlRes.json();
-
     if (!mlRes.ok && mlRes.status !== 422) {
       console.error('[midnight-subscribe] MailerLite error:', mlRes.status, JSON.stringify(data));
       return json(502, { error: 'Subscription failed, please try again' }, allowed);
     }
 
-    return json(200, {
-      success: true,
-      status: cleanStatus,
-      stage: cleanStage,
-      run_count: cleanStatus === 'started' ? runCount : undefined,
-    }, allowed);
+    // ── Supabase: two writes, both best-effort, both inactive no-ops
+    // until SUPABASE_URL / SUPABASE_SERVICE_KEY are set, same pattern
+    // as subscribe.js.
+    const SUPABASE_URL = env.SUPABASE_URL;
+    const SUPABASE_SERVICE_KEY = env.SUPABASE_SERVICE_KEY;
+    const cleanAssessmentId = cleanStr(assessment_id);
 
+    if (SUPABASE_URL && SUPABASE_SERVICE_KEY && cleanAssessmentId) {
+      const supabaseCalls = Promise.all([
+        // 1. Session-level row, one per MP- assessment_id, same
+        // started -> in_progress -> completed merge pattern the
+        // quiz's assessments table already uses.
+        fetch(`${SUPABASE_URL}/rest/v1/midnight_sessions?on_conflict=assessment_id`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            apikey: SUPABASE_SERVICE_KEY,
+            Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`,
+            Prefer: 'resolution=merge-duplicates',
+          },
+          body: JSON.stringify({
+            assessment_id: cleanAssessmentId,
+            email: email.trim().toLowerCase(),
+            name: name.trim(),
+            colic_type: cleanType || null,
+            colic_type_from_quiz: colic_type_detail === 'Confirmed from quiz handoff',
+            baby_age_weeks: cleanNum(baby_age_weeks) || null,
+            checklist_status: cleanStatus,
+            checklist_last_stage: cleanStr(checklist_last_stage) || null,
+            environment_outcome: cleanStr(environment_outcome, 50) || null,
+            tiger_hold_outcome: cleanStr(tigerHold_outcome, 50) || null,
+            final_outcome: cleanStr(final_outcome, 50) || null,
+            checklist_version: cleanStr(checklist_version, 20) || null,
+            lead_source: cleanStr(lead_source),
+            updated_at: new Date().toISOString(),
+            ...utm,
+          }),
+        }),
+        // 2. Identity row, via the RPC function, NOT a raw table
+        // upsert, so first-touch fields and the colic_type clobber
+        // fix both apply the same way for both quiz and midnight.
+        fetch(`${SUPABASE_URL}/rest/v1/rpc/upsert_lead`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            apikey: SUPABASE_SERVICE_KEY,
+            Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`,
+          },
+          body: JSON.stringify({
+            p_email: email.trim().toLowerCase(),
+            p_name: name.trim(),
+            p_baby_age_weeks: cleanNum(baby_age_weeks) ? Number(cleanNum(baby_age_weeks)) : null,
+            p_colic_type: cleanType,
+            p_source: 'midnight_protocol',
+            p_lead_source: cleanStr(lead_source),
+            p_utm_medium: utm.utm_medium,
+            p_utm_campaign: utm.utm_campaign,
+            p_quiz_completed: false,
+            p_midnight_completed: cleanStatus === 'completed',
+          }),
+        }),
+      ]).catch((err) => {
+        console.warn('[midnight-subscribe] Supabase write failed silently:', err);
+      });
+
+      if (typeof context.waitUntil === 'function') {
+        context.waitUntil(supabaseCalls);
+      } else {
+        await supabaseCalls;
+      }
+    }
+
+    return json(200, { success: true, status: cleanStatus, colic_type: cleanType }, allowed);
   } catch (err) {
     console.error('[midnight-subscribe] Unexpected error:', err);
     return json(500, { error: 'Internal server error' }, allowed);
