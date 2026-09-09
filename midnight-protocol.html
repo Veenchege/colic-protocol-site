@@ -205,6 +205,7 @@ a.btn{text-decoration:none;}
   color:var(--gold); display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px;}
 
 .timer-wrap{display:flex; flex-direction:column; align-items:center; gap:14px; margin:14px 0 6px; position:relative;}
+.tip-hint{font-size:13px;color:var(--muted);background:rgba(255,255,255,.5);border:1px solid rgba(0,0,0,.07);border-radius:10px;padding:10px 14px;margin-top:12px;line-height:1.55;text-align:center;}
 .timer-ring{position:relative; width:134px; height:134px;}
 .timer-ring svg{transform:rotate(-90deg);}
 .timer-digits{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column;}
@@ -395,6 +396,14 @@ function submitOutcome(stage, result){
   if (!state.lead.email) return;
   var extra = { checklist_status:'in_progress', checklist_last_stage: stage };
   extra[stage + '_outcome'] = result;
+  // Dwell time: how long the parent actually spent on this stage,
+  // recorded silently when a start timestamp exists in state.
+  // This replaces the blocking timer as the engagement signal.
+  var startKey = stage + 'StartedAt';
+  if (state[startKey]) {
+    extra[stage + '_dwell_seconds'] = Math.round((Date.now() - state[startKey]) / 1000);
+    state[startKey] = null;
+  }
   post(extra);
 }
 function submitCompleted(){
@@ -865,14 +874,18 @@ function buildTechniqueScreen(cfg){
       imgHtml +
       stepsHtml +
       (cfg.safety ? '<div class="card tint-red" style="margin-top:12px; font-size:12px; color:var(--cream); line-height:1.6;"><b style="color:var(--red);">Safety: </b>'+cfg.safety+'</div>' : '') +
-      '<div data-timer></div>' +
+      // tipLabel: a static guidance hint shown below the steps.
+      // timerLabel+seconds: retained for future use but unused now.
+      (cfg.tipLabel ? '<div class="tip-hint">'+esc(cfg.tipLabel)+'</div>' : '<div data-timer></div>') +
     '</div>' +
     '<div class="screen-foot">' +
-      '<button class="btn btn-primary" data-act="continue" '+(cfg.seconds?'disabled':'')+'>'+esc(cfg.continueLabel||'Done, next →')+'</button>' +
+      '<button class="btn btn-primary" data-act="continue">'+esc(cfg.continueLabel||'Done, next →')+'</button>' +
     '</div>';
   var el = buildScreen(html);
   function mount(){
     var contBtn = $(el,'[data-act=continue]');
+    // Legacy timer path (seconds) kept in case any screen still uses it,
+    // but all current screens use tipLabel instead.
     if (cfg.seconds){
       var slot = $(el,'[data-timer]');
       var cleanup = mountTimer(slot, {
@@ -1052,6 +1065,7 @@ function renderEmergency(){
 }
 
 function renderEnvironment(){
+  state.environmentStartedAt = Date.now();
   var items = [
     ['lights','Lights dimmed','Lowest warm setting, not total darkness'],
     ['noise','Brown noise on','60\u201365 dB, speaker 7+ feet from baby'],
@@ -1126,6 +1140,11 @@ function renderBreathing(){
 }
 
 function renderTigerHold(){
+  // Tiger Hold dwell-time tracker. The button is available immediately —
+  // we want to know how long parents actually spend here, not force a
+  // minimum. State stores the start time; submitOutcome() will include
+  // it when the check screen fires.
+  state.tigerHoldStartedAt = Date.now();
   return buildTechniqueScreen({
     stageDots: 3, eyebrow:'Stage 3 · Soothing Circuit', color:'var(--gold)',
     badge: typeBadgeHtml('NS','Usually the biggest lever for nervous-system type babies'),
@@ -1137,8 +1156,8 @@ function renderTigerHold(){
       'Start a steady pulse forward and back at 60 BPM, not rocking, a pulse.',
       'Still worked up after a minute? Add a firm shush right at ear level.'
     ],
-    seconds:180, pulse:true,
-    timerLabel:'Match the 60 BPM rhythm pulse below. Keep it steady, don\'t stop early.',
+    pulse:true,
+    timerLabel:'60 BPM rhythm — keep the pulse steady.',
     continueLabel:'Done, how\'s baby? →',
     onContinue:function(){ goTo('tigerHoldCheck'); }
   });
@@ -1175,6 +1194,7 @@ function renderTigerHoldTroubleshoot(){
 
 function renderBicycleLegs(){
   markStage('gas_release');
+  state.gas_releaseStartedAt = Date.now();
   return buildTechniqueScreen({
     stageDots:4, eyebrow:'Stage 4 · Gas Release', color:'var(--blush)',
     stepbar:{current:1,total:4},
@@ -1187,8 +1207,7 @@ function renderBicycleLegs(){
       'Switch legs in a smooth, slow cycling motion, never a sudden pull.',
       'After 10–15 reps, finish with one gentle double-knee compression to the chest.'
     ],
-    seconds:45,
-    timerLabel:'Slow beats fast here. One deliberate cycle every few seconds.',
+    tipLabel:'Slow beats fast here. One deliberate cycle every few seconds.',
     continueLabel:'Done, next: ILU massage →',
     onContinue:function(){ goTo('iluMassage'); }
   });
@@ -1206,8 +1225,7 @@ function renderIluMassage(){
       '<b style="color:var(--gold);">“L” Stroke:</b> Across the top, then down the left side.',
       '<b style="color:var(--sage);">“U” Stroke:</b> Up right side, across top, down left side, the complete colon route.'
     ],
-    seconds:60,
-    timerLabel:'Follow the I-L-U pattern shown above as the timer counts down.',
+    tipLabel:'Follow the I-L-U pattern shown above, repeat the full sequence 2–3 times.',
     continueLabel:'Done, next: Football hold →',
     onContinue:function(){ goTo('footballHold'); }
   });
@@ -1225,8 +1243,7 @@ function renderFootballHold(){
       'Keep the angle upright, this is what changes how gas and milk move.',
       'Pause to burp every minute or so, still upright.'
     ],
-    seconds:60,
-    timerLabel:'Upright is the whole mechanism here. Resist the urge to lay baby back.',
+    tipLabel:'Upright is the whole mechanism here. Resist the urge to lay baby back.',
     continueLabel:'Done, next: Warm compress →',
     onContinue:function(){ goTo('warmCompress'); }
   });
@@ -1244,14 +1261,14 @@ function renderWarmCompress(){
       'Keep baby upright or semi-upright while it works, continue any soothing already running.'
     ],
     safety:'Never leave a compress unattended. Remove immediately if skin looks red or baby resists it.',
-    seconds:120,
-    timerLabel:'Two minutes, gentle and steady.',
+    tipLabel:'Warm compress works best when baby stays upright while it sits. No rush.',
     continueLabel:'Done, how’s baby now? →',
     onContinue:function(){ goTo('finalCheck'); }
   });
 }
 
 function renderFinalCheck(){
+  state.finalStartedAt = Date.now();
   return buildOutcomeScreen({
     eyebrowColor:'var(--terra)',
     title:'After everything tonight…',
@@ -1308,7 +1325,6 @@ function renderBridge(){
       '<div class="illus" style="margin-top:14px;"><img src="'+IMG['3_node_infographic_on_obsidian_card_202608312321']+'" alt="Gut, nervous system, and feeding mechanics connection" style="width:100%; height:auto; display:block;"></div>' +
       orderedSystems.map(function(s){ return sysCardHtml(s, known && s.code === state.colicType); }).join('') +
 
-      '<a class="btn btn-primary" style="margin-top:6px;" href="'+quizHref+'">'+quizCtaText+'</a>' +
       '<div class="timer-note" style="margin:8px auto 0;">'+quizNote+'</div>' +
 
       '<details class="expand" style="margin-top:18px;">' +
@@ -1333,7 +1349,9 @@ function renderBridge(){
       '<div class="illus" style="margin-top:16px; background:none; border:none; box-shadow:none; padding:0;"><img src="'+IMG['3d_product_bundle_mockup_showcase_202608312322']+'" alt="The Calm Baby Blueprint bundle" style="width:100%; height:auto; display:block; border-radius:var(--r-md);"></div>' +
     '</div>' +
     '<div class="screen-foot">' +
-      '<a class="btn btn-outline" href="'+blueprintHref+'" target="_blank" rel="noreferrer">Get the Calm Baby Blueprint, $47 →</a>' +
+      '<a class="btn btn-primary" href="'+blueprintHref+'" target="_blank" rel="noreferrer">Get the Calm Baby Blueprint — $47 →</a>' +
+      '<div class="timer-note" style="margin:6px auto 10px;">72-hour guarantee. Keep it either way.</div>' +
+      '<a class="btn btn-outline" href="'+quizHref+'">'+quizCtaText+'</a>' +
       '<div class="skiplink"><button class="btn-link" data-act="restart">↺ Run the protocol again</button></div>' +
     '</div>';
   var el = buildScreen(html);
