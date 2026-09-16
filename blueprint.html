@@ -199,7 +199,7 @@ em{font-style:italic;color:var(--terra)}
           <span class="pb-pill">Keep it either way</span>
           <span class="pb-pill">Instant download</span>
         </div>
-        <a href="https://colicprotocol.gumroad.com/l/TheCalmBabyBlueprint?utm_source=website&utm_medium=sales_page" class="btn btn-hero" target="_blank" rel="noopener">Get the Blueprint, $47 →</a>
+        <a href="https://colicprotocol.gumroad.com/l/TheCalmBabyBlueprint?utm_source=website&utm_medium=sales_page&wanted=true" class="btn btn-hero gumroad-button" rel="noopener" onclick="gtag('event','begin_checkout',{value:47,currency:'USD',items:[{item_name:'Calm Baby Blueprint'}]});">Get the Blueprint, $47 →</a>
         <p class="pb-secondary">Not sure which system is primary yet? <a href="quiz.html" class="btn-ghost-link">Take the free 90-second assessment first →</a></p>
       </div>
     </div>
@@ -354,7 +354,7 @@ em{font-style:italic;color:var(--terra)}
     <div class="wrap">
       <h2>Ready when you are.</h2>
       <p>$47 one time. Instant download. 72-hour guarantee.</p>
-      <a href="https://colicprotocol.gumroad.com/l/TheCalmBabyBlueprint?utm_source=website&utm_medium=sales_page_bottom" class="btn btn-hero" target="_blank" rel="noopener">Get the Blueprint, $47 →</a>
+      <a href="https://colicprotocol.gumroad.com/l/TheCalmBabyBlueprint?utm_source=website&utm_medium=sales_page_bottom&wanted=true" class="btn btn-hero gumroad-button" rel="noopener" onclick="gtag('event','begin_checkout',{value:47,currency:'USD',items:[{item_name:'Calm Baby Blueprint'}]});">Get the Blueprint, $47 →</a>
       <p class="pb-cta-micro">Not sure yet? <a href="quiz.html" style="color:#fff;text-decoration:underline;">Take the free assessment</a> first.</p>
     </div>
   </section>
@@ -380,5 +380,24 @@ em{font-style:italic;color:var(--terra)}
     <p class="footer-disc">Colic Protocol is an educational management system, not a cure or a medical treatment, and results vary by baby. It is not a substitute for professional medical advice. Always consult your pediatrician before starting any new protocol, supplement, or technique. &copy; 2026 Colic Protocol. Vincent, Epidemiologist &amp; Dad.</p>
   </div>
 </footer>
+<script>
+(function () {
+  // Forward the lead's email (passed as ?le= from an email link, or elsewhere)
+  // onto every Gumroad checkout link on this page, so the webhook can match
+  // the eventual sale back to a specific lead even if they check out with a
+  // different email than the one they used on the quiz.
+  var params = new URLSearchParams(window.location.search);
+  var leadEmail = params.get('le');
+  if (!leadEmail) return;
+  document.querySelectorAll('a[href*="colicprotocol.gumroad.com"]').forEach(function (a) {
+    var url = new URL(a.href);
+    url.searchParams.set('le', leadEmail);
+    a.href = url.toString();
+  });
+})();
+</script>
+<!-- Gumroad overlay checkout widget: must load after the script above so it binds
+     its click handlers to the already-rewritten href values, not the originals. -->
+<script src="https://gumroad.com/js/gumroad.js"></script>
 </body>
 </html>

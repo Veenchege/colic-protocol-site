@@ -116,7 +116,7 @@ p{font-size:15.5px;line-height:1.75;color:var(--muted)}
 .hero::after{content:'';position:absolute;top:-130px;right:-130px;width:460px;height:460px;background:radial-gradient(circle,rgba(200,154,68,.16) 0%,transparent 68%);pointer-events:none}
 .hero-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:56px;align-items:center;position:relative;z-index:1}
 .hero-ey{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.5);display:block;margin-bottom:18px}
-.hero h1{color:#fff;font-size:clamp(32px,4.3vw,50px);line-height:1.12;margin-bottom:20px}
+.hero h1{color:#fff;font-size:clamp(32px,4.3vw,50px);line-height:1.12;margin-bottom:20px;min-height:calc(1.12em*2);font-size-adjust:0.48}
 .hero h1 em{color:#E3A57C;font-style:italic}
 .hero-body{font-size:16.5px;color:rgba(255,255,255,.68);line-height:1.75;margin-bottom:26px;max-width:490px}
 .hero-body strong{color:rgba(255,255,255,.92);font-weight:600}
@@ -273,9 +273,18 @@ p{font-size:15.5px;line-height:1.75;color:var(--muted)}
 .sticky-cta.visible{transform:translateY(0)}
 .sticky-cta a{display:block;width:100%;text-align:center;padding:14px;background:linear-gradient(135deg,var(--terra),var(--terra-deep));color:#fff;border-radius:10px;font-weight:700;font-size:15px}
 @media(max-width:720px){.sticky-cta{display:block}}
-/* scroll reveal */
-.rv{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}
-.rv.in{opacity:1;transform:none}
+/* scroll reveal — opacity-only, on purpose.
+   Fix (Sep 2026 CLS audit): this used to also animate transform:translateY(16px).
+   Chrome's Layout Instability API scores a transform-based move as a layout
+   shift even though it's compositor-only and never touches document flow.
+   With 4 stacked .rv children inside .loss-sec (section-header, loss-lede,
+   loss-grid, loss-foot) all shifting into view together, that's what was
+   producing the CLS 1.0 reading flagged on #main-content>section.loss-sec.sec
+   (and the stat-row/footer entries elsewhere on the page use the same class).
+   Dropping the translate and keeping only the opacity fade removes the
+   self-triggered shift entirely while keeping the same fade-in feel. */
+.rv{opacity:0;transition:opacity .5s ease}
+.rv.in{opacity:1}
 /* responsive */
 @media(max-width:860px){
   .hero-grid{grid-template-columns:1fr;gap:36px}

@@ -166,6 +166,10 @@ a.btn{text-decoration:none;}
 .toggle-text span{font-size:12px; color:var(--muted);}
 .progress-track{height:4px; background:var(--border); border-radius:3px; overflow:hidden; margin:16px 0 4px;}
 .progress-fill{height:100%; background:linear-gradient(90deg,var(--sage),#b3d0b3); border-radius:3px; transition:width .4s ease; box-shadow:0 0 8px rgba(147,179,148,0.6);}
+.why-btn{background:none; border:none; padding:5px 0 0; margin:0; font-family:inherit; font-size:11.5px; font-weight:600; color:var(--sage); cursor:pointer; text-align:left;}
+.why-body{font-size:12px; color:var(--muted); line-height:1.55; padding-top:6px; max-width:96%;}
+.solidarity-note{display:flex; gap:10px; align-items:flex-start; background:rgba(147,179,148,0.08); border:1px solid var(--sage-line); border-radius:12px; padding:12px 14px; margin-top:14px; font-size:12px; color:var(--cream); line-height:1.6;}
+.solidarity-note svg{flex-shrink:0; color:var(--sage); margin-top:1px;}
 
 .danger-item{display:flex; align-items:center; gap:13px; padding:14px 4px; cursor:pointer; border-radius:10px; transition:background .15s;}
 .danger-item:hover{background:rgba(226,104,92,0.08);}
@@ -296,6 +300,10 @@ var IMG = {
   'nurse_holding_infant_ankles_202608312318': '/images/mp-10.webp',
   'parent_holding_unsettled_newborn_202608312320': '/images/mp-11.webp',
   'blueprint_cover': '/images/mp-12.webp',
+  // New, clearer replacements (added this update) — old mp-01/mp-03 entries
+  // above are left in place in case either screen needs to revert.
+  'abdominal_massage_pathway_diagram': '/images/mp-13.jpeg',
+  'three_systems_interaction_infographic': '/images/mp-14.jpeg',
 };
 
 var CONFIG = {
@@ -324,6 +332,7 @@ var state = {
   utm: { utm_source: CONFIG.SOURCE, utm_medium:'', utm_campaign:'', utm_term:'', utm_content:'' },
   colicType: '',
   colicTypeFromQuiz: false,
+  colicTypeConfidence: null,
   quick: { diaper:null, fed:null },
   outcomes: { environment:null, tigerHold:null, final:null },
   cleanups: []
@@ -339,6 +348,11 @@ var state = {
     state.utm.utm_content = p.get('utm_content') || '';
     var t = (p.get('type') || '').toUpperCase();
     if (TYPE_MAP[t]){ state.colicType = t; state.colicTypeFromQuiz = true; }
+    var confParam = p.get('confidence');
+    if (confParam !== null && confParam !== '' && !isNaN(Number(confParam))){
+      var confNum = Number(confParam);
+      if (confNum >= 0 && confNum <= 100) state.colicTypeConfidence = confNum;
+    }
     var nameParam = (p.get('name') || '').trim();
     var ageParam = p.get('age');
     if (nameParam) state.lead.name = nameParam.slice(0, 60);
@@ -370,6 +384,10 @@ function post(extra){
       baby_age_weeks: state.lead.babyAgeWeeks,
       colic_type: state.colicType ? (TYPE_MAP[state.colicType] ? TYPE_MAP[state.colicType].label : 'Unassigned') : '',
       colic_type_detail: state.colicTypeFromQuiz ? 'Confirmed from quiz handoff' : (state.colicType ? 'Selected in Midnight Protocol' : ''),
+      // Only meaningful when it actually travelled from the quiz (see
+      // captureUTMandHandoff), null otherwise. Backend only forwards it
+      // when non-null, same clobber-safe pattern as colic_type below.
+      colic_type_confidence: state.colicTypeConfidence,
       assessment_id: ASSESSMENT_ID,
       lead_source: state.utm.utm_source,
       checklist_version: '1.2-vector',
@@ -392,7 +410,7 @@ function markStage(stageName, extra){
   if (!state.lead.email) return;
   post(Object.assign({ checklist_status:'in_progress', checklist_last_stage: stageName }, extra || {}));
 }
-function submitOutcome(stage, result){
+function submitOutcome(stage, result, extraFields){
   if (!state.lead.email) return;
   var extra = { checklist_status:'in_progress', checklist_last_stage: stage };
   extra[stage + '_outcome'] = result;
@@ -404,6 +422,7 @@ function submitOutcome(stage, result){
     extra[stage + '_dwell_seconds'] = Math.round((Date.now() - state[startKey]) / 1000);
     state[startKey] = null;
   }
+  if (extraFields) Object.assign(extra, extraFields);
   post(extra);
 }
 function submitCompleted(){
@@ -748,6 +767,110 @@ function mountTimer(container, opts){
   return function cleanup(){ if (interval) clearInterval(interval); };
 }
 
+// Count-up, never-blocking timer for the Tiger Hold (and any future
+// technique screen that wants one). Unlike mountTimer, there is no
+// target duration and it never disables the continue button — the
+// ring simply completes one lap every 60 seconds as a rhythm aid,
+// then starts the next lap while the digits keep the true running
+// total. getElapsed() returns total active (non-paused) seconds so
+// the calling screen can record it when the parent moves on.
+function mountStopwatch(container, opts){
+  var color = (opts && opts.color) || 'var(--gold)', pulse = !!(opts && opts.pulse);
+  var elapsed = 0, live = false, interval = null;
+  var R = 52, C = 2*Math.PI*R;
+  var NOTES = [
+    { at:0,   text:'Tap start once baby is in position and the pulse begins.' },
+    { at:15,  text:'Keep the pulse steady. Many babies need 30–60 seconds before the shift starts.' },
+    { at:45,  text:'You\u2019re in the window where it usually starts working.' },
+    { at:90,  text:'Past a minute in, this is often where things turn. No need to stop yet.' },
+    { at:150, text:'Longer generally helps here, there\u2019s no fixed target. Stop whenever baby, or your arm, needs a break.' }
+  ];
+
+  var wrap = document.createElement('div');
+  wrap.className = 'timer-wrap' + (pulse ? ' metro-active' : '');
+  wrap.innerHTML =
+    '<div class="timer-ring">' +
+      '<svg width="134" height="134" viewBox="0 0 134 134">' +
+        '<circle cx="67" cy="67" r="'+R+'" fill="none" stroke="rgba(244,237,228,0.12)" stroke-width="6"/>' +
+        '<circle class="ring-fg" cx="67" cy="67" r="'+R+'" fill="none" stroke="'+color+'" stroke-width="6" ' +
+          'stroke-dasharray="'+C+'" stroke-dashoffset="'+C+'" stroke-linecap="round"/>' +
+      '</svg>' +
+      '<div class="timer-digits"><span class="t">0:00</span>'+(pulse?'<span class="p" style="background:'+color+';color:'+color+'"></span>':'')+'</div>' +
+    '</div>' +
+    (pulse ? '<div class="metro-badge"><span class="metro-dot"></span>60 BPM Rhythm Pulse</div>' : '') +
+    '<div class="timer-controls"></div>' +
+    '<div class="timer-note-slot"></div>';
+  container.appendChild(wrap);
+
+  var ringFg = wrap.querySelector('.ring-fg');
+  var digitEl = wrap.querySelector('.t');
+  var controls = wrap.querySelector('.timer-controls');
+  var noteSlot = wrap.querySelector('.timer-note-slot');
+
+  function fmt(s){ var m = Math.floor(s/60), ss = s%60; return m + ':' + (ss<10?'0':'') + ss; }
+  function noteFor(s){
+    var n = NOTES[0].text;
+    for (var i=0;i<NOTES.length;i++){ if (s >= NOTES[i].at) n = NOTES[i].text; }
+    return n;
+  }
+  function paint(){
+    digitEl.textContent = fmt(elapsed);
+    var lap = elapsed % 60;
+    ringFg.setAttribute('stroke-dashoffset', C * (1 - lap/60));
+    if (!live && elapsed === 0){
+      noteSlot.innerHTML = '<div class="timer-note">'+NOTES[0].text+'</div>';
+    } else {
+      noteSlot.innerHTML = '<div class="timer-note">'+noteFor(elapsed)+'</div>';
+    }
+  }
+  function renderControls(){
+    controls.innerHTML = '';
+    if (!live){
+      var b = document.createElement('button');
+      b.className = 'timer-btn'; b.type = 'button';
+      b.textContent = elapsed > 0 ? '▶ Resume' : '▶ Start';
+      b.onclick = start;
+      controls.appendChild(b);
+    } else {
+      var p = document.createElement('button');
+      p.className = 'timer-btn'; p.type = 'button'; p.textContent = '⏸ Pause';
+      p.onclick = pause;
+      controls.appendChild(p);
+    }
+    if (elapsed > 0){
+      var r = document.createElement('button');
+      r.className = 'timer-btn'; r.type = 'button'; r.textContent = '↺';
+      r.onclick = reset;
+      controls.appendChild(r);
+    }
+  }
+  function tick(){ elapsed += 1; paint(); }
+  function start(){
+    if (live) return;
+    live = true;
+    paint(); renderControls();
+    interval = setInterval(tick, 1000);
+  }
+  function pause(){
+    live = false;
+    if (interval) clearInterval(interval);
+    interval = null;
+    renderControls();
+  }
+  function reset(){
+    live = false; elapsed = 0;
+    if (interval) clearInterval(interval);
+    interval = null;
+    paint(); renderControls();
+  }
+  paint(); renderControls();
+
+  return {
+    cleanup: function(){ if (interval) clearInterval(interval); },
+    getElapsed: function(){ return elapsed; }
+  };
+}
+
 function mountBreathingOrb(container, onDone){
   var t = 0, timeout = null, stopped = false;
   var TOTAL = 21;
@@ -874,9 +997,12 @@ function buildTechniqueScreen(cfg){
       imgHtml +
       stepsHtml +
       (cfg.safety ? '<div class="card tint-red" style="margin-top:12px; font-size:12px; color:var(--cream); line-height:1.6;"><b style="color:var(--red);">Safety: </b>'+cfg.safety+'</div>' : '') +
-      // tipLabel: a static guidance hint shown below the steps.
-      // timerLabel+seconds: retained for future use but unused now.
-      (cfg.tipLabel ? '<div class="tip-hint">'+esc(cfg.tipLabel)+'</div>' : '<div data-timer></div>') +
+      // stopwatch: a count-up, never-blocking timer (see mountStopwatch).
+      // tipLabel: a static guidance hint, can appear alongside the stopwatch
+      // or on its own. Legacy timer path (seconds) kept below for any
+      // screen that still wants a countdown, but nothing currently uses it.
+      (cfg.stopwatch ? '<div data-timer></div>' : (cfg.tipLabel ? '' : '<div data-timer></div>')) +
+      (cfg.tipLabel ? '<div class="tip-hint">'+esc(cfg.tipLabel)+'</div>' : '') +
     '</div>' +
     '<div class="screen-foot">' +
       '<button class="btn btn-primary" data-act="continue">'+esc(cfg.continueLabel||'Done, next →')+'</button>' +
@@ -884,9 +1010,17 @@ function buildTechniqueScreen(cfg){
   var el = buildScreen(html);
   function mount(){
     var contBtn = $(el,'[data-act=continue]');
-    // Legacy timer path (seconds) kept in case any screen still uses it,
-    // but all current screens use tipLabel instead.
-    if (cfg.seconds){
+    var stopwatchApi = null;
+    if (cfg.stopwatch){
+      // Non-blocking on purpose: this never touches contBtn.disabled.
+      // Parents can leave whenever baby needs them to, the timer is a
+      // pacing aid, not a gate.
+      var swSlot = $(el,'[data-timer]');
+      stopwatchApi = mountStopwatch(swSlot, { color: cfg.color, pulse: !!cfg.pulse });
+      state.cleanups.push(stopwatchApi.cleanup);
+    } else if (cfg.seconds){
+      // Legacy countdown path, retained in case a future screen wants a
+      // hard timer. Unused by every current screen.
       var slot = $(el,'[data-timer]');
       var cleanup = mountTimer(slot, {
         seconds: cfg.seconds, color: cfg.color, pulse: !!cfg.pulse, label: cfg.timerLabel,
@@ -894,7 +1028,11 @@ function buildTechniqueScreen(cfg){
       });
       state.cleanups.push(cleanup);
     }
-    contBtn.addEventListener('click', function(){ if(!contBtn.disabled) cfg.onContinue(); });
+    contBtn.addEventListener('click', function(){
+      if (contBtn.disabled) return;
+      if (stopwatchApi && cfg.onStopwatchElapsed) cfg.onStopwatchElapsed(stopwatchApi.getElapsed());
+      cfg.onContinue();
+    });
   }
   return { el:el, mount:mount };
 }
@@ -1014,19 +1152,45 @@ function renderStopScan(){
 function renderColicType(){
   var order = ['GUT','NS','FM'];
   var fromQuiz = state.colicTypeFromQuiz && TYPE_MAP[state.colicType];
+  // Honesty threshold: below 60%, the quiz's own signal for this
+  // respondent was genuinely mixed (see the QUESTIONS comment block on
+  // the quiz side for why that happens), so the badge and headline say
+  // "leaned toward" instead of an unqualified checkmark. The type is
+  // still pre-selected either way, a best guess is still a better
+  // starting point than none, it just isn't presented as more certain
+  // than it actually was. Confidence only exists when it truly travelled
+  // from the quiz handoff (see captureUTMandHandoff) — a null value
+  // means we have no signal either way, so the copy stays at its
+  // original, unqualified wording rather than guessing at uncertainty
+  // we don't have data for.
+  var conf = state.colicTypeConfidence;
+  var lowConfidence = fromQuiz && conf !== null && conf < 60;
   var cardsHtml = order.map(function(code){
     var t = TYPE_MAP[code];
     var pre = fromQuiz && state.colicType === code;
+    var preTag = pre
+      ? (lowConfidence
+          ? ' <b style="color:var(--gold);">leaning this way, from your assessment</b>'
+          : ' <b style="color:var(--sage);">\u2713 from your assessment</b>')
+      : '';
     return '<button class="opt '+(pre?'opt-good':'')+'" data-type="'+code+'" style="'+(pre?'':'border-color:var(--border-strong); background:none;')+'">' +
       '<span style="font-size:18px;">'+t.emoji+'</span>' +
-      '<span>'+t.label+(pre?' <b style="color:var(--sage);">\u2713 from your assessment</b>':'')+'</span>' +
+      '<span>'+t.label+preTag+'</span>' +
     '</button>';
   }).join('');
+  var headline = !fromQuiz
+    ? 'Already know what\u2019s\ndriving it tonight?'
+    : (lowConfidence ? 'Your answers leaned\ntoward one system.' : 'We\u2019ll tailor tonight\naround your result.');
+  var subText = !fromQuiz
+    ? 'If you\u2019ve taken the free assessment, tell us. We\u2019ll highlight the step that matters most for your baby\u2019s type.'
+    : (lowConfidence
+        ? 'It wasn\u2019t a clear-cut signal, your baby\u2019s answers touched more than one system. This is our best read, confirm it if it fits tonight, or switch if it doesn\u2019t.'
+        : 'Your assessment pointed to one system. Confirm it, or pick a different one if tonight feels different.');
   var html =
     '<div class="screen-body">' +
       '<div class="eyebrow" style="color:var(--terra)">Optional · 5 seconds</div>' +
-      '<h1 class="h1" style="font-size:23px;">' + (fromQuiz ? 'We\u2019ll tailor tonight\naround your result.' : 'Already know what\u2019s\ndriving it tonight?') + '</h1>' +
-      '<p class="sub">' + (fromQuiz ? 'Your assessment pointed to one system. Confirm it, or pick a different one if tonight feels different.' : 'If you\u2019ve taken the free assessment, tell us. We\u2019ll highlight the step that matters most for your baby\u2019s type.') + '</p>' +
+      '<h1 class="h1" style="font-size:23px; white-space:pre-line;">' + headline + '</h1>' +
+      '<p class="sub">' + subText + '</p>' +
       '<div style="margin-top:14px;">' + cardsHtml +
         '<button class="opt" data-type="UNSURE" style="border-color:var(--border-strong); background:none;"><span style="font-size:16px;">\u2022</span><span>Not sure, just help me now</span></button>' +
       '</div>' +
@@ -1067,13 +1231,24 @@ function renderEmergency(){
 function renderEnvironment(){
   state.environmentStartedAt = Date.now();
   var items = [
-    ['lights','Lights dimmed','Lowest warm setting, not total darkness'],
-    ['noise','Brown noise on','60\u201365 dB, speaker 7+ feet from baby'],
-    ['screens','Screens off','TV, tablets, phones turned away'],
-    ['temp','Room feels comfortable','18\u201320°C / 64\u201368°F']
+    ['lights','Lights dimmed','Lowest warm setting, not total darkness',
+      'Bright or blue-white light tells a newborn\u2019s brain it\u2019s daytime, working against the melatonin shift they need to settle. Total darkness isn\u2019t the goal either, that can feel disorienting instead of safe. A warm lamp on its lowest setting, or a hallway light through a cracked door, is the right amount.'],
+    ['noise','Brown noise on','60\u201365 dB, speaker 7+ feet from baby',
+      'Brown noise sits at a lower, deeper frequency than white noise, closer to the constant whoosh baby heard in the womb, which is why it reads as safety instead of static. No decibel meter needed: play it from a speaker across the room, not right beside the crib, at a volume where you could still hold a normal conversation over it.'],
+    ['screens','Screens off','TV, tablets, phones turned away',
+      'A lit screen, even muted and off to the side, is a second source of light and motion competing for attention right when the goal is reducing input, not adding another one. This includes your own phone screen if it\u2019s propped up and lit nearby.'],
+    ['temp','Room feels comfortable','18\u201320\u00b0C / 64\u201368\u00b0F',
+      'A room that runs too warm is one of the more overlooked reasons a baby stays unsettled, overheating reads to the nervous system as distress, not comfort. No thermometer needed: if you\u2019d be comfortable in a light long-sleeve layer, the room is in range.']
   ];
-  var rowsHtml = items.map(function(it){
-    return '<div class="toggle-row" data-env="'+it[0]+'"><div class="toggle-box">'+ICONS.check+'</div><div class="toggle-text"><b>'+it[1]+'</b><span>'+it[2]+'</span></div></div>';
+  var rowsHtml = items.map(function(it, i){
+    return '<div class="toggle-row" data-env="'+it[0]+'">' +
+      '<div class="toggle-box">'+ICONS.check+'</div>' +
+      '<div class="toggle-text">' +
+        '<b>'+it[1]+'</b><span>'+it[2]+'</span>' +
+        '<button type="button" class="why-btn" data-whytoggle data-idx="'+i+'">Why this helps \u25be</button>' +
+        '<div class="why-body" data-whybody data-idx="'+i+'" hidden>'+it[3]+'</div>' +
+      '</div>' +
+    '</div>';
   }).join('');
   var html =
     '<div class="screen-body">' +
@@ -1081,9 +1256,12 @@ function renderEnvironment(){
       '<div class="eyebrow" style="color:var(--sage)">Stage 2 · Environment Reset</div>' +
       typeBadgeHtml('NS','Highest-leverage step for nervous-system-type babies') +
       '<h1 class="h1" style="font-size:25px;">Reset the room<br>before the baby.</h1>' +
-      '<p class="sub">Sound before touch. The nervous system needs to hear safety before it can feel it.</p>' +
+      '<p class="sub">Sound before touch. The nervous system needs to hear safety before it can feel it. Tap any item below for exactly why it matters.</p>' +
       '<div class="card" style="margin-top:16px;">' + rowsHtml + '</div>' +
       '<div class="progress-track"><div class="progress-fill" data-fill style="width:0%;"></div></div>' +
+      '<div class="solidarity-note">' + ICONS.shield +
+        '<span>You\u2019re not the only parent standing in a dim room doing exactly this right now. This is the same first step, in the same sequence, every night, for every family who opens this tool.</span>' +
+      '</div>' +
     '</div>' +
     '<div class="screen-foot">' +
       '<button class="btn btn-sage" data-act="continue" disabled>Continue →</button>' +
@@ -1098,7 +1276,20 @@ function renderEnvironment(){
       cont.disabled = on < items.length;
     }
     $all(el, '.toggle-row').forEach(function(row){
-      row.addEventListener('click', function(){ row.classList.toggle('on'); update(); });
+      row.addEventListener('click', function(e){
+        if (e.target.closest('[data-whytoggle]')) return;
+        row.classList.toggle('on'); update();
+      });
+    });
+    $all(el, '[data-whytoggle]').forEach(function(btn){
+      btn.addEventListener('click', function(e){
+        e.stopPropagation();
+        var idx = btn.getAttribute('data-idx');
+        var body = $(el, '[data-whybody][data-idx="'+idx+'"]');
+        var wasHidden = body.hasAttribute('hidden');
+        if (wasHidden) body.removeAttribute('hidden'); else body.setAttribute('hidden','');
+        btn.textContent = wasHidden ? 'Why this helps \u25b4' : 'Why this helps \u25be';
+      });
     });
     cont.addEventListener('click', function(){ goTo('environmentCheck'); });
     $(el,'[data-act=skip]').addEventListener('click', function(){ goTo('environmentCheck'); });
@@ -1145,6 +1336,7 @@ function renderTigerHold(){
   // minimum. State stores the start time; submitOutcome() will include
   // it when the check screen fires.
   state.tigerHoldStartedAt = Date.now();
+  state.tigerHoldTimerSeconds = 0;
   return buildTechniqueScreen({
     stageDots: 3, eyebrow:'Stage 3 · Soothing Circuit', color:'var(--gold)',
     badge: typeBadgeHtml('NS','Usually the biggest lever for nervous-system type babies'),
@@ -1156,9 +1348,11 @@ function renderTigerHold(){
       'Start a steady pulse forward and back at 60 BPM, not rocking, a pulse.',
       'Still worked up after a minute? Add a firm shush right at ear level.'
     ],
+    stopwatch:true,
     pulse:true,
-    timerLabel:'60 BPM rhythm — keep the pulse steady.',
+    tipLabel:'There\u2019s no fixed time here. Longer generally helps, so stay in it as long as baby (and your arm) can.',
     continueLabel:'Done, how\'s baby? →',
+    onStopwatchElapsed:function(sec){ state.tigerHoldTimerSeconds = sec; },
     onContinue:function(){ goTo('tigerHoldCheck'); }
   });
 }
@@ -1170,7 +1364,7 @@ function renderTigerHoldCheck(){
     sub:'How\'s baby now?',
     onPick:function(val){
       state.outcomes.tigerHold = val;
-      submitOutcome('tiger_hold', val);
+      submitOutcome('tiger_hold', val, { tiger_hold_timer_seconds: state.tigerHoldTimerSeconds || 0 });
       if (val === 'good') goTo('finalCheck');
       else if (val === 'low') goTo('tigerHoldTroubleshoot');
       else goTo('bicycleLegs');
@@ -1218,7 +1412,7 @@ function renderIluMassage(){
     stageDots:4, eyebrow:'Stage 4 · Gas Release', color:'var(--blush)',
     stepbar:{current:2,total:4},
     title:'ILU Massage',
-    svg: '<img src="'+IMG['chatgpt_image_aug_31,_2026,_11_20_24_pm']+'" alt="ILU massage pathway diagram" style="width:100%; height:auto; display:block; border-radius:var(--r-md);">',
+    svg: '<img src="'+IMG['abdominal_massage_pathway_diagram']+'" alt="I-L-U abdominal massage pathway diagram showing the descending, transverse, and ascending colon strokes" style="width:100%; height:auto; display:block; border-radius:var(--r-md);">',
     steps:[
       'Flat hand, firm but gentle pressure. Always clockwise along the highlighted colon path.',
       '<b style="color:var(--terra);">“I” Stroke:</b> Down baby’s left side.',
@@ -1269,13 +1463,24 @@ function renderWarmCompress(){
 
 function renderFinalCheck(){
   state.finalStartedAt = Date.now();
+  // Gas Release (bicycleLegs → iluMassage → footballHold → warmCompress) has
+  // no outcome-check screen of its own, so nothing else ever reads
+  // gas_releaseStartedAt. Capture it here, right as the parent arrives,
+  // and ride along on the 'final' submit so it isn't lost. Only babies
+  // routed through the gas-release sequence will have this set.
+  var gasReleaseSeconds = state.gas_releaseStartedAt
+    ? Math.round((Date.now() - state.gas_releaseStartedAt) / 1000)
+    : null;
+  state.gas_releaseStartedAt = null;
   return buildOutcomeScreen({
     eyebrowColor:'var(--terra)',
     title:'After everything tonight…',
     sub:'Where’s baby right now?',
     onPick:function(val){
       state.outcomes.final = val;
-      submitOutcome('final', val);
+      var extra = {};
+      if (gasReleaseSeconds !== null) extra.gas_release_dwell_seconds = gasReleaseSeconds;
+      submitOutcome('final', val, extra);
       submitCompleted();
       goTo('bridge');
     }
@@ -1283,11 +1488,11 @@ function renderFinalCheck(){
 }
 
 var BRIDGE_COPY = {
-  good: { h:'Baby’s settled. Here’s how The Calm Baby Blueprint\\nprevents tomorrow night.',
+  good: { h:'Baby’s settled. Here’s how The Calm Baby Blueprint\nprevents tomorrow night.',
     sub:'Tonight’s crisis is managed. The Calm Baby Blueprint resets the underlying root cause so you aren’t back here at 2 AM tomorrow.' },
-  mid: { h:'Better, but not all the\\nway there yet.',
+  mid: { h:'Better, but not all the\nway there yet.',
     sub:'That’s usually a sign the protocol reached one root cause and not the other.' },
-  low: { h:'You did everything right.\\nHere’s what this checklist can’t reach.',
+  low: { h:'You showed up for every step tonight.\nNow let’s find what’s actually driving it.',
     sub:'A checklist manages tonight. It was never built to reset a root cause.' }
 };
 
@@ -1304,6 +1509,11 @@ function renderBridge(){
   var copy = BRIDGE_COPY[state.outcomes.final || 'mid'];
   var blueprintHref = withUTM(CONFIG.BLUEPRINT_URL, 'post_crisis_offer');
   blueprintHref += (blueprintHref.indexOf('?') > -1 ? '&' : '?') + 'ref=' + encodeURIComponent(ASSESSMENT_ID);
+  // wanted=true skips Gumroad's product/description page and drops her
+  // straight into checkout. By the bridge screen she's already read the
+  // full pitch on this page, Gumroad's own page would just be a second,
+  // redundant sell before she can pay.
+  blueprintHref += '&wanted=true';
   var quizHref = withUTM(CONFIG.QUIZ_URL, 'diagnosis_bridge');
 
   var known = state.colicType && SYSTEMS.filter(function(s){ return s.code === state.colicType; })[0];
@@ -1322,7 +1532,7 @@ function renderBridge(){
       '<h1 class="h1" style="font-size:24px; white-space:pre-line;">'+esc(copy.h)+'</h1>' +
       introHtml +
 
-      '<div class="illus" style="margin-top:14px;"><img src="'+IMG['3_node_infographic_on_obsidian_card_202608312321']+'" alt="Gut, nervous system, and feeding mechanics connection" style="width:100%; height:auto; display:block;"></div>' +
+      '<div class="illus" style="margin-top:14px;"><img src="'+IMG['three_systems_interaction_infographic']+'" alt="How the nervous system, gut, and feeding mechanics systems interact to drive colic" style="width:100%; height:auto; display:block;"></div>' +
       orderedSystems.map(function(s){ return sysCardHtml(s, known && s.code === state.colicType); }).join('') +
 
       '<div class="timer-note" style="margin:8px auto 0;">'+quizNote+'</div>' +

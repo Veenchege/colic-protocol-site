@@ -74,6 +74,7 @@ export async function onRequestPost(context) {
     baby_age_weeks,
     colic_type,
     colic_type_detail,
+    colic_type_confidence,
     assessment_id,
     lead_source,
     checklist_status,
@@ -82,6 +83,21 @@ export async function onRequestPost(context) {
     environment_outcome,
     tiger_hold_outcome,
     final_outcome,
+    // Dwell/timer fields. These were being computed correctly client-side
+    // (midnight-protocol.html's submitOutcome()) but were never destructured
+    // here, so they were silently dropped on every request — this is why
+    // all four dwell-time columns showed NULL for every row. Fixed by
+    // actually pulling them out of the body below.
+    environment_dwell_seconds,
+    tiger_hold_dwell_seconds,
+    gas_release_dwell_seconds,
+    final_dwell_seconds,
+    // New: active seconds the Tiger Hold stopwatch actually ran, distinct
+    // from tiger_hold_dwell_seconds (which is just time-on-screen). Lets
+    // duration-vs-outcome be analysed later. Requires a
+    // tiger_hold_timer_seconds column on midnight_sessions and a matching
+    // custom field in MailerLite before this will persist anywhere.
+    tiger_hold_timer_seconds,
     purchase_status,
     utm_source,
     utm_medium,
@@ -175,6 +191,32 @@ export async function onRequestPost(context) {
   // else: key omitted entirely, existing MailerLite value (if any)
   // from a prior quiz completion is left exactly as-is.
 
+  // Dwell/timer fields: each request only ever carries at most one or two
+  // of these (whichever stage's submitOutcome() just fired), the rest are
+  // absent from the body, not zero. Same clobber rule as colic_type above:
+  // only add a key when this specific request actually included a real
+  // number for it, otherwise a "started" or "in_progress" ping with no
+  // dwell data would blank out a value written by an earlier request for
+  // the same session.
+  var dwellCandidates = {
+    environment_dwell_seconds: environment_dwell_seconds,
+    tiger_hold_dwell_seconds: tiger_hold_dwell_seconds,
+    gas_release_dwell_seconds: gas_release_dwell_seconds,
+    final_dwell_seconds: final_dwell_seconds,
+    tiger_hold_timer_seconds: tiger_hold_timer_seconds,
+  };
+  Object.keys(dwellCandidates).forEach(function (key) {
+    var n = cleanNum(dwellCandidates[key]);
+    if (n !== '') fields[key] = n;
+  });
+
+  // Quiz-handoff confidence (0-100), only present when it actually
+  // travelled from the quiz. Same "only add the key when real" rule,
+  // requires a colic_type_confidence custom field in MailerLite before
+  // this persists there.
+  var confidenceNum = cleanNum(colic_type_confidence);
+  if (confidenceNum !== '') fields.colic_type_confidence = confidenceNum;
+
   try {
     const mlRes = await fetch('https://connect.mailerlite.com/api/subscribers', {
       method: 'POST',
@@ -223,12 +265,22 @@ export async function onRequestPost(context) {
             name: name.trim(),
             colic_type: cleanType || null,
             colic_type_from_quiz: colic_type_detail === 'Confirmed from quiz handoff',
+            ...(cleanNum(colic_type_confidence) !== '' ? { colic_type_confidence: Number(cleanNum(colic_type_confidence)) } : {}),
             baby_age_weeks: cleanNum(baby_age_weeks) || null,
             checklist_status: cleanStatus,
             checklist_last_stage: cleanStr(checklist_last_stage) || null,
             environment_outcome: cleanStr(environment_outcome, 50) || null,
             tiger_hold_outcome: cleanStr(tiger_hold_outcome, 50) || null,
             final_outcome: cleanStr(final_outcome, 50) || null,
+            // Same fields fixed above for MailerLite. Supabase's merge-
+            // duplicates upsert only sends a column here when this request
+            // actually has it, so a later ping without dwell data can't
+            // blank out an earlier stage's recorded time either.
+            ...(cleanNum(environment_dwell_seconds) !== '' ? { environment_dwell_seconds: Number(cleanNum(environment_dwell_seconds)) } : {}),
+            ...(cleanNum(tiger_hold_dwell_seconds) !== '' ? { tiger_hold_dwell_seconds: Number(cleanNum(tiger_hold_dwell_seconds)) } : {}),
+            ...(cleanNum(gas_release_dwell_seconds) !== '' ? { gas_release_dwell_seconds: Number(cleanNum(gas_release_dwell_seconds)) } : {}),
+            ...(cleanNum(final_dwell_seconds) !== '' ? { final_dwell_seconds: Number(cleanNum(final_dwell_seconds)) } : {}),
+            ...(cleanNum(tiger_hold_timer_seconds) !== '' ? { tiger_hold_timer_seconds: Number(cleanNum(tiger_hold_timer_seconds)) } : {}),
             checklist_version: cleanStr(checklist_version, 20) || null,
             lead_source: cleanStr(lead_source),
             updated_at: new Date().toISOString(),
