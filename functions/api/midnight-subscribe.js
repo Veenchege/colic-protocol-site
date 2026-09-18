@@ -191,6 +191,21 @@ export async function onRequestPost(context) {
   // else: key omitted entirely, existing MailerLite value (if any)
   // from a prior quiz completion is left exactly as-is.
 
+  // AUTOMATION-SPLIT FIX: colic_type is intentionally omitted above
+  // when blank, to protect a real diagnosis already on file from a
+  // prior quiz completion. But that means every DM-direct Midnight
+  // Protocol lead (no quiz handoff, ~87% of sessions per the
+  // dashboard) reaches the MailerLite automation's colic_type split
+  // with nothing to match, and the automation dead-ends there with no
+  // email sent. This field is NOT clobber-guarded and is always
+  // present, specifically so the automation always has something to
+  // split on. Point the automation's split step at this field, not at
+  // colic_type directly, and add an "Unassigned" branch that sends a
+  // type-agnostic Midnight Protocol email instead of one of the three
+  // GUT/NSD/FM variants. colic_type itself (used everywhere else,
+  // e.g. Supabase and any type-specific logic) is untouched.
+  fields.colic_type_for_email = cleanType || 'Unassigned';
+
   // Dwell/timer fields: each request only ever carries at most one or two
   // of these (whichever stage's submitOutcome() just fired), the rest are
   // absent from the body, not zero. Same clobber rule as colic_type above:
