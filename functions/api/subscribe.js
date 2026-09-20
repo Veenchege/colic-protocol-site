@@ -238,6 +238,19 @@ export async function onRequestPost(context) {
             name: name.trim(),
             colic_type: cleanType,
             colic_type_detail: cleanStr(colic_type_detail),
+            // AUTOMATION-SPLIT FIX: the "90 second quiz" MailerLite
+            // automation's Condition 2/3/4 branches split on
+            // colic_type_for_email, not on colic_type directly. This
+            // field was never added when quiz.js/subscribe.js were
+            // rebuilt, so every completion since has had colic_type
+            // written correctly while the automation's own split
+            // field stayed permanently blank — every quiz completion
+            // dead-ends at the type check and gets no email. cleanType
+            // is '' on the initial 'started' call (colic_type is
+            // 'Unassigned' at that point per quiz.js), so this falls
+            // back to 'Unassigned' there too, same convention as
+            // midnight-subscribe.js's identical fix.
+            colic_type_for_email: cleanType || 'Unassigned',
             feeding_method: cleanFeeding,
             quiz_status: cleanStatus,
             confidence_pct: cleanNum(confidence_pct),
