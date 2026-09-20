@@ -354,6 +354,10 @@ var state = {
     state.utm.utm_campaign = p.get('utm_campaign') || '';
     state.utm.utm_term = p.get('utm_term') || '';
     state.utm.utm_content = p.get('utm_content') || '';
+    // Quiz assessment ID (CP-...) travels in from the quiz handoff. Kept
+    // separate from this session's own MP- ID so neither overwrites the other.
+    var aidParam = (p.get('aid') || '').trim();
+    if (/^CP-[A-Za-z0-9-]{3,40}$/.test(aidParam)) state.quizAssessmentId = aidParam;
     var t = (p.get('type') || '').toUpperCase();
     if (TYPE_MAP[t]){ state.colicType = t; state.colicTypeFromQuiz = true; }
     var confParam = p.get('confidence');
@@ -397,6 +401,9 @@ function post(extra){
       // when non-null, same clobber-safe pattern as colic_type below.
       colic_type_confidence: state.colicTypeConfidence,
       assessment_id: ASSESSMENT_ID,
+      // Present only when she came from the quiz. Backend should use this
+      // for the MailerLite assessment_id field so the CP- ID is never replaced.
+      quiz_assessment_id: state.quizAssessmentId || null,
       lead_source: state.utm.utm_source,
       checklist_version: '1.2-vector',
       purchase_status: 'pending'
@@ -1552,7 +1559,7 @@ function sysCardHtml(sys, matched){
 function renderBridge(){
   var copy = BRIDGE_COPY[state.outcomes.final || 'mid'];
   var blueprintHref = withUTM(CONFIG.BLUEPRINT_URL, 'post_crisis_offer');
-  blueprintHref += (blueprintHref.indexOf('?') > -1 ? '&' : '?') + 'ref=' + encodeURIComponent(ASSESSMENT_ID);
+  blueprintHref += (blueprintHref.indexOf('?') > -1 ? '&' : '?') + 'ref=' + encodeURIComponent(state.quizAssessmentId || ASSESSMENT_ID);
   // wanted=true skips Gumroad's product/description page and drops her
   // straight into checkout. By the bridge screen she's already read the
   // full pitch on this page, Gumroad's own page would just be a second,

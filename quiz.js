@@ -778,7 +778,7 @@ function goToChecklist() {
     `&confidence=${getConfidencePct()}` +
     `&name=${encodeURIComponent(userName)}` +
     `&age=${encodeURIComponent(babyAgeWeeks != null ? babyAgeWeeks : '')}` +
-    `&utm_source=${encodeURIComponent(UTM_SOURCE)}&utm_medium=quiz_handoff&utm_campaign=checklist_handoff`;
+    `&aid=${encodeURIComponent(ASSESSMENT_ID)}&utm_source=${encodeURIComponent(UTM_SOURCE)}&utm_medium=quiz_handoff&utm_campaign=checklist_handoff`;
   window.location.href = url;
 }
 

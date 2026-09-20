@@ -76,6 +76,9 @@ export async function onRequestPost(context) {
     colic_type_detail,
     colic_type_confidence,
     assessment_id,
+    // CP- ID from the quiz, present only when she arrived via the quiz
+    // handoff (midnight-protocol.html sends it as null otherwise).
+    quiz_assessment_id,
     lead_source,
     checklist_status,
     checklist_last_stage,
@@ -167,13 +170,54 @@ export async function onRequestPost(context) {
     return json(500, { error: 'Server configuration error' }, allowed);
   }
 
+  // ASSESSMENT-ID RECONCILIATION. Two ID families exist on purpose:
+  //   CP-  the quiz result, the person's canonical ID. Gumroad purchases
+  //        are matched back to it via the ?ref= param.
+  //   MP-  one Midnight Protocol session. Stays the key of midnight_sessions.
+  // The MailerLite assessment_id field must hold the CP- ID whenever one
+  // exists. Order of preference:
+  //   1. CP- ID sent by the browser (quiz handoff URL carried ?aid=)
+  //   2. a CP- ID already on the subscriber in MailerLite (she took the
+  //      quiz earlier and came back through an email/DM link with no ?aid=)
+  //   3. this session's MP- ID (Midnight-only lead, no quiz on file)
+  // Without step 2 an email-to-Midnight click would overwrite a real CP- ID.
+  const CP_ID_RE = /^CP-[A-Za-z0-9-]{3,40}$/;
+  const cleanQuizId =
+    typeof quiz_assessment_id === 'string' && CP_ID_RE.test(quiz_assessment_id.trim())
+      ? quiz_assessment_id.trim()
+      : '';
+  const cleanMpId = cleanStr(assessment_id);
+
+  let mailerliteAssessmentId = cleanQuizId;
+  if (!mailerliteAssessmentId) {
+    try {
+      const existingRes = await fetch(
+        `https://connect.mailerlite.com/api/subscribers/${encodeURIComponent(email.trim().toLowerCase())}`,
+        { headers: { Accept: 'application/json', Authorization: `Bearer ${API_KEY}` } }
+      );
+      if (existingRes.ok) {
+        const existing = await existingRes.json();
+        const existingId = existing && existing.data && existing.data.fields
+          ? existing.data.fields.assessment_id
+          : '';
+        if (typeof existingId === 'string' && CP_ID_RE.test(existingId.trim())) {
+          mailerliteAssessmentId = existingId.trim();
+        }
+      }
+    } catch (err) {
+      // Lookup is a safeguard only. On failure fall through to the MP- ID.
+      console.warn('[midnight-subscribe] existing-ID lookup failed:', err);
+    }
+  }
+  if (!mailerliteAssessmentId) mailerliteAssessmentId = cleanMpId;
+
   // Build the MailerLite fields payload. colic_type is added
   // conditionally, everything else is always present since these
   // fields are exclusive to this tool and can't clobber quiz data.
   const fields = {
     name: name.trim(),
     baby_age_weeks: cleanNum(baby_age_weeks),
-    assessment_id: cleanStr(assessment_id),
+    assessment_id: mailerliteAssessmentId,
     lead_source: cleanStr(lead_source),
     checklist_status: cleanStatus,
     checklist_last_stage: cleanStr(checklist_last_stage),
@@ -280,6 +324,10 @@ export async function onRequestPost(context) {
             name: name.trim(),
             colic_type: cleanType || null,
             colic_type_from_quiz: colic_type_detail === 'Confirmed from quiz handoff',
+            // Links this session to its quiz result. Requires the
+            // quiz_assessment_id column (see SQL in the reply) before
+            // deploying, or PostgREST rejects the whole row.
+            ...(cleanQuizId ? { quiz_assessment_id: cleanQuizId } : {}),
             ...(cleanNum(colic_type_confidence) !== '' ? { colic_type_confidence: Number(cleanNum(colic_type_confidence)) } : {}),
             baby_age_weeks: cleanNum(baby_age_weeks) || null,
             checklist_status: cleanStatus,
