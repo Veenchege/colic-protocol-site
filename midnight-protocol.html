@@ -162,6 +162,11 @@ a.btn{text-decoration:none;}
 .toggle-box svg path{stroke-dasharray:24; stroke-dashoffset:24; transition:stroke-dashoffset .3s ease;}
 .toggle-row.on .toggle-box svg{opacity:1;}
 .toggle-row.on .toggle-box svg path{stroke-dashoffset:0;}
+.toggle-text{flex:1 1 auto; min-width:0; text-align:left;}
+.toggle-row{align-items:flex-start;}
+.toggle-box{margin-top:1px;}
+.why-btn{display:block;}
+.why-body{max-width:none !important; overflow-wrap:anywhere;}
 .toggle-text b{display:block; font-size:14px; font-weight:600; color:var(--cream); margin-bottom:1px;}
 .toggle-text span{font-size:12px; color:var(--muted);}
 .progress-track{height:4px; background:var(--border); border-radius:3px; overflow:hidden; margin:16px 0 4px;}
@@ -304,6 +309,9 @@ var IMG = {
   // above are left in place in case either screen needs to revert.
   'abdominal_massage_pathway_diagram': '/images/mp-13.jpeg',
   'three_systems_interaction_infographic': '/images/mp-14.jpeg',
+  // Football hold replacement: upload the new file as /images/mp-15.webp.
+  // Until it exists, the old drawing shows instead of a blank box.
+  'football_hold': '/images/mp-15.webp',
 };
 
 var CONFIG = {
@@ -566,6 +574,30 @@ var SVGS = {
       '<text x="200" y="210" font-family="DM Mono, monospace" font-size="11" fill="#93b394" text-anchor="middle">UPRIGHT GRAVITY VENTING ANGLE</text>' +
     '</svg>',
 
+  environment:
+    '<svg viewBox="0 0 400 230" xmlns="http://www.w3.org/2000/svg">' +
+      '<rect width="400" height="230" fill="#0d0a07"/>' +
+      '<circle cx="78" cy="88" r="70" fill="rgba(224,189,117,0.10)"/>' +
+      '<path d="M50 72 L106 72 L96 40 L60 40 Z" fill="rgba(224,189,117,0.25)" stroke="#e0bd75" stroke-width="2" stroke-linejoin="round"/>' +
+      '<line x1="78" y1="72" x2="78" y2="150" stroke="#e0bd75" stroke-width="3" stroke-linecap="round"/>' +
+      '<ellipse cx="78" cy="156" rx="24" ry="6" fill="rgba(224,189,117,0.3)" stroke="#e0bd75" stroke-width="1.8"/>' +
+      '<text x="78" y="200" font-family="DM Mono, monospace" font-size="10" fill="#e0bd75" text-anchor="middle">DIM + WARM</text>' +
+      '<rect x="150" y="80" width="62" height="84" rx="10" fill="rgba(147,179,148,0.12)" stroke="#93b394" stroke-width="2"/>' +
+      '<circle cx="181" cy="132" r="18" fill="none" stroke="#93b394" stroke-width="2"/>' +
+      '<circle cx="181" cy="132" r="5" fill="#93b394"/>' +
+      '<circle cx="181" cy="102" r="5" fill="none" stroke="#93b394" stroke-width="1.6"/>' +
+      '<path d="M226 104 C234 116 234 128 226 140" stroke="#93b394" stroke-width="2" fill="none" stroke-linecap="round"/>' +
+      '<path d="M236 94 C248 112 248 132 236 150" stroke="#93b394" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.7"/>' +
+      '<text x="196" y="200" font-family="DM Mono, monospace" font-size="10" fill="#93b394" text-anchor="middle">BROWN NOISE</text>' +
+      '<rect x="278" y="70" width="52" height="70" rx="6" fill="rgba(245,239,230,0.05)" stroke="rgba(245,239,230,0.35)" stroke-width="1.8"/>' +
+      '<line x1="270" y1="152" x2="338" y2="58" stroke="#dd8058" stroke-width="3" stroke-linecap="round"/>' +
+      '<text x="304" y="200" font-family="DM Mono, monospace" font-size="10" fill="#dd8058" text-anchor="middle">SCREENS OFF</text>' +
+      '<rect x="358" y="64" width="12" height="82" rx="6" fill="rgba(230,161,137,0.15)" stroke="#e6a189" stroke-width="1.8"/>' +
+      '<circle cx="364" cy="154" r="10" fill="#e6a189"/>' +
+      '<rect x="361" y="98" width="6" height="52" rx="3" fill="#e6a189"/>' +
+      '<text x="364" y="184" font-family="DM Mono, monospace" font-size="9" fill="#e6a189" text-anchor="middle">18-20C</text>' +
+    '</svg>',
+
   cryDecoder:
     '<svg viewBox="0 0 400 190" xmlns="http://www.w3.org/2000/svg">' +
       '<rect width="400" height="190" fill="#0d0a07"/>' +
@@ -643,6 +675,17 @@ var SVGS = {
         '<rect x="8" y="82" width="54" height="12" rx="3" fill="rgba(244,237,228,0.1)"/>' +
       '</g>' +
     '</svg>'
+};
+
+// If an image file is missing on the server or fails to load, swap in the
+// matching built-in drawing instead of leaving a blank box.
+window.__mpFallback = function(img, key){
+  try{
+    if (!SVGS[key]) return;
+    var d = document.createElement('div');
+    d.innerHTML = SVGS[key];
+    if (img.parentNode) img.parentNode.replaceChild(d.firstChild, img);
+  }catch(e){}
 };
 
 function mountTimer(container, opts){
@@ -1257,6 +1300,7 @@ function renderEnvironment(){
       typeBadgeHtml('NS','Highest-leverage step for nervous-system-type babies') +
       '<h1 class="h1" style="font-size:25px;">Reset the room<br>before the baby.</h1>' +
       '<p class="sub">Sound before touch. The nervous system needs to hear safety before it can feel it. Tap any item below for exactly why it matters.</p>' +
+      '<div class="illus" style="margin-top:14px;">' + SVGS.environment + '</div>' +
       '<div class="card" style="margin-top:16px;">' + rowsHtml + '</div>' +
       '<div class="progress-track"><div class="progress-fill" data-fill style="width:0%;"></div></div>' +
       '<div class="solidarity-note">' + ICONS.shield +
@@ -1412,7 +1456,7 @@ function renderIluMassage(){
     stageDots:4, eyebrow:'Stage 4 · Gas Release', color:'var(--blush)',
     stepbar:{current:2,total:4},
     title:'ILU Massage',
-    svg: '<img src="'+IMG['abdominal_massage_pathway_diagram']+'" alt="I-L-U abdominal massage pathway diagram showing the descending, transverse, and ascending colon strokes" style="width:100%; height:auto; display:block; border-radius:var(--r-md);">',
+    svg: '<img src="'+IMG['abdominal_massage_pathway_diagram']+'" onerror="__mpFallback(this,\'ilu\')" alt="I-L-U abdominal massage pathway diagram showing the descending, transverse, and ascending colon strokes" style="width:100%; height:auto; display:block; border-radius:var(--r-md);">',
     steps:[
       'Flat hand, firm but gentle pressure. Always clockwise along the highlighted colon path.',
       '<b style="color:var(--terra);">“I” Stroke:</b> Down baby’s left side.',
@@ -1430,7 +1474,7 @@ function renderFootballHold(){
     stageDots:4, eyebrow:'Stage 4 · Gas Release', color:'var(--blush)',
     stepbar:{current:3,total:4},
     title:'Football Hold',
-    svg: SVGS.football,
+    svg: '<img src="'+IMG['football_hold']+'" onerror="__mpFallback(this,\'football\')" alt="Football hold" style="width:100%; height:auto; display:block; border-radius:var(--r-md);">',
     steps:[
       'Tuck baby along your forearm, facing you, body upright, not reclined.',
       'Support the head in your palm. Ear, shoulder, and hip in one line.',
