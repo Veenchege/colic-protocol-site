@@ -328,6 +328,12 @@ a{color:inherit}
    stay invisible just because the primary type won the tiebreak.
    ═══════════════════════════════════════════════════════════════════════ */
 .score-panel{background:rgba(255,255,255,.6);border:1px solid rgba(0,0,0,.09);border-radius:14px;padding:20px 20px 16px;margin-bottom:4px}
+.audit-box{background:rgba(200,150,60,.06);border:1px solid rgba(200,150,60,.28);border-radius:14px;padding:18px 20px}
+.audit-title{font-family:var(--fm);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--terra-deep);margin-bottom:12px}
+.audit-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.audit-list li{position:relative;padding-left:20px;font-size:14px;color:var(--ink);line-height:1.5}
+.audit-list li::before{content:"";position:absolute;left:0;top:8px;width:7px;height:7px;border-radius:50%;background:var(--terra-deep)}
+.audit-close{font-family:var(--fd);font-style:italic;font-size:14px;color:var(--muted);margin:14px 0 0;padding-top:12px;border-top:1px solid rgba(200,150,60,.25)}
 .score-panel-head{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid rgba(0,0,0,.08);padding-bottom:10px;margin-bottom:16px}
 .score-panel-title{font-family:var(--fm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-soft)}
 .score-panel-scale{font-family:var(--fm);font-size:9px;color:var(--muted-soft)}
@@ -480,6 +486,10 @@ a{color:inherit}
 
       <div class="result-section reveal">
         <div class="score-panel" id="scorePanel"></div>
+      </div>
+
+      <div class="result-section reveal">
+        <div class="audit-box" id="answerAudit"></div>
       </div>
 
       <div class="result-section reveal">

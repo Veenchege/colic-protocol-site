@@ -128,10 +128,10 @@ const QUESTIONS = [
     sub: "Think about the pattern over the last few days. Pick the one that fits most nights.",
     single: true,
     opts: [
-      ["Consistently in the evening — usually 5PM to midnight, regardless of feeding",      {GUT:0,NS:3,FM:0}],
-      ["During or shortly after feeding — often arching away from the breast or bottle",    {GUT:2,NS:0,FM:2}],
-      ["Seemingly randomly throughout the day with no clear pattern",                       {GUT:1,NS:1,FM:1}],
-      ["Consistently 1 to 3 hours after a feed, like clockwork",                            {GUT:1,NS:0,FM:4}],
+      ["Consistently in the evening — usually 5PM to midnight, regardless of feeding",      {GUT:0,NS:3,FM:0}, null, null, "The crying is concentrated in the evening."],
+      ["During or shortly after feeding — often arching away from the breast or bottle",    {GUT:2,NS:0,FM:2}, null, null, "You reported repeated feeding-related discomfort."],
+      ["Seemingly randomly throughout the day with no clear pattern",                       {GUT:1,NS:1,FM:1}, null, null, "The crying doesn't follow an obvious time-of-day pattern."],
+      ["Consistently 1 to 3 hours after a feed, like clockwork",                            {GUT:1,NS:0,FM:4}, null, null, "The crying follows a consistent delay after feeds."],
     ]
   },
   {
@@ -139,10 +139,10 @@ const QUESTIONS = [
     sub: "How a cry sounds carries real diagnostic information. Pick the closest match.",
     single: true,
     opts: [
-      ["High-pitched, continuous, and intense from the very first second — no build-up",   {GUT:0,NS:4,FM:0}],
-      ["Starts softer and escalates over 10–15 minutes into inconsolable",                 {GUT:2,NS:1,FM:0}],
-      ["Comes in waves — crying, pause, crying again — with legs pulled to chest",         {GUT:3,NS:0,FM:0}],
-      ["Grunting, straining, or gulping sounds, especially in the first few minutes after a feed", {GUT:1,NS:0,FM:3}],
+      ["High-pitched, continuous, and intense from the very first second — no build-up",   {GUT:0,NS:4,FM:0}, null, null, "The cry starts high-pitched and intense with no build-up."],
+      ["Starts softer and escalates over 10–15 minutes into inconsolable",                 {GUT:2,NS:1,FM:0}, null, null, "The cry builds gradually rather than starting at full intensity."],
+      ["Comes in waves — crying, pause, crying again — with legs pulled to chest",         {GUT:3,NS:0,FM:0}, null, null, "The crying comes in waves, with legs pulled toward the chest."],
+      ["Grunting, straining, or gulping sounds, especially in the first few minutes after a feed", {GUT:1,NS:0,FM:3}, null, null, "You noted grunting or straining sounds after feeds."],
     ]
   },
   {
@@ -150,10 +150,10 @@ const QUESTIONS = [
     sub: "Physical signals during crying point to specific root causes. Pick the most common one.",
     single: true,
     opts: [
-      ["Legs pulled toward the chest, abdomen visibly tight or distended",                 {GUT:4,NS:0,FM:0}],
-      ["Full-body tension — arching back, fists clenched, face red and straining",         {GUT:0,NS:4,FM:0}],
-      ["Pulls off the breast or bottle repeatedly, coughs or sputters mid-feed",            {GUT:0,NS:0,FM:4}],
-      ["Inconsolable regardless of position — nothing seems to help at all",               {GUT:1,NS:1,FM:1}],
+      ["Legs pulled toward the chest, abdomen visibly tight or distended",                 {GUT:4,NS:0,FM:0}, null, null, "The abdomen appears tight or distended during episodes."],
+      ["Full-body tension — arching back, fists clenched, face red and straining",         {GUT:0,NS:4,FM:0}, null, null, "The body shows full tension, arching, and clenched fists."],
+      ["Pulls off the breast or bottle repeatedly, coughs or sputters mid-feed",            {GUT:0,NS:0,FM:4}, null, null, "Your baby pulls off or coughs mid-feed."],
+      ["Inconsolable regardless of position — nothing seems to help at all",               {GUT:1,NS:1,FM:1}, null, null, "Nothing about position changes how consolable your baby is."],
     ]
   },
   {
@@ -170,10 +170,10 @@ const QUESTIONS = [
     q: "How does your baby typically respond when being held during a crying episode?",
     sub: "",
     opts: [
-      ["Calms somewhat when held face-down with gentle pressure on the abdomen",           {GUT:3,NS:0,FM:0}],
-      ["Calms briefly when moved rhythmically — but starts again when movement stops",     {GUT:0,NS:4,FM:0}],
-      ["Wants to stay upright after feeds — unsettled lying flat or being reclined",        {GUT:0,NS:0,FM:4}],
-      ["Inconsistent — sometimes holding helps, sometimes it makes things worse",          {GUT:1,NS:1,FM:1}],
+      ["Calms somewhat when held face-down with gentle pressure on the abdomen",           {GUT:3,NS:0,FM:0}, null, null, "Face-down pressure holding brings some relief."],
+      ["Calms briefly when moved rhythmically — but starts again when movement stops",     {GUT:0,NS:4,FM:0}, null, null, "Rhythmic movement calms your baby only while it continues."],
+      ["Wants to stay upright after feeds — unsettled lying flat or being reclined",        {GUT:0,NS:0,FM:4}, null, null, "Your baby wants to stay upright after feeds."],
+      ["Inconsistent — sometimes holding helps, sometimes it makes things worse",          {GUT:1,NS:1,FM:1}, null, null, "Holding helps inconsistently."],
     ]
   },
   {
@@ -181,9 +181,9 @@ const QUESTIONS = [
     sub: "Gut presentation provides direct microbiome data. Pick the one that's typical right now.",
     single: true,
     opts: [
-      ["Green, frothy, or mucousy — sometimes with a strong smell",                        {GUT:3,NS:0,FM:0}],
+      ["Green, frothy, or mucousy — sometimes with a strong smell",                        {GUT:3,NS:0,FM:0}, null, null, "Stool has been green, frothy, or mucousy."],
       ["Normal yellow seedy (breastfed) or tan (formula) — no stool changes noted",       {GUT:0,NS:1,FM:1}],
-      ["Infrequent — less than once a day — with apparent straining",                      {GUT:2,NS:0,FM:0}],
+      ["Infrequent — less than once a day — with apparent straining",                      {GUT:2,NS:0,FM:0}, null, null, "Bowel movements have been infrequent, with straining."],
       ["Not sure — haven't noticed a pattern",                                             {GUT:0,NS:0,FM:0}],
     ]
   },
@@ -193,9 +193,9 @@ const QUESTIONS = [
     single: true,
     opts: [
       ["Exclusively breastfed",                                                            {GUT:1,NS:0,FM:0}, "Breastfed"],
-      ["Formula-fed — has been from birth or switched recently",                           {GUT:0,NS:0,FM:2}, "Formula-fed"],
+      ["Formula-fed — has been from birth or switched recently",                           {GUT:0,NS:0,FM:2}, "Formula-fed", null, "Feeding is formula, from birth or a recent switch."],
       ["Mixed feeding — breast and formula",                                               {GUT:0,NS:0,FM:1}, "Mixed"],
-      ["I've eliminated dairy from my diet already and the crying hasn't changed",         {GUT:0,NS:1,FM:1}, "Breastfed"],
+      ["I've eliminated dairy from my diet already and the crying hasn't changed",         {GUT:0,NS:1,FM:1}, "Breastfed", null, "Dairy has already been eliminated with no change."],
     ]
   },
 ];
@@ -410,6 +410,12 @@ let scores = {GUT:0, NS:0, FM:0};
 // from scoring so the result page and the DM message can say it back
 // to her, not just score against it silently.
 let triedItems = [];
+// Collected per type as the quiz is answered: every selected option that
+// weighted toward that type and has a written `reason`, paired with the
+// weight it contributed. Powers the answer-audit block on the result page
+// (buildAnswerAudit) — an itemized "why this pattern" list instead of a
+// bare confidence percentage.
+let typeReasons = {GUT:[], NS:[], FM:[]};
 const selectedMap = new Map();
 const quizStartedAt = Date.now(); // simple bot-speed trap
 
@@ -510,6 +516,7 @@ function startQuiz() {
   scores = {GUT:0, NS:0, FM:0};
   feedingMethod = '';
   triedItems = [];
+  typeReasons = {GUT:[], NS:[], FM:[]};
   qIndex = 0;
   selectedMap.clear();
 
@@ -554,13 +561,13 @@ function renderQuestion() {
     div.setAttribute('tabindex', '0');
     div.innerHTML = `<span class="opt-text">${o[0]}</span><span class="opt-check" id="chk${i}" aria-hidden="true"></span>`;
     div.style.animation = `rise .35s ${i * .07}s ease both`;
-    div.onclick = () => toggleOption(i, o[1], div, !!q.single, o[2] || null, o[3] || null);
-    div.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleOption(i, o[1], div, !!q.single, o[2] || null, o[3] || null); } };
+    div.onclick = () => toggleOption(i, o[1], div, !!q.single, o[2] || null, o[3] || null, o[4] || null);
+    div.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleOption(i, o[1], div, !!q.single, o[2] || null, o[3] || null, o[4] || null); } };
     box.appendChild(div);
   });
 }
 
-function toggleOption(idx, weights, el, single, feeding, triedTag) {
+function toggleOption(idx, weights, el, single, feeding, triedTag, reason) {
   const deselect = (node) => {
     node.classList.remove('selected');
     node.setAttribute('aria-checked', 'false');
@@ -579,7 +586,7 @@ function toggleOption(idx, weights, el, single, feeding, triedTag) {
     document.querySelectorAll('#optionsBox .option').forEach(deselect);
     selectedMap.clear();
     if (!wasSelected) {
-      selectedMap.set(idx, { weights, feeding, triedTag });
+      selectedMap.set(idx, { weights, feeding, triedTag, reason });
       select(el);
     }
   } else {
@@ -587,7 +594,7 @@ function toggleOption(idx, weights, el, single, feeding, triedTag) {
       selectedMap.delete(idx);
       deselect(el);
     } else {
-      selectedMap.set(idx, { weights, feeding, triedTag });
+      selectedMap.set(idx, { weights, feeding, triedTag, reason });
       select(el);
     }
   }
@@ -606,6 +613,19 @@ function advanceQ() {
     Object.keys(sel.weights).forEach(k => { scores[k] += sel.weights[k]; });
     if (sel.feeding) feedingMethod = sel.feeding;
     if (sel.triedTag) triedItems.push(sel.triedTag);
+
+    // A "tried X, no change" answer gets its own reason line even though
+    // its static text (above) doesn't mention the specific thing tried —
+    // build that one dynamically here instead of hardcoding it per option.
+    const text = sel.triedTag
+      ? `You have already tried ${sel.triedTag} without a meaningful change.`
+      : sel.reason;
+
+    if (text) {
+      Object.keys(sel.weights).forEach(k => {
+        if (sel.weights[k] > 0) typeReasons[k].push({ text, weight: sel.weights[k] });
+      });
+    }
   });
   qIndex++;
   selectedMap.clear();
@@ -696,6 +716,7 @@ async function showResult() {
   document.getElementById('resultMonitor').textContent  = R.monitor;
 
   renderScorePanel(scores, type);
+  document.getElementById('answerAudit').innerHTML = buildAnswerAudit(type);
   renderQuickAction(type);
   document.getElementById('reframeBlock').innerHTML = buildReframeLine(type, userName);
   renderPrevalenceBar(type);
@@ -778,7 +799,7 @@ function goToChecklist() {
     `&confidence=${getConfidencePct()}` +
     `&name=${encodeURIComponent(userName)}` +
     `&age=${encodeURIComponent(babyAgeWeeks != null ? babyAgeWeeks : '')}` +
-    `&aid=${encodeURIComponent(ASSESSMENT_ID)}&utm_source=${encodeURIComponent(UTM_SOURCE)}&utm_medium=quiz_handoff&utm_campaign=checklist_handoff`;
+    `&utm_source=quiz&utm_medium=result_page&utm_campaign=checklist_handoff`;
   window.location.href = url;
 }
 
@@ -868,6 +889,49 @@ function buildProfileNarrative() {
 
   sentence += `. Here's what that most likely points to.`;
   return sentence;
+}
+
+/* ── ANSWER AUDIT ─────────────────────────────────────────────────────────
+   Itemized "why this pattern" list: the specific things she reported that
+   actually moved the winning type, in her own situation's terms, not a
+   score. Deliberately not the same content as buildProfileNarrative() or
+   buildTriedFailureLine() above — those are warm prose; this is a scan-
+   able list built to be checked line by line against what she told the
+   quiz, which is the actual point (see the reply this shipped with: this
+   is much stronger than "you scored 63% GUT" because every line traces
+   to a specific answer instead of asking her to trust a single number). */
+function buildAnswerAudit(type) {
+  const feedingPhrase = {
+    'Breastfed': 'breastfed',
+    'Formula-fed': 'formula-fed',
+    'Mixed': 'mixed breast and formula fed',
+  }[feedingMethod] || null;
+
+  // Always lead with the two facts every completion has, regardless of
+  // which answers happened to carry weight this time.
+  const lines = [`Your baby is ${babyAgeWeeks} week${babyAgeWeeks === 1 ? '' : 's'} old.`];
+  if (feedingPhrase) lines.push(`Your baby is ${feedingPhrase}.`);
+
+  // Highest-weight answers first; a duplicate reason (two questions
+  // producing the same line) only needs to appear once.
+  const seen = new Set(lines);
+  typeReasons[type]
+    .slice()
+    .sort((a, b) => b.weight - a.weight)
+    .forEach(r => {
+      if (lines.length >= 6) return;
+      if (seen.has(r.text)) return;
+      seen.add(r.text);
+      lines.push(r.text);
+    });
+
+  const items = lines.map(l => `<li>${l}</li>`).join('');
+
+  return `
+    <div class="audit-title">Why your answers point toward this system</div>
+    <ul class="audit-list">${items}</ul>
+    <p class="audit-close">Those answers are what moved your result toward this track.</p>
+  `;
 }
 
 /* ── SCORE PANEL ──────────────────────────────────────────────────────────

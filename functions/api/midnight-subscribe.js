@@ -189,7 +189,13 @@ export async function onRequestPost(context) {
   const cleanMpId = cleanStr(assessment_id);
 
   let mailerliteAssessmentId = cleanQuizId;
-  if (!mailerliteAssessmentId) {
+  // Type already on file from an earlier quiz or Midnight Protocol pick.
+  // Used only to stop a blank-type request from overwriting it in the
+  // colic_type_for_email field below.
+  let existingRealType = '';
+  const REAL_TYPES = VALID_COLIC_TYPES.filter((t) => t && t !== 'Unassigned');
+
+  if (!cleanQuizId || !cleanType) {
     try {
       const existingRes = await fetch(
         `https://connect.mailerlite.com/api/subscribers/${encodeURIComponent(email.trim().toLowerCase())}`,
@@ -197,16 +203,16 @@ export async function onRequestPost(context) {
       );
       if (existingRes.ok) {
         const existing = await existingRes.json();
-        const existingId = existing && existing.data && existing.data.fields
-          ? existing.data.fields.assessment_id
-          : '';
-        if (typeof existingId === 'string' && CP_ID_RE.test(existingId.trim())) {
-          mailerliteAssessmentId = existingId.trim();
+        const f = (existing && existing.data && existing.data.fields) || {};
+        if (!cleanQuizId && typeof f.assessment_id === 'string' && CP_ID_RE.test(f.assessment_id.trim())) {
+          mailerliteAssessmentId = f.assessment_id.trim();
         }
+        if (REAL_TYPES.includes(f.colic_type_for_email)) existingRealType = f.colic_type_for_email;
+        else if (REAL_TYPES.includes(f.colic_type)) existingRealType = f.colic_type;
       }
     } catch (err) {
-      // Lookup is a safeguard only. On failure fall through to the MP- ID.
-      console.warn('[midnight-subscribe] existing-ID lookup failed:', err);
+      // Lookup is a safeguard only. On failure fall through to defaults.
+      console.warn('[midnight-subscribe] existing-subscriber lookup failed:', err);
     }
   }
   if (!mailerliteAssessmentId) mailerliteAssessmentId = cleanMpId;
@@ -248,7 +254,10 @@ export async function onRequestPost(context) {
   // type-agnostic Midnight Protocol email instead of one of the three
   // GUT/NSD/FM variants. colic_type itself (used everywhere else,
   // e.g. Supabase and any type-specific logic) is untouched.
-  fields.colic_type_for_email = cleanType || 'Unassigned';
+  // Never downgrade a known type to 'Unassigned': a quiz completer who
+  // reopens the tool from a DM link (no type sent) would otherwise be
+  // pushed out of their type-specific email track mid-sequence.
+  fields.colic_type_for_email = cleanType || existingRealType || 'Unassigned';
 
   // Dwell/timer fields: each request only ever carries at most one or two
   // of these (whichever stage's submitOutcome() just fired), the rest are
