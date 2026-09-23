@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Colic Diary: What to Track and Why It Matters</title>
+<meta name="description" content="Tracking colic isn't about proving something to your pediatrician. It's how you separate what's actually working from what just happened to coincide.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#f8f3ec; --paper:#fffdfa; --ink:#2c1f18; --ink-soft:#4a3a30;
+  --terra:#c4603a; --terra-soft:rgba(196,96,58,0.10);
+  --sage:#5c7a5f; --sage-soft:rgba(92,122,95,0.10);
+  --gold:#c89a3e; --gold-soft:rgba(200,154,62,0.12);
+  --muted:#8a7566; --line:rgba(44,31,24,0.12);
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'DM Sans',system-ui,-apple-system,sans-serif;
+  --mono:'DM Mono',monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --cream:#1c1712; --paper:#241d17; --ink:#f2e9e0; --ink-soft:#d8c9bb;
+    --terra:#e08561; --terra-soft:rgba(224,133,97,0.14);
+    --sage:#8fae92; --sage-soft:rgba(143,174,146,0.14);
+    --gold:#dcb35f; --gold-soft:rgba(220,179,95,0.14);
+    --muted:#a8998c; --line:rgba(242,233,224,0.14);
+  }
+}
+:root[data-theme="dark"]{
+  --cream:#1c1712; --paper:#241d17; --ink:#f2e9e0; --ink-soft:#d8c9bb;
+  --terra:#e08561; --terra-soft:rgba(224,133,97,0.14);
+  --sage:#8fae92; --sage-soft:rgba(143,174,146,0.14);
+  --gold:#dcb35f; --gold-soft:rgba(220,179,95,0.14);
+  --muted:#a8998c; --line:rgba(242,233,224,0.14);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth; scroll-padding-top:env(safe-area-inset-top,0px);}
+body{
+  font-family:var(--sans); background:var(--cream); color:var(--ink);
+  font-size:17px; line-height:1.65; -webkit-font-smoothing:antialiased;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-reduced-motion: reduce){ *{scroll-behavior:auto !important; transition:none !important;} }
+a{color:var(--terra); text-decoration-thickness:1px; text-underline-offset:2px;}
+a:focus-visible, button:focus-visible{outline:2px solid var(--terra); outline-offset:3px; border-radius:2px;}
+.topline{ border-bottom:1px solid var(--line); padding:18px 24px; }
+.topline-inner{ max-width:680px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; font-family:var(--sans); font-size:14px; color:var(--muted); }
+.wordmark{ font-family:var(--serif); font-weight:600; font-size:18px; color:var(--ink); }
+.wordmark em{ color:var(--terra); font-style:italic; }
+main{ max-width:680px; margin:0 auto; padding:56px 24px 40px; }
+.badges{ display:flex; gap:10px; margin-bottom:28px; flex-wrap:wrap; }
+.badge{ display:inline-flex; align-items:center; gap:7px; font-family:var(--sans); font-size:12.5px; color:var(--ink-soft); padding:5px 12px 5px 5px; border-radius:20px; border:1px solid var(--line); background:var(--paper); }
+.badge img{ width:22px; height:22px; border-radius:50%; flex-shrink:0; object-fit:cover; }
+h1{ font-family:var(--serif); font-weight:600; font-size:clamp(30px,6vw,44px); line-height:1.14; color:var(--ink); letter-spacing:-0.01em; }
+.deck{ font-family:var(--serif); font-style:italic; font-weight:400; font-size:19px; color:var(--muted); margin-top:14px; line-height:1.5; max-width:56ch; }
+.hero{ margin:36px -4px 12px; border-radius:6px; overflow:hidden; }
+.hero img{ width:100%; height:auto; display:block; }
+.hero.placeholder{ aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; }
+.hero-caption{ font-family:var(--sans); font-size:12.5px; color:var(--muted); margin-top:10px; margin-bottom:32px; line-height:1.5; }
+.meta-line{ font-family:var(--sans); font-size:13.5px; color:var(--muted); margin-top:20px; padding-top:20px; border-top:1px solid var(--line); }
+article{ font-family:var(--sans); font-size:17px; line-height:1.75; color:var(--ink-soft); }
+article p{ margin-bottom:22px; max-width:64ch; }
+article p:first-of-type{ font-size:18.5px; color:var(--ink); }
+article ul{ margin:0 0 22px 20px; max-width:62ch; }
+article li{ margin-bottom:9px; line-height:1.65; }
+article strong{ color:var(--ink); }
+.stat-pull{ font-family:var(--serif); font-style:italic; font-size:22px; line-height:1.5; color:var(--ink); border-left:3px solid var(--sage); padding-left:22px; margin:36px 0; max-width:58ch; }
+.stat-pull span{ display:block; font-family:var(--sans); font-style:normal; font-size:13px; color:var(--muted); margin-top:8px; }
+.safety-note{ margin:30px 0; padding:20px 22px; border-radius:5px; background:var(--terra-soft); border-left:3px solid var(--terra); }
+.safety-note p{ font-size:15.5px; margin-bottom:0; color:var(--ink-soft); }
+.system{ margin:28px 0; padding:22px 24px; border-radius:4px; border-left:3px solid; background:var(--paper); }
+.system.gut{ border-color:var(--sage); }
+.system.nsd{ border-color:var(--terra); }
+.system.fm{ border-color:var(--gold); }
+.system-head{ display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+.system-head img{ width:26px; height:26px; border-radius:50%; flex-shrink:0; }
+.system-head h3{ font-family:var(--serif); font-weight:600; font-size:21px; color:var(--ink); }
+.system p{ font-size:15.5px; line-height:1.7; color:var(--ink-soft); margin-bottom:0; max-width:none; }
+.system p + p{ margin-top:12px; }
+.crisis-note{ margin:30px 0; padding:18px 22px; border-radius:5px; background:var(--sage-soft); border-left:3px solid var(--sage); }
+.crisis-note p{ font-size:14.5px; margin-bottom:0; color:var(--ink-soft); font-style:italic; }
+.cta-band{ margin:48px 0 8px; padding:32px 28px; border-radius:6px; background:var(--gold-soft); border:1px solid rgba(200,154,62,0.28); }
+.cta-band p{ font-size:16px; color:var(--ink-soft); margin-bottom:16px; max-width:52ch; }
+.cta-button{ display:inline-block; font-family:var(--sans); font-weight:600; font-size:15px; color:#fff; background:var(--terra); padding:13px 26px; border-radius:5px; text-decoration:none; }
+.cta-button:hover{ background:#a94f2f; }
+footer{ max-width:680px; margin:60px auto 0; padding:28px 24px 60px; border-top:1px solid var(--line); }
+.sources{ font-family:var(--sans); font-size:13px; color:var(--muted); line-height:1.9; }
+.sources-label{ font-family:var(--serif); font-style:italic; font-size:15px; color:var(--ink-soft); margin-bottom:12px; }
+@media (max-width:520px){ body{ font-size:16px; } h1{ font-size:29px; } }
+</style>
+</head>
+<body>
+<div class="topline"><div class="topline-inner"><span class="wordmark">Colic <em>Protocol</em></span><span>Journey & Tracking</span></div></div>
+<main>
+<div class="badges"></div>
+<h1>Colic Diary</h1>
+<p class="deck">Tracking colic isn't about proving something to your pediatrician. It's how you separate what's actually working from what just happened to coincide.</p>
+<div class="meta-line">4 minute read &middot; Journey & Tracking</div>
+<div class="hero"><img src="images/hero-colic-diary.jpg" alt=""></div><p class="hero-caption">A single good night could be coincidence. Four good nights, logged, is a pattern.</p>
+<article>
+<p>When every evening blurs into the same exhausted haze, it's genuinely hard to tell whether last night's Tiger Hold actually helped, or whether your baby just happened to settle around the same time anyway. That's not a memory problem. It's a pattern-recognition problem, and it's exactly what tracking solves.</p>
+<p><strong>What's actually worth logging:</strong></p>
+<ul><li><strong>Crying start and end times.</strong> Not a general impression of "a rough evening," actual timestamps. This is what reveals whether a technique is genuinely shortening episodes over days, not just whether any single night felt better</li><li><strong>Feeding details.</strong> Time, method (breast, bottle, mixed), and duration. This is what eventually shows whether crying clusters a predictable few hours after specific feeds, the signature of a feeding-mechanics pattern</li><li><strong>What you tried, and when relative to the crying.</strong> Tiger Hold at minute two behaves differently than Tiger Hold at minute forty. Logging timing, not just the technique, is what makes a log actually diagnostic instead of just a list of things attempted</li><li><strong>Environment notes.</strong> Room brightness, sound, anything unusual about the day. Useful for spotting nervous-system-load patterns</li></ul>
+<p>The value compounds after about three to five days, once there's enough data to see a pattern instead of a single data point. A single "good night" could be coincidence. Four good nights in a row, all following the same feeding adjustment, is a pattern worth trusting.</p>
+<p>This is also the most direct way to notice real improvement even when it's gradual and hard to feel in the moment, which is exactly what <a href="/blog/signs-colic-is-improving">Signs Your Baby's Colic Is Improving</a> is about. Worth logging honestly too: how you're doing, not just the baby, since colic's toll on a parent is real and tracked separately in <a href="/blog/colic-postpartum-mental-health">Colic and Postpartum Mental Health</a>. If you haven't yet narrowed down which of the three systems, gut, nervous system, or feeding mechanics, is most likely driving your baby's pattern, that's worth doing before tracking starts, so you're logging the right variables from day one.</p>
+<div class="cta-band">
+<p>Not sure which of the three systems is driving your baby's crying? A 90-second assessment sorts that out and hands you straight into a guided, timed protocol for tonight.</p>
+<a class="cta-button" href="/quiz">Take the 90-second assessment</a>
+</div>
+</article>
+</main>
+<footer>
+<p class="sources-label">Sources referenced in this guide</p>
+<p class="sources">General tracking methodology; not evidence-claim content requiring citation.</p>
+</footer>
+</body>
+</html>

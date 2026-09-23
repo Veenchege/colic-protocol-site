@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Colic Relief That Actually Works: A Root-Cause Guide</title>
+<meta name="description" content="A root-cause guide. Not a list of products to try next, a map of which of three systems is likely driving your baby's crying, and what the evidence says works for each.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#f8f3ec; --paper:#fffdfa; --ink:#2c1f18; --ink-soft:#4a3a30;
+  --terra:#c4603a; --terra-soft:rgba(196,96,58,0.10);
+  --sage:#5c7a5f; --sage-soft:rgba(92,122,95,0.10);
+  --gold:#c89a3e; --gold-soft:rgba(200,154,62,0.12);
+  --muted:#8a7566; --line:rgba(44,31,24,0.12);
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'DM Sans',system-ui,-apple-system,sans-serif;
+  --mono:'DM Mono',monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --cream:#1c1712; --paper:#241d17; --ink:#f2e9e0; --ink-soft:#d8c9bb;
+    --terra:#e08561; --terra-soft:rgba(224,133,97,0.14);
+    --sage:#8fae92; --sage-soft:rgba(143,174,146,0.14);
+    --gold:#dcb35f; --gold-soft:rgba(220,179,95,0.14);
+    --muted:#a8998c; --line:rgba(242,233,224,0.14);
+  }
+}
+:root[data-theme="dark"]{
+  --cream:#1c1712; --paper:#241d17; --ink:#f2e9e0; --ink-soft:#d8c9bb;
+  --terra:#e08561; --terra-soft:rgba(224,133,97,0.14);
+  --sage:#8fae92; --sage-soft:rgba(143,174,146,0.14);
+  --gold:#dcb35f; --gold-soft:rgba(220,179,95,0.14);
+  --muted:#a8998c; --line:rgba(242,233,224,0.14);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth; scroll-padding-top:env(safe-area-inset-top,0px);}
+body{
+  font-family:var(--sans); background:var(--cream); color:var(--ink);
+  font-size:17px; line-height:1.65; -webkit-font-smoothing:antialiased;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-reduced-motion: reduce){ *{scroll-behavior:auto !important; transition:none !important;} }
+a{color:var(--terra); text-decoration-thickness:1px; text-underline-offset:2px;}
+a:focus-visible, button:focus-visible{outline:2px solid var(--terra); outline-offset:3px; border-radius:2px;}
+.topline{ border-bottom:1px solid var(--line); padding:18px 24px; }
+.topline-inner{ max-width:680px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; font-family:var(--sans); font-size:14px; color:var(--muted); }
+.wordmark{ font-family:var(--serif); font-weight:600; font-size:18px; color:var(--ink); }
+.wordmark em{ color:var(--terra); font-style:italic; }
+main{ max-width:680px; margin:0 auto; padding:56px 24px 40px; }
+.badges{ display:flex; gap:10px; margin-bottom:28px; flex-wrap:wrap; }
+.badge{ display:inline-flex; align-items:center; gap:7px; font-family:var(--sans); font-size:12.5px; color:var(--ink-soft); padding:5px 12px 5px 5px; border-radius:20px; border:1px solid var(--line); background:var(--paper); }
+.badge img{ width:22px; height:22px; border-radius:50%; flex-shrink:0; object-fit:cover; }
+h1{ font-family:var(--serif); font-weight:600; font-size:clamp(30px,6vw,44px); line-height:1.14; color:var(--ink); letter-spacing:-0.01em; }
+.deck{ font-family:var(--serif); font-style:italic; font-weight:400; font-size:19px; color:var(--muted); margin-top:14px; line-height:1.5; max-width:56ch; }
+.hero{ margin:36px -4px 12px; border-radius:6px; overflow:hidden; }
+.hero img{ width:100%; height:auto; display:block; }
+.hero.placeholder{ aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; }
+.hero-caption{ font-family:var(--sans); font-size:12.5px; color:var(--muted); margin-top:10px; margin-bottom:32px; line-height:1.5; }
+.meta-line{ font-family:var(--sans); font-size:13.5px; color:var(--muted); margin-top:20px; padding-top:20px; border-top:1px solid var(--line); }
+article{ font-family:var(--sans); font-size:17px; line-height:1.75; color:var(--ink-soft); }
+article p{ margin-bottom:22px; max-width:64ch; }
+article p:first-of-type{ font-size:18.5px; color:var(--ink); }
+article ul{ margin:0 0 22px 20px; max-width:62ch; }
+article li{ margin-bottom:9px; line-height:1.65; }
+article strong{ color:var(--ink); }
+.stat-pull{ font-family:var(--serif); font-style:italic; font-size:22px; line-height:1.5; color:var(--ink); border-left:3px solid var(--sage); padding-left:22px; margin:36px 0; max-width:58ch; }
+.stat-pull span{ display:block; font-family:var(--sans); font-style:normal; font-size:13px; color:var(--muted); margin-top:8px; }
+.safety-note{ margin:30px 0; padding:20px 22px; border-radius:5px; background:var(--terra-soft); border-left:3px solid var(--terra); }
+.safety-note p{ font-size:15.5px; margin-bottom:0; color:var(--ink-soft); }
+.system{ margin:28px 0; padding:22px 24px; border-radius:4px; border-left:3px solid; background:var(--paper); }
+.system.gut{ border-color:var(--sage); }
+.system.nsd{ border-color:var(--terra); }
+.system.fm{ border-color:var(--gold); }
+.system-head{ display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+.system-head img{ width:26px; height:26px; border-radius:50%; flex-shrink:0; }
+.system-head h3{ font-family:var(--serif); font-weight:600; font-size:21px; color:var(--ink); }
+.system p{ font-size:15.5px; line-height:1.7; color:var(--ink-soft); margin-bottom:0; max-width:none; }
+.system p + p{ margin-top:12px; }
+.crisis-note{ margin:30px 0; padding:18px 22px; border-radius:5px; background:var(--sage-soft); border-left:3px solid var(--sage); }
+.crisis-note p{ font-size:14.5px; margin-bottom:0; color:var(--ink-soft); font-style:italic; }
+.cta-band{ margin:48px 0 8px; padding:32px 28px; border-radius:6px; background:var(--gold-soft); border:1px solid rgba(200,154,62,0.28); }
+.cta-band p{ font-size:16px; color:var(--ink-soft); margin-bottom:16px; max-width:52ch; }
+.cta-button{ display:inline-block; font-family:var(--sans); font-weight:600; font-size:15px; color:#fff; background:var(--terra); padding:13px 26px; border-radius:5px; text-decoration:none; }
+.cta-button:hover{ background:#a94f2f; }
+footer{ max-width:680px; margin:60px auto 0; padding:28px 24px 60px; border-top:1px solid var(--line); }
+.sources{ font-family:var(--sans); font-size:13px; color:var(--muted); line-height:1.9; }
+.sources-label{ font-family:var(--serif); font-style:italic; font-size:15px; color:var(--ink-soft); margin-bottom:12px; }
+@media (max-width:520px){ body{ font-size:16px; } h1{ font-size:29px; } }
+</style>
+</head>
+<body>
+<div class="topline"><div class="topline-inner"><span class="wordmark">Colic <em>Protocol</em></span><span>Root-Cause Guide</span></div></div>
+<main>
+<div class="badges"><span class="badge"><img src="images/icon-gut.jpg" alt="">Gut Microbiome</span><span class="badge"><img src="images/icon-nsd.jpg" alt="">Nervous System</span><span class="badge"><img src="images/icon-feeding.jpg" alt="">Feeding Mechanics</span></div>
+<h1>Colic Relief That Actually Works</h1>
+<p class="deck">A root-cause guide. Not a list of products to try next, a map of which of three systems is likely driving your baby's crying, and what the evidence says works for each.</p>
+<div class="meta-line">9 minute read &middot; Root-Cause Guide</div>
+<div class="hero"><img src="images/hero-pillar.jpg" alt=""></div><p class="hero-caption">Most colic advice treats crying as one problem. The research points to three, and most babies have one that's primary.</p>
+<article>
+<p>If you've tried gripe water, gas drops, a different swaddle, and a louder sound machine, and your baby is still screaming every evening, the problem probably isn't that you haven't found the right product yet. It's that colic isn't one problem, and most of what you've tried was built to solve only one piece of it.</p>
+<p>The research points to three separate root-cause systems, and a baby's colic is usually driven primarily by one of them.</p>
+<div class="system gut"><div class="system-head"><img src="images/icon-gut.jpg" alt=""><h3>Gut Microbiome Imbalance</h3></div><p>A 2020 systematic review in <em>BMJ Open</em> (Ellwood et al.) and a separate 2020 review in <em>Acta Paediatrica</em> (Hjern et al.) both point toward gut-focused intervention as the strongest evidence-based approach for a meaningful subset of colicky infants, particularly breastfed babies. A 2017 network meta-analysis of 32 randomized trials covering 2,242 infants (Gutiérrez-Castrellón et al., published in <em>Medicine</em>) found L. reuteri DSM 17938 outperformed the other interventions studied.</p><p>See <a href="/blog/probiotics-for-colic-strain-matters">Probiotics for Colic</a> and <a href="/blog/foods-that-make-colic-worse">Foods That Make Colic Worse</a> for the specifics, including the breastfed-only caveat that matters here.</p></div>
+<div class="system nsd"><div class="system-head"><img src="images/icon-nsd.jpg" alt=""><h3>Nervous System Dysregulation</h3></div><p>A newborn's threat-detection system is still calibrating. Startle reflexes, overstimulation, and difficulty self-soothing after being overwhelmed all sit in this bucket.</p><p>See <a href="/blog/colic-holds-beyond-tiger-hold">Colic Holds Beyond Tiger Hold</a>, our <a href="/blog/tiger-hold-guide">Tiger Hold guide</a>, <a href="/blog/swaddling-moro-reflex-colic">Swaddling and the Moro Reflex</a>, and <a href="/blog/witching-hour-room-setup">Room Setup for the Witching Hour</a>.</p></div>
+<div class="system fm"><div class="system-head"><img src="images/icon-feeding.jpg" alt=""><h3>Feeding Mechanics</h3></div><p>Air swallowed during feeding doesn't cause problems at the feed itself. It sits, ferments over two to four hours, and shows up as the evening crying window most parents don't connect back to that afternoon's bottle.</p><p>See <a href="/blog/best-bottles-feeding-positions-colic">Best Bottles and Feeding Positions</a> and <a href="/blog/gentle-burping-techniques">Gentle Burping Techniques</a>.</p></div>
+<p class="stat-pull">Colic isn't one problem. Most remedies fail because they were built to solve only one of three.<span>Why single-technique fixes work briefly, then stop</span></p>
+<p>Here's why single remedies fail so often: if you're only addressing one of the three systems and a different one is actually primary for your baby, the fix looks like it's "not working," when really it was never aimed at the right target. That's also why <a href="/blog/does-gripe-water-work">gripe water</a> and <a href="/blog/gripe-water-vs-gas-drops">gas drops</a> fail the way they do. See <a href="/blog/colic-myths-vs-facts">Colic Myths vs. Facts</a> for the mechanism behind both.</p>
+<div class="cta-band">
+<p>Not sure which of the three systems is driving your baby's crying? A 90-second assessment sorts that out and hands you straight into a guided, timed protocol for tonight.</p>
+<a class="cta-button" href="/quiz">Take the 90-second assessment</a>
+</div>
+</article>
+</main>
+<footer>
+<p class="sources-label">Sources referenced in this guide</p>
+<p class="sources">Ellwood J, et al. Colic and food allergy, gastrointestinal or maturational disorder? An evidence review. <em>BMJ Open</em>. 2020.<br>Hjern A, Lindblom K, Reuter A, Silfverdal SA. A systematic review of prevention and treatment of infantile colic. <em>Acta Paediatrica</em>. 2020;109(9):1733-1744.<br>Gutiérrez-Castrellón P, et al. Efficacy of L. reuteri DSM 17938 for infantile colic: systematic review with network meta-analysis. <em>Medicine (Baltimore)</em>. 2017;96(51):e9375.</p>
+</footer>
+</body>
+</html>
