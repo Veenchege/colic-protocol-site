@@ -765,6 +765,13 @@ async function showResult() {
   window.scrollTo({top: 0, behavior: 'smooth'});
 }
 
+// HIERARCHY NOTE [this version]: this used to be one of two co-equal
+// buttons on the result page, plus the only button on the sticky bar.
+// Dashboard v8.0: 9 clicks off this exact page, 0 purchases. It now
+// lives behind a collapsed "already sure?" details block, reached by
+// choice, not presented as an equal alternative to goToChecklist().
+// Tracking/behavior below is unchanged, only the markup around the
+// button that calls it. See quiz.html's PATH HIERARCHY comment.
 function goToProduct() {
   trackPathClick('blueprint');
   // Assessment ID travels into the Gumroad URL so Zapier can match

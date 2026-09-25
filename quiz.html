@@ -232,52 +232,67 @@ a{color:inherit}
 .offer-q{font-family:var(--fb);font-size:12.5px;font-weight:700;color:var(--terra-deep);margin-bottom:4px}
 .offer-a{font-size:13px;color:var(--muted);line-height:1.6}
 
-/* Side by side at every width on purpose, this is the actual "which
-   one" comparison moment, stacking it on mobile (where nearly all of
-   this traffic reads from) would remove the psychological effect the
-   layout exists for. What makes this fit on a ~360px phone: each card
-   only shows a short compact pitch by default (cover, kicker, one
-   line, button), the Blueprint's full 8-answer breakdown lives inside
-   a native <details> a tap away, not stacked inline. Grid over flex
-   here specifically so both columns stay locked at exactly 50/50
-   regardless of how much text either card's content happens to be. */
-.path-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:2px}
-.path-cover{width:100%;height:92px;object-fit:cover;border-radius:9px;margin-bottom:10px;display:block;background:rgba(0,0,0,.04)}
-.path-card-paid{position:relative}
-.price-badge{position:absolute;top:6px;right:6px;width:44px;height:44px;border-radius:50%;background:var(--terra);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(188,90,51,.4);transform:rotate(6deg);z-index:2}
-.price-badge b{font-size:13px;line-height:1;font-family:var(--fb)}
-.price-badge small{font-size:6.5px;letter-spacing:.04em;opacity:.9}
-@media(min-width:560px){.price-badge{width:58px;height:58px;top:10px;right:10px}.price-badge b{font-size:16px}.price-badge small{font-size:7.5px}}
-.path-card{display:flex;flex-direction:column;border-radius:14px;padding:14px 12px;border:1.5px solid;min-width:0}
-.path-card-free{background:var(--sage-soft);border-color:rgba(108,135,89,.35)}
-.path-card-paid{background:rgba(255,255,255,.62);border-color:rgba(188,90,51,.28)}
+/* ═══════════════════════════════════════════════════════════════════
+   PATH HIERARCHY — changed [this version]. Was a locked 50/50 grid
+   presenting the Midnight Protocol and the direct Blueprint purchase
+   as two co-equal options ("pick whichever fits tonight"). Dashboard
+   v8.0 data: 9 people clicked straight to Blueprint from this page,
+   0 bought. The only confirmed sale with a traceable path (Jessica
+   Soliman) went through mechanism content first, not a direct offer.
+   Co-equal framing was actively working against the funnel this page
+   is supposed to run. Single primary path now: Midnight Protocol is
+   the one full-width CTA. The Blueprint offer content (still
+   genuinely persuasive, still worth showing) moves inside a collapsed
+   <details> below it, for someone who wants to read ahead, with its
+   own visually-quieter purchase button, not a second CTA of equal
+   weight. Nothing here changes what quiz.js tracks (path_clicked
+   still logs 'checklist' | 'blueprint' | 'dm') or which element IDs
+   it writes into, only which one gets first claim on her attention.
+   ═══════════════════════════════════════════════════════════════════ */
+.path-cover{width:100%;height:120px;object-fit:cover;border-radius:9px;margin-bottom:10px;display:block;background:rgba(0,0,0,.04)}
+.path-card{display:flex;flex-direction:column;border-radius:14px;padding:18px 16px;border:1.5px solid;min-width:0}
+
+/* Primary path — Midnight Protocol. Full width, the loudest thing on
+   the page after the result itself. */
+.path-primary{background:var(--sage-soft);border-color:rgba(108,135,89,.4);margin-top:6px;box-shadow:0 8px 24px rgba(92,122,95,.14)}
+.path-primary .path-kicker{color:var(--pine);font-weight:700}
+.path-primary .path-title{font-family:var(--fd);font-size:20px;font-weight:700;color:var(--ink);line-height:1.28;margin-bottom:7px}
+.path-primary .path-desc{font-size:13.5px}
 .path-kicker{font-family:var(--fm);font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;margin-bottom:8px;display:block;line-height:1.3}
-.path-card-free .path-kicker{color:var(--pine)}
-.path-card-paid .path-kicker{color:var(--terra-deep)}
 .path-title{font-family:var(--fd);font-size:15.5px;font-weight:700;color:var(--ink);line-height:1.3;margin-bottom:6px}
 .path-desc{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:10px}
 .path-desc strong{color:var(--ink)}
-.path-card .btn-checklist,.path-card .btn-cta{margin-top:auto}
-.btn-checklist{width:100%;padding:12px 8px;background:linear-gradient(135deg,var(--sage),var(--pine-mid));color:#fff;border:none;border-radius:10px;font-family:var(--fb);font-size:12.5px;font-weight:700;cursor:pointer;transition:transform .2s,box-shadow .2s}
+.btn-checklist{width:100%;padding:16px 8px;background:linear-gradient(135deg,var(--sage),var(--pine-mid));color:#fff;border:none;border-radius:12px;font-family:var(--fb);font-size:15px;font-weight:700;cursor:pointer;transition:transform .2s,box-shadow .2s}
 .btn-checklist:hover{transform:scale(1.01);box-shadow:0 10px 24px rgba(108,135,89,.35)}
+.path-primary-sub{display:block;font-size:11.5px;font-weight:500;opacity:.85;margin-top:5px}
 
-/* wider screens get a little more breathing room, content doesn't
-   change shape, just spacing, so the "always side by side" promise
-   never quietly becomes a different layout at some breakpoint */
+/* Secondary path — direct Blueprint purchase. Lives inside a collapsed
+   <details> now, closed by default, reached by choice not by default
+   visual weight. Its button is deliberately smaller and outlined, not
+   the filled/glowing treatment .btn-checklist gets above. */
+.offer-details-full{margin:16px 0 4px;border-top:1px dashed rgba(0,0,0,.14);padding-top:14px}
+.offer-details-full summary{cursor:pointer;list-style:none;font-family:var(--fb);font-size:13px;font-weight:700;color:var(--terra-deep)}
+.offer-details-full summary::-webkit-details-marker{display:none}
+.offer-details-full summary::after{content:'  ▾';font-weight:500;opacity:.75}
+.offer-details-full[open] summary::after{content:'  ▴'}
+.offer-details-full .path-card-paid{background:rgba(255,255,255,.5);border:1.5px solid rgba(188,90,51,.22);border-radius:14px;padding:16px;margin-top:12px;position:relative}
+.price-badge{position:absolute;top:6px;right:6px;width:40px;height:40px;border-radius:50%;background:var(--terra);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(188,90,51,.4);transform:rotate(6deg);z-index:2}
+.price-badge b{font-size:12px;line-height:1;font-family:var(--fb)}
+.price-badge small{font-size:6px;letter-spacing:.04em;opacity:.9}
+.btn-cta-secondary{width:100%;padding:13px 8px;background:transparent;color:var(--terra-deep);border:1.5px solid var(--terra);border-radius:10px;font-family:var(--fb);font-size:13px;font-weight:700;cursor:pointer;margin-top:4px;line-height:1.3;transition:background .2s}
+.btn-cta-secondary:hover{background:rgba(188,90,51,.08)}
+.cta-sub{display:block;font-size:11px;font-weight:500;opacity:.75;margin-top:4px;color:var(--muted)}
+
 @media(min-width:560px){
-  .path-grid{gap:16px}
-  .path-card{padding:20px 18px}
-  .path-cover{height:130px;margin-bottom:14px}
-  .path-title{font-size:18px}
+  .path-card{padding:24px 22px}
+  .path-cover{height:150px;margin-bottom:14px}
+  .path-primary .path-title{font-size:23px}
   .path-desc{font-size:13px}
-  .btn-cta{padding:18px;font-size:16px;border-radius:14px;margin-bottom:10px}
-  .cta-sub{display:block}
 }
 
-/* Blueprint's full answer set, collapsed by default so the compact
-   side-by-side comparison is what she sees first on both cards. A
-   native <details> element, not a JS toggle, works without a script
-   and is accessible by default. */
+/* Blueprint's own inner Q&A, collapsed by default within the outer
+   details above so the compact view stays compact even when opened.
+   Native <details>, works without a script, accessible by default. */
 .offer-details{margin:2px 0 12px}
 .offer-details summary{cursor:pointer;list-style:none;font-family:var(--fb);font-size:12px;font-weight:700;color:var(--terra-deep);padding:8px 0;border-top:1px dashed rgba(188,90,51,.25)}
 .offer-details summary::-webkit-details-marker{display:none}
@@ -540,26 +555,29 @@ a{color:inherit}
         </div>
       </div>
 
-      <div class="section-label">Two ways to use this tonight</div>
-      <p class="path-desc">Same result, two starting points. Pick whichever matches how urgent tonight feels, or ask Vincent directly below if you're not sure.</p>
+      <div class="section-label">Start here</div>
+      <p class="path-desc">This runs the full protocol for your result, tonight, one guided step at a time. No reading required.</p>
 
-      <div class="path-grid">
-        <div class="path-card path-card-free">
-          <img class="path-cover" src="/images/checklist-cover.jpg" alt="Midnight Emergency Checklist preview" loading="lazy" onerror="this.remove()">
-          <span class="path-kicker">Free · Right now</span>
-          <div class="path-title" id="checklistHook">Tonight's 3 steps, guided</div>
-          <p class="path-desc">Same steps above, with timers, for right now.</p>
-          <button class="btn-checklist" id="checklistBtn" type="button" onclick="goToChecklist()">Start Tonight →</button>
-        </div>
+      <div class="path-card path-primary">
+        <img class="path-cover" src="/images/checklist-cover.jpg" alt="Tonight's guided protocol preview" loading="lazy" onerror="this.remove()">
+        <span class="path-kicker">Free · Guided · Built for your result</span>
+        <div class="path-title" id="checklistHook">Start Tonight's Guided Protocol</div>
+        <p class="path-desc">Timed steps, personalized to your result, right now.</p>
+        <button class="btn-checklist" id="checklistBtn" type="button" onclick="goToChecklist()">Start Tonight →</button>
+        <span class="path-primary-sub">Takes about as long as one more crying episode would anyway.</span>
+      </div>
 
-        <div class="path-card path-card-paid">
+      <details class="offer-details-full">
+        <summary>Already sure you want the full $47 Blueprint? See it here</summary>
+
+        <div class="path-card-paid">
           <img class="path-cover" src="/images/blueprint-cover.jpg" alt="The Calm Baby Blueprint book cover" loading="lazy" onerror="this.remove()">
           <span class="price-badge" aria-hidden="true"><b>$47</b><small>ONE TIME</small></span>
           <span class="path-kicker">$47 · Complete system</span>
           <p class="path-desc" id="offerForBaby"></p>
 
           <details class="offer-details">
-            <summary>Why this, not just the checklist</summary>
+            <summary>Why this, not just tonight's protocol</summary>
 
             <div class="offer-qa">
               <div class="offer-q">Why haven't the usual tips worked?</div>
@@ -589,17 +607,17 @@ a{color:inherit}
 
           <div class="guarantee-card" id="guaranteeCard"></div>
 
-          <button class="btn-cta" id="ctaBtn" type="button" onclick="goToProduct()">
+          <button class="btn-cta-secondary" id="ctaBtn" type="button" onclick="goToProduct()">
             <span id="ctaBtnText"></span>
             <span class="cta-sub">$47 one time · 72-hour guarantee · Keep it either way</span>
           </button>
         </div>
-      </div>
+      </details>
 
       <div class="dm-path">
         <div class="dm-path-text">
-          <strong>Not sure which one fits tonight?</strong>
-          <span>Send Vincent your result and he'll help you understand what it means for your baby specifically.</span>
+          <strong>Want Vincent to look at your specific result?</strong>
+          <span>Send him your result and he'll help you understand what it means for your baby specifically.</span>
         </div>
         <div class="dm-message-box" id="dmMessageBox" aria-live="polite"></div>
         <div class="dm-actions">
@@ -614,9 +632,14 @@ a{color:inherit}
   </div>
 </main>
 
+<!-- Sticky bar CTA changed [this version]: was goToProduct() ("Get the
+     Blueprint — $47"), the single most persistent nudge on the page
+     toward the path with a confirmed 0% conversion rate (9 clicks, 0
+     sales, Dashboard v8.0). Now points at the same primary path as the
+     rest of the page. -->
 <div class="stickybar" id="stickyBar">
   <div class="sb-info">Your result: <b id="stickyType"></b></div>
-  <button type="button" onclick="goToProduct()">Get the Blueprint — $47</button>
+  <button type="button" onclick="goToChecklist()">Start Tonight's Protocol →</button>
 </div>
 
 <footer style="text-align:center;padding:24px 16px 40px;position:relative;z-index:2;">
