@@ -314,6 +314,22 @@ export async function onRequestPost(context) {
     const SUPABASE_SERVICE_KEY = env.SUPABASE_SERVICE_KEY;
     const cleanAssessmentId = cleanStr(assessment_id);
 
+    // Bug fixed [this version]: p_quiz_completed was hardcoded false
+    // below regardless of how this session actually got here. A quiz
+    // handoff sets colic_type_detail to exactly 'Confirmed from quiz
+    // handoff' (see quiz.js / subscribe.js), which this file already
+    // computes correctly one write later, at colic_type_from_quiz on
+    // the midnight_sessions insert, just never reused it for the
+    // upsert_lead call sitting right next to it. Every quiz-completer
+    // who then ran Midnight Protocol was telling leads.quiz_completed
+    // she hadn't done the quiz, whatever upsert_lead's own merge logic
+    // does with that. Sending the true value here removes the question
+    // rather than depending on the RPC to ignore a false we know is
+    // wrong. Confirm separately whether upsert_lead treats this as a
+    // set or a set-if-true merge, since a genuine non-quiz Midnight
+    // Protocol session still needs `false` to be safe to send.
+    const cameFromQuiz = colic_type_detail === 'Confirmed from quiz handoff';
+
     if (SUPABASE_URL && SUPABASE_SERVICE_KEY && cleanAssessmentId) {
       const supabaseCalls = Promise.all([
         // 1. Session-level row, one per MP- assessment_id, same
@@ -332,7 +348,7 @@ export async function onRequestPost(context) {
             email: email.trim().toLowerCase(),
             name: name.trim(),
             colic_type: cleanType || null,
-            colic_type_from_quiz: colic_type_detail === 'Confirmed from quiz handoff',
+            colic_type_from_quiz: cameFromQuiz,
             // Links this session to its quiz result. Requires the
             // quiz_assessment_id column (see SQL in the reply) before
             // deploying, or PostgREST rejects the whole row.
@@ -378,7 +394,7 @@ export async function onRequestPost(context) {
             p_lead_source: cleanStr(lead_source),
             p_utm_medium: utm.utm_medium,
             p_utm_campaign: utm.utm_campaign,
-            p_quiz_completed: false,
+            p_quiz_completed: cameFromQuiz,
             p_midnight_completed: cleanStatus === 'completed',
           }),
         }),
