@@ -170,7 +170,17 @@ export async function onRequestPost(context) {
   // quiz's group only so this doesn't hard-fail if the dedicated
   // group hasn't been created yet, confirm this is actually what you
   // want before relying on it.
-  const GROUP_ID = env.MAILERLITE_GROUP_ID_MIDNIGHT || env.MAILERLITE_GROUP_ID;
+  // Accepts both spellings. Cloudflare was set up as MAILERLITE_GROUP_MIDNIGHT
+  // while this file originally only read MAILERLITE_GROUP_ID_MIDNIGHT, so the
+  // variable was never seen and every signup fell back to the quiz group.
+  const MIDNIGHT_GROUP_ID = (env.MAILERLITE_GROUP_ID_MIDNIGHT || env.MAILERLITE_GROUP_MIDNIGHT || '').toString().trim();
+  const GROUP_ID = MIDNIGHT_GROUP_ID || env.MAILERLITE_GROUP_ID;
+  // The fallback to the quiz group is what put a Midnight-only test signup into
+  // "90 second assesment". It stays as a safety net so signups are never lost,
+  // but it is no longer silent: it logs, and the JSON response reports it.
+  if (!MIDNIGHT_GROUP_ID) {
+    console.warn('[midnight-subscribe] neither MAILERLITE_GROUP_ID_MIDNIGHT nor MAILERLITE_GROUP_MIDNIGHT is set, falling back to the quiz group');
+  }
 
   if (!API_KEY || !GROUP_ID) {
     console.error('[midnight-subscribe] Missing MAILERLITE_API_KEY or a group id');
@@ -200,9 +210,11 @@ export async function onRequestPost(context) {
   // Used only to stop a blank-type request from overwriting it in the
   // colic_type_for_email field below.
   let existingRealType = '';
+  // Used so a returning visitor cannot reset a real purchase_status back to 'pending'.
+  let existingPurchaseStatus = '';
   const REAL_TYPES = VALID_COLIC_TYPES.filter((t) => t && t !== 'Unassigned');
 
-  if (!cleanQuizId || !cleanType) {
+  {
     try {
       const existingRes = await fetch(
         `https://connect.mailerlite.com/api/subscribers/${encodeURIComponent(email.trim().toLowerCase())}`,
@@ -211,6 +223,9 @@ export async function onRequestPost(context) {
       if (existingRes.ok) {
         const existing = await existingRes.json();
         const f = (existing && existing.data && existing.data.fields) || {};
+        if (typeof f.purchase_status === 'string' && f.purchase_status.trim() !== '') {
+          existingPurchaseStatus = f.purchase_status.trim();
+        }
         if (!cleanQuizId && typeof f.assessment_id === 'string' && CP_ID_RE.test(f.assessment_id.trim())) {
           mailerliteAssessmentId = f.assessment_id.trim();
         }
@@ -227,19 +242,36 @@ export async function onRequestPost(context) {
   // Build the MailerLite fields payload. colic_type is added
   // conditionally, everything else is always present since these
   // fields are exclusive to this tool and can't clobber quiz data.
+  // WIPE FIX. MailerLite overwrites any field present in the request, even
+  // with ''. Each ping only knows its own stage, so a later ping used to blank
+  // outcomes (and utm/lead_source/etc.) written by earlier pings. only() drops
+  // empty values so those keys are omitted and the stored value survives.
+  // name and checklist_status are always sent on purpose.
+  const only = (obj) =>
+    Object.fromEntries(
+      Object.entries(obj).filter(([, v]) => v !== '' && v !== null && v !== undefined)
+    );
+
+  // purchase_status: default 'pending' only when nothing is on file yet.
+  // If the subscriber already has a value (e.g. a purchase status), leave it.
+  const incomingPurchase = cleanStr(purchase_status, 50);
+  const purchaseToSend = existingPurchaseStatus ? '' : (incomingPurchase || 'pending');
+
   const fields = {
     name: name.trim(),
-    baby_age_weeks: cleanNum(baby_age_weeks),
-    assessment_id: mailerliteAssessmentId,
-    lead_source: cleanStr(lead_source),
     checklist_status: cleanStatus,
-    checklist_last_stage: cleanStr(checklist_last_stage),
-    checklist_version: cleanStr(checklist_version, 20),
-    environment_outcome: cleanStr(environment_outcome, 50),
-    tiger_hold_outcome: cleanStr(tiger_hold_outcome, 50),
-    final_outcome: cleanStr(final_outcome, 50),
-    purchase_status: cleanStr(purchase_status, 50) || 'pending',
-    ...utm,
+    ...only({
+      baby_age_weeks: cleanNum(baby_age_weeks),
+      assessment_id: mailerliteAssessmentId,
+      lead_source: cleanStr(lead_source),
+      checklist_last_stage: cleanStr(checklist_last_stage),
+      checklist_version: cleanStr(checklist_version, 20),
+      environment_outcome: cleanStr(environment_outcome, 50),
+      tiger_hold_outcome: cleanStr(tiger_hold_outcome, 50),
+      final_outcome: cleanStr(final_outcome, 50),
+      purchase_status: purchaseToSend,
+      ...utm,
+    }),
   };
   if (cleanType) {
     fields.colic_type = cleanType;
@@ -357,36 +389,34 @@ export async function onRequestPost(context) {
             Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`,
             Prefer: 'resolution=merge-duplicates',
           },
+          // Same wipe fix as MailerLite: merge-duplicates overwrites every
+          // column present in the body, including explicit nulls, so empty
+          // values are dropped and each ping only writes what it knows.
           body: JSON.stringify({
             assessment_id: cleanAssessmentId,
             email: email.trim().toLowerCase(),
             name: name.trim(),
-            colic_type: cleanType || null,
             colic_type_from_quiz: cameFromQuiz,
-            // Links this session to its quiz result. Requires the
-            // quiz_assessment_id column (see SQL in the reply) before
-            // deploying, or PostgREST rejects the whole row.
-            ...(cleanQuizId ? { quiz_assessment_id: cleanQuizId } : {}),
-            ...(cleanNum(colic_type_confidence) !== '' ? { colic_type_confidence: Number(cleanNum(colic_type_confidence)) } : {}),
-            baby_age_weeks: cleanNum(baby_age_weeks) || null,
             checklist_status: cleanStatus,
-            checklist_last_stage: cleanStr(checklist_last_stage) || null,
-            environment_outcome: cleanStr(environment_outcome, 50) || null,
-            tiger_hold_outcome: cleanStr(tiger_hold_outcome, 50) || null,
-            final_outcome: cleanStr(final_outcome, 50) || null,
-            // Same fields fixed above for MailerLite. Supabase's merge-
-            // duplicates upsert only sends a column here when this request
-            // actually has it, so a later ping without dwell data can't
-            // blank out an earlier stage's recorded time either.
+            updated_at: new Date().toISOString(),
+            ...only({
+              colic_type: cleanType,
+              quiz_assessment_id: cleanQuizId,
+              baby_age_weeks: cleanNum(baby_age_weeks),
+              checklist_last_stage: cleanStr(checklist_last_stage),
+              environment_outcome: cleanStr(environment_outcome, 50),
+              tiger_hold_outcome: cleanStr(tiger_hold_outcome, 50),
+              final_outcome: cleanStr(final_outcome, 50),
+              checklist_version: cleanStr(checklist_version, 20),
+              lead_source: cleanStr(lead_source),
+              ...utm,
+            }),
+            ...(cleanNum(colic_type_confidence) !== '' ? { colic_type_confidence: Number(cleanNum(colic_type_confidence)) } : {}),
             ...(cleanNum(environment_dwell_seconds) !== '' ? { environment_dwell_seconds: Number(cleanNum(environment_dwell_seconds)) } : {}),
             ...(cleanNum(tiger_hold_dwell_seconds) !== '' ? { tiger_hold_dwell_seconds: Number(cleanNum(tiger_hold_dwell_seconds)) } : {}),
             ...(cleanNum(gas_release_dwell_seconds) !== '' ? { gas_release_dwell_seconds: Number(cleanNum(gas_release_dwell_seconds)) } : {}),
             ...(cleanNum(final_dwell_seconds) !== '' ? { final_dwell_seconds: Number(cleanNum(final_dwell_seconds)) } : {}),
             ...(cleanNum(tiger_hold_timer_seconds) !== '' ? { tiger_hold_timer_seconds: Number(cleanNum(tiger_hold_timer_seconds)) } : {}),
-            checklist_version: cleanStr(checklist_version, 20) || null,
-            lead_source: cleanStr(lead_source),
-            updated_at: new Date().toISOString(),
-            ...utm,
           }),
         }),
         // 2. Identity row, via the RPC function, NOT a raw table
@@ -425,7 +455,7 @@ export async function onRequestPost(context) {
 
     return json(
       mlFailed ? 502 : 200,
-      { success: !mlFailed, status: cleanStatus, colic_type: cleanType },
+      { success: !mlFailed, status: cleanStatus, colic_type: cleanType, group: MIDNIGHT_GROUP_ID ? 'midnight' : 'fallback_quiz' },
       allowed
     );
   } catch (err) {
