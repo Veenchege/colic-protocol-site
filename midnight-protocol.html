@@ -1574,8 +1574,22 @@ function renderBridge(){
     ? ('<p class="sub">'+esc(copy.sub)+' You already told us tonight was likely <b style="color:var(--cream);">'+known.name+'</b>. Here’s what that means, and what tonight’s protocol could and couldn’t reach for that type.</p>')
     : ('<p class="sub">'+esc(copy.sub)+' Most parents assume colic is one condition. It’s usually one of three, and tonight’s protocol only reaches two of them.</p>');
 
-  var quizCtaText = known ? 'Confirm it and unlock type-specific dosing →' : 'Take the 90-second assessment →';
-  var quizNote = known ? 'The full assessment confirms it and calibrates the protocol to it.' : 'Takes less time than tonight’s protocol did.';
+  // Secondary CTA logic changed [this version]. Was unconditional: every
+  // bridge screen showed a second button next to the Blueprint one,
+  // and for anyone who already had a confirmed type (quiz handoff or
+  // picked in MP) it said "Confirm it and unlock type-specific dosing"
+  // and looped back to the quiz she'd already effectively taken. That's
+  // a competing decision at the exact moment she's most ready to buy,
+  // the same failure pattern the quiz result page had with its direct-
+  // Blueprint button sitting next to the Midnight Protocol one. Now:
+  // known type -> no second button, just the offer and the restart
+  // link. Unknown type (she skipped colicType or picked "not sure")
+  // -> the quiz link stays, because getting her an actual diagnosis
+  // before the offer is real value, not a redundant loop.
+  var quizCtaText = 'Take the 90-second assessment →';
+  var quizNote = known
+    ? 'This is the exact calibration the full protocol below carries through, by feeding method, not just by type.'
+    : 'Takes less time than tonight’s protocol did.';
 
   var html =
     '<div class="screen-body">' +
@@ -1612,7 +1626,7 @@ function renderBridge(){
     '<div class="screen-foot">' +
       '<a class="btn btn-primary" href="'+blueprintHref+'" target="_blank" rel="noreferrer">Get the Calm Baby Blueprint — $47 →</a>' +
       '<div class="timer-note" style="margin:6px auto 10px;">72-hour guarantee. Keep it either way.</div>' +
-      '<a class="btn btn-outline" href="'+quizHref+'">'+quizCtaText+'</a>' +
+      (known ? '' : '<a class="btn btn-outline" href="'+quizHref+'">'+quizCtaText+'</a>') +
       '<div class="skiplink"><button class="btn-link" data-act="restart">↺ Run the protocol again</button></div>' +
     '</div>';
   var el = buildScreen(html);
