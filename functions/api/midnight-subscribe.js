@@ -110,7 +110,10 @@ export async function onRequestPost(context) {
   } = body || {};
 
   if (typeof website === 'string' && website.trim().length > 0) {
-    return json(200, { success: true }, allowed); // honeypot, silently accept and drop
+    // Honeypot tripped. Still returns 200 so bots learn nothing, but logs it,
+    // because browser autofill can fill hidden fields and silently drop real leads.
+    console.warn('[midnight-subscribe] honeypot tripped, lead dropped');
+    return json(200, { success: true }, allowed);
   }
 
   if (!name || typeof name !== 'string' || name.trim().length < 1) {
@@ -142,6 +145,10 @@ export async function onRequestPost(context) {
     return val.trim().slice(0, maxLen).replace(/[<>"'`]/g, '');
   };
   const cleanNum = (val) => {
+    // Number(null) and Number('') are 0, which used to write a fake "0"
+    // (e.g. colic_type_confidence) for visitors with no value. Real 0 still passes.
+    if (val === null || val === undefined) return '';
+    if (typeof val === 'string' && val.trim() === '') return '';
     const n = Number(val);
     return Number.isFinite(n) ? String(n) : '';
   };
@@ -301,10 +308,17 @@ export async function onRequestPost(context) {
       }),
     });
 
-    const data = await mlRes.json();
-    if (!mlRes.ok && mlRes.status !== 422) {
-      console.error('[midnight-subscribe] MailerLite error:', mlRes.status, JSON.stringify(data));
-      return json(502, { error: 'Subscription failed, please try again' }, allowed);
+    const data = await mlRes.json().catch(() => ({}));
+    // 422 used to be treated as success and never logged, so subscriber-cap,
+    // bad-group-id and bad-field rejections were invisible. Any non-OK is now
+    // logged. Supabase writes below still run so the lead is not lost, and the
+    // response at the end reports the failure.
+    const mlFailed = !mlRes.ok;
+    if (mlFailed) {
+      console.error(
+        '[midnight-subscribe] MailerLite rejected:', mlRes.status,
+        JSON.stringify(data), 'group:', GROUP_ID, 'email:', email.trim().toLowerCase()
+      );
     }
 
     // ── Supabase: two writes, both best-effort, both inactive no-ops
@@ -409,7 +423,11 @@ export async function onRequestPost(context) {
       }
     }
 
-    return json(200, { success: true, status: cleanStatus, colic_type: cleanType }, allowed);
+    return json(
+      mlFailed ? 502 : 200,
+      { success: !mlFailed, status: cleanStatus, colic_type: cleanType },
+      allowed
+    );
   } catch (err) {
     console.error('[midnight-subscribe] Unexpected error:', err);
     return json(500, { error: 'Internal server error' }, allowed);
