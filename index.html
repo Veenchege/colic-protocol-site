@@ -177,7 +177,7 @@ p{font-size:15.5px;line-height:1.75;color:var(--muted)}
 .found-sec{background:var(--paper)}
 .found-grid{display:grid;grid-template-columns:1fr auto;gap:56px;align-items:center}
 @media(max-width:860px){.found-grid{grid-template-columns:1fr}}
-.found-avatar{width:132px;height:132px;border-radius:50%;background:linear-gradient(135deg,var(--terra),var(--pine));display:flex;align-items:center;justify-content:center;margin:0 auto 16px;border:3px solid rgba(189,91,52,.2);flex-shrink:0}
+.found-avatar{width:132px;height:132px;border-radius:50%;background:linear-gradient(135deg,var(--terra),var(--pine));display:flex;align-items:center;justify-content:center;margin:0 auto 16px;border:3px solid rgba(189,91,52,.2);flex-shrink:0;object-fit:cover;object-position:50% 28%}
 .found-initials{font-family:var(--serif);font-size:30px;color:#fff;font-weight:700}
 .found-vis{text-align:center}
 .found-creds strong{display:block;font-size:14px;font-weight:700;color:var(--ink);margin-bottom:3px}
@@ -493,7 +493,7 @@ p{font-size:15.5px;line-height:1.75;color:var(--muted)}
       <a href="about.html" class="btn-outline">Read the full story →</a>
     </div>
     <div class="found-vis rv">
-      <div class="found-avatar" aria-hidden="true"><span class="found-initials">V</span></div>
+      <img class="found-avatar" src="images/vincent-400.jpg" srcset="images/vincent-400.jpg 400w, images/vincent.jpg 800w" sizes="132px" alt="Vincent, epidemiologist and dad to Zion" width="132" height="132" loading="lazy" decoding="async">
       <div class="found-creds">
         <strong>Vincent</strong>
         <span>Epidemiologist &amp; Data Analyst · Colic Protocol founder</span>

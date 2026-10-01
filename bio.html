@@ -19,13 +19,7 @@
   images/blueprint.jpg   ← 709130869_1787784803532734.jpg  (Blueprint flat lay)
   images/process.jpg     ← 992418189_1787485352493449.jpg  (Assess → Identify → Protocol)
   images/not-a-pdf.jpg   ← 147201286_1787688504952914.jpg  (You're Not Buying Another PDF)
-  images/vincent.jpg     ← GENERATE THIS (prompt below)
-
-  VINCENT PHOTO PROMPT:
-  "Professional headshot of a Black man in his early 30s, warm but authoritative expression,
-  genuine natural smile, light coloured background (warm cream or off-white), business-casual
-  attire (open-collar shirt or light sweater), natural window lighting from the side,
-  photorealistic, waist-up, high resolution portrait."
+  images/vincent-400.jpg ← real headshot (used on this page)
 
   IMAGES NOT USED — AND WHY:
   ✗ Free_3AM_Emergency_Checklist.jpeg  — Step 1 copy says "white noise". Brand rule violation.
@@ -352,7 +346,9 @@ a   { color: inherit; text-decoration: none; }
   height: 68px;
   border-radius: 50%;
   object-fit: cover;
+  object-position: 50% 28%;
   flex-shrink: 0;
+  border: 2px solid var(--border);
 }
 .founder-placeholder {
   width: 68px;
@@ -642,18 +638,7 @@ a   { color: inherit; text-decoration: none; }
 
 <!-- ── FOUNDER ── -->
 <div class="founder-section">
-  <!--
-    Replace the placeholder below with:
-    <img src="images/vincent.jpg" alt="Vincent — Epidemiologist and Dad to Zion" class="founder-photo">
-
-    Generate the photo using this prompt:
-    "Professional headshot of a Black man in his early 30s, warm but authoritative expression,
-    genuine natural smile, warm cream or off-white background, open-collar shirt or light
-    knit sweater, natural side window lighting, photorealistic, waist-up portrait, high resolution."
-  -->
-  <div class="founder-placeholder">
-    <span>Add Vincent&rsquo;s photo here</span>
-  </div>
+  <img src="images/vincent-400.jpg" alt="Vincent, epidemiologist and dad to Zion" class="founder-photo" width="68" height="68" decoding="async">
   <div>
     <div class="founder-name">Vincent</div>
     <div class="founder-title">Epidemiologist &amp; Dad to Zion</div>
