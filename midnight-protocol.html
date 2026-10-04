@@ -1386,7 +1386,7 @@ function renderTigerHold(){
   // we want to know how long parents actually spend here, not force a
   // minimum. State stores the start time; submitOutcome() will include
   // it when the check screen fires.
-  state.tigerHoldStartedAt = Date.now();
+  state['tiger_holdStartedAt'] = Date.now();
   state.tigerHoldTimerSeconds = 0;
   return buildTechniqueScreen({
     stageDots: 3, eyebrow:'Stage 3 · Soothing Circuit', color:'var(--gold)',
