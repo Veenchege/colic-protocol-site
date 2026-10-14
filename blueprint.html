@@ -12,15 +12,20 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Calm Baby Blueprint: $47, All 3 Systems, 72-Hour Guarantee | Colic Protocol</title>
-<meta name="description" content="The complete colic management system for all three root causes: gut, nervous system, and feeding mechanics. $47 one-time. 72-hour guarantee, keep everything either way.">
+<title>The Calm Baby Blueprint: $47, 72-Hour Guarantee | Colic Protocol</title>
+<meta name="description" content="An 88-page colic management system for babies 2 to 12 weeks old. Find your starting point, change one thing at a time, and track what helps. $47 one-time, 72-hour guarantee, keep it either way.">
 <link rel="canonical" href="https://colicprotocol.baby/blueprint">
+<meta property="og:type" content="website">
+<meta property="og:title" content="The Calm Baby Blueprint">
+<meta property="og:description" content="An 88-page colic management system. Find your starting point, change one thing at a time, and track what helps.">
+<meta property="og:url" content="https://colicprotocol.baby/blueprint">
+<meta property="og:image" content="https://colicprotocol.baby/images/blueprint-cover.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
   --paper:#FBF4EA; --paper-deep:#F1E5D3; --card:#FFFCF7;
-  --ink:#241A12; --muted:#7A6A56; --muted-soft:#9C8C77;
+  --ink:#241A12; --muted:#6F604D; --muted-soft:#8F7F6A;
   --pine:#37452F; --pine-deep:#232B1E; --pine-mid:#4B5C41;
   --terra:#BC5A33; --terra-deep:#8A3F22; --terra-soft:#E9D2C2;
   --sage:#6C8759; --sage-soft:#DCE4D0;
@@ -37,61 +42,148 @@ img{max-width:100%;display:block}
 .skip-link{position:absolute;left:-9999px;top:0;z-index:300;background:var(--pine-deep);color:#fff;padding:12px 20px;border-radius:0 0 10px 0;font-size:14px;font-weight:600}
 .skip-link:focus{left:0}
 .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+.wrap-narrow{max-width:760px;margin:0 auto;padding:0 24px}
 .sec{padding:clamp(48px,6.5vw,84px) 0}
-.eyebrow{font-family:var(--fm);font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--terra);display:block;margin-bottom:12px}
+.eyebrow{font-family:var(--fm);font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--terra-deep);display:block;margin-bottom:12px}
 h1,h2,h3{font-family:var(--fd);color:var(--ink);font-weight:700;line-height:1.15}
-h2{font-size:clamp(25px,3.2vw,34px)}
-h3{font-size:17px;font-weight:700}
-p{font-size:15px;color:var(--muted);line-height:1.72}
-.section-header{max-width:640px;margin:0 auto 40px;text-align:center}
+h2{font-size:clamp(26px,3.4vw,36px)}
+h3{font-size:18px;font-weight:700}
+p{font-size:16px;color:var(--muted);line-height:1.72}
+.section-header{max-width:660px;margin:0 auto 36px;text-align:center}
 .section-header p{margin-top:12px}
 em{font-style:italic;color:var(--terra)}
-.btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--fb);font-weight:700;border-radius:11px;cursor:pointer;border:none;text-decoration:none;transition:transform .18s,box-shadow .18s}
+strong{color:var(--ink);font-weight:600}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--fb);font-weight:700;border-radius:11px;cursor:pointer;border:none;text-decoration:none;transition:transform .18s,box-shadow .18s}
 .btn:hover{transform:translateY(-2px)}
 .btn-hero{background:linear-gradient(135deg,var(--terra),var(--terra-deep));color:#fff;padding:18px 36px;font-size:17px;box-shadow:0 10px 30px rgba(188,90,51,.35)}
 .btn-hero:hover{box-shadow:0 16px 40px rgba(188,90,51,.48)}
 .btn-ghost-link{color:var(--ink);font-weight:600;font-size:14px;border-bottom:1.5px solid var(--line2);padding-bottom:2px}
 .btn-ghost-link:hover{border-color:var(--terra);color:var(--terra)}
+a:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:6px}
 
 /* nav */
-.site-nav{position:sticky;top:0;z-index:100;background:rgba(251,244,234,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.site-nav{position:sticky;top:0;z-index:100;background:rgba(251,244,234,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .nav-inner{max-width:1080px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
 .nav-logo{display:flex;align-items:center;gap:10px}
 .logo-name{font-family:var(--fd);font-size:17px;font-weight:700;color:var(--ink)}
 .nav-links{display:flex;align-items:center;gap:26px}
 .nav-links a{color:var(--muted);font-size:14px;font-weight:500}
 .nav-links a:hover{color:var(--ink)}
-.nav-pill{background:var(--ink);border-radius:9px;padding:9px 18px;color:#fff!important;font-weight:700!important}
-.nav-pill:hover{background:var(--terra)}
 .nav-toggle{display:none;background:none;border:none;color:var(--ink);cursor:pointer;font-size:22px;padding:4px}
 .mobile-nav{display:none;background:var(--paper);padding:6px 24px 22px;border-top:1px solid var(--line);flex-direction:column;gap:15px}
 .mobile-nav.open{display:flex}
 .mobile-nav a{color:var(--ink);font-size:16px;font-weight:500}
-.mob-cta{background:var(--terra);color:#fff!important;padding:13px;border-radius:10px;text-align:center;font-weight:700!important}
 @media(max-width:860px){.nav-links{display:none}.nav-toggle{display:block}}
 
 /* hero */
-.pb-hero{padding:clamp(46px,6vw,70px) 0 10px}
+.pb-hero{padding:clamp(40px,6vw,70px) 24px clamp(36px,5vw,56px)}
 .pb-hero-grid{display:grid;grid-template-columns:auto 1fr;gap:52px;align-items:center}
-@media(max-width:820px){.pb-hero-grid{grid-template-columns:1fr}.pb-cover-col{order:-1;display:flex;justify-content:center}}
-.pb-cover{width:230px;border-radius:10px;box-shadow:14px 18px 44px rgba(36,26,18,.32);transform:perspective(900px) rotateY(-8deg)}
-.pb-hero h1{font-size:clamp(30px,4.4vw,46px);margin-bottom:14px}
-.pb-price-row{display:flex;align-items:baseline;gap:12px;margin:20px 0}
-.pb-price{font-family:var(--fd);font-size:40px;font-weight:700;color:var(--ink)}
+@media(max-width:820px){.pb-hero-grid{grid-template-columns:1fr;gap:28px}.pb-cover-col{order:-1;display:flex;justify-content:center}}
+.pb-cover{width:230px;height:auto;border-radius:10px;box-shadow:14px 18px 44px rgba(36,26,18,.32);transform:perspective(900px) rotateY(-8deg)}
+@media(max-width:820px){.pb-cover{width:118px;transform:none;box-shadow:8px 10px 26px rgba(36,26,18,.28)}.pb-hero h1{font-size:30px}.pb-hero{padding-top:28px;padding-bottom:36px}}
+.pb-hero h1{font-size:clamp(31px,4.6vw,48px);margin-bottom:16px}
+.pb-hero .lede{font-size:17px;max-width:540px}
+.pb-price-row{display:flex;align-items:baseline;gap:12px;margin:18px 0 16px}
+.pb-price{font-family:var(--fd);font-size:42px;font-weight:700;color:var(--ink)}
 .pb-price-note{font-size:13px;color:var(--muted-soft)}
-.pb-trust{display:flex;flex-wrap:wrap;gap:9px;margin:18px 0 24px}
+.pb-trust{display:flex;flex-wrap:wrap;gap:9px;margin:16px 0 0}
 .pb-pill{font-family:var(--fm);font-size:11px;color:var(--pine);background:var(--sage-soft);border:1px solid rgba(108,135,89,.25);border-radius:20px;padding:6px 13px}
-.pb-secondary{font-size:13px;color:var(--muted);margin-top:14px}
+.pb-secondary{font-size:14px;color:var(--muted);margin-top:16px}
+@media(max-width:560px){.btn-hero{width:100%;padding:18px 20px}}
 
-/* included */
-.inc-sec{background:var(--paper-deep)}
-.inc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
-.inc-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 22px}
-.inc-num{font-family:var(--fd);font-size:13px;color:var(--terra);font-weight:700;display:block;margin-bottom:6px}
-.inc-card p{font-size:13.5px;margin-top:6px}
+/* testimonial */
+.proof-sec{background:var(--paper-deep);padding:clamp(40px,5.5vw,68px) 0}
+.proof-card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:clamp(24px,4vw,40px);box-shadow:var(--shadow);position:relative}
+.proof-top{display:flex;align-items:center;flex-wrap:wrap;gap:10px 14px;margin-bottom:18px}
+.stars{display:flex;gap:3px}
+.stars svg{width:22px;height:22px;fill:var(--gold)}
+.proof-rating{font-family:var(--fm);font-size:12px;color:var(--muted);letter-spacing:.04em}
+.proof-text p{font-size:17px;color:var(--ink);line-height:1.75;margin-bottom:16px}
+.proof-text p:last-child{margin-bottom:0}
+.proof-sign{display:flex;align-items:center;gap:14px;margin-top:22px;padding-top:20px;border-top:1px solid var(--line)}
+.proof-avatar{width:46px;height:46px;border-radius:50%;background:var(--terra-soft);color:var(--terra-deep);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:20px;font-weight:700;flex:none}
+.proof-sign strong{display:block;font-family:var(--fd);font-size:19px;line-height:1.2}
+.proof-sign span{font-size:13px;color:var(--muted)}
+.proof-cta{text-align:center;margin-top:28px}
+.proof-note{font-size:13px;color:var(--muted-soft);margin-top:12px}
 
-/* who for */
-.who-sec{background:var(--paper)}
+/* why */
+.why-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
+@media(max-width:820px){.why-grid{grid-template-columns:1fr;gap:28px}}
+.why-text p{margin-bottom:16px}
+.why-text p:last-child{margin-bottom:0}
+.why-aside{background:var(--pine-deep);border-radius:18px;padding:30px 28px;color:rgba(251,244,234,.92)}
+.why-aside .eyebrow{color:var(--gold)}
+.why-aside p{color:rgba(251,244,234,.82);font-size:15.5px}
+.why-aside .big{font-family:var(--fd);font-size:26px;line-height:1.25;color:#fff;font-weight:600;margin-bottom:14px}
+
+/* founder */
+.founder-sec{background:var(--paper-deep)}
+.founder-grid{display:grid;grid-template-columns:auto 1fr;gap:40px;align-items:start}
+@media(max-width:700px){.founder-grid{grid-template-columns:1fr;gap:22px}}
+.founder-photo{width:200px;height:200px;border-radius:18px;object-fit:cover;object-position:50% 28%;box-shadow:var(--shadow);border:3px solid var(--card)}
+@media(max-width:700px){.founder-photo{width:120px;height:120px;border-radius:50%}}
+.founder-text h2{margin-bottom:14px}
+.founder-text p{margin-bottom:14px}
+.scope{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--sage);border-radius:10px;padding:16px 18px;margin-top:18px}
+.scope p{font-size:14.5px;margin:0}
+
+/* inside */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-bottom:36px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px 22px}
+.tile svg{width:52px;height:52px;margin-bottom:14px}
+.tile h3{margin-bottom:6px}
+.tile p{font-size:14.5px}
+.guide-title{font-family:var(--fm);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;text-align:center}
+.inc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.inc-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px}
+.inc-num{font-family:var(--fd);font-size:13px;color:var(--terra-deep);font-weight:700;display:block;margin-bottom:6px}
+.inc-card p{font-size:14.5px;margin-top:6px}
+.peek{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,340px));justify-content:center;gap:20px;margin-top:36px}
+.peek[hidden]{display:none}
+.peek figure{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
+.peek figure[hidden]{display:none}
+.peek img{width:100%;height:auto;max-height:560px;object-fit:cover;object-position:top}
+.peek figcaption{font-size:13px;color:var(--muted);padding:12px 16px}
+
+/* how */
+.how-sec{background:var(--paper-deep)}
+.how-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:44px;align-items:center}
+@media(max-width:820px){.how-grid{grid-template-columns:1fr;gap:28px}}
+.rings{max-width:320px;margin:0 auto;width:100%}
+.rings-cap{font-size:13px;color:var(--muted);text-align:center;margin-top:8px}
+.steps{list-style:none;counter-reset:s}
+.steps li{counter-increment:s;position:relative;padding:0 0 22px 56px}
+.steps li:last-child{padding-bottom:0}
+.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:38px;height:38px;border-radius:50%;background:var(--terra);color:#fff;font-family:var(--fd);font-weight:700;font-size:19px;display:flex;align-items:center;justify-content:center}
+.steps h3{margin-bottom:4px}
+.steps p{font-size:15px}
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:34px}
+.legend div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:14px;color:var(--muted);line-height:1.55}
+.legend b{display:flex;align-items:center;gap:8px;font-family:var(--fm);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);margin-bottom:4px}
+.legend i{width:11px;height:11px;border-radius:50%;display:inline-block}
+.t72{margin-top:40px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px 24px}
+.t72 h3{text-align:center;margin-bottom:20px}
+.t72-row{display:grid;grid-template-columns:repeat(3,1fr);gap:0;position:relative}
+@media(max-width:700px){.t72-row{grid-template-columns:1fr;gap:16px}}
+.t72-step{padding:0 14px;text-align:center;position:relative}
+.t72-dot{width:16px;height:16px;border-radius:50%;background:var(--terra);margin:0 auto 12px;position:relative;z-index:2;box-shadow:0 0 0 5px var(--terra-soft)}
+.t72-row::before{content:'';position:absolute;top:7px;left:16.6%;right:16.6%;height:2px;background:var(--terra-soft);z-index:1}
+@media(max-width:700px){.t72-row::before{display:none}.t72-step{text-align:left;display:grid;grid-template-columns:24px 1fr;gap:0 14px;padding:0}.t72-dot{margin:3px 0 0}}
+.t72-step b{display:block;font-family:var(--fm);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--terra-deep);margin-bottom:4px}
+.t72-step p{font-size:14.5px}
+
+/* research */
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.res-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px}
+.res-card .tag{font-family:var(--fm);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--terra-deep);display:block;margin-bottom:8px}
+.res-card h3{font-size:17px;margin-bottom:6px}
+.res-card p{font-size:14.5px}
+.res-after{max-width:700px;margin:28px auto 0;text-align:center}
+.res-after p{font-size:15.5px}
+
+/* who */
+.who-sec{background:var(--paper-deep)}
 .who-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
 @media(max-width:700px){.who-grid{grid-template-columns:1fr}}
 .who-card{border-radius:14px;padding:24px 24px}
@@ -101,51 +193,48 @@ em{font-style:italic;color:var(--terra)}
 .who-yes h4{color:var(--pine)}
 .who-no h4{color:var(--terra-deep)}
 .who-card ul{list-style:none}
-.who-card li{font-size:13.5px;color:var(--ink);margin-bottom:9px;padding-left:18px;position:relative;line-height:1.5}
-.who-yes li::before{content:'✓';position:absolute;left:0;color:var(--sage);font-weight:700}
-.who-no li::before{content:'-';position:absolute;left:0;color:var(--terra-deep);font-weight:700}
+.who-card li{font-size:15px;color:var(--ink);margin-bottom:10px;padding-left:20px;position:relative;line-height:1.55}
+.who-yes li::before{content:'✓';position:absolute;left:0;color:var(--pine);font-weight:700}
+.who-no li::before{content:'×';position:absolute;left:1px;color:var(--terra-deep);font-weight:700}
+.redflag{margin-top:20px;background:#FFF4F0;border:2px solid var(--terra);border-radius:14px;padding:20px 22px;display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start}
+.redflag svg{width:30px;height:30px;flex:none;margin-top:2px}
+.redflag h3{font-size:18px;color:var(--terra-deep);margin-bottom:4px}
+.redflag p{font-size:15px;color:var(--ink)}
 
 /* guarantee */
-.guar-sec{background:var(--paper-deep)}
 .guar-grid{display:grid;grid-template-columns:auto 1fr;gap:44px;align-items:center}
-@media(max-width:760px){.guar-grid{grid-template-columns:1fr}.guar-img{order:-1;margin:0 auto}}
-.guar-img{width:210px;border-radius:16px;overflow:hidden;box-shadow:var(--shadow)}
+@media(max-width:760px){.guar-grid{grid-template-columns:1fr;gap:24px;justify-items:start}}
+.seal{width:170px;height:170px;flex:none}
 .guar-text h2{margin-bottom:14px}
-.guar-text p{margin-bottom:10px}
+.guar-text p{margin-bottom:12px}
+.guar-fine{font-size:14px!important;color:var(--muted-soft)!important}
 .guar-sign{display:flex;align-items:center;gap:12px;margin-top:18px}
 .guar-sign img{width:52px;height:52px;border-radius:50%;object-fit:cover;object-position:50% 28%;border:2px solid var(--terra-soft)}
-.guar-sign strong{display:block;font-family:var(--fd);font-size:17px;color:var(--ink);line-height:1.2}
-.guar-sign span{font-size:12.5px;color:var(--muted)}
-
-/* loss */
-.loss-sec{background:var(--pine-deep)}
-.loss-sec .eyebrow{color:var(--gold)}
-.loss-sec h2{color:rgba(251,244,234,.96)}
-.loss-sec .section-header p{color:rgba(251,244,234,.65)}
-.loss-compare{display:grid;grid-template-columns:1fr 1fr;gap:18px;max-width:820px;margin:0 auto}
-@media(max-width:700px){.loss-compare{grid-template-columns:1fr}}
-.loss-card{border-radius:16px;padding:26px 24px}
-.loss-spent{background:rgba(188,90,51,.14);border:1px solid rgba(188,90,51,.3)}
-.loss-blue{background:rgba(108,135,89,.16);border:1px solid rgba(108,135,89,.34)}
-.loss-card h4{font-family:var(--fm);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(251,244,234,.5);margin-bottom:14px}
-.loss-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid rgba(251,244,234,.08);font-size:13px}
-.loss-row span:first-child{color:rgba(251,244,234,.72)}
-.loss-row span:last-child{font-family:var(--fm);color:rgba(251,244,234,.92)}
-.loss-total{display:flex;justify-content:space-between;margin-top:12px;padding-top:12px;border-top:1px solid rgba(251,244,234,.18);font-family:var(--fd);font-size:19px;font-weight:700;color:#fff}
-.loss-total.blue{color:var(--gold)}
+.guar-sign strong{display:block;font-family:var(--fd);font-size:18px;line-height:1.2}
+.guar-sign span{font-size:13px;color:var(--muted)}
 
 /* faq */
-.faq-sec{background:var(--paper)}
-.faq-item{border-bottom:1px solid var(--line);padding:18px 0}
-.faq-item h3{font-size:15.5px;margin-bottom:8px}
-.faq-item p{font-size:14px;margin-bottom:0}
+.faq-sec{background:var(--paper-deep)}
+.faq-item{border-bottom:1px solid var(--line2);padding:20px 0}
+.section-header + .faq-item{border-top:1px solid var(--line2)}
+.faq-item h3{font-size:18px;margin-bottom:8px}
+.faq-item p{font-size:15.5px;margin-bottom:0}
 
 /* final cta */
 .pb-cta{background:linear-gradient(155deg,var(--terra-deep),var(--terra));padding:clamp(56px,7vw,84px) 0;text-align:center}
 .pb-cta h2{color:#fff;margin-bottom:12px}
-.pb-cta p{color:rgba(255,255,255,.85);max-width:460px;margin:0 auto 26px}
+.pb-cta p{color:rgba(255,255,255,.9);max-width:480px;margin:0 auto 26px}
 .pb-cta .btn-hero{background:#fff;color:var(--terra-deep);box-shadow:0 10px 30px rgba(0,0,0,.2)}
-.pb-cta-micro{font-size:12px;color:rgba(255,255,255,.66);margin-top:16px}
+.pb-cta-micro{font-size:13px!important;color:rgba(255,255,255,.78)!important;margin:16px auto 0!important}
+.pb-cta-micro a{color:#fff;text-decoration:underline}
+
+/* sticky mobile cta */
+.sticky{position:fixed;left:0;right:0;bottom:0;z-index:150;background:rgba(251,244,234,.97);backdrop-filter:blur(10px);border-top:1px solid var(--line2);padding:10px 16px calc(10px + env(safe-area-inset-bottom));display:none;align-items:center;justify-content:space-between;gap:12px;transform:translateY(110%);transition:transform .25s}
+.sticky.show{transform:none}
+.sticky .s-txt{font-size:13px;color:var(--muted);line-height:1.3}
+.sticky .s-txt b{display:block;font-family:var(--fd);font-size:22px;color:var(--ink);line-height:1.1}
+.sticky .btn{padding:13px 20px;font-size:15px;flex:none;width:auto}
+@media(max-width:820px){.sticky{display:flex}body{padding-bottom:0}.site-footer{padding-bottom:96px}}
 
 /* footer */
 .site-footer{background:var(--pine-deep);padding:40px 0}
@@ -153,25 +242,29 @@ em{font-style:italic;color:var(--terra)}
 .footer-brand{display:flex;align-items:center;gap:10px}
 .footer-brand-name{font-family:var(--fd);font-size:15px;color:rgba(251,244,234,.85)}
 .footer-links{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center}
-.footer-links a{color:rgba(251,244,234,.5);font-size:13px}
-.footer-links a:hover{color:rgba(251,244,234,.88)}
-.footer-disc{font-size:11px;color:rgba(251,244,234,.32);width:100%;line-height:1.7;margin-top:16px;border-top:1px solid rgba(251,244,234,.08);padding-top:14px}
+.footer-links a{color:rgba(251,244,234,.6);font-size:13px}
+.footer-links a:hover{color:rgba(251,244,234,.92)}
+.footer-disc{font-size:11.5px;color:rgba(251,244,234,.5);width:100%;line-height:1.7;margin-top:16px;border-top:1px solid rgba(251,244,234,.08);padding-top:14px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
 <a href="#main-content" class="skip-link">Skip to main content</a>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="star" viewBox="0 0 24 24"><path d="M12 2.5l2.9 6.1 6.6.9-4.8 4.6 1.2 6.6L12 17.4 6.1 20.7l1.2-6.6L2.5 9.5l6.6-.9z"/></symbol>
+</svg>
+
 <nav class="site-nav" aria-label="Main navigation">
   <div class="nav-inner">
     <a href="index.html" class="nav-logo" aria-label="Colic Protocol home">
-      <svg width="34" height="30" viewBox="0 0 40 36"><circle cx="15" cy="14" r="10.5" fill="none" stroke="#BC5A33" stroke-width="2.3" opacity=".92"/><circle cx="25" cy="14" r="10.5" fill="none" stroke="#6C8759" stroke-width="2.3" opacity=".92"/><circle cx="20" cy="23" r="10.5" fill="none" stroke="#C0963F" stroke-width="2.3" opacity=".92"/></svg>
+      <svg width="34" height="30" viewBox="0 0 40 36" aria-hidden="true"><circle cx="15" cy="14" r="10.5" fill="none" stroke="#BC5A33" stroke-width="2.3" opacity=".92"/><circle cx="25" cy="14" r="10.5" fill="none" stroke="#6C8759" stroke-width="2.3" opacity=".92"/><circle cx="20" cy="23" r="10.5" fill="none" stroke="#C0963F" stroke-width="2.3" opacity=".92"/></svg>
       <span class="logo-name">Colic Protocol</span>
     </a>
     <div class="nav-links">
       <a href="about.html">About</a>
       <a href="blog.html">Blog</a>
       <a href="quiz.html">Free Assessment</a>
-      <a href="quiz.html" class="nav-pill">Take the Free Assessment →</a>
     </div>
     <button class="nav-toggle" onclick="document.getElementById('mobileNav').classList.toggle('open')" aria-label="Open menu">&#9776;</button>
   </div>
@@ -179,123 +272,285 @@ em{font-style:italic;color:var(--terra)}
     <a href="about.html">About</a>
     <a href="blog.html">Blog</a>
     <a href="quiz.html">Free Assessment</a>
-    <a href="quiz.html" class="mob-cta">Take the Free Assessment →</a>
   </div>
 </nav>
 
 <main id="main-content">
 
+  <!-- 1. HERO -->
   <section class="pb-hero wrap">
     <div class="pb-hero-grid">
       <div class="pb-cover-col">
-        <img src="images/blueprint-cover.jpg" alt="The Calm Baby Blueprint cover" class="pb-cover">
+        <img src="images/blueprint-cover.jpg" alt="The Calm Baby Blueprint cover" class="pb-cover" width="230" height="306" fetchpriority="high">
       </div>
       <div class="pb-hero-text">
-        <span class="eyebrow">The Complete Protocol, All 3 Systems</span>
-        <h1>The Calm Baby Blueprint</h1>
-        <p>A diagnostic protocol and management system for gut, nervous system, and feeding-mechanics colic, sequenced together instead of handed to you as a single generic fix. Built from peer-reviewed research and refined since with real families.</p>
+        <span class="eyebrow">The Calm Baby Blueprint · For babies 2 to 12 weeks</span>
+        <h1>It&rsquo;s 3 AM and nothing is working. You need a plan, not another guess.</h1>
+        <p class="lede">The Calm Baby Blueprint is an 88-page colic management system. Pick where to start, change one thing at a time, and track what helps. A management system, not a cure.</p>
         <div class="pb-price-row">
           <span class="pb-price">$47</span>
           <span class="pb-price-note">one-time purchase, no subscription</span>
         </div>
+        <a id="heroCta" href="https://colicprotocol.gumroad.com/l/TheCalmBabyBlueprint?utm_source=website&utm_medium=sales_page&wanted=true" class="btn btn-hero gumroad-button" rel="noopener" onclick="gtag('event','begin_checkout',{value:47,currency:'USD',placement:'hero',items:[{item_name:'Calm Baby Blueprint'}]});">Get the Blueprint, $47 &rarr;</a>
         <div class="pb-trust">
           <span class="pb-pill">72-hour guarantee</span>
           <span class="pb-pill">Keep it either way</span>
           <span class="pb-pill">Instant download</span>
         </div>
-        <a href="https://colicprotocol.gumroad.com/l/TheCalmBabyBlueprint?utm_source=website&utm_medium=sales_page&wanted=true" class="btn btn-hero gumroad-button" rel="noopener" onclick="gtag('event','begin_checkout',{value:47,currency:'USD',items:[{item_name:'Calm Baby Blueprint'}]});">Get the Blueprint, $47 →</a>
-        <p class="pb-secondary">Not sure which system is primary yet? <a href="quiz.html" class="btn-ghost-link">Take the free 90-second assessment first →</a></p>
+        <p class="pb-secondary">Want a free starting point first? <a href="quiz.html" class="btn-ghost-link">Take the 90-second assessment &rarr;</a></p>
       </div>
     </div>
   </section>
 
-  <section class="sec inc-sec">
+  <!-- 2. TESTIMONIAL (directly after hero) -->
+  <section class="proof-sec" data-track="testimonial" aria-label="Customer review">
+    <div class="wrap-narrow">
+      <span class="eyebrow" style="text-align:center">From a parent who already bought it</span>
+      <figure class="proof-card">
+        <div class="proof-top">
+          <div class="stars" role="img" aria-label="5 out of 5 stars">
+            <svg aria-hidden="true"><use href="#star"/></svg><svg aria-hidden="true"><use href="#star"/></svg><svg aria-hidden="true"><use href="#star"/></svg><svg aria-hidden="true"><use href="#star"/></svg><svg aria-hidden="true"><use href="#star"/></svg>
+          </div>
+          <span class="proof-rating">5.0 &middot; 1 rating on Gumroad</span>
+        </div>
+        <blockquote class="proof-text" id="cassieQuote">
+          <p>I came across The Colic Protocol’s Instagram when my baby was 11 weeks old. It was 5 a.m. after a really rough night, and as soon as I saw the Blueprint, I purchased it. At that point, I had already spent about five weeks doing my own research on colic and reflux. I was spending hours Googling, reading, and trying to figure out what could be going on with my baby. Anytime she was finally asleep, I was researching.</p>
+          <p>When I opened the Blueprint, I was honestly blown away. It had everything I had spent weeks learning on my own, plus so much more, all organized into one resource that was actually easy to understand. I immediately wished I had found it sooner because it would have saved me so many hours of searching and trying to piece everything together myself.</p>
+          <p>I highly recommend the Blueprint to any parent dealing with colic, reflux, or even just a very fussy baby. Having all of this information in one place is incredibly helpful, especially when you’re exhausted, overwhelmed, and just trying to understand how to help your baby.</p>
+        </blockquote>
+        <figcaption class="proof-sign">
+          <div class="proof-avatar" aria-hidden="true">C</div>
+          <div><strong>Cassie Reardon</strong><span>Parent &middot; Gumroad review, shown exactly as she wrote it</span></div>
+        </figcaption>
+      </figure>
+      <div class="proof-cta">
+        <a href="https://colicprotocol.gumroad.com/l/TheCalmBabyBlueprint?utm_source=website&utm_medium=sales_page_proof&wanted=true" class="btn btn-hero gumroad-button" rel="noopener" onclick="gtag('event','begin_checkout',{value:47,currency:'USD',placement:'after_testimonial',items:[{item_name:'Calm Baby Blueprint'}]});">Get the Blueprint, $47 &rarr;</a>
+        <p class="proof-note">72-hour guarantee. You keep the Blueprint either way.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. WHY IT'S HARD -->
+  <section class="sec" data-track="why">
+    <div class="wrap">
+      <div class="why-grid">
+        <div class="why-text">
+          <span class="eyebrow">Why 3 AM is so hard</span>
+          <h2 style="margin-bottom:18px">You have probably already done the right things.</h2>
+          <p>You tried the gas drops. Maybe the gripe water. You read forums until your eyes hurt, and every one told you something different.</p>
+          <p>Here is the part nobody says out loud. When you change three things in one night, you cannot tell which one helped, or whether anything did.</p>
+          <p>That is not a you problem. It is a tools problem. You have been trying to solve a pattern with no way to see the pattern.</p>
+        </div>
+        <aside class="why-aside">
+          <span class="eyebrow">What changes</span>
+          <p class="big">A place to start. One change at a time. A log that shows what is really happening.</p>
+          <p>That is the whole idea behind the Blueprint. Less guessing, and a clear answer to &ldquo;did that help?&rdquo;</p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. FOUNDER -->
+  <section class="sec founder-sec" data-track="founder">
+    <div class="wrap">
+      <div class="founder-grid">
+        <img src="images/vincent-400.jpg" alt="Vincent, epidemiologist and dad to Zion" class="founder-photo" width="200" height="200" loading="lazy" decoding="async">
+        <div class="founder-text">
+          <span class="eyebrow">Why I wrote this</span>
+          <h2>I&rsquo;m Vincent. Zion is my daughter.</h2>
+          <p>When Zion was 3 weeks old, her colic was severe. We were told to wait it out. Waiting was not something I could do at 3 AM with her in my arms.</p>
+          <p>I am an epidemiologist, so I did the one thing I know how to do. I went back to the research, read what the studies actually found, and built a plan for her. Within 48 hours, her crying had settled.</p>
+          <p>That was one baby, and one baby proves nothing. But it is why I wrote this down for other parents, and why I am careful about what I claim.</p>
+          <div class="scope">
+            <p><strong>What I am:</strong> someone trained to read and weigh research. <strong>What I am not:</strong> a pediatrician, a GI specialist or a lactation consultant. Please keep yours in the loop.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. WHAT'S INSIDE -->
+  <section class="sec" data-track="inside">
     <div class="wrap">
       <div class="section-header">
-        <span class="eyebrow">What's inside</span>
-        <h2>Every system, sequenced, not scattered.</h2>
-        <p>Seven components, built to work together rather than as a list of unrelated tips.</p>
+        <span class="eyebrow">What&rsquo;s inside</span>
+        <h2>Four parts, built to work together.</h2>
+        <p>One download. You can use it the night you buy it.</p>
       </div>
+
+      <div class="tiles">
+        <div class="tile">
+          <svg viewBox="0 0 52 52" fill="none" aria-hidden="true"><rect x="10" y="5" width="32" height="42" rx="4" fill="#FFFCF7" stroke="#BC5A33" stroke-width="2.4"/><path d="M17 16h18M17 23h18M17 30h12" stroke="#BC5A33" stroke-width="2.4" stroke-linecap="round"/><rect x="17" y="37" width="10" height="3.5" rx="1.7" fill="#E9D2C2"/></svg>
+          <h3>88-page guide</h3>
+          <p>Your starting point, the steps for each pattern, and what to do when the first thing does not work.</p>
+        </div>
+        <div class="tile">
+          <svg viewBox="0 0 52 52" fill="none" aria-hidden="true"><rect x="14" y="4" width="24" height="44" rx="5" fill="#FFFCF7" stroke="#6C8759" stroke-width="2.4"/><circle cx="26" cy="40" r="2.2" fill="#6C8759"/><path d="M19 14h14" stroke="#6C8759" stroke-width="2.4" stroke-linecap="round"/><circle cx="21" cy="23" r="2.4" fill="#DCE4D0" stroke="#6C8759" stroke-width="1.6"/><circle cx="31" cy="23" r="2.4" fill="#6C8759"/><circle cx="21" cy="31" r="2.4" fill="#6C8759"/><circle cx="31" cy="31" r="2.4" fill="#DCE4D0" stroke="#6C8759" stroke-width="1.6"/></svg>
+          <h3>Bloom Baby Tracker App</h3>
+          <p>One-tap logging. After a few days you can see your baby&rsquo;s real pattern instead of relying on memory at 3 AM.</p>
+        </div>
+        <div class="tile">
+          <svg viewBox="0 0 52 52" fill="none" aria-hidden="true"><path d="M8 26v0M14 20v12M20 14v24M26 18v16M32 12v28M38 19v14M44 24v4" stroke="#C0963F" stroke-width="3.4" stroke-linecap="round"/></svg>
+          <h3>60-Minute Brown Noise Soundscape</h3>
+          <p>A steady track for the room. Keep it quiet and low, across the room, on a timer.</p>
+        </div>
+        <div class="tile">
+          <svg viewBox="0 0 52 52" fill="none" aria-hidden="true"><circle cx="26" cy="26" r="20" fill="#FFFCF7" stroke="#8A3F22" stroke-width="2.4"/><path d="M21 17.5v17l14-8.5z" fill="#BC5A33"/></svg>
+          <h3>Cry Decoder Masterclass</h3>
+          <p>Learn to tell a gas cry, an overtired cry and a dysregulation cry apart by ear.</p>
+        </div>
+      </div>
+
+      <p class="guide-title">Inside the 88 pages</p>
       <div class="inc-grid">
-        <div class="inc-card"><span class="inc-num">01</span><h3>Diagnostic protocol</h3><p>A deeper version of the free assessment, for cases where more than one system is contributing at once.</p></div>
-        <div class="inc-card"><span class="inc-num">02</span><h3>Gut-support protocol</h3><p>The exact probiotic strain, dose, and timing, calibrated separately for breastfeeding and formula-feeding.</p></div>
-        <div class="inc-card"><span class="inc-num">03</span><h3>Physical techniques</h3><p>Tiger Hold, ILU massage, and positioning, matched to which system is primary for your baby.</p></div>
-        <div class="inc-card"><span class="inc-num">04</span><h3>Feeding mechanics protocol</h3><p>Paced feeding, bottle angle, and latch assessment, calibrated separately for breastfeeding and formula-feeding.</p></div>
-        <div class="inc-card"><span class="inc-num">05</span><h3>Bloom Baby Tracker</h3><p>A one-tap logging tool that reveals your baby's actual pattern within days, not weeks of guessing.</p></div>
-        <div class="inc-card"><span class="inc-num">06</span><h3>60-minute brown noise soundscape</h3><p>Calibrated to womb frequency, ready to use the night you buy it.</p></div>
-        <div class="inc-card"><span class="inc-num">07</span><h3>Cry Decoder Masterclass</h3><p>Learn to tell a gas cry, an overtired cry, and a dysregulation cry apart by ear.</p></div>
+        <div class="inc-card"><span class="inc-num">01</span><h3>Starting-point assessment</h3><p>A deeper version of the free assessment, for babies where more than one pattern may be involved.</p></div>
+        <div class="inc-card"><span class="inc-num">02</span><h3>Gut support</h3><p>The probiotic strain and dose used in the research, who it was tested in, and separate guidance for breastfed and formula-fed babies.</p></div>
+        <div class="inc-card"><span class="inc-num">03</span><h3>Soothing techniques</h3><p>Tiger Hold, gentle massage and positioning, matched to your baby&rsquo;s starting point.</p></div>
+        <div class="inc-card"><span class="inc-num">04</span><h3>Feeding mechanics</h3><p>Paced feeding, bottle position and a latch check, with separate steps for breastfeeding and formula-feeding.</p></div>
+      </div>
+
+      <!-- Real screenshots appear here automatically once these two files exist in /images/. If a file is missing, its card never shows. -->
+      <div class="peek" id="peek" hidden>
+        <figure hidden>
+          <img src="images/tracker-screenshot.jpg" alt="Screenshot of the Bloom Baby Tracker App" onload="this.parentNode.hidden=false;document.getElementById('peek').hidden=false" onerror="this.parentNode.remove()">
+          <figcaption>The Bloom Baby Tracker App</figcaption>
+        </figure>
+        <figure hidden>
+          <img src="images/blueprint-sample-page.jpg" alt="A sample page from the Calm Baby Blueprint" onload="this.parentNode.hidden=false;document.getElementById('peek').hidden=false" onerror="this.parentNode.remove()">
+          <figcaption>A sample page from the guide</figcaption>
+        </figure>
       </div>
     </div>
   </section>
 
-  <section class="sec who-sec">
+  <!-- 6. HOW IT WORKS -->
+  <section class="sec how-sec" data-track="how">
     <div class="wrap">
       <div class="section-header">
-        <span class="eyebrow">Set the right expectation before you buy</span>
-        <h2>Who this is built for, and who it isn't.</h2>
+        <span class="eyebrow">How it works</span>
+        <h2>Three places to start. One change at a time.</h2>
+        <p>Colic has no single known cause. So the Blueprint gives you three practical places to start, then helps you test them in order. They are a way to choose your first step, not a diagnosis.</p>
+      </div>
+
+      <div class="how-grid">
+        <div>
+          <svg class="rings" viewBox="0 0 300 276" role="img" aria-label="Three overlapping circles: gut, nervous system and feeding">
+            <circle cx="112" cy="104" r="76" fill="#BC5A33" fill-opacity=".10" stroke="#BC5A33" stroke-width="2.6"/>
+            <circle cx="188" cy="104" r="76" fill="#6C8759" fill-opacity=".12" stroke="#6C8759" stroke-width="2.6"/>
+            <circle cx="150" cy="170" r="76" fill="#C0963F" fill-opacity=".14" stroke="#C0963F" stroke-width="2.6"/>
+            <text x="82" y="92" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="700" font-size="15" fill="#8A3F22">Gut</text>
+            <text x="222" y="88" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="700" font-size="15" fill="#37452F">Nervous</text>
+            <text x="222" y="106" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="700" font-size="15" fill="#37452F">system</text>
+            <text x="150" y="214" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="700" font-size="15" fill="#7A5A16">Feeding</text>
+            <text x="150" y="136" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="600" font-size="11" fill="#241A12" letter-spacing=".08em">YOUR BABY</text>
+          </svg>
+          <p class="rings-cap">Most babies fit one pattern best. Some overlap.</p>
+        </div>
+        <ol class="steps">
+          <li><h3>Find your starting point</h3><p>Answer a few questions about when and how your baby cries. You get the pattern that fits best.</p></li>
+          <li><h3>Change one thing</h3><p>Use the steps for that pattern, starting tonight. If nothing shifts after a fair trial, add the next one.</p></li>
+          <li><h3>Log it and check in</h3><p>Track each cry in the Bloom Baby Tracker App. At 72 hours, look at the log and see what moved.</p></li>
+        </ol>
+      </div>
+
+      <div class="legend">
+        <div><b><i style="background:#BC5A33"></i>Gut</b>The gut bacteria question, including what the probiotic research does and does not show.</div>
+        <div><b><i style="background:#6C8759"></i>Nervous system</b>Tiger Hold, a quiet room, and calming yourself so you can calm your baby.</div>
+        <div><b><i style="background:#C0963F"></i>Feeding</b>How your baby feeds. Paced feeding, bottle position and latch.</div>
+      </div>
+
+      <div class="t72">
+        <h3>Your first 72 hours</h3>
+        <div class="t72-row">
+          <div class="t72-step"><span class="t72-dot"></span><div><b>Tonight</b><p>Pick your starting point and make one change.</p></div></div>
+          <div class="t72-step"><span class="t72-dot"></span><div><b>Hours 0 to 72</b><p>Log every cry. Keep everything else steady.</p></div></div>
+          <div class="t72-step"><span class="t72-dot"></span><div><b>Hour 72</b><p>Check the log. A shift? Keep going. No shift? Write to me.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. RESEARCH -->
+  <section class="sec" data-track="research">
+    <div class="wrap">
+      <div class="section-header">
+        <span class="eyebrow">The research, honestly</span>
+        <h2>What the studies show, and what they don&rsquo;t.</h2>
+        <p>You are going to check this anyway. So here it is, including the part that is not flattering.</p>
+      </div>
+      <div class="res-grid">
+        <div class="res-card"><span class="tag">In favor</span><h3>Savino et al., Pediatrics, 2010</h3><p>50 exclusively breastfed babies. The probiotic L. reuteri DSM 17938 was compared with simethicone drops, and the probiotic group did better. Small trial, breastfed babies only.</p></div>
+        <div class="res-card"><span class="tag">Against</span><h3>Sung et al., BMJ, 2014</h3><p>A larger trial that included formula-fed babies. It found no benefit over placebo.</p></div>
+        <div class="res-card"><span class="tag">Overall</span><h3>Later pooled analyses</h3><p>Combining several trials suggests a modest effect, mostly in breastfed babies, with a lot of uncertainty.</p></div>
+        <div class="res-card"><span class="tag">Unproven</span><h3>Paced feeding</h3><p>It slows the flow and makes feeds last longer. Whether that reduces colic has not been proven.</p></div>
+      </div>
+      <div class="res-after">
+        <p>Nothing here is a promise, and no single product is the answer. That is why the Blueprint starts with feeding and soothing steps, and treats the probiotic as an option to talk through with your pediatrician.</p>
+        <p style="margin-top:12px">I would rather you know all of this before you buy than find it out later.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. WHO IT'S FOR + RED FLAGS -->
+  <section class="sec who-sec" data-track="fit">
+    <div class="wrap">
+      <div class="section-header">
+        <span class="eyebrow">Check the fit before you buy</span>
+        <h2>Who this is for, and who it isn&rsquo;t.</h2>
       </div>
       <div class="who-grid">
         <div class="who-card who-yes">
-          <h4>This is built for you if</h4>
+          <h4>This is for you if</h4>
           <ul>
-            <li>Your baby is roughly 2 to 12 weeks old and crying in a pattern that doesn't match "just tired" or "just hungry"</li>
-            <li>You're breastfeeding, formula-feeding, or a mix, both are covered with separate tracks</li>
-            <li>You've already tried a remedy or two and want to know why it stopped working</li>
-            <li>You want to understand the mechanism, not just follow a step blindly</li>
+            <li>Your baby is about 2 to 12 weeks old and the crying does not look like &ldquo;just tired&rdquo; or &ldquo;just hungry&rdquo;</li>
+            <li>You breastfeed, formula-feed or do both. Each has its own steps</li>
+            <li>You have already tried a remedy or two and want to know why it stopped working</li>
+            <li>You want to understand the why, not just follow steps blindly</li>
           </ul>
         </div>
         <div class="who-card who-no">
-          <h4>This probably isn't for you if</h4>
+          <h4>This probably isn&rsquo;t for you if</h4>
           <ul>
-            <li>Your baby has a confirmed reflux (GER/GERD) diagnosis, that's a different protocol and a different conversation with your pediatrician</li>
-            <li>Your baby is past 12 weeks and the crying has already resolved on its own</li>
-            <li>You're looking for a guarantee that the crying stops entirely rather than a management system that targets the actual driving system</li>
+            <li>Your baby has a confirmed reflux (GER or GERD) diagnosis. That is a different conversation with your pediatrician</li>
+            <li>Your baby is past 12 weeks and the crying has already settled on its own</li>
+            <li>You want a promise that the crying will stop. This is a management system, and results vary</li>
           </ul>
         </div>
       </div>
+      <div class="redflag" role="note">
+        <svg viewBox="0 0 30 30" fill="none" aria-hidden="true"><path d="M15 3L28 26H2L15 3z" fill="#FFF4F0" stroke="#BC5A33" stroke-width="2.2" stroke-linejoin="round"/><path d="M15 11v7" stroke="#BC5A33" stroke-width="2.4" stroke-linecap="round"/><circle cx="15" cy="22" r="1.4" fill="#BC5A33"/></svg>
+        <div>
+          <h3>Call a doctor first if you see any of these</h3>
+          <p>A fever, green or bilious vomiting, blood in the stool, poor feeding, or a baby who is unusually sleepy or limp. These need medical care before any home plan. If something feels wrong to you, trust that and call.</p>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section class="sec guar-sec">
+  <!-- 9. GUARANTEE -->
+  <section class="sec" data-track="guarantee">
     <div class="wrap guar-grid">
-      <img src="images/guarantee-explained.jpg" alt="Illustration explaining the 72-hour guarantee" class="guar-img" loading="lazy">
+      <svg class="seal" viewBox="0 0 170 170" role="img" aria-label="72-hour guarantee">
+        <circle cx="85" cy="85" r="80" fill="#FFFCF7" stroke="#BC5A33" stroke-width="3"/>
+        <circle cx="85" cy="85" r="68" fill="none" stroke="#E9D2C2" stroke-width="2" stroke-dasharray="3 5"/>
+        <text x="85" y="66" text-anchor="middle" font-family="DM Mono, monospace" font-size="11" letter-spacing="2" fill="#8A3F22">THE</text>
+        <text x="85" y="104" text-anchor="middle" font-family="Cormorant Garamond, serif" font-weight="700" font-size="42" fill="#241A12">72</text>
+        <text x="85" y="124" text-anchor="middle" font-family="DM Mono, monospace" font-size="11" letter-spacing="2" fill="#8A3F22">HOUR GUARANTEE</text>
+      </svg>
       <div class="guar-text">
-        <span class="eyebrow">Zero risk, stated plainly</span>
-        <h2>72 hours. A full refund if it doesn't help. Keep everything either way.</h2>
-        <p>If your baby isn't noticeably calmer within 72 hours of starting the protocol for their primary system, email <a href="mailto:hello@colicprotocol.baby" class="btn-ghost-link">hello@colicprotocol.baby</a>. Full refund, no back-and-forth, and no need to justify it.</p>
-        <p>You keep the Blueprint, the tracker, and the soundscape regardless of what you decide.</p>
+        <span class="eyebrow">The guarantee, in plain words</span>
+        <h2>No meaningful shift in 72 hours? I&rsquo;ll make it right.</h2>
+        <p>If the Blueprint doesn&rsquo;t produce a meaningful shift in 72 hours, reply to your receipt or write to <a href="mailto:hello@colicprotocol.baby" class="btn-ghost-link">hello@colicprotocol.baby</a> and I&rsquo;ll make it right. You keep the Blueprint, the tracker and the soundscape either way.</p>
+        <p class="guar-fine">The 72 hours covers the Blueprint&rsquo;s first changes, like feeding, positioning and soothing. It is not a promise about any single product.</p>
         <div class="guar-sign">
-          <img src="images/vincent-400.jpg" alt="Vincent, epidemiologist and dad to Zion" width="52" height="52" loading="lazy" decoding="async">
-          <div><strong>Vincent</strong><span>Epidemiologist &amp; Dad to Zion.</span></div>
+          <img src="images/vincent-400.jpg" alt="" width="52" height="52" loading="lazy" decoding="async">
+          <div><strong>Vincent</strong><span>Epidemiologist &amp; Dad to Zion</span></div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="sec loss-sec">
-    <div class="wrap">
-      <div class="section-header">
-        <span class="eyebrow">Before you spend anything else</span>
-        <h2>What colic has probably already cost you.</h2>
-      </div>
-      <div class="loss-compare">
-        <div class="loss-card loss-spent">
-          <h4>What's typically already spent</h4>
-          <div class="loss-row"><span>Gripe water, 2 to 3 rounds</span><span>$24 to $54</span></div>
-          <div class="loss-row"><span>Gas drops, 2 to 3 rounds</span><span>$16 to $45</span></div>
-          <div class="loss-row"><span>One pediatric or colic consult</span><span>$300 to $500</span></div>
-          <div class="loss-total">$50 to $350+</div>
-        </div>
-        <div class="loss-card loss-blue">
-          <h4>The Calm Baby Blueprint</h4>
-          <div class="loss-row"><span>All 3 systems, sequenced</span><span>Included</span></div>
-          <div class="loss-row"><span>Tracker, soundscape, masterclass</span><span>Included</span></div>
-          <div class="loss-total blue">$47</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
+  <!-- 10. FAQ -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -303,76 +558,110 @@ em{font-style:italic;color:var(--terra)}
     "mainEntity": [
       {
         "@type": "Question",
-        "name": "Is this different for breastfed vs. formula-fed babies?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Yes. The gut-support protocol has separate tracks, since the primary research on the studied probiotic strain was conducted in breastfed infants specifically. The formula-feeding track uses the broader systematic-review evidence and a paced-feeding protocol instead." }
+        "name": "Is this just another thing that won't work?",
+        "acceptedAnswer": { "@type": "Answer", "text": "I can't promise it will work for your baby, and nobody honestly can. The Blueprint is a management system, not a cure. It gives you a structured way to try one change at a time and see what helps. If it does not produce a meaningful shift in 72 hours, you are covered by the guarantee." }
+      },
+      {
+        "@type": "Question",
+        "name": "How fast will I see a difference?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Some parents try the first change the night they buy. The Blueprint asks you to check your log at 72 hours. Colic often peaks around week 6 and eases by about 3 to 4 months, so the goal is a plan for getting through those weeks." }
+      },
+      {
+        "@type": "Question",
+        "name": "What about my pediatrician?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Keep them in the loop. The Blueprint does not replace medical care. The tracker log is easy to show at an appointment, and any red-flag sign such as fever, green vomit, blood in the stool, poor feeding or unusual sleepiness needs a doctor first." }
+      },
+      {
+        "@type": "Question",
+        "name": "Is the brown noise safe for my baby?",
+        "acceptedAnswer": { "@type": "Answer", "text": "My advice is to keep any sound quiet and low, across the room, on a timer. Never run it loud or right next to the crib. If you have questions about sound for your baby, ask your pediatrician." }
+      },
+      {
+        "@type": "Question",
+        "name": "Is this different for breastfed and formula-fed babies?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. The main probiotic trial was done in exclusively breastfed babies, and a larger trial that included formula-fed babies found no benefit. So the Blueprint has separate guidance for each, and formula-fed babies start with feeding and soothing steps." }
+      },
+      {
+        "@type": "Question",
+        "name": "What does \"I'll make it right\" mean?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Email me. If you want a refund, you will get one, and you keep the Blueprint either way. I would also like to hear what you saw, so I can help." }
       },
       {
         "@type": "Question",
         "name": "Is this a subscription?",
-        "acceptedAnswer": { "@type": "Answer", "text": "No. It's a one-time $47 purchase. No recurring charge, no upsell tier." }
-      },
-      {
-        "@type": "Question",
-        "name": "What if it doesn't work for my baby?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Email us within 72 hours of starting the protocol and you'll get a full refund, no back-and-forth. You keep the Blueprint and bonuses regardless." }
-      },
-      {
-        "@type": "Question",
-        "name": "How is this different from a general baby sleep or soothing book?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Most general resources treat colic as one problem with one universal technique. This starts by identifying which of the three systems, gut, nervous system, or feeding mechanics, is actually primary for your baby, then gives you the specific protocol for that system rather than a one-size-fits-all method." }
+        "acceptedAnswer": { "@type": "Answer", "text": "No. It is a one-time $47 purchase. No recurring charge, no upsell tier." }
       },
       {
         "@type": "Question",
         "name": "Do I need the free assessment first?",
-        "acceptedAnswer": { "@type": "Answer", "text": "It helps. The Blueprint includes a deeper diagnostic tool, but the free 90-second assessment gives you a fast starting point tonight if you'd rather begin there." }
+        "acceptedAnswer": { "@type": "Answer", "text": "It helps. The Blueprint includes a deeper assessment, but the free 90-second version gives you a quick starting point tonight if you would rather begin there." }
       }
     ]
   }
   </script>
-  <section class="sec faq-sec">
-    <div class="wrap" style="max-width:760px;">
+  <section class="sec faq-sec" data-track="faq">
+    <div class="wrap-narrow">
       <div class="section-header">
         <span class="eyebrow">Questions</span>
         <h2>Before you buy</h2>
       </div>
       <div class="faq-item">
-        <h3>Is this different for breastfed vs. formula-fed babies?</h3>
-        <p>Yes. The gut-support protocol has separate tracks, since the primary research on the studied probiotic strain was conducted in breastfed infants specifically. The formula-feeding track uses the broader systematic-review evidence and a paced-feeding protocol instead.</p>
+        <h3>Is this just another thing that won&rsquo;t work?</h3>
+        <p>I can&rsquo;t promise it will work for your baby, and nobody honestly can. The Blueprint is a management system, not a cure. It gives you a structured way to try one change at a time and see what helps. If it does not produce a meaningful shift in 72 hours, you are covered by the guarantee.</p>
+      </div>
+      <div class="faq-item">
+        <h3>How fast will I see a difference?</h3>
+        <p>Some parents try the first change the night they buy. The Blueprint asks you to check your log at 72 hours. Colic often peaks around week 6 and eases by about 3 to 4 months, so the goal is a plan for getting through those weeks.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What about my pediatrician?</h3>
+        <p>Keep them in the loop. The Blueprint does not replace medical care. The tracker log is easy to show at an appointment, and any red-flag sign such as fever, green vomit, blood in the stool, poor feeding or unusual sleepiness needs a doctor first.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Is the brown noise safe for my baby?</h3>
+        <p>My advice is to keep any sound quiet and low, across the room, on a timer. Never run it loud or right next to the crib. If you have questions about sound for your baby, ask your pediatrician.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Is this different for breastfed and formula-fed babies?</h3>
+        <p>Yes. The main probiotic trial was done in exclusively breastfed babies, and a larger trial that included formula-fed babies found no benefit. So the Blueprint has separate guidance for each, and formula-fed babies start with feeding and soothing steps.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What does &ldquo;I&rsquo;ll make it right&rdquo; mean?</h3>
+        <p>Email me. If you want a refund, you will get one, and you keep the Blueprint either way. I would also like to hear what you saw, so I can help.</p>
       </div>
       <div class="faq-item">
         <h3>Is this a subscription?</h3>
-        <p>No. It's a one-time $47 purchase. No recurring charge, no upsell tier.</p>
-      </div>
-      <div class="faq-item">
-        <h3>What if it doesn't work for my baby?</h3>
-        <p>Email us within 72 hours of starting the protocol and you'll get a full refund, no back-and-forth. You keep the Blueprint and bonuses regardless.</p>
-      </div>
-      <div class="faq-item">
-        <h3>How is this different from a general baby sleep or soothing book?</h3>
-        <p>Most general resources treat colic as one problem with one universal technique. This starts by identifying which of the three systems, gut, nervous system, or feeding mechanics, is actually primary for your baby, then gives you the specific protocol for that system rather than a one-size-fits-all method.</p>
+        <p>No. It is a one-time $47 purchase. No recurring charge, no upsell tier.</p>
       </div>
       <div class="faq-item">
         <h3>Do I need the free assessment first?</h3>
-        <p>It helps. The Blueprint includes a deeper diagnostic tool, but the free 90-second assessment gives you a fast starting point tonight if you'd rather begin there.</p>
+        <p>It helps. The Blueprint includes a deeper assessment, but the free 90-second version gives you a quick starting point tonight if you would rather begin there.</p>
       </div>
     </div>
   </section>
 
-  <section class="pb-cta">
+  <!-- 11. FINAL CTA -->
+  <section class="pb-cta" id="finalCta">
     <div class="wrap">
-      <h2>Ready when you are.</h2>
-      <p>$47 one time. Instant download. 72-hour guarantee.</p>
-      <a href="https://colicprotocol.gumroad.com/l/TheCalmBabyBlueprint?utm_source=website&utm_medium=sales_page_bottom&wanted=true" class="btn btn-hero gumroad-button" rel="noopener" onclick="gtag('event','begin_checkout',{value:47,currency:'USD',items:[{item_name:'Calm Baby Blueprint'}]});">Get the Blueprint, $47 →</a>
-      <p class="pb-cta-micro">Not sure yet? <a href="quiz.html" style="color:#fff;text-decoration:underline;">Take the free assessment</a> first.</p>
+      <h2>You don&rsquo;t have to figure this out alone at 3 AM.</h2>
+      <p>$47 one time. Instant download. 72-hour guarantee, and you keep the Blueprint either way.</p>
+      <a href="https://colicprotocol.gumroad.com/l/TheCalmBabyBlueprint?utm_source=website&utm_medium=sales_page_bottom&wanted=true" class="btn btn-hero gumroad-button" rel="noopener" onclick="gtag('event','begin_checkout',{value:47,currency:'USD',placement:'bottom',items:[{item_name:'Calm Baby Blueprint'}]});">Get the Blueprint, $47 &rarr;</a>
+      <p class="pb-cta-micro">Not ready yet? <a href="quiz.html">Take the free assessment</a> first.</p>
     </div>
   </section>
 
 </main>
 
+<!-- Sticky mobile CTA: appears after the hero button scrolls out of view, hides near the final CTA -->
+<div class="sticky" id="sticky" aria-hidden="true">
+  <div class="s-txt"><b>$47</b>72-hour guarantee</div>
+  <a href="https://colicprotocol.gumroad.com/l/TheCalmBabyBlueprint?utm_source=website&utm_medium=sales_page_sticky&wanted=true" class="btn btn-hero gumroad-button" rel="noopener" tabindex="-1" onclick="gtag('event','begin_checkout',{value:47,currency:'USD',placement:'sticky',items:[{item_name:'Calm Baby Blueprint'}]});">Get the Blueprint &rarr;</a>
+</div>
+
 <footer class="site-footer" role="contentinfo">
   <div class="wrap footer-inner">
     <div class="footer-brand">
-      <svg width="26" height="23" viewBox="0 0 40 36"><circle cx="15" cy="14" r="10.5" fill="none" stroke="#BC5A33" stroke-width="2.6" opacity=".85"/><circle cx="25" cy="14" r="10.5" fill="none" stroke="#6C8759" stroke-width="2.6" opacity=".85"/><circle cx="20" cy="23" r="10.5" fill="none" stroke="#C0963F" stroke-width="2.6" opacity=".85"/></svg>
+      <svg width="26" height="23" viewBox="0 0 40 36" aria-hidden="true"><circle cx="15" cy="14" r="10.5" fill="none" stroke="#BC5A33" stroke-width="2.6" opacity=".85"/><circle cx="25" cy="14" r="10.5" fill="none" stroke="#6C8759" stroke-width="2.6" opacity=".85"/><circle cx="20" cy="23" r="10.5" fill="none" stroke="#C0963F" stroke-width="2.6" opacity=".85"/></svg>
       <span class="footer-brand-name">Colic Protocol</span>
     </div>
     <nav class="footer-links" aria-label="Footer navigation">
@@ -388,6 +677,7 @@ em{font-style:italic;color:var(--terra)}
     <p class="footer-disc">Colic Protocol is an educational management system, not a cure or a medical treatment, and results vary by baby. It is not a substitute for professional medical advice. Always consult your pediatrician before starting any new protocol, supplement, or technique. &copy; 2026 Colic Protocol. Vincent, Epidemiologist &amp; Dad.</p>
   </div>
 </footer>
+
 <script>
 (function () {
   // Forward the lead's email (passed as ?le= from an email link, or elsewhere)
@@ -402,6 +692,42 @@ em{font-style:italic;color:var(--terra)}
     url.searchParams.set('le', leadEmail);
     a.href = url.toString();
   });
+})();
+</script>
+<script>
+(function () {
+  // Sticky CTA + section-view events. No layout shifts: the bar is position:fixed and slides in with transform.
+  if (!('IntersectionObserver' in window)) return;
+  var sticky = document.getElementById('sticky');
+  var heroCta = document.getElementById('heroCta');
+  var finalCta = document.getElementById('finalCta');
+  var heroGone = false, finalSeen = false, footSeen = false;
+  function update() {
+    var on = heroGone && !finalSeen && !footSeen;
+    sticky.classList.toggle('show', on);
+    sticky.setAttribute('aria-hidden', on ? 'false' : 'true');
+    sticky.querySelector('a').tabIndex = on ? 0 : -1;
+  }
+  if (heroCta) new IntersectionObserver(function (e) {
+    heroGone = !e[0].isIntersecting && e[0].boundingClientRect.top < 0;
+    update();
+  }).observe(heroCta);
+  if (finalCta) new IntersectionObserver(function (e) { finalSeen = e[0].isIntersecting; update(); }, { threshold: 0.15 }).observe(finalCta);
+  var foot = document.querySelector('.site-footer');
+  if (foot) new IntersectionObserver(function (e) { footSeen = e[0].isIntersecting; update(); }).observe(foot);
+
+  // Section views, once each, so scroll depth can be read in GA4 at low traffic
+  var seen = {};
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      var name = en.target.getAttribute('data-track');
+      if (en.isIntersecting && !seen[name]) {
+        seen[name] = 1;
+        try { gtag('event', 'section_view', { section: name }); } catch (e) {}
+      }
+    });
+  }, { threshold: 0.35 });
+  document.querySelectorAll('[data-track]').forEach(function (s) { io.observe(s); });
 })();
 </script>
 <!-- Gumroad overlay checkout widget: must load after the script above so it binds
