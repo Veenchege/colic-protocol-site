@@ -680,16 +680,16 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offse
 
 <script>
 (function () {
-  // Forward the lead's email (passed as ?le= from an email link, or elsewhere)
-  // onto every Gumroad checkout link on this page, so the webhook can match
-  // the eventual sale back to a specific lead even if they check out with a
-  // different email than the one they used on the quiz.
+  // Forward the lead's email (?le=) and the quiz assessment ID (?ref=)
+  // onto every Gumroad checkout link so the webhook can match the sale.
   var params = new URLSearchParams(window.location.search);
   var leadEmail = params.get('le');
-  if (!leadEmail) return;
+  var ref = params.get('ref');
+  if (!leadEmail && !ref) return;
   document.querySelectorAll('a[href*="colicprotocol.gumroad.com"]').forEach(function (a) {
     var url = new URL(a.href);
-    url.searchParams.set('le', leadEmail);
+    if (leadEmail) url.searchParams.set('le', leadEmail);
+    if (ref) url.searchParams.set('ref', ref);
     a.href = url.toString();
   });
 })();

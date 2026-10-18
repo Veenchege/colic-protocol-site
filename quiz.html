@@ -12,9 +12,9 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Free Colic Root Cause Assessment | Colic Protocol</title>
-<meta name="description" content="Find which of the three root systems, gut, nervous system, or feeding mechanics, is driving your baby's crying. Free assessment, evidence-based, personalized protocol.">
-<meta property="og:title" content="Which of the 3 root-cause systems is driving your baby's crying? Free assessment.">
+<title>Free Colic Starting-Point Assessment | Colic Protocol</title>
+<meta name="description" content="Find which of three practical starting points, gut, nervous system or feeding, fits your baby's crying best. Free, about 90 seconds, not a diagnosis.">
+<meta property="og:title" content="Where should you start with your baby's crying? Free assessment.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://colicprotocol.baby/quiz">
 <meta name="twitter:card" content="summary_large_image">
@@ -38,10 +38,11 @@ html{scroll-behavior:smooth}
 }
 body{font-family:var(--fb);background:linear-gradient(155deg,var(--paper) 0%,var(--paper-deep) 100%);min-height:100vh;color:var(--ink);overflow-x:hidden;line-height:1.6}
 a{color:inherit}
-.glow{position:fixed;top:-170px;right:-150px;width:460px;height:460px;background:radial-gradient(circle,rgba(188,90,51,.14) 0%,transparent 70%);filter:blur(50px);pointer-events:none;z-index:0}
-.glow2{position:fixed;bottom:-180px;left:-140px;width:420px;height:420px;background:radial-gradient(circle,rgba(108,135,89,.14) 0%,transparent 70%);filter:blur(55px);pointer-events:none;z-index:0}
+/* No filter:blur here. The radial-gradient already fades to transparent, so
+   the blur only added paint cost on cheap phones. */
+.glow{position:fixed;top:-170px;right:-150px;width:460px;height:460px;background:radial-gradient(circle,rgba(188,90,51,.14) 0%,transparent 70%);pointer-events:none;z-index:0}
+.glow2{position:fixed;bottom:-180px;left:-140px;width:420px;height:420px;background:radial-gradient(circle,rgba(108,135,89,.14) 0%,transparent 70%);pointer-events:none;z-index:0}
 
-/* nav */
 .quiz-nav{background:var(--pine-deep);padding:13px 16px;position:sticky;top:0;z-index:100}
 .qnav-inner{max-width:660px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
 .qn-logo{display:flex;align-items:center;gap:9px;text-decoration:none}
@@ -50,12 +51,11 @@ a{color:inherit}
 .qn-back:hover{color:rgba(251,244,234,.85)}
 
 .wrap{max-width:660px;margin:0 auto;padding:16px 16px 60px;position:relative;z-index:2}
-.card{background:var(--glass);backdrop-filter:blur(20px);border:1px solid rgba(255,252,247,.6);border-radius:20px;box-shadow:var(--shadow);padding:34px 28px;margin-top:22px;animation:rise .5s ease both}
+.card{background:var(--glass);border:1px solid rgba(255,252,247,.6);border-radius:20px;box-shadow:var(--shadow);padding:34px 28px;margin-top:22px;animation:rise .5s ease both}
 @keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 .hidden{display:none!important}
 .eyebrow{font-family:var(--fm);font-size:11px;font-weight:500;letter-spacing:.13em;color:var(--terra);text-transform:uppercase;margin-bottom:12px;display:block}
 
-/* landing */
 .landing h1{font-family:var(--fd);font-size:clamp(26px,5vw,38px);color:var(--ink);line-height:1.18;font-weight:700;margin-bottom:14px;min-height:calc(1.18em*2);font-size-adjust:0.48}
 .landing h1 em{font-style:italic;color:var(--terra)}
 .landing .sub{font-size:15.5px;color:var(--muted);line-height:1.68;margin-bottom:22px}
@@ -71,7 +71,6 @@ a{color:inherit}
 .btn-primary:hover{transform:scale(1.015);box-shadow:0 10px 28px rgba(188,90,51,.38)}
 .disclaimer{font-size:11px;color:var(--muted-soft);text-align:center;margin-top:10px;line-height:1.5}
 
-/* capture form */
 .form-row{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
 .form-row input{padding:14px 16px;border:1.5px solid rgba(0,0,0,.1);border-radius:12px;font-family:var(--fb);font-size:15px;background:rgba(255,255,255,.85);color:var(--ink);outline:none;transition:border-color .2s}
 .form-row input:focus{border-color:var(--terra)}
@@ -81,7 +80,6 @@ a{color:inherit}
 .consent-row span{font-size:12px;color:var(--muted);line-height:1.55}
 .consent-row a{color:var(--terra-deep);text-decoration:underline;text-underline-offset:2px}
 
-/* quiz */
 .q-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:12px}
 .q-count{font-size:12px;font-weight:600;color:var(--muted);font-family:var(--fm);flex-shrink:0}
 .progress-track{flex:1;height:6px;background:rgba(0,0,0,.08);border-radius:20px;overflow:hidden;margin:0 14px}
@@ -108,7 +106,14 @@ a{color:inherit}
 .btn-continue.visible{opacity:1;pointer-events:auto;transform:translateY(0)}
 .btn-continue:hover{background:var(--terra)}
 
-/* analysis */
+/* safety stop screen */
+.stop-card{border:2px solid var(--terra);background:#FFF4F0}
+.stop-card h1{font-family:var(--fd);font-size:clamp(26px,5vw,34px);color:var(--terra-deep);line-height:1.2;margin-bottom:12px}
+.stop-card p{font-size:15px;color:var(--ink);line-height:1.7;margin-bottom:12px}
+.stop-card .stop-list{font-weight:700}
+.btn-stop-back{width:100%;padding:14px;margin-top:8px;background:transparent;color:var(--terra-deep);border:1.5px solid var(--terra);border-radius:12px;font-family:var(--fb);font-size:14px;font-weight:700;cursor:pointer}
+.btn-stop-back:hover{background:rgba(188,90,51,.08)}
+
 .analysis-wrap{text-align:center;padding:20px 0}
 .analysis-wrap h2{font-family:var(--fd);font-size:22px;color:var(--ink);margin:16px 0 8px}
 .analysis-wrap p{font-size:14px;color:var(--muted);margin-bottom:22px}
@@ -120,7 +125,6 @@ a{color:inherit}
 .scan-list{display:flex;flex-direction:column;gap:10px;text-align:left;max-width:400px;margin:0 auto}
 .scan-item{font-size:13px;color:var(--muted);background:rgba(255,255,255,.5);border-radius:10px;padding:11px 14px;display:flex;align-items:center;gap:10px}
 
-/* result */
 .result-banner{padding:32px 28px;border-radius:20px 20px 0 0;text-align:center;margin-top:22px;position:relative;overflow:hidden}
 .result-banner::after{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;background:rgba(255,255,255,.10);border-radius:50%}
 .trust-badges{font-family:var(--fm);font-size:9px;letter-spacing:.1em;text-transform:uppercase;opacity:.7;margin-bottom:12px;position:relative}
@@ -130,22 +134,16 @@ a{color:inherit}
 .gut-banner{background:var(--gut-bg);color:var(--terra-deep)}
 .ns-banner{background:var(--nerv-bg);color:var(--pine)}
 .feed-banner{background:var(--feed-bg);color:#7A5C1E}
-.result-body{background:var(--glass);backdrop-filter:blur(20px);padding:8px 28px 6px;border:1px solid rgba(255,252,247,.6);border-top:none}
+.result-body{background:var(--glass);padding:8px 28px 6px;border:1px solid rgba(255,252,247,.6);border-top:none}
 .result-section{padding:22px 0;border-bottom:1px solid rgba(0,0,0,.07)}
 .result-section:last-child{border-bottom:none}
 .section-label{font-family:var(--fm);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-soft);margin-bottom:12px}
 .headline{font-family:var(--fd);font-size:19px;font-weight:700;color:var(--ink);margin-bottom:10px}
 .science-text{font-size:14px;color:var(--muted);line-height:1.7}
 
-/* scroll-reveal, purely a polish layer, respects reduced-motion below */
 .reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
 .reveal.in{opacity:1;transform:none}
 
-/* prevalence — real numbers for GUT/NS (Master Baseline Dashboard,
-   completed-assessment sample), and a deliberate no-data admission for
-   FM rather than a made-up percentage, since that type genuinely has
-   zero completion history of its own as of this build. See
-   renderPrevalenceBar() for which state renders when. */
 .eyebrow-mini{font-family:var(--fm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--terra-deep);margin-bottom:8px}
 .prevalence-note{font-size:13.5px;color:var(--muted);line-height:1.65}
 .prevalence-note strong{color:var(--ink)}
@@ -154,54 +152,30 @@ a{color:inherit}
 .prevalence-labels{display:flex;justify-content:space-between;margin-top:8px;font-size:11.5px;color:var(--muted-soft)}
 .prevalence-labels .here{color:var(--ink);font-weight:700}
 
-/* tried-line — the personalized "here's why what you already tried
-   didn't work" callback, built from her real Q4 answers, sits right
-   under the mechanism explanation, not duplicated in the offer card's
-   own why-tips-failed answer, which stays generic/type-level */
 .tried-line{font-size:13.5px;color:var(--ink);line-height:1.65;background:rgba(255,255,255,.5);border-left:3px solid var(--terra);border-radius:0 8px 8px 0;padding:10px 14px;margin-top:14px}
 .tried-line strong{color:var(--terra-deep)}
 
 .rules-box{background:rgba(200,150,60,.08);border:1px solid rgba(200,150,60,.3);border-radius:12px;padding:16px 18px}
 .rules-box p{font-size:14px;color:var(--muted);line-height:1.7;margin:0}
 
-.mistakes-list{display:flex;flex-direction:column;gap:12px}
-.mistake-item{display:flex;gap:10px;font-size:13.5px;color:var(--muted);line-height:1.6}
-.mistake-num{font-family:var(--fd);font-weight:700;color:var(--terra);flex-shrink:0}
-.mistake-text{flex:1}
 .steps-list-result{display:flex;flex-direction:column;gap:14px}
 .step-card{display:flex;gap:14px}
 .step-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--fm);font-size:13px;font-weight:700;flex-shrink:0;color:#fff}
 .gut-sn{background:var(--gut)} .ns-sn{background:var(--nerv)} .feed-sn{background:var(--feed)}
 .step-title{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:3px}
 .step-body{font-size:13.5px;color:var(--muted);line-height:1.6}
+.step-ev{font-family:var(--fm);font-size:10.5px;color:var(--muted-soft);margin-top:5px;line-height:1.5}
 
-.cta-section{background:var(--glass);backdrop-filter:blur(20px);border:1px solid rgba(255,252,247,.6);border-top:none;border-radius:0 0 20px 20px;padding:26px 28px 32px}
-.cta-hook{font-family:var(--fd);font-size:19px;font-weight:700;color:var(--ink);margin-bottom:10px;line-height:1.35}
-.cta-body{font-size:14px;color:var(--muted);line-height:1.68;margin-bottom:16px}
-.cta-body strong{color:var(--ink)}
-.consequence-box{background:rgba(188,90,51,.08);border-left:3px solid var(--terra);border-radius:0 10px 10px 0;padding:14px 16px;margin-bottom:20px}
-.consequence-box p{font-size:13px;color:var(--terra-deep);line-height:1.65}
-.what-inside-label{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:12px}
+.redflag-box{background:#FFF4F0;border:1.5px solid var(--terra);border-radius:12px;padding:14px 16px;font-size:13px;color:var(--ink);line-height:1.6;margin:10px 0}
+.redflag-box b{color:var(--terra-deep)}
+
+.cta-section{background:var(--glass);border:1px solid rgba(255,252,247,.6);border-top:none;border-radius:0 0 20px 20px;padding:26px 28px 32px}
 .protocol-list{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:20px}
 .protocol-list li{display:flex;align-items:flex-start;gap:9px;font-size:13.5px;color:var(--ink);line-height:1.55}
 .protocol-list .check{color:var(--sage);font-weight:700;flex-shrink:0}
-.guarantee-box{background:rgba(192,150,63,.14);border:1px solid rgba(192,150,63,.3);border-radius:12px;padding:14px 16px;margin-bottom:20px}
-.guarantee-box strong{display:block;font-family:var(--fm);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:#7A5C1E;margin-bottom:5px}
-.guarantee-box p{font-size:12.5px;color:#5c4a1e;line-height:1.6}
-.btn-cta{width:100%;padding:11px 8px;background:linear-gradient(135deg,var(--terra),var(--terra-deep));color:#fff;border:none;border-radius:10px;font-family:var(--fb);font-size:12px;font-weight:700;cursor:pointer;margin-bottom:6px;line-height:1.3;transition:transform .2s,box-shadow .2s}
-.btn-cta:hover{transform:scale(1.01);box-shadow:0 12px 32px rgba(188,90,51,.4)}
-.cta-sub{display:none;font-size:11.5px;font-weight:500;opacity:.85;margin-top:3px}
+.btn-cta{width:100%;padding:11px 8px;background:linear-gradient(135deg,var(--terra),var(--terra-deep));color:#fff;border:none;border-radius:10px;font-family:var(--fb);font-size:12px;font-weight:700;cursor:pointer;margin-bottom:6px;line-height:1.3}
 .guarantee-note{font-size:11.5px;color:var(--muted-soft);text-align:center;line-height:1.6}
 
-/* profile strip — sits under the banner so the result reads as "your
-   baby's result" using only fields this quiz actually collects (parent
-   first name, baby age, feeding method, assessment id). Chips, not a
-   form or a table, deliberately light-touch, not clinical. */
-/* profile card — one warm, illustrated-feeling card instead of a row
-   of data chips. The warmth comes from the writing (a sentence built
-   from her own answers, including what she's already tried), not from
-   trying to fake an illustration in CSS. Soft two-tone gradient nods at
-   the book cover's terra/sage palette without copying it outright. */
 .profile-card{position:relative;overflow:hidden;border-radius:18px;padding:22px 22px 16px;margin:16px 0 4px;background:linear-gradient(135deg,var(--terra-soft) 0%,var(--sage-soft) 100%);border:1px solid rgba(0,0,0,.05)}
 .profile-card::before{content:'🤍';position:absolute;top:-14px;right:-6px;font-size:64px;opacity:.16;transform:rotate(12deg)}
 .profile-narrative{position:relative;font-family:var(--fd);font-size:17px;font-style:italic;font-weight:600;color:var(--ink);line-height:1.5;max-width:92%}
@@ -209,68 +183,30 @@ a{color:inherit}
 .profile-id{position:relative;font-family:var(--fm);font-size:10.5px;color:var(--muted-soft);margin-top:12px}
 .assessment-note{font-size:11.5px;color:var(--muted-soft);line-height:1.55;padding:6px 0 4px}
 
-/* bridge line — the pivot sentence between the free diagnostic
-   narrative and the offer below it, gets its own visual beat rather
-   than blending into either section */
 .bridge-line{font-family:var(--fd);font-size:16.5px;font-style:italic;color:var(--terra-deep);line-height:1.5;padding-bottom:16px;margin-bottom:16px;border-bottom:1px solid rgba(0,0,0,.08)}
 
-/* Two real quotes, that's genuinely all there are right now, this
-   section is written to hold exactly two well rather than padded out
-   to look like more. Cassie's quote is the specific sentences she gave
-   explicit permission to share, not the rest of that conversation. */
 .testimonial-strip{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:20px}
-@media(min-width:560px){.testimonial-strip{grid-template-columns:1fr 1fr}}
 .testimonial-card{background:rgba(255,255,255,.55);border:1px solid rgba(0,0,0,.06);border-radius:12px;padding:14px 16px}
 .testimonial-quote{font-family:var(--fd);font-style:italic;font-size:13.5px;color:var(--ink);line-height:1.55;margin-bottom:8px}
 .testimonial-attr{font-family:var(--fm);font-size:10.5px;color:var(--muted-soft);text-transform:uppercase;letter-spacing:.04em}
 
-/* offer Q&A — short labeled answers inside the paid card, replacing a
-   single long sales paragraph. Each answer is meant to be a sentence
-   or two, not a section, that's what keeps 8 of these from reading
-   like a dissertation. */
 .offer-qa{margin-bottom:14px}
 .dm-avatar{float:left;width:44px;height:44px;border-radius:50%;object-fit:cover;object-position:50% 28%;margin:0 12px 6px 0;border:2px solid #E9D2C2}
 .offer-q{font-family:var(--fb);font-size:12.5px;font-weight:700;color:var(--terra-deep);margin-bottom:4px}
 .offer-a{font-size:13px;color:var(--muted);line-height:1.6}
 
-/* ═══════════════════════════════════════════════════════════════════
-   PATH HIERARCHY — changed [this version]. Was a locked 50/50 grid
-   presenting the Midnight Protocol and the direct Blueprint purchase
-   as two co-equal options ("pick whichever fits tonight"). Dashboard
-   v8.0 data: 9 people clicked straight to Blueprint from this page,
-   0 bought. The only confirmed sale with a traceable path (Jessica
-   Soliman) went through mechanism content first, not a direct offer.
-   Co-equal framing was actively working against the funnel this page
-   is supposed to run. Single primary path now: Midnight Protocol is
-   the one full-width CTA. The Blueprint offer content (still
-   genuinely persuasive, still worth showing) moves inside a collapsed
-   <details> below it, for someone who wants to read ahead, with its
-   own visually-quieter purchase button, not a second CTA of equal
-   weight. Nothing here changes what quiz.js tracks (path_clicked
-   still logs 'checklist' | 'blueprint' | 'dm') or which element IDs
-   it writes into, only which one gets first claim on her attention.
-   ═══════════════════════════════════════════════════════════════════ */
 .path-cover{width:100%;height:120px;object-fit:cover;border-radius:9px;margin-bottom:10px;display:block;background:rgba(0,0,0,.04)}
 .path-card{display:flex;flex-direction:column;border-radius:14px;padding:18px 16px;border:1.5px solid;min-width:0}
-
-/* Primary path — Midnight Protocol. Full width, the loudest thing on
-   the page after the result itself. */
 .path-primary{background:var(--sage-soft);border-color:rgba(108,135,89,.4);margin-top:6px;box-shadow:0 8px 24px rgba(92,122,95,.14)}
 .path-primary .path-kicker{color:var(--pine);font-weight:700}
 .path-primary .path-title{font-family:var(--fd);font-size:20px;font-weight:700;color:var(--ink);line-height:1.28;margin-bottom:7px}
 .path-primary .path-desc{font-size:13.5px}
 .path-kicker{font-family:var(--fm);font-size:9.5px;letter-spacing:.05em;text-transform:uppercase;margin-bottom:8px;display:block;line-height:1.3}
-.path-title{font-family:var(--fd);font-size:15.5px;font-weight:700;color:var(--ink);line-height:1.3;margin-bottom:6px}
 .path-desc{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:10px}
-.path-desc strong{color:var(--ink)}
 .btn-checklist{width:100%;padding:16px 8px;background:linear-gradient(135deg,var(--sage),var(--pine-mid));color:#fff;border:none;border-radius:12px;font-family:var(--fb);font-size:15px;font-weight:700;cursor:pointer;transition:transform .2s,box-shadow .2s}
 .btn-checklist:hover{transform:scale(1.01);box-shadow:0 10px 24px rgba(108,135,89,.35)}
 .path-primary-sub{display:block;font-size:11.5px;font-weight:500;opacity:.85;margin-top:5px}
 
-/* Secondary path — direct Blueprint purchase. Lives inside a collapsed
-   <details> now, closed by default, reached by choice not by default
-   visual weight. Its button is deliberately smaller and outlined, not
-   the filled/glowing treatment .btn-checklist gets above. */
 .offer-details-full{margin:16px 0 4px;border-top:1px dashed rgba(0,0,0,.14);padding-top:14px}
 .offer-details-full summary{cursor:pointer;list-style:none;font-family:var(--fb);font-size:13px;font-weight:700;color:var(--terra-deep)}
 .offer-details-full summary::-webkit-details-marker{display:none}
@@ -282,7 +218,10 @@ a{color:inherit}
 .price-badge small{font-size:6px;letter-spacing:.04em;opacity:.9}
 .btn-cta-secondary{width:100%;padding:13px 8px;background:transparent;color:var(--terra-deep);border:1.5px solid var(--terra);border-radius:10px;font-family:var(--fb);font-size:13px;font-weight:700;cursor:pointer;margin-top:4px;line-height:1.3;transition:background .2s}
 .btn-cta-secondary:hover{background:rgba(188,90,51,.08)}
-.cta-sub{display:block;font-size:11px;font-weight:500;opacity:.75;margin-top:4px;color:var(--muted)}
+.btn-checkout{width:100%;padding:14px 8px;background:linear-gradient(135deg,var(--terra),var(--terra-deep));color:#fff;border:none;border-radius:10px;font-family:var(--fb);font-size:14px;font-weight:700;cursor:pointer;margin-top:4px;line-height:1.3;transition:transform .2s,box-shadow .2s}
+.btn-checkout:hover{transform:scale(1.01);box-shadow:0 10px 24px rgba(188,90,51,.35)}
+.cta-sub{display:block;font-size:11px;font-weight:500;opacity:.85;margin-top:4px}
+.btn-cta-secondary .cta-sub{color:var(--muted);opacity:.85}
 
 @media(min-width:560px){
   .path-card{padding:24px 22px}
@@ -291,9 +230,6 @@ a{color:inherit}
   .path-desc{font-size:13px}
 }
 
-/* Blueprint's own inner Q&A, collapsed by default within the outer
-   details above so the compact view stays compact even when opened.
-   Native <details>, works without a script, accessible by default. */
 .offer-details{margin:2px 0 12px}
 .offer-details summary{cursor:pointer;list-style:none;font-family:var(--fb);font-size:12px;font-weight:700;color:var(--terra-deep);padding:8px 0;border-top:1px dashed rgba(188,90,51,.25)}
 .offer-details summary::-webkit-details-marker{display:none}
@@ -301,9 +237,6 @@ a{color:inherit}
 .offer-details[open] summary::after{content:'  ▴ hide details'}
 .offer-details[open] summary{border-bottom:1px dashed rgba(188,90,51,.25);margin-bottom:10px}
 
-/* DM path — third option below both cards, for someone who isn't
-   sure which of the two above fits tonight. Copy-then-paste, not a
-   pre-filled composer: plain ig.me links don't support that. */
 .dm-path{margin-top:18px;padding-top:18px;border-top:1px solid rgba(0,0,0,.07)}
 .dm-path-text strong{display:block;font-family:var(--fd);font-size:15px;font-weight:700;color:var(--ink);margin-bottom:4px}
 .dm-path-text span{font-size:12.5px;color:var(--muted);line-height:1.55}
@@ -316,12 +249,7 @@ a{color:inherit}
 .btn-dm-open:hover{background:var(--terra-deep);border-color:var(--terra-deep)}
 .dm-note{font-size:11px;color:var(--muted-soft);margin-top:8px;line-height:1.5}
 
-/* sticky bottom bar — shows once she's scrolled past the result
-   banner, so the CTA is always one tap away without needing to
-   scroll back up or hunt through the page for it. Hidden near the
-   top on purpose, showing it immediately would just be another
-   banner competing with the actual result. */
-.stickybar{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(252,250,247,.95);backdrop-filter:blur(10px);border-top:1px solid rgba(0,0,0,.1);transform:translateY(100%);transition:transform .3s ease}
+.stickybar{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(252,250,247,.97);border-top:1px solid rgba(0,0,0,.1);transform:translateY(100%);transition:transform .3s ease}
 .stickybar.show{transform:none}
 .stickybar .sb-info{font-size:12.5px;color:var(--muted);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .stickybar .sb-info b{color:var(--ink)}
@@ -336,13 +264,6 @@ a{color:inherit}
   .cta-section{padding:22px 18px 26px}
 }
 
-/* ═══════════════════════════════════════════════════════════════════════
-   SCORE PANEL — her own three scores, lab-report style, not a badge or
-   a colorful ring. Distinct from .prevalence-track (that compares her
-   to the population); this shows HER numbers across all three systems
-   side by side, so a secondary system that scored meaningfully doesn't
-   stay invisible just because the primary type won the tiebreak.
-   ═══════════════════════════════════════════════════════════════════════ */
 .score-panel{background:rgba(255,255,255,.6);border:1px solid rgba(0,0,0,.09);border-radius:14px;padding:20px 20px 16px;margin-bottom:4px}
 .audit-box{background:rgba(200,150,60,.06);border:1px solid rgba(200,150,60,.28);border-radius:14px;padding:18px 20px}
 .audit-title{font-family:var(--fm);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--terra-deep);margin-bottom:12px}
@@ -364,10 +285,6 @@ a{color:inherit}
 .score-row.is-secondary .score-fill{background:var(--muted-soft)}
 .score-panel-foot{font-family:var(--fm);font-size:10px;color:var(--muted-soft);line-height:1.6;border-top:1px solid rgba(0,0,0,.08);padding-top:12px;margin-top:14px}
 
-/* QUICK ACTION — "right now" as numbered micro-steps, not a paragraph.
-   Sits ahead of the deeper "why" content on purpose: most of this
-   traffic skims, so the first thing after the score panel is something
-   she can DO, not something she has to read carefully. */
 .quick-action{background:var(--sage-soft);border:1px solid rgba(108,135,89,.35);border-radius:14px;padding:20px 20px 18px;margin-bottom:4px}
 .qa-eyebrow{font-family:var(--fm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--pine);margin-bottom:8px}
 .qa-title{font-family:var(--fd);font-size:19px;font-weight:700;color:var(--ink);margin-bottom:14px;line-height:1.3}
@@ -376,27 +293,14 @@ a{color:inherit}
 .qa-steps li::before{content:counter(qa);flex-shrink:0;width:22px;height:22px;border-radius:50%;background:var(--pine);color:#fff;font-family:var(--fm);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px}
 .qa-note{font-size:12px;color:var(--muted);margin-top:14px;line-height:1.6;border-top:1px dashed rgba(108,135,89,.4);padding-top:12px}
 
-/* REFRAME — one paragraph, no bullets, matching the Loss Inventory
-   rule (lists dilute the emotional weight of prose-form loss framing).
-   Bridges from "tonight" to "the window" before the mechanism section. */
 .reframe-block{font-size:14.5px;color:var(--ink);line-height:1.75;padding:2px 2px 4px}
 .reframe-block strong{color:var(--terra-deep)}
 
-/* ANGLE STRIP — Solution / Shortcut / Feeling, made explicit and
-   visible rather than left implicit in prose, sits right after the
-   bridge sentence as its direct payoff. */
 .angle-strip{display:flex;flex-direction:column;gap:11px;margin:2px 0 20px;padding:17px 18px;background:rgba(255,255,255,.55);border:1px solid rgba(0,0,0,.07);border-radius:12px}
 .angle-row{display:flex;gap:11px;align-items:baseline}
 .angle-tag{font-family:var(--fm);font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--terra-deep);min-width:74px;flex-shrink:0}
 .angle-text{font-size:13px;color:var(--ink);line-height:1.55}
 
-/* GUARANTEE CARD — bolder than the old inline guarantee-box on
-   purpose. The "conversational, not a badge" rule exists because a
-   sticker-style guarantee graphic next to a payment link was a
-   suspected trigger in a Meta account suspension. This is
-   colicprotocol.baby, not a Meta post or ad, that specific risk
-   doesn't apply here, so the guarantee gets full visual weight and
-   stays visible by default instead of hiding inside a details toggle. */
 .guarantee-card{background:linear-gradient(135deg,rgba(200,150,60,.16),rgba(200,150,60,.06));border:1.5px solid rgba(192,150,63,.4);border-radius:16px;padding:20px 20px 22px;margin:6px 0 16px}
 .guarantee-proof{font-size:12.5px;color:var(--muted);line-height:1.65;margin-bottom:14px;padding-bottom:14px;border-bottom:1px dashed rgba(192,150,63,.45)}
 .guarantee-proof strong{color:var(--ink)}
@@ -426,20 +330,20 @@ a{color:inherit}
   <!-- SCREEN 1: LANDING -->
   <div id="landingScreen" class="card landing">
     <span class="eyebrow">Free Assessment · 7 Questions · No Payment Required</span>
-    <h1>Your baby's crying has a <em>specific root cause.</em> This identifies it.</h1>
-    <p class="sub">Infant colic isn't one condition, it's three distinct physiological failures that require different interventions. This assessment weighs your answers against all three and pinpoints which one is primary for your baby, with the exact protocol to start tonight.</p>
+    <h1>Not sure where to start with your baby's crying? <em>Find your starting point.</em></h1>
+    <p class="sub">Colic has no single known cause. This assessment sorts your answers into three practical starting patterns, gut, nervous system and feeding, so you know what to try first tonight. It is a starting point, not a diagnosis.</p>
 
     <div class="stat-row">
-      <div class="stat-box"><span class="num">3</span><div class="lbl">root cause<br>systems</div></div>
-      <div class="stat-box"><span class="num">7</span><div class="lbl">diagnostic<br>questions</div></div>
+      <div class="stat-box"><span class="num">3</span><div class="lbl">starting<br>patterns</div></div>
+      <div class="stat-box"><span class="num">7</span><div class="lbl">quick<br>questions</div></div>
       <div class="stat-box"><span class="num">72h</span><div class="lbl">guarantee<br>on the Blueprint</div></div>
     </div>
 
     <div class="trust-strip" aria-label="Trust signals">
-      <span class="trust-item"><span class="trust-dot"></span>Based on peer-reviewed RCT evidence</span>
-      <span class="trust-item"><span class="trust-dot"></span>Built by an Epidemiologist</span>
+      <span class="trust-item"><span class="trust-dot"></span>Plain about what the research does and doesn't show</span>
+      <span class="trust-item"><span class="trust-dot"></span>Built by an epidemiologist, not a pediatrician</span>
       <span class="trust-item"><span class="trust-dot"></span>Start tonight, free</span>
-      <span class="trust-item"><span class="trust-dot"></span>Over <span class="assessment-count-value">250</span>+ assessments completed</span>
+      <span class="trust-item"><span class="trust-dot"></span><span class="assessment-count-value">600</span>+ assessments completed</span>
     </div>
 
     <div class="form-row">
@@ -453,8 +357,28 @@ a{color:inherit}
       <input type="checkbox" id="consentCheck" aria-describedby="consentText"/>
       <span id="consentText">I agree to receive my result and occasional emails from Colic Protocol. See our <a href="/privacy-policy" target="_blank" rel="noopener">Privacy Policy</a>.</span>
     </label>
-    <button class="btn-primary" onclick="startQuiz()">Find My Baby's Root Cause &rarr;</button>
-    <p class="disclaimer">Educational purposes only. Not medical advice. Consult your pediatrician for guidance specific to your baby's health. Unsubscribe at any time.</p>
+    <button class="btn-primary" onclick="startQuiz()">Find My Starting Point &rarr;</button>
+    <p class="disclaimer">Educational purposes only. Not medical advice. It does not replace your baby's doctor. There is one quick safety check before the questions. Unsubscribe at any time.</p>
+  </div>
+
+  <!-- SCREEN 1b: SAFETY CHECK -->
+  <div id="redFlagScreen" class="card hidden">
+    <span class="eyebrow">Before we start · Safety check</span>
+    <div class="q-text">Does your baby have any of these right now?</div>
+    <div class="q-sub">These need a doctor, not a home protocol. Pick all that apply.</div>
+    <div class="multi-hint">Select all that apply</div>
+    <div class="options" id="rfOptions"></div>
+    <button class="btn-continue" id="rfContinue" onclick="submitRedFlag()">Continue</button>
+  </div>
+
+  <!-- SCREEN 1c: SAFETY STOP -->
+  <div id="redFlagStopScreen" class="card stop-card hidden" role="alert">
+    <span class="eyebrow">Please read this first</span>
+    <h1>Call your baby's doctor now.</h1>
+    <p>You told us: <span class="stop-list" id="rfStopList"></span>.</p>
+    <p>These signs need a medical assessment before any home plan. If your baby is struggling to breathe, has blue lips or face, or is very hard to wake, call your local emergency number now (911, 999 or 112).</p>
+    <p>This assessment can't tell you what is wrong, and it isn't built for babies with these signs, so we have not given you a result.</p>
+    <button class="btn-stop-back" type="button" onclick="backFromRedFlagStop()">Go back and change my answer</button>
   </div>
 
   <!-- SCREEN 2: QUIZ -->
@@ -474,13 +398,13 @@ a{color:inherit}
   <!-- SCREEN 3: ANALYSIS -->
   <div id="analysisScreen" class="card hidden">
     <div class="analysis-wrap">
-      <h2>Weighing your answers against all three systems...</h2>
-      <p>Mapping your responses against gut, nervous system, and feeding-mechanics patterns from peer-reviewed clinical literature.</p>
+      <h2>Comparing your answers across the three patterns...</h2>
+      <p>Looking at gut, nervous system and feeding signs.</p>
       <div class="dots-row" aria-hidden="true"><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div></div>
       <div class="scan-list" aria-live="polite">
-        <div class="scan-item">Evaluating gut microbiome presentation</div>
-        <div class="scan-item">Mapping nervous system dysregulation signals</div>
-        <div class="scan-item">Assessing feeding mechanics and air-intake patterns</div>
+        <div class="scan-item">Checking gut-related signs</div>
+        <div class="scan-item">Checking settling and stimulation signs</div>
+        <div class="scan-item">Checking feeding and timing signs</div>
       </div>
     </div>
   </div>
@@ -488,7 +412,7 @@ a{color:inherit}
   <!-- SCREEN 4: RESULT -->
   <div id="resultScreen" class="hidden">
     <div class="result-banner" id="resultBanner">
-      <div class="trust-badges">Evidence-based &nbsp;·&nbsp; Diagnosis before protocol</div>
+      <div class="trust-badges">Starting-point assessment &nbsp;·&nbsp; Not a diagnosis</div>
       <div class="type-badge" id="resultBadge"></div>
       <h1 id="resultTitle"></h1>
       <div class="prevalence" id="resultPrevalence"></div>
@@ -498,7 +422,8 @@ a{color:inherit}
         <p class="profile-narrative" id="profileNarrative"></p>
         <p class="profile-id">Assessment <span id="profAssessmentId"></span></p>
       </div>
-      <p class="assessment-note">This identifies your baby's most likely pattern for educational purposes. It is not a medical diagnosis.</p>
+      <p class="assessment-note">This suggests a starting point for educational purposes. It is not a medical diagnosis.</p>
+      <div class="redflag-box" id="redFlagBox"></div>
 
       <div class="result-section reveal">
         <div class="score-panel" id="scorePanel"></div>
@@ -523,12 +448,12 @@ a{color:inherit}
         <div class="headline" id="resultSeeing"></div>
       </div>
       <div class="result-section reveal">
-        <div class="section-label">Why it happens</div>
+        <div class="section-label">What the research does and doesn't say</div>
         <p class="science-text" id="resultWhy"></p>
         <p class="tried-line" id="triedLine"></p>
       </div>
       <div class="result-section reveal">
-        <div class="section-label">What this rules out</div>
+        <div class="section-label">What else this could be</div>
         <div class="rules-box"><p id="resultRulesOut"></p></div>
       </div>
       <div class="result-section reveal" style="border-bottom:none;">
@@ -550,22 +475,18 @@ a{color:inherit}
           <p class="testimonial-quote">"Your blueprint is amazing and I wish I came across your page 5 weeks ago. I've had to learn most of that information on my own from endless hours of research when I could have just read your blueprint."</p>
           <p class="testimonial-attr">Cassie R., via Instagram DM</p>
         </div>
-        <div class="testimonial-card">
-          <p class="testimonial-quote">"Doing the methods you have posted have helped my son so much with his colic and gas, thank you!!!"</p>
-          <p class="testimonial-attr">Brittany, @brittanytrifone13</p>
-        </div>
       </div>
 
       <div class="section-label">Start here</div>
-      <p class="path-desc">This runs the full protocol for your result, tonight, one guided step at a time. No reading required.</p>
+      <p class="path-desc">This runs a guided version of tonight's steps for your result, one at a time. No reading required.</p>
 
       <div class="path-card path-primary">
         <img class="path-cover" src="/images/checklist-cover.jpg" alt="Tonight's guided protocol preview" loading="lazy" onerror="this.remove()">
-        <span class="path-kicker">Free · Guided · Built for your result</span>
+        <span class="path-kicker">Free · Guided · Matched to your result</span>
         <div class="path-title" id="checklistHook">Start Tonight's Guided Protocol</div>
-        <p class="path-desc">Timed steps, personalized to your result, right now.</p>
-        <button class="btn-checklist" id="checklistBtn" type="button" onclick="goToChecklist()">Start Tonight →</button>
-        <span class="path-primary-sub">Takes about as long as one more crying episode would anyway.</span>
+        <p class="path-desc">Timed steps, matched to your result, right now.</p>
+        <button class="btn-checklist" id="checklistBtn" type="button" onclick="goToChecklist()">Start Tonight &rarr;</button>
+        <span class="path-primary-sub">We'll carry your details over, so there's nothing to re-enter.</span>
       </div>
 
       <details class="offer-details-full">
@@ -597,50 +518,49 @@ a{color:inherit}
               <p class="offer-a" id="offerTrust"></p>
             </div>
             <div class="offer-qa">
-              <div class="offer-q">What evidence supports it?</div>
+              <div class="offer-q">What does the evidence say?</div>
               <p class="offer-a" id="offerEvidence"></p>
             </div>
             <div class="offer-qa">
               <div class="offer-q">What if it doesn't help?</div>
-              <p class="offer-a">Covered by the 72-hour guarantee below, see it before you decide, not buried after checkout.</p>
+              <p class="offer-a">Covered by the 72-Hour Guarantee below. See it before you decide, not after checkout.</p>
             </div>
           </details>
 
           <div class="guarantee-card" id="guaranteeCard"></div>
 
-          <button class="btn-cta-secondary" id="ctaBtn" type="button" onclick="goToProduct()">
+          <button class="btn-checkout" id="ctaBtn" type="button" onclick="goToProduct()">
             <span id="ctaBtnText"></span>
-            <span class="cta-sub">$47 one time · 72-hour guarantee · Keep it either way</span>
+            <span class="cta-sub">$47 one time · 72-Hour Guarantee · Keep it either way</span>
+          </button>
+          <button class="btn-cta-secondary" id="viewBtn" type="button" onclick="viewProduct()">
+            View the full product page
+            <span class="cta-sub">Read the details first. Nothing is charged.</span>
           </button>
         </div>
       </details>
 
       <div class="dm-path">
         <div class="dm-path-text">
-          <img src="images/vincent-400.jpg" alt="Vincent" class="dm-avatar" width="44" height="44" loading="lazy" decoding="async"><strong>Want Vincent to look at your specific result?</strong>
-          <span>Send him your result and he'll help you understand what it means for your baby specifically.</span>
+          <img src="images/vincent-400.jpg" alt="Vincent" class="dm-avatar" width="44" height="44" loading="lazy" decoding="async"><strong>Want Vincent to look at your result?</strong>
+          <span>Send him your result and he'll share what he can. He is not your baby's doctor, so he can't diagnose.</span>
         </div>
         <div class="dm-message-box" id="dmMessageBox" aria-live="polite"></div>
         <div class="dm-actions">
           <button class="btn-dm-copy" id="dmCopyBtn" type="button" onclick="copyDMMessage()">Copy message</button>
-          <button class="btn-dm-open" id="dmOpenBtn" type="button" onclick="goToDM()">Message Vincent on Instagram →</button>
+          <button class="btn-dm-open" id="dmOpenBtn" type="button" onclick="goToDM()">Message Vincent on Instagram &rarr;</button>
         </div>
-        <p class="dm-note">Copies the message above to your clipboard and opens Instagram. Paste it into the chat and hit send, Instagram doesn't let a website fill that in automatically.</p>
+        <p class="dm-note">Copies the message above to your clipboard and opens Instagram. Paste it into the chat and hit send. Instagram doesn't let a website fill that in automatically.</p>
       </div>
 
-      <p class="guarantee-note">Not medical advice. Consult your pediatrician for fever above 38&deg;C or breathing difficulty.</p>
+      <p class="guarantee-note">Not medical advice. This does not replace your baby's doctor.</p>
     </div>
   </div>
 </main>
 
-<!-- Sticky bar CTA changed [this version]: was goToProduct() ("Get the
-     Blueprint — $47"), the single most persistent nudge on the page
-     toward the path with a confirmed 0% conversion rate (9 clicks, 0
-     sales, Dashboard v8.0). Now points at the same primary path as the
-     rest of the page. -->
 <div class="stickybar" id="stickyBar">
-  <div class="sb-info">Your result: <b id="stickyType"></b></div>
-  <button type="button" onclick="goToChecklist()">Start Tonight's Protocol →</button>
+  <div class="sb-info">Your closest fit: <b id="stickyType"></b></div>
+  <button type="button" onclick="goToChecklist()">Start Tonight's Protocol &rarr;</button>
 </div>
 
 <footer style="text-align:center;padding:24px 16px 40px;position:relative;z-index:2;">

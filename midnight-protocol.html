@@ -14,7 +14,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#14100c">
 <title>The Midnight Protocol · Colic Protocol</title>
-<meta name="description" content="A step-by-step evidence-based protocol for colic crisis moments. Visual holds, rhythmic metronome, and pediatric soothing sequence.">
+<meta name="description" content="A guided, step-by-step set of soothing ideas for hard colic evenings. Not medical advice.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -77,7 +77,6 @@ button{-webkit-tap-highlight-color:transparent;}
   *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
 }
 
-/* ── layout ─────────────────────────────────────────────── */
 .screen{display:flex; flex-direction:column; flex:1; padding:28px 22px 24px; animation:screenIn .38s cubic-bezier(.16,1,.3,1);}
 .screen.center{justify-content:center;}
 .screen-body{flex:1; display:flex; flex-direction:column;}
@@ -213,8 +212,12 @@ a.btn{text-decoration:none;}
   width:22px; height:22px; border-radius:50%; background:var(--card-2); border:1px solid var(--border-strong);
   color:var(--gold); display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px;}
 
+.ev-line{font-family:var(--mono); font-size:10.5px; color:var(--muted-2); line-height:1.5; margin:2px 0 4px;}
+.tip-hint{font-size:13px; color:var(--muted); background:var(--card-2); border:1px solid var(--border); border-radius:10px; padding:10px 14px; margin-top:12px; line-height:1.55; text-align:center;}
+.extra-card{font-size:13px; color:var(--cream); line-height:1.6; margin-bottom:12px;}
+.extra-card b{color:var(--sage);}
+
 .timer-wrap{display:flex; flex-direction:column; align-items:center; gap:14px; margin:14px 0 6px; position:relative;}
-.tip-hint{font-size:13px;color:var(--muted);background:rgba(255,255,255,.5);border:1px solid rgba(0,0,0,.07);border-radius:10px;padding:10px 14px;margin-top:12px;line-height:1.55;text-align:center;}
 .timer-ring{position:relative; width:134px; height:134px;}
 .timer-ring svg{transform:rotate(-90deg);}
 .timer-digits{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column;}
@@ -225,17 +228,19 @@ a.btn{text-decoration:none;}
   0%,100%{transform:scale(1); opacity:.4; filter:drop-shadow(0 0 2px currentColor);}
   50%{transform:scale(1.45); opacity:1; filter:drop-shadow(0 0 10px currentColor);}
 }
-@keyframes metronomeGlow{
-  0%,100%{box-shadow:0 0 0 0 rgba(221,128,88,0); transform:scale(1);}
-  50%{box-shadow:0 0 28px 8px rgba(221,128,88,0.28); transform:scale(1.02);}
-}
-.metro-active .timer-ring{border-radius:50%; animation:metronomeGlow 1s ease-in-out infinite;}
+/* Opacity-only pulse. Animating box-shadow and transform repainted every
+   frame, which janks on cheap Android phones. */
+.metro-active .timer-ring{border-radius:50%; animation:none;}
+.metro-active .timer-ring::after{content:'';position:absolute;inset:-6px;border-radius:50%;
+  box-shadow:0 0 28px 8px rgba(221,128,88,.28);opacity:0;pointer-events:none;
+  animation:metroPulse 1s ease-in-out infinite}
+@keyframes metroPulse{0%,100%{opacity:0}50%{opacity:1}}
+@media (max-width:480px){.card{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(31,25,16,.92)}}
 
 .timer-controls{display:flex; gap:8px;}
 .timer-btn{min-height:44px; padding:0 20px; border-radius:12px; font-size:13.5px; font-weight:600; cursor:pointer; border:1px solid var(--border-strong); background:rgba(244,237,228,.06); color:var(--cream); transition:all .2s;}
 .timer-btn:hover{background:rgba(244,237,228,.12); border-color:var(--gold);}
 .timer-note{font-size:11.5px; color:var(--muted-2); text-align:center; max-width:260px; line-height:1.5;}
-.timer-done-note{font-size:12px; color:var(--sage); font-weight:600; text-align:center;}
 
 .metro-badge{
   display:inline-flex; align-items:center; gap:6px; font-family:var(--mono); font-size:10px;
@@ -252,7 +257,6 @@ a.btn{text-decoration:none;}
 .vs-row + .vs-row{border-top:1px solid var(--border);}
 .vs-row .nm{display:flex; gap:9px; align-items:flex-start; font-size:13px; color:var(--cream); line-height:1.5;}
 .vs-row .nm svg{flex-shrink:0; margin-top:2px; width:15px; height:15px; color:var(--sage);}
-.vs-row .val{font-family:var(--mono); font-size:12px; color:var(--muted); white-space:nowrap;}
 .vs-total{display:flex; justify-content:space-between; align-items:center; margin-top:12px; padding:14px 16px;
   background:linear-gradient(135deg, rgba(147,179,148,0.18), rgba(147,179,148,0.06));
   border:1.5px solid var(--sage-line); border-radius:14px; box-shadow:0 0 25px rgba(147,179,148,0.15);}
@@ -264,18 +268,6 @@ a.btn{text-decoration:none;}
 .sys-card .ic svg{width:20px; height:20px;}
 .sys-card b{display:block; font-size:14px; margin-bottom:3px;}
 .sys-card p{margin:0; font-size:12px; color:var(--muted); line-height:1.55;}
-
-.expand{border:1px solid var(--border); border-radius:14px; overflow:hidden; background:var(--card); backdrop-filter:blur(10px);}
-.expand summary{list-style:none; cursor:pointer; padding:14px 16px; display:flex; align-items:center; justify-content:space-between; font-size:13px; font-weight:600; color:var(--cream);}
-.expand summary::-webkit-details-marker{display:none;}
-.expand summary .chev{transition:transform .2s; color:var(--muted); flex-shrink:0;}
-.expand[open] summary .chev{transform:rotate(180deg);}
-.expand .expand-body{padding:0 16px 16px;}
-.expand .expand-body svg{width:100%; border-radius:12px; display:block;}
-
-.ilu-track{transition:stroke .4s, stroke-width .4s, filter .4s, opacity .4s;}
-.ilu-active{stroke:var(--gold) !important; stroke-width:5 !important; opacity:1 !important; filter:drop-shadow(0 0 10px rgba(224,189,117,0.9));}
-.ilu-label-slot{min-height:22px; font-size:12.5px; font-weight:600; color:var(--gold); text-align:center; margin-top:6px;}
 
 .spacer{flex:1;}
 .trust-line{display:flex; gap:9px; align-items:center; font-size:11.5px; color:var(--muted-2); margin-top:16px; justify-content:center; text-align:center; line-height:1.5;}
@@ -292,51 +284,50 @@ a.btn{text-decoration:none;}
 (function(){
 'use strict';
 
+// Only images that are actually used on a screen. mp-01, mp-03, mp-04,
+// mp-06 and mp-14 were removed because they carry claims (cortisol and
+// melatonin chart, "systems interact" graphic, bouncing comparison)
+// that are not supported by the research in Master Document v17.
 var IMG = {
-  '3_node_infographic_on_obsidian_card_202608312321': '/images/mp-01.webp',
-  '3d_product_bundle_mockup_showcase_202608312322': '/images/mp-02.webp',
-  'chatgpt_image_aug_31,_2026,_11_20_24_pm': '/images/mp-03.webp',
-  'comparing_infant_bouncing_and_sw…_202608312318': '/images/mp-04.webp',
-  'father_holding_newborn_baby_202608312316': '/images/mp-05.webp',
-  'infant_crying_intensity_chart_202608312322': '/images/mp-06.webp',
-  'infant_tiger_holding_parent_forearm_202608312317': '/images/mp-07.webp',
-  'infographic_comparing_infant_bou…_202608312317': '/images/mp-08.webp',
-  'newborn_bicycle_legs_exercise_di…_202608312318': '/images/mp-09.webp',
-  'nurse_holding_infant_ankles_202608312318': '/images/mp-10.webp',
-  'parent_holding_unsettled_newborn_202608312320': '/images/mp-11.webp',
-  'blueprint_cover': '/images/mp-12.webp',
-  // New, clearer replacements (added this update) — old mp-01/mp-03 entries
-  // above are left in place in case either screen needs to revert.
+  'father_holding_newborn_baby': '/images/mp-05.webp',
+  'parent_holding_unsettled_newborn': '/images/mp-11.webp',
+  'tiger_hold': '/images/mp-07.webp',
+  'bicycle_legs': '/images/mp-09.webp',
   'abdominal_massage_pathway_diagram': '/images/mp-13.jpeg',
-  'three_systems_interaction_infographic': '/images/mp-14.jpeg',
-  // Football hold replacement: upload the new file as /images/mp-15.webp.
-  // Until it exists, the old drawing shows instead of a blank box.
   'football_hold': '/images/mp-15.webp',
+  'bundle': '/images/mp-02.webp'
 };
 
 var CONFIG = {
   ENDPOINT: '/api/midnight-subscribe',
   QUIZ_URL: 'quiz.html',
   BLUEPRINT_URL: 'https://colicprotocol.gumroad.com/l/TheCalmBabyBlueprint',
+  VIEW_PRODUCT_URL: '/blueprint',
   SOURCE: 'midnight_protocol'
 };
 
 var TYPE_MAP = {
-  GUT: { label:'Gut Microbiome Imbalance', emoji:'🤠', short:'gut' },
+  GUT: { label:'Gut Microbiome Imbalance', emoji:'🦠', short:'gut' },
   NS:  { label:'Nervous System Dysregulation', emoji:'⚡', short:'nervous' },
   FM:  { label:'Feeding Mechanics', emoji:'🍼', short:'feeding' }
 };
 
+/* 10 random characters from crypto, no 0/O/1/I. The old 5-digit ID had only
+   100,000 values, so two sessions could share one and overwrite each other. */
 var ASSESSMENT_ID = (function(){
-  var year = new Date().getFullYear();
-  var rand = String(Math.floor(Math.random()*99999)).padStart(5,'0');
-  return 'MP-' + year + '-' + rand;
+  var ALPHA = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  var b = new Uint8Array(10), r = '', i;
+  try { crypto.getRandomValues(b); }
+  catch(e){ for (i = 0; i < b.length; i++) b[i] = Math.floor(Math.random()*256); }
+  for (i = 0; i < b.length; i++) r += ALPHA[b[i] % 32];
+  return 'MP-' + new Date().getFullYear() + '-' + r;
 })();
 var SESSION_STARTED_AT = Date.now();
 
 var state = {
   screen: 'welcome',
   lead: { name:'', email:'', babyAgeWeeks:'', consent:false },
+  hasHandoff: false,
   utm: { utm_source: CONFIG.SOURCE, utm_medium:'', utm_campaign:'', utm_term:'', utm_content:'' },
   colicType: '',
   colicTypeFromQuiz: false,
@@ -354,8 +345,6 @@ var state = {
     state.utm.utm_campaign = p.get('utm_campaign') || '';
     state.utm.utm_term = p.get('utm_term') || '';
     state.utm.utm_content = p.get('utm_content') || '';
-    // Quiz assessment ID (CP-...) travels in from the quiz handoff. Kept
-    // separate from this session's own MP- ID so neither overwrites the other.
     var aidParam = (p.get('aid') || '').trim();
     if (/^CP-[A-Za-z0-9-]{3,40}$/.test(aidParam)) state.quizAssessmentId = aidParam;
     var t = (p.get('type') || '').toUpperCase();
@@ -375,6 +364,25 @@ var state = {
   }catch(e){}
 })();
 
+// Same-origin handoff from the quiz (sessionStorage 'cp_lead'). When the
+// name, email, age and consent are all present, the Welcome form is
+// skipped, so a quiz completer is not asked for her details twice.
+(function readLeadHandoff(){
+  try{
+    var raw = sessionStorage.getItem('cp_lead');
+    if (!raw) return;
+    var l = JSON.parse(raw);
+    var emailOK = l && typeof l.email === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(l.email);
+    var nameVal = l && l.name ? String(l.name).slice(0, 60) : state.lead.name;
+    var ageNum = (l && l.age !== null && l.age !== '' && !isNaN(Number(l.age))) ? Number(l.age) : null;
+    var ageOK = ageNum !== null && ageNum >= 0 && ageNum <= 60;
+    if (emailOK && l.consent === true && nameVal && ageOK){
+      state.lead = { name:nameVal, email:l.email.toLowerCase(), babyAgeWeeks:ageNum, consent:true, hp:'' };
+      state.hasHandoff = true;
+    }
+  }catch(e){}
+})();
+
 function withUTM(url, campaign){
   try{
     var isAbsolute = /^https?:\/\//i.test(url);
@@ -384,6 +392,17 @@ function withUTM(url, campaign){
     u.searchParams.set('utm_campaign', campaign || state.utm.utm_campaign || 'midnight_protocol');
     return isAbsolute ? u.href : (u.pathname + u.search);
   }catch(e){ return url; }
+}
+
+/* Outcomes and dwell times from earlier stages ride along on every later
+   write, so the final "completed" ping can never blank them. */
+state.sticky = {};
+function remember(extra){
+  ['environment_outcome','tiger_hold_outcome','final_outcome',
+   'environment_dwell_seconds','tiger_hold_dwell_seconds',
+   'gas_release_dwell_seconds','tiger_hold_timer_seconds'].forEach(function(k){
+    if (extra[k] !== undefined && extra[k] !== null && extra[k] !== '') state.sticky[k] = extra[k];
+  });
 }
 
 function post(extra){
@@ -396,18 +415,13 @@ function post(extra){
       baby_age_weeks: state.lead.babyAgeWeeks,
       colic_type: state.colicType ? (TYPE_MAP[state.colicType] ? TYPE_MAP[state.colicType].label : 'Unassigned') : '',
       colic_type_detail: state.colicTypeFromQuiz ? 'Confirmed from quiz handoff' : (state.colicType ? 'Selected in Midnight Protocol' : ''),
-      // Only meaningful when it actually travelled from the quiz (see
-      // captureUTMandHandoff), null otherwise. Backend only forwards it
-      // when non-null, same clobber-safe pattern as colic_type below.
       colic_type_confidence: state.colicTypeConfidence,
       assessment_id: ASSESSMENT_ID,
-      // Present only when she came from the quiz. Backend should use this
-      // for the MailerLite assessment_id field so the CP- ID is never replaced.
       quiz_assessment_id: state.quizAssessmentId || null,
       lead_source: state.utm.utm_source,
-      checklist_version: '1.2-vector',
+      checklist_version: '1.3-evidence',
       purchase_status: 'pending'
-    }, state.utm, extra || {});
+    }, state.utm, state.sticky, extra || {});
     fetch(CONFIG.ENDPOINT, {
       method:'POST',
       headers:{'Content-Type':'application/json'},
@@ -416,9 +430,11 @@ function post(extra){
     })['catch'](function(){});
   }catch(e){}
 }
-function submitLead(){
+// force = true is used when she arrives with details already captured by
+// the quiz and taps Start herself, so the bot-speed check is skipped.
+function submitLead(force){
   var isBot = (Date.now() - SESSION_STARTED_AT) < 1500;
-  if (isBot) return;
+  if (isBot && !force) return;
   post({ checklist_status:'started', checklist_last_stage:'welcome' });
 }
 function markStage(stageName, extra){
@@ -429,15 +445,13 @@ function submitOutcome(stage, result, extraFields){
   if (!state.lead.email) return;
   var extra = { checklist_status:'in_progress', checklist_last_stage: stage };
   extra[stage + '_outcome'] = result;
-  // Dwell time: how long the parent actually spent on this stage,
-  // recorded silently when a start timestamp exists in state.
-  // This replaces the blocking timer as the engagement signal.
   var startKey = stage + 'StartedAt';
   if (state[startKey]) {
     extra[stage + '_dwell_seconds'] = Math.round((Date.now() - state[startKey]) / 1000);
     state[startKey] = null;
   }
   if (extraFields) Object.assign(extra, extraFields);
+  remember(extra);
   post(extra);
 }
 function submitCompleted(){
@@ -461,124 +475,30 @@ var ICONS = {
     '</svg>'
 };
 
+// Built-in drawings. 'ilu' and 'football' are fallbacks if their image
+// files fail to load. 'environment' is used on the room-calming screen.
 var SVGS = {
-  tigerHold:
-    '<svg viewBox="0 0 400 240" xmlns="http://www.w3.org/2000/svg">' +
-      '<defs>' +
-        '<radialGradient id="th-glow" cx="50%" cy="60%" r="50%">' +
-          '<stop offset="0%" stop-color="#dd8058" stop-opacity="0.28"/>' +
-          '<stop offset="100%" stop-color="#100d0a" stop-opacity="0"/>' +
-        '</radialGradient>' +
-        '<linearGradient id="arm-grad" x1="0" y1="0" x2="1" y2="1">' +
-          '<stop offset="0%" stop-color="#3d2f23"/>' +
-          '<stop offset="100%" stop-color="#1c1611"/>' +
-        '</linearGradient>' +
-      '</defs>' +
-      '<rect width="400" height="240" fill="#0d0a07"/>' +
-      '<circle cx="200" cy="140" r="110" fill="url(#th-glow)"/>' +
-      '<path d="M40 180 Q160 170 300 135 Q340 130 360 110" stroke="url(#arm-grad)" stroke-width="32" stroke-linecap="round" fill="none"/>' +
-      '<path d="M40 180 Q160 170 300 135 Q340 130 360 110" stroke="rgba(224,189,117,0.4)" stroke-width="2" stroke-linecap="round" fill="none"/>' +
-      '<path d="M320 120 C340 110 355 95 365 75 C370 90 355 125 330 135 Z" fill="rgba(224,189,117,0.18)" stroke="#e0bd75" stroke-width="1.8"/>' +
-      '<path d="M120 120 C140 85 240 75 310 90 C325 93 345 80 340 68 C325 50 290 55 260 62 C200 58 130 80 100 115 C85 132 100 155 120 160" fill="rgba(245,239,230,0.06)" stroke="#f5efe6" stroke-width="2" stroke-linecap="round"/>' +
-      '<circle cx="325" cy="72" r="28" fill="rgba(230,161,137,0.15)" stroke="#e6a189" stroke-width="1.8"/>' +
-      '<path d="M110 125 Q80 145 95 170 Q115 155 125 130" fill="rgba(245,239,230,0.08)" stroke="#f5efe6" stroke-width="1.6"/>' +
-      '<path d="M140 115 Q125 140 135 165" stroke="#f5efe6" stroke-width="1.6" fill="none"/>' +
-      '<ellipse cx="210" cy="115" rx="35" ry="16" fill="rgba(221,128,88,0.35)" stroke="#dd8058" stroke-width="2"/>' +
-      '<text x="210" y="119" font-family="DM Sans, sans-serif" font-size="11" font-weight="700" fill="#f5efe6" text-anchor="middle">Firm Contact</text>' +
-      '<path d="M180 175 C195 165 225 165 240 175" stroke="#e0bd75" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.85"/>' +
-      '<path d="M170 188 C195 175 235 175 250 188" stroke="#e0bd75" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.5"/>' +
-      '<text x="200" y="215" font-family="DM Mono, monospace" font-size="11" fill="#e0bd75" text-anchor="middle" letter-spacing="1">STEADY 60 BPM PULSE</text>' +
-    '</svg>',
-
-  tigerErrors:
-    '<svg viewBox="0 0 400 210" xmlns="http://www.w3.org/2000/svg">' +
-      '<rect width="400" height="210" fill="#0d0a07"/>' +
-      '<line x1="200" y1="20" x2="200" y2="190" stroke="rgba(244,237,228,0.12)" stroke-dasharray="4 4"/>' +
-      '<g transform="translate(15, 10)">' +
-        '<rect x="0" y="0" width="170" height="185" rx="14" fill="rgba(226,104,92,0.06)" stroke="rgba(226,104,92,0.35)"/>' +
-        '<circle cx="85" cy="55" r="26" fill="rgba(226,104,92,0.15)" stroke="#e2685c" stroke-width="1.6"/>' +
-        '<path d="M85 40 v30 M70 55 h30" stroke="#e2685c" stroke-width="2.5" stroke-linecap="round" transform="rotate(45 85 55)"/>' +
-        '<path d="M50 110 L50 90 M50 90 L44 96 M50 90 L56 96" stroke="#e2685c" stroke-width="2" stroke-linecap="round"/>' +
-        '<path d="M120 90 L120 110 M120 110 L114 104 M120 110 L126 104" stroke="#e2685c" stroke-width="2" stroke-linecap="round"/>' +
-        '<text x="85" y="132" font-family="DM Sans, sans-serif" font-size="13" font-weight="700" fill="#e2685c" text-anchor="middle">Fast Bouncing</text>' +
-        '<text x="85" y="152" font-family="DM Sans, sans-serif" font-size="11" fill="#ab9c8b" text-anchor="middle">Triggers Moro reflex</text>' +
-        '<text x="85" y="168" font-family="DM Sans, sans-serif" font-size="11" fill="#ab9c8b" text-anchor="middle">Stops hold early (&lt;60s)</text>' +
-      '</g>' +
-      '<g transform="translate(215, 10)">' +
-        '<rect x="0" y="0" width="170" height="185" rx="14" fill="rgba(147,179,148,0.08)" stroke="rgba(147,179,148,0.45)"/>' +
-        '<circle cx="85" cy="55" r="26" fill="rgba(147,179,148,0.18)" stroke="#93b394" stroke-width="1.6"/>' +
-        '<path d="M72 55 L82 65 L98 45" stroke="#93b394" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>' +
-        '<path d="M40 100 Q85 88 130 100" stroke="#93b394" stroke-width="2" stroke-linecap="round" fill="none"/>' +
-        '<path d="M130 100 L122 95 M130 100 L124 106" stroke="#93b394" stroke-width="2" stroke-linecap="round"/>' +
-        '<text x="85" y="132" font-family="DM Sans, sans-serif" font-size="13" font-weight="700" fill="#93b394" text-anchor="middle">60 BPM Smooth Pulse</text>' +
-        '<text x="85" y="152" font-family="DM Sans, sans-serif" font-size="11" fill="#ab9c8b" text-anchor="middle">Firm tummy contact</text>' +
-        '<text x="85" y="168" font-family="DM Sans, sans-serif" font-size="11" fill="#ab9c8b" text-anchor="middle">Held for full 3 min</text>' +
-      '</g>' +
-    '</svg>',
-
-  bicycle:
-    '<svg viewBox="0 0 400 230" xmlns="http://www.w3.org/2000/svg">' +
-      '<defs>' +
-        '<radialGradient id="bc-glow" cx="50%" cy="50%" r="50%">' +
-          '<stop offset="0%" stop-color="#93b394" stop-opacity="0.22"/>' +
-          '<stop offset="100%" stop-color="#100d0a" stop-opacity="0"/>' +
-        '</radialGradient>' +
-      '</defs>' +
-      '<rect width="400" height="230" fill="#0d0a07"/>' +
-      '<circle cx="200" cy="115" r="95" fill="url(#bc-glow)"/>' +
-      '<ellipse cx="160" cy="120" rx="65" ry="40" fill="rgba(245,239,230,0.06)" stroke="#f5efe6" stroke-width="1.8"/>' +
-      '<circle cx="95" cy="115" r="26" fill="rgba(230,161,137,0.14)" stroke="#e6a189" stroke-width="1.8"/>' +
-      '<path d="M210 115 Q245 80 270 95 Q250 120 220 125" fill="rgba(224,189,117,0.18)" stroke="#e0bd75" stroke-width="2"/>' +
-      '<path d="M210 125 Q260 145 285 130 Q270 110 230 115" fill="rgba(147,179,148,0.18)" stroke="#93b394" stroke-width="2"/>' +
-      '<path d="M255 70 C285 85 295 125 275 155 C250 175 220 160 215 145" stroke="#93b394" stroke-width="2" stroke-linecap="round" stroke-dasharray="5 5" fill="none"/>' +
-      '<polygon points="275,155 282,146 270,147" fill="#93b394"/>' +
-      '<circle cx="270" cy="95" r="10" fill="none" stroke="#e0bd75" stroke-width="1.8"/>' +
-      '<circle cx="285" cy="130" r="10" fill="none" stroke="#93b394" stroke-width="1.8"/>' +
-      '<text x="200" y="205" font-family="DM Mono, monospace" font-size="11" fill="#93b394" text-anchor="middle" letter-spacing="1">SLOW ROTATION · FINISH WITH KNEE TUCK</text>' +
-    '</svg>',
-
   ilu:
-    '<svg id="ilu-svg-graphic" viewBox="0 0 400 240" xmlns="http://www.w3.org/2000/svg">' +
-      '<defs>' +
-        '<radialGradient id="ilu-bg-glow" cx="50%" cy="50%" r="50%">' +
-          '<stop offset="0%" stop-color="#e0bd75" stop-opacity="0.2"/>' +
-          '<stop offset="100%" stop-color="#100d0a" stop-opacity="0"/>' +
-        '</radialGradient>' +
-      '</defs>' +
+    '<svg viewBox="0 0 400 240" xmlns="http://www.w3.org/2000/svg">' +
       '<rect width="400" height="240" fill="#0d0a07"/>' +
-      '<circle cx="200" cy="120" r="100" fill="url(#ilu-bg-glow)"/>' +
       '<rect x="110" y="30" width="180" height="170" rx="40" fill="rgba(245,239,230,0.05)" stroke="rgba(245,239,230,0.3)" stroke-width="2"/>' +
       '<circle cx="200" cy="125" r="4" fill="#e0bd75"/>' +
       '<text x="200" y="142" font-family="DM Sans" font-size="9" fill="#756652" text-anchor="middle">Navel</text>' +
-      '<path d="M250 70 L250 170" stroke="rgba(244,237,228,0.18)" stroke-width="3.5" stroke-linecap="round" fill="none"/>' +
-      '<path d="M150 70 L250 70 L250 170" stroke="rgba(244,237,228,0.18)" stroke-width="3.5" stroke-linecap="round" fill="none"/>' +
-      '<path d="M150 170 L150 70 L250 70 L250 170" stroke="rgba(244,237,228,0.18)" stroke-width="3.5" stroke-linecap="round" fill="none"/>' +
-      '<path id="ilu-track-i" class="ilu-track" d="M250 70 L250 170" stroke="#dd8058" stroke-width="3.5" stroke-linecap="round" fill="none" opacity="0.25"/>' +
-      '<path id="ilu-track-l" class="ilu-track" d="M150 70 L250 70 L250 170" stroke="#e0bd75" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.25"/>' +
-      '<path id="ilu-track-u" class="ilu-track" d="M150 170 L150 70 L250 70 L250 170" stroke="#93b394" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.25"/>' +
-      '<circle cx="250" cy="52" r="13" fill="#1f1910" stroke="#dd8058" stroke-width="1.5"/>' +
-      '<text x="250" y="56" font-family="DM Mono" font-size="11" font-weight="700" fill="#dd8058" text-anchor="middle">I</text>' +
-      '<circle cx="150" cy="52" r="13" fill="#1f1910" stroke="#e0bd75" stroke-width="1.5"/>' +
-      '<text x="150" y="56" font-family="DM Mono" font-size="11" font-weight="700" fill="#e0bd75" text-anchor="middle">L</text>' +
-      '<circle cx="150" cy="188" r="13" fill="#1f1910" stroke="#93b394" stroke-width="1.5"/>' +
-      '<text x="150" y="192" font-family="DM Mono" font-size="11" font-weight="700" fill="#93b394" text-anchor="middle">U</text>' +
-      '<text id="ilu-status-text" x="200" y="222" font-family="DM Mono, monospace" font-size="11" fill="#e0bd75" text-anchor="middle">CLOCKWISE MASSAGE PATHWAY</text>' +
+      '<path d="M250 70 L250 170" stroke="#dd8058" stroke-width="3.5" stroke-linecap="round" fill="none" opacity="0.6"/>' +
+      '<path d="M150 70 L250 70 L250 170" stroke="#e0bd75" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6"/>' +
+      '<path d="M150 170 L150 70 L250 70 L250 170" stroke="#93b394" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6"/>' +
+      '<text x="200" y="222" font-family="DM Mono, monospace" font-size="11" fill="#e0bd75" text-anchor="middle">CLOCKWISE STROKES, GENTLE PRESSURE</text>' +
     '</svg>',
 
   football:
     '<svg viewBox="0 0 400 230" xmlns="http://www.w3.org/2000/svg">' +
       '<rect width="400" height="230" fill="#0d0a07"/>' +
       '<circle cx="200" cy="115" r="95" fill="rgba(224,189,117,0.12)"/>' +
-      '<path d="M120 220 C120 140 150 90 200 90 C250 90 280 140 280 220" fill="rgba(245,239,230,0.04)" stroke="rgba(245,239,230,0.2)" stroke-width="1.8"/>' +
       '<path d="M140 185 L250 100" stroke="#3d2f23" stroke-width="26" stroke-linecap="round"/>' +
       '<path d="M140 185 L250 100" stroke="#e0bd75" stroke-width="2" stroke-linecap="round"/>' +
       '<ellipse cx="220" cy="120" rx="30" ry="48" transform="rotate(-25 220 120)" fill="rgba(230,161,137,0.16)" stroke="#e6a189" stroke-width="2"/>' +
       '<circle cx="245" cy="80" r="22" fill="rgba(245,239,230,0.1)" stroke="#f5efe6" stroke-width="1.8"/>' +
-      '<line x1="245" y1="80" x2="200" y2="160" stroke="#93b394" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 4"/>' +
-      '<circle cx="245" cy="80" r="3.5" fill="#93b394"/>' +
-      '<circle cx="228" cy="115" r="3.5" fill="#93b394"/>' +
-      '<circle cx="200" cy="160" r="3.5" fill="#93b394"/>' +
-      '<text x="200" y="210" font-family="DM Mono, monospace" font-size="11" fill="#93b394" text-anchor="middle">UPRIGHT GRAVITY VENTING ANGLE</text>' +
+      '<text x="200" y="210" font-family="DM Mono, monospace" font-size="11" fill="#93b394" text-anchor="middle">UPRIGHT AND SUPPORTED</text>' +
     '</svg>',
 
   environment:
@@ -588,104 +508,23 @@ var SVGS = {
       '<path d="M50 72 L106 72 L96 40 L60 40 Z" fill="rgba(224,189,117,0.25)" stroke="#e0bd75" stroke-width="2" stroke-linejoin="round"/>' +
       '<line x1="78" y1="72" x2="78" y2="150" stroke="#e0bd75" stroke-width="3" stroke-linecap="round"/>' +
       '<ellipse cx="78" cy="156" rx="24" ry="6" fill="rgba(224,189,117,0.3)" stroke="#e0bd75" stroke-width="1.8"/>' +
-      '<text x="78" y="200" font-family="DM Mono, monospace" font-size="10" fill="#e0bd75" text-anchor="middle">DIM + WARM</text>' +
+      '<text x="78" y="200" font-family="DM Mono, monospace" font-size="10" fill="#e0bd75" text-anchor="middle">DIM LIGHT</text>' +
       '<rect x="150" y="80" width="62" height="84" rx="10" fill="rgba(147,179,148,0.12)" stroke="#93b394" stroke-width="2"/>' +
       '<circle cx="181" cy="132" r="18" fill="none" stroke="#93b394" stroke-width="2"/>' +
       '<circle cx="181" cy="132" r="5" fill="#93b394"/>' +
       '<circle cx="181" cy="102" r="5" fill="none" stroke="#93b394" stroke-width="1.6"/>' +
       '<path d="M226 104 C234 116 234 128 226 140" stroke="#93b394" stroke-width="2" fill="none" stroke-linecap="round"/>' +
-      '<path d="M236 94 C248 112 248 132 236 150" stroke="#93b394" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.7"/>' +
-      '<text x="196" y="200" font-family="DM Mono, monospace" font-size="10" fill="#93b394" text-anchor="middle">BROWN NOISE</text>' +
+      '<text x="196" y="200" font-family="DM Mono, monospace" font-size="10" fill="#93b394" text-anchor="middle">LOW SOUND</text>' +
       '<rect x="278" y="70" width="52" height="70" rx="6" fill="rgba(245,239,230,0.05)" stroke="rgba(245,239,230,0.35)" stroke-width="1.8"/>' +
       '<line x1="270" y1="152" x2="338" y2="58" stroke="#dd8058" stroke-width="3" stroke-linecap="round"/>' +
       '<text x="304" y="200" font-family="DM Mono, monospace" font-size="10" fill="#dd8058" text-anchor="middle">SCREENS OFF</text>' +
       '<rect x="358" y="64" width="12" height="82" rx="6" fill="rgba(230,161,137,0.15)" stroke="#e6a189" stroke-width="1.8"/>' +
       '<circle cx="364" cy="154" r="10" fill="#e6a189"/>' +
       '<rect x="361" y="98" width="6" height="52" rx="3" fill="#e6a189"/>' +
-      '<text x="364" y="184" font-family="DM Mono, monospace" font-size="9" fill="#e6a189" text-anchor="middle">18-20C</text>' +
-    '</svg>',
-
-  cryDecoder:
-    '<svg viewBox="0 0 400 190" xmlns="http://www.w3.org/2000/svg">' +
-      '<rect width="400" height="190" fill="#0d0a07"/>' +
-      '<g transform="translate(10, 15)">' +
-        '<rect x="0" y="0" width="115" height="155" rx="14" fill="rgba(221,128,88,0.08)" stroke="rgba(221,128,88,0.45)"/>' +
-        '<circle cx="57" cy="42" r="22" fill="rgba(221,128,88,0.2)"/>' +
-        '<path d="M50 35 C50 50 64 50 64 60" stroke="#dd8058" stroke-width="2.5" stroke-linecap="round" fill="none"/>' +
-        '<circle cx="50" cy="33" r="2" fill="#dd8058"/><circle cx="64" cy="62" r="2" fill="#dd8058"/>' +
-        '<text x="57" y="85" font-family="DM Sans" font-size="12" font-weight="700" fill="#dd8058" text-anchor="middle">Microbiome</text>' +
-        '<text x="57" y="103" font-family="DM Sans" font-size="10" fill="#ab9c8b" text-anchor="middle">Gut Dysbiosis</text>' +
-        '<text x="57" y="118" font-family="DM Sans" font-size="10" fill="#ab9c8b" text-anchor="middle">Gas &amp; Cramping</text>' +
-        '<text x="57" y="140" font-family="DM Mono" font-size="9" fill="#dd8058" text-anchor="middle">TYPE: GUT</text>' +
-      '</g>' +
-      '<g transform="translate(142, 15)">' +
-        '<rect x="0" y="0" width="115" height="155" rx="14" fill="rgba(224,189,117,0.08)" stroke="rgba(224,189,117,0.45)"/>' +
-        '<circle cx="57" cy="42" r="22" fill="rgba(224,189,117,0.2)"/>' +
-        '<path d="M42 42 h8 l4 -12 l6 24 l4 -18 l4 10 h10" stroke="#e0bd75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>' +
-        '<text x="57" y="85" font-family="DM Sans" font-size="12" font-weight="700" fill="#e0bd75" text-anchor="middle">Nervous Sys</text>' +
-        '<text x="57" y="103" font-family="DM Sans" font-size="10" fill="#ab9c8b" text-anchor="middle">Sensory Overload</text>' +
-        '<text x="57" y="118" font-family="DM Sans" font-size="10" fill="#ab9c8b" text-anchor="middle">Startle &amp; Tension</text>' +
-        '<text x="57" y="140" font-family="DM Mono" font-size="9" fill="#e0bd75" text-anchor="middle">TYPE: NS</text>' +
-      '</g>' +
-      '<g transform="translate(274, 15)">' +
-        '<rect x="0" y="0" width="115" height="155" rx="14" fill="rgba(147,179,148,0.08)" stroke="rgba(147,179,148,0.45)"/>' +
-        '<circle cx="57" cy="42" r="22" fill="rgba(147,179,148,0.2)"/>' +
-        '<path d="M50 32 h14 M52 32 v7 c0 2-1 3-2 4 c-2 2-3 4-3 7 v22 c0 4 3 7 7 7 h6 c4 0 7-3 7-7 v-22 c0-3-1-5-3-7 c-1-1-2-2-2-4 v-7" stroke="#93b394" stroke-width="1.8" fill="none"/>' +
-        '<text x="57" y="85" font-family="DM Sans" font-size="12" font-weight="700" fill="#93b394" text-anchor="middle">Mechanics</text>' +
-        '<text x="57" y="103" font-family="DM Sans" font-size="10" fill="#ab9c8b" text-anchor="middle">Latch &amp; Aerophagia</text>' +
-        '<text x="57" y="118" font-family="DM Sans" font-size="10" fill="#ab9c8b" text-anchor="middle">Feeding Distress</text>' +
-        '<text x="57" y="140" font-family="DM Mono" font-size="9" fill="#93b394" text-anchor="middle">TYPE: FM</text>' +
-      '</g>' +
-    '</svg>',
-
-  witchingHour:
-    '<svg viewBox="0 0 380 180" xmlns="http://www.w3.org/2000/svg">' +
-      '<rect width="380" height="180" fill="#0d0a07"/>' +
-      '<line x1="40" y1="140" x2="350" y2="140" stroke="rgba(244,237,228,0.15)"/>' +
-      '<line x1="40" y1="40" x2="40" y2="140" stroke="rgba(244,237,228,0.15)"/>' +
-      '<text x="40" y="156" font-family="DM Mono" font-size="9" fill="#756652">4PM</text>' +
-      '<text x="110" y="156" font-family="DM Mono" font-size="9" fill="#756652">6PM</text>' +
-      '<text x="180" y="156" font-family="DM Mono" font-size="9" fill="#e2685c" font-weight="700">8PM-10PM (PEAK)</text>' +
-      '<text x="290" y="156" font-family="DM Mono" font-size="9" fill="#756652">12AM</text>' +
-      '<text x="350" y="156" font-family="DM Mono" font-size="9" fill="#756652">3AM</text>' +
-      '<path d="M40 130 Q110 115 170 50 Q210 40 250 85 Q310 120 350 135" fill="none" stroke="#e2685c" stroke-width="3" stroke-linecap="round"/>' +
-      '<path d="M150 140 L150 58 Q190 40 230 68 L230 140 Z" fill="rgba(226,104,92,0.15)"/>' +
-      '<circle cx="190" cy="45" r="5" fill="#e2685c" stroke="#fff" stroke-width="1.5"/>' +
-      '<text x="190" y="28" font-family="DM Sans" font-size="10" font-weight="700" fill="#e0bd75" text-anchor="middle">Cortisol surge &amp; Melatonin lag</text>' +
-    '</svg>',
-
-  blueprintBundle:
-    '<svg viewBox="0 0 280 180" xmlns="http://www.w3.org/2000/svg">' +
-      '<defs>' +
-        '<filter id="b-shadow" x="-20%" y="-20%" width="140%" height="140%">' +
-          '<feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#000" flood-opacity="0.6"/>' +
-        '</filter>' +
-      '</defs>' +
-      '<rect width="280" height="180" fill="transparent"/>' +
-      '<g transform="translate(45, 20)" filter="url(#b-shadow)">' +
-        '<rect x="0" y="0" width="110" height="140" rx="6" fill="#1b1510" stroke="#e0bd75" stroke-width="2"/>' +
-        '<rect x="6" y="0" width="4" height="140" fill="#3d2f23"/>' +
-        '<text x="58" y="45" font-family="Cormorant Garamond" font-size="14" font-weight="700" fill="#f5efe6" text-anchor="middle">THE CALM</text>' +
-        '<text x="58" y="62" font-family="Cormorant Garamond" font-size="14" font-weight="700" fill="#e0bd75" text-anchor="middle">BABY</text>' +
-        '<text x="58" y="78" font-family="Cormorant Garamond" font-size="12" font-weight="600" fill="#f5efe6" text-anchor="middle">BLUEPRINT</text>' +
-        '<line x1="30" y1="90" x2="86" y2="90" stroke="#e0bd75" stroke-width="1"/>' +
-        '<text x="58" y="112" font-family="DM Mono" font-size="7" fill="#ab9c8b" text-anchor="middle">EPIDEMIOLOGIST-DESIGNED</text>' +
-        '<text x="58" y="124" font-family="DM Mono" font-size="7" fill="#93b394" text-anchor="middle">COMPLETE PROTOCOL</text>' +
-      '</g>' +
-      '<g transform="translate(145, 40)" filter="url(#b-shadow)">' +
-        '<rect x="0" y="0" width="70" height="120" rx="14" fill="#0f0c08" stroke="#93b394" stroke-width="2"/>' +
-        '<circle cx="35" cy="8" r="2" fill="#333"/>' +
-        '<rect x="8" y="20" width="54" height="24" rx="5" fill="rgba(147,179,148,0.2)"/>' +
-        '<text x="35" y="35" font-family="DM Sans" font-size="8" font-weight="700" fill="#93b394" text-anchor="middle">Bloom Tracker</text>' +
-        '<rect x="8" y="50" width="54" height="12" rx="3" fill="rgba(224,189,117,0.15)"/>' +
-        '<rect x="8" y="66" width="54" height="12" rx="3" fill="rgba(221,128,88,0.15)"/>' +
-        '<rect x="8" y="82" width="54" height="12" rx="3" fill="rgba(244,237,228,0.1)"/>' +
-      '</g>' +
+      '<text x="364" y="184" font-family="DM Mono, monospace" font-size="9" fill="#e6a189" text-anchor="middle">NOT TOO WARM</text>' +
     '</svg>'
 };
 
-// If an image file is missing on the server or fails to load, swap in the
-// matching built-in drawing instead of leaving a blank box.
 window.__mpFallback = function(img, key){
   try{
     if (!SVGS[key]) return;
@@ -695,145 +534,18 @@ window.__mpFallback = function(img, key){
   }catch(e){}
 };
 
-function mountTimer(container, opts){
-  var seconds = opts.seconds, color = opts.color || 'var(--terra)',
-      pulse = !!opts.pulse, onDone = opts.onDone || function(){}, label = opts.label;
-  var rem = seconds, live = false, done = false, interval = null;
-  var R = 52, C = 2*Math.PI*R;
-
-  var wrap = document.createElement('div');
-  wrap.className = 'timer-wrap' + (pulse ? ' metro-active' : '');
-  wrap.innerHTML =
-    '<div class="timer-ring">' +
-      '<svg width="134" height="134" viewBox="0 0 134 134">' +
-        '<circle cx="67" cy="67" r="'+R+'" fill="none" stroke="rgba(244,237,228,0.12)" stroke-width="6"/>' +
-        '<circle class="ring-fg" cx="67" cy="67" r="'+R+'" fill="none" stroke="'+color+'" stroke-width="6" ' +
-          'stroke-dasharray="'+C+'" stroke-dashoffset="0" stroke-linecap="round"/>' +
-      '</svg>' +
-      '<div class="timer-digits"><span class="t"></span>'+(pulse?'<span class="p" style="background:'+color+';color:'+color+'"></span>':'')+'</div>' +
-    '</div>' +
-    (pulse ? '<div class="metro-badge"><span class="metro-dot"></span>60 BPM Rhythm Pulse</div>' : '') +
-    '<div class="timer-controls"></div>' +
-    '<div class="timer-note-slot"></div>';
-  container.appendChild(wrap);
-
-  var ringFg = wrap.querySelector('.ring-fg');
-  var digitEl = wrap.querySelector('.t');
-  var controls = wrap.querySelector('.timer-controls');
-  var noteSlot = wrap.querySelector('.timer-note-slot');
-
-  function fmt(s){ var m = Math.floor(s/60), ss = s%60; return m + ':' + (ss<10?'0':'') + ss; }
-  
-  function updateIluGraphic(){
-    var trackI = document.getElementById('ilu-track-i');
-    var trackL = document.getElementById('ilu-track-l');
-    var trackU = document.getElementById('ilu-track-u');
-    var statusText = document.getElementById('ilu-status-text');
-    if (!trackI || !trackL || !trackU) return;
-
-    trackI.classList.remove('ilu-active');
-    trackL.classList.remove('ilu-active');
-    trackU.classList.remove('ilu-active');
-
-    if (!live && rem === seconds){
-      if (statusText) statusText.textContent = 'READY TO START CLOCKWISE MASSAGE';
-      return;
-    }
-
-    if (rem > 45){
-      trackI.classList.add('ilu-active');
-      if (statusText) statusText.textContent = 'PHASE 1: "I" STROKE (DOWN BABY\'S LEFT)';
-    } else if (rem > 25){
-      trackL.classList.add('ilu-active');
-      if (statusText) statusText.textContent = 'PHASE 2: "L" STROKE (ACROSS TOP & DOWN LEFT)';
-    } else {
-      trackU.classList.add('ilu-active');
-      if (statusText) statusText.textContent = 'PHASE 3: "U" STROKE (UP RIGHT, ACROSS, DOWN LEFT)';
-    }
-  }
-
-  function paint(){
-    digitEl.textContent = done ? '✓' : fmt(rem);
-    var off = C * (1 - rem/seconds);
-    ringFg.setAttribute('stroke-dashoffset', done ? 0 : off);
-    updateIluGraphic();
-  }
-  function renderControls(){
-    controls.innerHTML = '';
-    if (!live && !done){
-      var b = document.createElement('button');
-      b.className = 'timer-btn'; b.type = 'button';
-      b.textContent = rem < seconds ? '▶ Resume' : ('▶ Start ' + (seconds>=60 ? Math.round(seconds/60)+'-min timer' : seconds+'s timer'));
-      b.onclick = start;
-      controls.appendChild(b);
-    }
-    if (live){
-      var p = document.createElement('button');
-      p.className = 'timer-btn'; p.type = 'button'; p.textContent = '⏸ Pause';
-      p.onclick = pause;
-      controls.appendChild(p);
-    }
-    if (done || (!live && rem < seconds)){
-      var r = document.createElement('button');
-      r.className = 'timer-btn'; r.type = 'button'; r.textContent = '↺';
-      r.onclick = reset;
-      controls.appendChild(r);
-    }
-    noteSlot.innerHTML = done
-      ? '<div class="timer-done-note">✓ Step complete, tap continue below</div>'
-      : (label ? '<div class="timer-note">'+label+'</div>' : '');
-  }
-  function tick(){
-    rem -= 1;
-    if (rem <= 0){
-      rem = 0; live = false; done = true;
-      clearInterval(interval); interval = null;
-      paint(); renderControls();
-      onDone();
-      return;
-    }
-    paint();
-  }
-  function start(){
-    if (live || done) return;
-    live = true;
-    paint(); renderControls();
-    interval = setInterval(tick, 1000);
-  }
-  function pause(){
-    live = false;
-    if (interval) clearInterval(interval);
-    interval = null;
-    renderControls();
-  }
-  function reset(){
-    live = false; done = false; rem = seconds;
-    if (interval) clearInterval(interval);
-    interval = null;
-    paint(); renderControls();
-  }
-  paint(); renderControls();
-
-  return function cleanup(){ if (interval) clearInterval(interval); };
-}
-
-// Count-up, never-blocking timer for the Tiger Hold (and any future
-// technique screen that wants one). Unlike mountTimer, there is no
-// target duration and it never disables the continue button — the
-// ring simply completes one lap every 60 seconds as a rhythm aid,
-// then starts the next lap while the digits keep the true running
-// total. getElapsed() returns total active (non-paused) seconds so
-// the calling screen can record it when the parent moves on.
+// Count-up, never-blocking timer for the supported hold. No target
+// duration and it never disables the continue button. The ring completes
+// one lap per 60 seconds as a pacing aid only. getElapsed() returns total
+// active seconds so the screen can record it when the parent moves on.
 function mountStopwatch(container, opts){
   var color = (opts && opts.color) || 'var(--gold)', pulse = !!(opts && opts.pulse);
   var elapsed = 0, live = false, interval = null;
   var R = 52, C = 2*Math.PI*R;
   var NOTES = [
-    { at:0,   text:'Tap start once baby is in position and the pulse begins.' },
-    { at:15,  text:'Keep the pulse steady. Many babies need 30–60 seconds before the shift starts.' },
-    { at:45,  text:'You\u2019re in the window where it usually starts working.' },
-    { at:90,  text:'Past a minute in, this is often where things turn. No need to stop yet.' },
-    { at:150, text:'Longer generally helps here, there\u2019s no fixed target. Stop whenever baby, or your arm, needs a break.' }
+    { at:0,   text:'Tap start once your baby is in position and you have found a slow, steady rhythm.' },
+    { at:60,  text:'Keep the rhythm slow and steady. There is no fixed time, and no need to push on.' },
+    { at:180, text:'Stop whenever your baby, or your arm, needs a break.' }
   ];
 
   var wrap = document.createElement('div');
@@ -847,7 +559,7 @@ function mountStopwatch(container, opts){
       '</svg>' +
       '<div class="timer-digits"><span class="t">0:00</span>'+(pulse?'<span class="p" style="background:'+color+';color:'+color+'"></span>':'')+'</div>' +
     '</div>' +
-    (pulse ? '<div class="metro-badge"><span class="metro-dot"></span>60 BPM Rhythm Pulse</div>' : '') +
+    (pulse ? '<div class="metro-badge"><span class="metro-dot"></span>Pacing guide: about one pulse per second</div>' : '') +
     '<div class="timer-controls"></div>' +
     '<div class="timer-note-slot"></div>';
   container.appendChild(wrap);
@@ -867,11 +579,7 @@ function mountStopwatch(container, opts){
     digitEl.textContent = fmt(elapsed);
     var lap = elapsed % 60;
     ringFg.setAttribute('stroke-dashoffset', C * (1 - lap/60));
-    if (!live && elapsed === 0){
-      noteSlot.innerHTML = '<div class="timer-note">'+NOTES[0].text+'</div>';
-    } else {
-      noteSlot.innerHTML = '<div class="timer-note">'+noteFor(elapsed)+'</div>';
-    }
+    noteSlot.innerHTML = '<div class="timer-note">'+noteFor(elapsed)+'</div>';
   }
   function renderControls(){
     controls.innerHTML = '';
@@ -1006,6 +714,8 @@ function typeBadgeHtml(forCode, text){
   '</div>';
 }
 
+var DISCLAIMER = 'Educational, not medical advice. It does not replace your baby’s doctor.';
+
 function buildOutcomeScreen(cfg){
   var html =
     '<div class="screen-body center-text" style="align-items:center; justify-content:center; display:flex; flex-direction:column;">' +
@@ -1044,14 +754,12 @@ function buildTechniqueScreen(cfg){
     '<div class="screen-body">' +
       topHtml +
       '<h1 class="h1" style="font-size:24px; margin-bottom:14px;">'+esc(cfg.title)+'</h1>' +
+      (cfg.extraHtml ? '<div class="card tint-sage extra-card">'+cfg.extraHtml+'</div>' : '') +
       imgHtml +
       stepsHtml +
+      (cfg.evidence ? '<div class="ev-line">Evidence: '+esc(cfg.evidence)+'</div>' : '') +
       (cfg.safety ? '<div class="card tint-red" style="margin-top:12px; font-size:12px; color:var(--cream); line-height:1.6;"><b style="color:var(--red);">Safety: </b>'+cfg.safety+'</div>' : '') +
-      // stopwatch: a count-up, never-blocking timer (see mountStopwatch).
-      // tipLabel: a static guidance hint, can appear alongside the stopwatch
-      // or on its own. Legacy timer path (seconds) kept below for any
-      // screen that still wants a countdown, but nothing currently uses it.
-      (cfg.stopwatch ? '<div data-timer></div>' : (cfg.tipLabel ? '' : '<div data-timer></div>')) +
+      (cfg.stopwatch ? '<div data-timer></div>' : '') +
       (cfg.tipLabel ? '<div class="tip-hint">'+esc(cfg.tipLabel)+'</div>' : '') +
     '</div>' +
     '<div class="screen-foot">' +
@@ -1062,24 +770,12 @@ function buildTechniqueScreen(cfg){
     var contBtn = $(el,'[data-act=continue]');
     var stopwatchApi = null;
     if (cfg.stopwatch){
-      // Non-blocking on purpose: this never touches contBtn.disabled.
-      // Parents can leave whenever baby needs them to, the timer is a
-      // pacing aid, not a gate.
+      // Non-blocking on purpose: the timer is a pacing aid, not a gate.
       var swSlot = $(el,'[data-timer]');
       stopwatchApi = mountStopwatch(swSlot, { color: cfg.color, pulse: !!cfg.pulse });
       state.cleanups.push(stopwatchApi.cleanup);
-    } else if (cfg.seconds){
-      // Legacy countdown path, retained in case a future screen wants a
-      // hard timer. Unused by every current screen.
-      var slot = $(el,'[data-timer]');
-      var cleanup = mountTimer(slot, {
-        seconds: cfg.seconds, color: cfg.color, pulse: !!cfg.pulse, label: cfg.timerLabel,
-        onDone: function(){ contBtn.disabled = false; }
-      });
-      state.cleanups.push(cleanup);
     }
     contBtn.addEventListener('click', function(){
-      if (contBtn.disabled) return;
       if (stopwatchApi && cfg.onStopwatchElapsed) cfg.onStopwatchElapsed(stopwatchApi.getElapsed());
       cfg.onContinue();
     });
@@ -1087,38 +783,42 @@ function buildTechniqueScreen(cfg){
   return { el:el, mount:mount };
 }
 
+// Safety list matches the quiz safety check. Any tap goes to the stop screen.
 var DANGERS = [
-  { key:'fever', text:'Fever above 38°C / 100.4°F' },
-  { key:'breathing', text:'Breathing difficulty, or blue lips or face' },
+  { key:'fever', text:'Fever of 38°C / 100.4°F or higher' },
+  { key:'vomit', text:'Green vomit, or forceful vomiting after most feeds' },
+  { key:'blood', text:'Blood in the stool' },
+  { key:'feeding', text:'Poor feeding or refusing feeds' },
+  { key:'limp', text:'Unusually sleepy, limp, or very hard to wake' },
+  { key:'breathing', text:'Trouble breathing, or blue lips or face' },
   { key:'tourniquet', text:'A hair wrapped tightly around a finger, toe, or genitals' }
 ];
 var SYSTEMS = [
   { code:'GUT', key:'gut', name:'Gut Microbiome Imbalance', icon:ICONS.gut, tint:'terra',
     signs:'Pulls legs to tummy, frequent gas, crying after feeds, brief relief after passing gas.' },
   { code:'NS', key:'nervous', name:'Nervous System Dysregulation', icon:ICONS.nervous, tint:'gold',
-    signs:'Startles easily, hard to settle, overtired but won\u2019t sleep, sensitive to stimulation.' },
+    signs:'Startles easily, hard to settle, overtired but won’t sleep, sensitive to stimulation.' },
   { code:'FM', key:'feeding', name:'Feeding Mechanics', icon:ICONS.feeding, tint:'sage',
     signs:'Gulping or choking sounds during feeds, pulls off the breast or bottle repeatedly, crying within an hour of most feeds.' }
 ];
 
 function renderWelcome(){
   var fromQuizNote = state.colicTypeFromQuiz
-    ? '<div class="pill" style="border-color:var(--sage-line); color:var(--sage); background:var(--sage-soft); margin-bottom:16px;">\u2713 Picked up from your assessment</div>'
+    ? '<div class="pill" style="border-color:var(--sage-line); color:var(--sage); background:var(--sage-soft); margin-bottom:16px;">✓ Picked up from your assessment</div>'
     : '';
-  var html =
-    '<div class="screen-body">' +
-      '<div class="eyebrow" style="color:var(--terra)">Colic Protocol · Midnight Protocol</div>' +
-      '<h1 class="h1">Your baby won\u2019t<br>stop crying?</h1>' +
-      '<p class="sub">Let\u2019s go step by step, together. Most parents notice a shift in the first few minutes. Tell us who to walk through it, and let\u2019s start.</p>' +
-      fromQuizNote +
-      '<div style="margin-top:18px;">' +
+
+  var formHtml = state.hasHandoff
+    ? '<div class="card tint-sage" style="margin-top:18px; font-size:13.5px; line-height:1.6;">' +
+        '<b style="color:var(--sage);">Welcome, ' + esc(state.lead.name) + '.</b> We already have your details from the assessment, so there is nothing to re-enter.' +
+      '</div>'
+    : '<div style="margin-top:18px;">' +
         '<div class="field-group">' +
           '<label class="label-sm">Your first name</label>' +
           '<input class="field" data-f="name" type="text" inputmode="text" autocomplete="given-name" placeholder="First name" value="'+esc(state.lead.name)+'">' +
           '<div class="err" data-err="name" hidden></div>' +
         '</div>' +
         '<div class="field-group">' +
-          '<label class="label-sm">Baby\u2019s age, in weeks</label>' +
+          '<label class="label-sm">Baby’s age, in weeks</label>' +
           '<input class="field" data-f="age" type="number" inputmode="numeric" min="0" max="60" placeholder="e.g. 5" value="'+esc(state.lead.babyAgeWeeks)+'">' +
           '<div class="err" data-err="age" hidden></div>' +
         '</div>' +
@@ -1133,15 +833,30 @@ function renderWelcome(){
         '</label>' +
         '<div class="err" data-err="consent" hidden></div>' +
         '<input type="text" data-f="hp" name="mp_extra_note" autocomplete="off" data-lpignore="true" data-1p-ignore tabindex="-1" aria-hidden="true" style="position:absolute; left:-9999px; width:1px; height:1px; opacity:0;">' +
-      '</div>' +
-      '<div class="illus" style="margin-top:18px; margin-bottom:0;"><img src="'+IMG['father_holding_newborn_baby_202608312316']+'" alt="Father holding newborn baby" style="width:100%; height:auto; display:block;"></div>' +
+      '</div>';
+
+  var html =
+    '<div class="screen-body">' +
+      '<div class="eyebrow" style="color:var(--terra)">Colic Protocol · Midnight Protocol</div>' +
+      '<h1 class="h1">Your baby won’t<br>stop crying?</h1>' +
+      '<p class="sub">Let’s go step by step. This is a guided set of soothing ideas for tonight. No technique works every time, and it is fine to stop whenever you need to.</p>' +
+      fromQuizNote +
+      formHtml +
+      '<div class="illus" style="margin-top:18px; margin-bottom:0;"><img src="'+IMG['father_holding_newborn_baby']+'" alt="Father holding newborn baby" style="width:100%; height:auto; display:block;"></div>' +
     '</div>' +
     '<div class="screen-foot">' +
       '<button class="btn btn-primary" data-act="start">Start the Midnight Protocol →</button>' +
-      '<div class="trust-line">Built by an epidemiologist and dad who spent his own week 3 at 2AM here too. Free. No card.</div>' +
+      '<div class="trust-line">Built by Vincent, an epidemiologist and dad (not a pediatrician). Free. No card.<br>' + DISCLAIMER + '</div>' +
     '</div>';
   var el = buildScreen(html);
   function mount(){
+    if (state.hasHandoff){
+      $(el,'[data-act=start]').addEventListener('click', function(){
+        submitLead(true);
+        goTo('stopscan');
+      });
+      return;
+    }
     var errName = $(el,'[data-err=name]'), errAge = $(el,'[data-err=age]'),
         errEmail = $(el,'[data-err=email]'), errConsent = $(el,'[data-err=consent]');
     $(el,'[data-act=start]').addEventListener('click', function(){
@@ -1153,13 +868,13 @@ function renderWelcome(){
       var nameOK = name.length > 0;
       var ageOK = age !== '' && Number(age) >= 0 && Number(age) <= 60;
       var emailOK = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-      errName.hidden = nameOK; errName.textContent = 'Enter a name so we know who we\u2019re talking to.';
-      errAge.hidden = ageOK; errAge.textContent = 'Enter baby\u2019s age in weeks (0\u201360).';
-      errEmail.hidden = emailOK; errEmail.textContent = 'Enter a valid email, that\u2019s where tonight\u2019s protocol is saved to.';
+      errName.hidden = nameOK; errName.textContent = 'Enter a name so we know who we’re talking to.';
+      errAge.hidden = ageOK; errAge.textContent = 'Enter baby’s age in weeks (0–60).';
+      errEmail.hidden = emailOK; errEmail.textContent = 'Enter a valid email, that’s where tonight’s protocol is saved to.';
       errConsent.hidden = consent; errConsent.textContent = 'Check the box to continue, we only send what you agree to.';
       if (!(nameOK && ageOK && emailOK && consent)) return;
       state.lead = { name:name, email:email.toLowerCase(), babyAgeWeeks:Number(age), consent:true, hp:hp };
-      submitLead();
+      submitLead(false);
       goTo('stopscan');
     });
   }
@@ -1174,9 +889,9 @@ function renderStopScan(){
     '<div class="screen-body">' +
       '<div class="dots">' + dotsHTML(1) + '</div>' +
       '<div class="eyebrow" style="color:var(--terra)">Stage 1 · Stop &amp; Scan</div>' +
-      '<h1 class="h1" style="font-size:25px;">Rule out danger, first.</h1>' +
-      '<p class="sub">Quick check before we soothe anything.</p>' +
-      '<div class="illus" style="margin-top:14px;"><img src="'+IMG['parent_holding_unsettled_newborn_202608312320']+'" alt="Parent holding unsettled newborn" style="width:100%; height:auto; display:block;"></div>' +
+      '<h1 class="h1" style="font-size:25px;">Check for warning signs, first.</h1>' +
+      '<p class="sub">These need a doctor, not a technique. Tap any that apply.</p>' +
+      '<div class="illus" style="margin-top:14px;"><img src="'+IMG['parent_holding_unsettled_newborn']+'" alt="Parent holding unsettled newborn" style="width:100%; height:auto; display:block;"></div>' +
       '<div class="card tint-red" style="margin-top:0;">' + dangerHtml + '</div>' +
       '<div class="card" style="margin-top:12px;">' +
         '<div class="toggle-row" data-q="diaper"><div class="toggle-box">'+ICONS.check+'</div><div class="toggle-text"><b>Diaper checked and clean</b><span>Change it before anything else if not</span></div></div>' +
@@ -1184,7 +899,7 @@ function renderStopScan(){
       '</div>' +
     '</div>' +
     '<div class="screen-foot">' +
-      '<button class="btn btn-sage" data-act="continue">None of the danger signs. Continue →</button>' +
+      '<button class="btn btn-sage" data-act="continue">None of these. Continue →</button>' +
     '</div>';
   var el = buildScreen(html);
   function mount(){
@@ -1202,17 +917,6 @@ function renderStopScan(){
 function renderColicType(){
   var order = ['GUT','NS','FM'];
   var fromQuiz = state.colicTypeFromQuiz && TYPE_MAP[state.colicType];
-  // Honesty threshold: below 60%, the quiz's own signal for this
-  // respondent was genuinely mixed (see the QUESTIONS comment block on
-  // the quiz side for why that happens), so the badge and headline say
-  // "leaned toward" instead of an unqualified checkmark. The type is
-  // still pre-selected either way, a best guess is still a better
-  // starting point than none, it just isn't presented as more certain
-  // than it actually was. Confidence only exists when it truly travelled
-  // from the quiz handoff (see captureUTMandHandoff) — a null value
-  // means we have no signal either way, so the copy stays at its
-  // original, unqualified wording rather than guessing at uncertainty
-  // we don't have data for.
   var conf = state.colicTypeConfidence;
   var lowConfidence = fromQuiz && conf !== null && conf < 60;
   var cardsHtml = order.map(function(code){
@@ -1221,7 +925,7 @@ function renderColicType(){
     var preTag = pre
       ? (lowConfidence
           ? ' <b style="color:var(--gold);">leaning this way, from your assessment</b>'
-          : ' <b style="color:var(--sage);">\u2713 from your assessment</b>')
+          : ' <b style="color:var(--sage);">✓ from your assessment</b>')
       : '';
     return '<button class="opt '+(pre?'opt-good':'')+'" data-type="'+code+'" style="'+(pre?'':'border-color:var(--border-strong); background:none;')+'">' +
       '<span style="font-size:18px;">'+t.emoji+'</span>' +
@@ -1229,20 +933,20 @@ function renderColicType(){
     '</button>';
   }).join('');
   var headline = !fromQuiz
-    ? 'Already know what\u2019s\ndriving it tonight?'
-    : (lowConfidence ? 'Your answers leaned\ntoward one system.' : 'We\u2019ll tailor tonight\naround your result.');
+    ? 'Already know where\nyou want to start?'
+    : (lowConfidence ? 'Your answers leaned\ntoward one pattern.' : 'We’ll point out the steps\nthat match your result.');
   var subText = !fromQuiz
-    ? 'If you\u2019ve taken the free assessment, tell us. We\u2019ll highlight the step that matters most for your baby\u2019s type.'
+    ? 'If you’ve taken the free assessment, tell us. We’ll point out the steps that match your baby’s starting point.'
     : (lowConfidence
-        ? 'It wasn\u2019t a clear-cut signal, your baby\u2019s answers touched more than one system. This is our best read, confirm it if it fits tonight, or switch if it doesn\u2019t.'
-        : 'Your assessment pointed to one system. Confirm it, or pick a different one if tonight feels different.');
+        ? 'It wasn’t a clear-cut result, your answers touched more than one pattern. This is our best read, a starting point and not a diagnosis. Keep it if it fits tonight, or switch if it doesn’t.'
+        : 'Your assessment pointed to one starting pattern. Keep it, or pick a different one if tonight feels different.');
   var html =
     '<div class="screen-body">' +
       '<div class="eyebrow" style="color:var(--terra)">Optional · 5 seconds</div>' +
       '<h1 class="h1" style="font-size:23px; white-space:pre-line;">' + headline + '</h1>' +
       '<p class="sub">' + subText + '</p>' +
       '<div style="margin-top:14px;">' + cardsHtml +
-        '<button class="opt" data-type="UNSURE" style="border-color:var(--border-strong); background:none;"><span style="font-size:16px;">\u2022</span><span>Not sure, just help me now</span></button>' +
+        '<button class="opt" data-type="UNSURE" style="border-color:var(--border-strong); background:none;"><span style="font-size:16px;">•</span><span>Not sure, just help me now</span></button>' +
       '</div>' +
     '</div>';
   var el = buildScreen(html);
@@ -1265,11 +969,12 @@ function renderEmergency(){
   var html =
     '<div class="screen-body center-text" style="align-items:center; justify-content:center; display:flex; flex-direction:column;">' +
       '<div class="pill" style="border-color:var(--red-line); color:var(--red); background:var(--red-soft); margin-bottom:18px;">Stop the protocol</div>' +
-      '<div class="h1" style="font-size:26px; color:var(--red);">Call now</div>' +
-      '<div class="big-num" style="font-size:52px; color:var(--cream); margin:10px 0 20px; letter-spacing:.04em;">999 · 911</div>' +
-      '<p class="sub" style="max-width:270px;">Fever, breathing trouble, blue lips, or a hair tourniquet need real medical care right now. This protocol can wait, your baby\u2019s safety can\u2019t.</p>' +
+      '<div class="h1" style="font-size:26px; color:var(--red);">Call your baby’s doctor now</div>' +
+      '<div class="big-num" style="font-size:40px; color:var(--cream); margin:10px 0 6px; letter-spacing:.04em;">911 · 999 · 112</div>' +
+      '<div class="label-sm" style="text-align:center;">Local emergency numbers</div>' +
+      '<p class="sub" style="max-width:290px; margin-top:12px;">Call your baby’s doctor now. If your baby is struggling to breathe, has blue lips or face, or is very hard to wake, call your local emergency number instead. This protocol can wait. Your baby’s safety can’t.</p>' +
     '</div>' +
-    '<div class="screen-foot"><button class="btn btn-ghost" data-act="back">← I checked again, we\u2019re safe</button></div>';
+    '<div class="screen-foot"><button class="btn btn-ghost" data-act="back">← I tapped by mistake, go back</button></div>';
   var el = buildScreen(html, 'tint-emergency');
   el.style.background = 'radial-gradient(ellipse 400px 300px at 50% 20%, rgba(226,104,92,0.16), transparent 65%)';
   function mount(){
@@ -1281,21 +986,21 @@ function renderEmergency(){
 function renderEnvironment(){
   state.environmentStartedAt = Date.now();
   var items = [
-    ['lights','Lights dimmed','Lowest warm setting, not total darkness',
-      'Bright or blue-white light tells a newborn\u2019s brain it\u2019s daytime, working against the melatonin shift they need to settle. Total darkness isn\u2019t the goal either, that can feel disorienting instead of safe. A warm lamp on its lowest setting, or a hallway light through a cracked door, is the right amount.'],
-    ['noise','Brown noise on','60\u201365 dB, speaker 7+ feet from baby',
-      'Brown noise sits at a lower, deeper frequency than white noise, closer to the constant whoosh baby heard in the womb, which is why it reads as safety instead of static. No decibel meter needed: play it from a speaker across the room, not right beside the crib, at a volume where you could still hold a normal conversation over it.'],
+    ['lights','Lights dimmed','Low and warm is fine',
+      'A calm, dim room means less for your baby to react to. No trial shows a particular light level helps colic, so treat this as common-sense comfort, not a proven step. Keep enough light to see your baby safely.'],
+    ['noise','Low, steady sound (optional)','Quiet, across the room, on a timer',
+      'Steady low sound is common practice and some babies seem to settle with it. It has not been shown to reduce colic. Baby sound machines have also been measured above recommended levels at full volume (Hugh et al., Pediatrics 2014), so keep it quiet, across the room, never beside the crib, and set a timer.'],
     ['screens','Screens off','TV, tablets, phones turned away',
-      'A lit screen, even muted and off to the side, is a second source of light and motion competing for attention right when the goal is reducing input, not adding another one. This includes your own phone screen if it\u2019s propped up and lit nearby.'],
-    ['temp','Room feels comfortable','18\u201320\u00b0C / 64\u201368\u00b0F',
-      'A room that runs too warm is one of the more overlooked reasons a baby stays unsettled, overheating reads to the nervous system as distress, not comfort. No thermometer needed: if you\u2019d be comfortable in a light long-sleeve layer, the room is in range.']
+      'A lit screen nearby adds light and movement when you are trying to reduce what your baby has to take in. This is common sense, not trial-tested. It includes your own phone if it is propped up and lit.'],
+    ['temp','Room feels comfortable','Not too warm',
+      'Overheating is a safe-sleep concern, and many safe-sleep guides suggest roughly 16 to 20°C (61 to 68°F). If you would be comfortable in a light long-sleeve layer, the room is likely in range.']
   ];
   var rowsHtml = items.map(function(it, i){
     return '<div class="toggle-row" data-env="'+it[0]+'">' +
       '<div class="toggle-box">'+ICONS.check+'</div>' +
       '<div class="toggle-text">' +
         '<b>'+it[1]+'</b><span>'+it[2]+'</span>' +
-        '<button type="button" class="why-btn" data-whytoggle data-idx="'+i+'">Why this helps \u25be</button>' +
+        '<button type="button" class="why-btn" data-whytoggle data-idx="'+i+'">Why this helps ▾</button>' +
         '<div class="why-body" data-whybody data-idx="'+i+'" hidden>'+it[3]+'</div>' +
       '</div>' +
     '</div>';
@@ -1303,15 +1008,16 @@ function renderEnvironment(){
   var html =
     '<div class="screen-body">' +
       '<div class="dots">' + dotsHTML(2) + '</div>' +
-      '<div class="eyebrow" style="color:var(--sage)">Stage 2 · Environment Reset</div>' +
-      typeBadgeHtml('NS','Highest-leverage step for nervous-system-type babies') +
-      '<h1 class="h1" style="font-size:25px;">Reset the room<br>before the baby.</h1>' +
-      '<p class="sub">Sound before touch. The nervous system needs to hear safety before it can feel it. Tap any item below for exactly why it matters.</p>' +
+      '<div class="eyebrow" style="color:var(--sage)">Stage 2 · Calm the Room</div>' +
+      typeBadgeHtml('NS','A good place to start for your result') +
+      '<h1 class="h1" style="font-size:25px;">Calm the room<br>first.</h1>' +
+      '<p class="sub">Fewer inputs can make it easier to settle a baby. This is common sense rather than a proven step, so keep it simple. Tap any item for the reasoning.</p>' +
       '<div class="illus" style="margin-top:14px;">' + SVGS.environment + '</div>' +
       '<div class="card" style="margin-top:16px;">' + rowsHtml + '</div>' +
+      '<div class="ev-line" style="margin-top:8px;">Evidence: common practice, not trial-tested for colic</div>' +
       '<div class="progress-track"><div class="progress-fill" data-fill style="width:0%;"></div></div>' +
       '<div class="solidarity-note">' + ICONS.shield +
-        '<span>You\u2019re not the only parent standing in a dim room doing exactly this right now. This is the same first step, in the same sequence, every night, for every family who opens this tool.</span>' +
+        '<span>You’re not the only parent standing in a dim room doing exactly this right now. Colic is hard, and it is not a sign you are doing anything wrong.</span>' +
       '</div>' +
     '</div>' +
     '<div class="screen-foot">' +
@@ -1339,7 +1045,7 @@ function renderEnvironment(){
         var body = $(el, '[data-whybody][data-idx="'+idx+'"]');
         var wasHidden = body.hasAttribute('hidden');
         if (wasHidden) body.removeAttribute('hidden'); else body.setAttribute('hidden','');
-        btn.textContent = wasHidden ? 'Why this helps \u25b4' : 'Why this helps \u25be';
+        btn.textContent = wasHidden ? 'Why this helps ▴' : 'Why this helps ▾';
       });
     });
     cont.addEventListener('click', function(){ goTo('environmentCheck'); });
@@ -1351,8 +1057,8 @@ function renderEnvironment(){
 function renderEnvironmentCheck(){
   return buildOutcomeScreen({
     eyebrowColor:'var(--sage)',
-    title:'After the environment reset\u2026',
-    sub:'How\u2019s baby right now?',
+    title:'After calming the room…',
+    sub:'How’s baby right now?',
     onPick:function(val){
       state.outcomes.environment = val;
       submitOutcome('environment', val);
@@ -1366,8 +1072,8 @@ function renderBreathing(){
   var html =
     '<div class="screen-body center-text" style="align-items:center; justify-content:center; display:flex; flex-direction:column;">' +
       '<div class="eyebrow" style="color:var(--gold); justify-content:center;">Parent Reset</div>' +
-      '<div class="h2">Regulate, before you touch.</div>' +
-      '<p class="sub" style="max-width:260px;">Your cortisol transmits through touch. Three slow breaths, then we start.</p>' +
+      '<div class="h2">Take a moment first.</div>' +
+      '<p class="sub" style="max-width:280px;">Three slow breaths can help you steady yourself. Your wellbeing matters in its own right, and it is fine to put your baby down safely on their back for a minute if you need to.</p>' +
       '<div data-orb></div>' +
     '</div>' +
     '<div class="screen-foot"><button class="btn-link" data-act="skip" style="display:block; margin:0 auto;">Skip this →</button></div>';
@@ -1382,26 +1088,24 @@ function renderBreathing(){
 }
 
 function renderTigerHold(){
-  // Tiger Hold dwell-time tracker. The button is available immediately —
-  // we want to know how long parents actually spend here, not force a
-  // minimum. State stores the start time; submitOutcome() will include
-  // it when the check screen fires.
   state['tiger_holdStartedAt'] = Date.now();
   state.tigerHoldTimerSeconds = 0;
   return buildTechniqueScreen({
-    stageDots: 3, eyebrow:'Stage 3 · Soothing Circuit', color:'var(--gold)',
-    badge: typeBadgeHtml('NS','Usually the biggest lever for nervous-system type babies'),
+    stageDots: 3, eyebrow:'Stage 3 · Supported Hold', color:'var(--gold)',
+    badge: typeBadgeHtml('NS','A good place to start for your result'),
     title:'The Tiger Hold',
-    svg: '<img src="'+IMG['infant_tiger_holding_parent_forearm_202608312317']+'" alt="Tiger hold diagram" style="width:100%; height:auto; display:block; border-radius:var(--r-md);">',
+    svg: '<img src="'+IMG['tiger_hold']+'" alt="Tiger hold diagram" style="width:100%; height:auto; display:block; border-radius:var(--r-md);">',
     steps:[
-      'Flip baby face-down along your forearm, head resting in your palm, legs either side of your elbow.',
-      'Let the belly make firm, steady contact with your arm. That contact is the pressure point doing the work.',
-      'Start a steady pulse forward and back at 60 BPM, not rocking, a pulse.',
-      'Still worked up after a minute? Add a firm shush right at ear level.'
+      'Lay your baby face-down along your forearm, head resting in your palm, legs either side of your elbow. Awake and supervised only.',
+      'Keep the hold firm and supported, with your baby’s belly resting on your forearm.',
+      'Move in a slow, steady rhythm, forward and back, about one pulse per second. Smooth and slow, not jiggling.',
+      'If your baby is still upset after a few minutes, that is common. No technique works every time.'
     ],
+    evidence:'Small, unblinded studies. No trial shows it beats other supported holds',
+    safety:'Face-down holds are for awake, supervised holding only. Never put your baby to sleep face-down.',
     stopwatch:true,
     pulse:true,
-    tipLabel:'There\u2019s no fixed time here. Longer generally helps, so stay in it as long as baby (and your arm) can.',
+    tipLabel:'There is no fixed time here. Stop whenever your baby, or your arm, needs a break.',
     continueLabel:'Done, how\'s baby? →',
     onStopwatchElapsed:function(sec){ state.tigerHoldTimerSeconds = sec; },
     onContinue:function(){ goTo('tigerHoldCheck'); }
@@ -1411,7 +1115,7 @@ function renderTigerHold(){
 function renderTigerHoldCheck(){
   return buildOutcomeScreen({
     eyebrowColor:'var(--gold)',
-    title:'After the Tiger Hold…',
+    title:'After the supported hold…',
     sub:'How\'s baby now?',
     onPick:function(val){
       state.outcomes.tigerHold = val;
@@ -1426,12 +1130,11 @@ function renderTigerHoldCheck(){
 function renderTigerHoldTroubleshoot(){
   var html =
     '<div class="screen-body">' +
-      '<div class="eyebrow" style="color:var(--gold)">Two things that usually explain it</div>' +
-      '<h1 class="h1" style="font-size:23px;">Quick fix before<br>the next round.</h1>' +
-      '<div class="illus"><img src="'+IMG['comparing_infant_bouncing_and_sw…_202608312318']+'" alt="Fast bouncing versus gentle swaying comparison" style="width:100%; height:auto; display:block;"></div>' +
-      '<p class="sub">Held under a minute, or an uneven bounce instead of a steady 60 BPM pulse, those two things explain most “it’s not working.” Both are easy to correct on the next try. For now, let’s keep moving.</p>' +
+      '<div class="eyebrow" style="color:var(--gold)">That’s common</div>' +
+      '<h1 class="h1" style="font-size:23px;">No technique works<br>every time.</h1>' +
+      '<p class="sub">It is common for a hold not to settle your baby, and it doesn’t mean you did it wrong. Colic also rises and falls on its own. Let’s try something different for belly comfort next.</p>' +
     '</div>' +
-    '<div class="screen-foot"><button class="btn btn-primary" data-act="continue">Continue to gas release →</button></div>';
+    '<div class="screen-foot"><button class="btn btn-primary" data-act="continue">Continue to belly comfort →</button></div>';
   var el = buildScreen(html);
   function mount(){ $(el,'[data-act=continue]').addEventListener('click', function(){ goTo('bicycleLegs'); }); }
   return { el:el, mount:mount };
@@ -1440,73 +1143,80 @@ function renderTigerHoldTroubleshoot(){
 function renderBicycleLegs(){
   markStage('gas_release');
   state.gas_releaseStartedAt = Date.now();
+  var fmCard = state.colicType === 'FM'
+    ? '<b>For your result, feeding pace, at the next feed:</b> hold your baby near-upright, keep the bottle near-horizontal with the nipple fully covered with milk (or check the latch if breastfeeding), and pause every 20 to 30 seconds. Feeds will take longer. Paced feeding is widely taught, but whether it reduces colic has not been shown.'
+    : '';
   return buildTechniqueScreen({
-    stageDots:4, eyebrow:'Stage 4 · Gas Release', color:'var(--blush)',
+    stageDots:4, eyebrow:'Stage 4 · Belly Comfort', color:'var(--blush)',
     stepbar:{current:1,total:4},
-    badge: typeBadgeHtml('GUT','This sequence tends to matter most for gut-type babies'),
+    badge: typeBadgeHtml('GUT','A good place to start for your result'),
+    extraHtml: fmCard,
     title:'Bicycle Legs',
-    svg: '<img src="'+IMG['newborn_bicycle_legs_exercise_di…_202608312318']+'" alt="Newborn bicycle legs exercise diagram" style="width:100%; height:auto; display:block; border-radius:var(--r-md);">',
+    svg: '<img src="'+IMG['bicycle_legs']+'" alt="Newborn bicycle legs exercise diagram" style="width:100%; height:auto; display:block; border-radius:var(--r-md);">',
     steps:[
-      'Lay baby on their back on a flat, firm surface.',
-      'Hold both ankles gently. Bring one knee to the chest while the other leg extends.',
+      'Lay your baby on their back on a flat, firm surface.',
+      'Hold both ankles gently. Bring one knee toward the chest while the other leg extends.',
       'Switch legs in a smooth, slow cycling motion, never a sudden pull.',
-      'After 10–15 reps, finish with one gentle double-knee compression to the chest.'
+      'After 10 to 15 reps, finish with one gentle double-knee tuck to the chest.'
     ],
+    evidence:'Common practice, little trial evidence',
     tipLabel:'Slow beats fast here. One deliberate cycle every few seconds.',
-    continueLabel:'Done, next: ILU massage →',
+    continueLabel:'Done, next: tummy massage →',
     onContinue:function(){ goTo('iluMassage'); }
   });
 }
 
 function renderIluMassage(){
   return buildTechniqueScreen({
-    stageDots:4, eyebrow:'Stage 4 · Gas Release', color:'var(--blush)',
+    stageDots:4, eyebrow:'Stage 4 · Belly Comfort', color:'var(--blush)',
     stepbar:{current:2,total:4},
-    title:'ILU Massage',
-    svg: '<img src="'+IMG['abdominal_massage_pathway_diagram']+'" onerror="__mpFallback(this,\'ilu\')" alt="I-L-U abdominal massage pathway diagram showing the descending, transverse, and ascending colon strokes" style="width:100%; height:auto; display:block; border-radius:var(--r-md);">',
+    title:'Tummy Massage (I-L-U)',
+    svg: '<img src="'+IMG['abdominal_massage_pathway_diagram']+'" onerror="__mpFallback(this,\'ilu\')" alt="I-L-U abdominal massage pathway diagram" style="width:100%; height:auto; display:block; border-radius:var(--r-md);">',
     steps:[
-      'Flat hand, firm but gentle pressure. Always clockwise along the highlighted colon path.',
-      '<b style="color:var(--terra);">“I” Stroke:</b> Down baby’s left side.',
-      '<b style="color:var(--gold);">“L” Stroke:</b> Across the top, then down the left side.',
-      '<b style="color:var(--sage);">“U” Stroke:</b> Up right side, across top, down left side, the complete colon route.'
+      'Use a flat hand with firm but gentle pressure. Always clockwise along the path shown.',
+      '<b style="color:var(--terra);">“I” stroke:</b> down your baby’s left side.',
+      '<b style="color:var(--gold);">“L” stroke:</b> across the top, then down the left side.',
+      '<b style="color:var(--sage);">“U” stroke:</b> up the right side, across the top, down the left side.'
     ],
-    tipLabel:'Follow the I-L-U pattern shown above, repeat the full sequence 2–3 times.',
-    continueLabel:'Done, next: Football hold →',
+    evidence:'Small, unblinded studies suggest massage may reduce distress for some babies',
+    tipLabel:'Repeat the full sequence 2 or 3 times. Stop if your baby resists.',
+    continueLabel:'Done, next: football hold →',
     onContinue:function(){ goTo('footballHold'); }
   });
 }
 
 function renderFootballHold(){
   return buildTechniqueScreen({
-    stageDots:4, eyebrow:'Stage 4 · Gas Release', color:'var(--blush)',
+    stageDots:4, eyebrow:'Stage 4 · Belly Comfort', color:'var(--blush)',
     stepbar:{current:3,total:4},
     title:'Football Hold',
     svg: '<img src="'+IMG['football_hold']+'" onerror="__mpFallback(this,\'football\')" alt="Football hold" style="width:100%; height:auto; display:block; border-radius:var(--r-md);">',
     steps:[
-      'Tuck baby along your forearm, facing you, body upright, not reclined.',
+      'Tuck your baby along your forearm, facing you, body upright and supported.',
       'Support the head in your palm. Ear, shoulder, and hip in one line.',
-      'Keep the angle upright, this is what changes how gas and milk move.',
-      'Pause to burp every minute or so, still upright.'
+      'Keep your baby upright and well supported, and pause to burp gently every minute or so.'
     ],
-    tipLabel:'Upright is the whole mechanism here. Resist the urge to lay baby back.',
-    continueLabel:'Done, next: Warm compress →',
+    evidence:'Common practice, not trial-tested',
+    tipLabel:'Keep your baby upright and supported. Stop if they resist.',
+    continueLabel:'Done, next: warm compress →',
     onContinue:function(){ goTo('warmCompress'); }
   });
 }
 
 function renderWarmCompress(){
   return buildTechniqueScreen({
-    stageDots:4, eyebrow:'Stage 4 · Gas Release', color:'var(--blush)',
+    stageDots:4, eyebrow:'Stage 4 · Belly Comfort', color:'var(--blush)',
     stepbar:{current:4,total:4},
     title:'Warm Compress',
     svg: ICONS.compress,
     steps:[
       'Warm a damp cloth, then test it on the inside of your own wrist first. Warm, not hot.',
-      'Lay it gently across baby’s belly.',
-      'Keep baby upright or semi-upright while it works, continue any soothing already running.'
+      'Lay it gently across your baby’s belly.',
+      'Keep your baby upright or semi-upright while it sits, and continue any soothing already running.'
     ],
-    safety:'Never leave a compress unattended. Remove immediately if skin looks red or baby resists it.',
-    tipLabel:'Warm compress works best when baby stays upright while it sits. No rush.',
+    evidence:'Common comfort measure, not trial-tested',
+    safety:'Never leave a compress unattended. Remove it immediately if skin looks red or your baby resists it.',
+    tipLabel:'No rush. Keep your baby upright or semi-upright while it sits.',
     continueLabel:'Done, how’s baby now? →',
     onContinue:function(){ goTo('finalCheck'); }
   });
@@ -1514,11 +1224,6 @@ function renderWarmCompress(){
 
 function renderFinalCheck(){
   state.finalStartedAt = Date.now();
-  // Gas Release (bicycleLegs → iluMassage → footballHold → warmCompress) has
-  // no outcome-check screen of its own, so nothing else ever reads
-  // gas_releaseStartedAt. Capture it here, right as the parent arrives,
-  // and ride along on the 'final' submit so it isn't lost. Only babies
-  // routed through the gas-release sequence will have this set.
   var gasReleaseSeconds = state.gas_releaseStartedAt
     ? Math.round((Date.now() - state.gas_releaseStartedAt) / 1000)
     : null;
@@ -1539,16 +1244,16 @@ function renderFinalCheck(){
 }
 
 var BRIDGE_COPY = {
-  good: { h:'Baby’s settled. Here’s how The Calm Baby Blueprint\nprevents tomorrow night.',
-    sub:'Tonight’s crisis is managed. The Calm Baby Blueprint resets the underlying root cause so you aren’t back here at 2 AM tomorrow.' },
+  good: { h:'Baby’s settled. Here’s what could make\nthe next few weeks less chaotic.',
+    sub:'Tonight went well. Colic often comes back in the evening, and it usually peaks around week 6 and eases by about 3 to 4 months. A clear order to try things in, plus a log, can help you see what is working.' },
   mid: { h:'Better, but not all the\nway there yet.',
-    sub:'That’s usually a sign the protocol reached one root cause and not the other.' },
-  low: { h:'You showed up for every step tonight.\nNow let’s find what’s actually driving it.',
-    sub:'A checklist manages tonight. It was never built to reset a root cause.' }
+    sub:'That’s common, and no technique works every time. Trying one change at a time and keeping a log can help you see what is helping.' },
+  low: { h:'You showed up for every step tonight.\nThat took real effort.',
+    sub:'No technique works every time, and colic often eases on its own. If tonight was rough, run through the warning signs again, and talk to your pediatrician if you are worried.' }
 };
 
 function sysCardHtml(sys, matched){
-  var matchTag = matched ? '<span class="pill badge-clear" style="margin-left:8px;">✓ Matches tonight</span>' : '';
+  var matchTag = matched ? '<span class="pill badge-clear" style="margin-left:8px;">✓ Your starting point</span>' : '';
   var faded = (state.colicType && !matched) ? 'opacity:.55;' : '';
   return '<div class="sys-card tint-'+sys.tint+'" style="background:var(--card); border-color:'+(matched?'var(--'+sys.tint+'-line)':'var(--border)')+'; '+(matched?'box-shadow:0 0 20px rgba(224,189,117,0.15);':'')+faded+'">' +
     '<div class="ic" style="background:var(--'+sys.tint+'-soft); color:var(--'+sys.tint+');">'+sys.icon+'</div>' +
@@ -1558,76 +1263,62 @@ function sysCardHtml(sys, matched){
 
 function renderBridge(){
   var copy = BRIDGE_COPY[state.outcomes.final || 'mid'];
+  var refId = encodeURIComponent(state.quizAssessmentId || ASSESSMENT_ID);
+
+  // Checkout: straight to Gumroad (skips the Gumroad product page).
   var blueprintHref = withUTM(CONFIG.BLUEPRINT_URL, 'post_crisis_offer');
-  blueprintHref += (blueprintHref.indexOf('?') > -1 ? '&' : '?') + 'ref=' + encodeURIComponent(state.quizAssessmentId || ASSESSMENT_ID);
-  // wanted=true skips Gumroad's product/description page and drops her
-  // straight into checkout. By the bridge screen she's already read the
-  // full pitch on this page, Gumroad's own page would just be a second,
-  // redundant sell before she can pay.
-  blueprintHref += '&wanted=true';
-  var quizHref = withUTM(CONFIG.QUIZ_URL, 'diagnosis_bridge');
+  blueprintHref += (blueprintHref.indexOf('?') > -1 ? '&' : '?') + 'ref=' + refId + '&wanted=true';
+
+  // View product: the /blueprint page, with the same ref so it carries through.
+  var viewHref = withUTM(CONFIG.VIEW_PRODUCT_URL, 'post_crisis_offer_view');
+  viewHref += (viewHref.indexOf('?') > -1 ? '&' : '?') + 'ref=' + refId;
+
+  var quizHref = withUTM(CONFIG.QUIZ_URL, 'starting_point_bridge');
 
   var known = state.colicType && SYSTEMS.filter(function(s){ return s.code === state.colicType; })[0];
   var orderedSystems = known ? [known].concat(SYSTEMS.filter(function(s){ return s.code !== state.colicType; })) : SYSTEMS;
 
   var introHtml = known
-    ? ('<p class="sub">'+esc(copy.sub)+' You already told us tonight was likely <b style="color:var(--cream);">'+known.name+'</b>. Here’s what that means, and what tonight’s protocol could and couldn’t reach for that type.</p>')
-    : ('<p class="sub">'+esc(copy.sub)+' Most parents assume colic is one condition. It’s usually one of three, and tonight’s protocol only reaches two of them.</p>');
+    ? ('<p class="sub">'+esc(copy.sub)+' Your starting point was <b style="color:var(--cream);">'+known.name+'</b>. That is a best guess, not a diagnosis. These are the three practical starting patterns.</p>')
+    : ('<p class="sub">'+esc(copy.sub)+' Colic has no single known cause. These are three practical places to start.</p>');
 
-  // Secondary CTA logic changed [this version]. Was unconditional: every
-  // bridge screen showed a second button next to the Blueprint one,
-  // and for anyone who already had a confirmed type (quiz handoff or
-  // picked in MP) it said "Confirm it and unlock type-specific dosing"
-  // and looped back to the quiz she'd already effectively taken. That's
-  // a competing decision at the exact moment she's most ready to buy,
-  // the same failure pattern the quiz result page had with its direct-
-  // Blueprint button sitting next to the Midnight Protocol one. Now:
-  // known type -> no second button, just the offer and the restart
-  // link. Unknown type (she skipped colicType or picked "not sure")
-  // -> the quiz link stays, because getting her an actual diagnosis
-  // before the offer is real value, not a redundant loop.
-  var quizCtaText = 'Take the 90-second assessment →';
   var quizNote = known
-    ? 'This is the exact calibration the full protocol below carries through, by feeding method, not just by type.'
-    : 'Takes less time than tonight’s protocol did.';
+    ? 'A starting point, not a diagnosis. Your baby can show signs of more than one pattern.'
+    : 'A free 90-second assessment can suggest where to start.';
 
   var html =
     '<div class="screen-body">' +
-      '<div class="eyebrow" style="color:var(--terra)">Diagnosis Before Protocol</div>' +
+      '<div class="eyebrow" style="color:var(--terra)">A starting point for the weeks ahead</div>' +
       '<h1 class="h1" style="font-size:24px; white-space:pre-line;">'+esc(copy.h)+'</h1>' +
       introHtml +
 
-      '<div class="illus" style="margin-top:14px;"><img src="'+IMG['three_systems_interaction_infographic']+'" alt="How the nervous system, gut, and feeding mechanics systems interact to drive colic" style="width:100%; height:auto; display:block;"></div>' +
       orderedSystems.map(function(s){ return sysCardHtml(s, known && s.code === state.colicType); }).join('') +
 
       '<div class="timer-note" style="margin:8px auto 0;">'+quizNote+'</div>' +
 
-      '<details class="expand" style="margin-top:18px;">' +
-        '<summary>Why does colic peak in the evening?<svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary>' +
-        '<div class="expand-body" style="padding-top:10px;"><img src="'+IMG['infant_crying_intensity_chart_202608312322']+'" alt="24-hour infant crying and hormone chart" style="width:100%; height:auto; display:block; border-radius:var(--r-sm);"></div>' +
-      '</details>' +
-
       '<div class="divider"></div>' +
-      '<div class="label-sm center-text" style="margin-bottom:10px;">Prefer to skip straight to the full solution?</div>' +
+      '<div class="label-sm center-text" style="margin-bottom:10px;">If you want the steps, tracker and evidence in one place</div>' +
       '<div class="card">' +
-        '<div class="vs-row"><div class="nm">'+ICONS.leaf+'Diagnostic Protocol, all three systems</div></div>' +
-        '<div class="vs-row"><div class="nm">'+ICONS.leaf+'Full sequenced protocol for your primary system</div></div>' +
+        '<div class="vs-row"><div class="nm">'+ICONS.leaf+'Starting-point assessment, a deeper version of the free one</div></div>' +
+        '<div class="vs-row"><div class="nm">'+ICONS.leaf+'Step-by-step guide for each pattern, with the evidence stated</div></div>' +
         '<div class="vs-row"><div class="nm">'+ICONS.leaf+'Bloom Baby Tracker App</div></div>' +
         '<div class="vs-row"><div class="nm">'+ICONS.leaf+'60-Minute Brown Noise Soundscape</div></div>' +
         '<div class="vs-row"><div class="nm">'+ICONS.leaf+'Cry Decoder Masterclass</div></div>' +
-        '<div class="vs-total"><span class="lbl">Complete system, tonight</span><span class="amt">$47</span></div>' +
+        '<div class="vs-total"><span class="lbl">The Calm Baby Blueprint</span><span class="amt">$47</span></div>' +
       '</div>' +
       '<div class="card tint-sage" style="margin-top:12px;">' +
         '<div style="display:flex; gap:12px; align-items:flex-start;"><div style="color:var(--sage); flex-shrink:0; margin-top:2px;">'+ICONS.shield+'</div>' +
-        '<p style="margin:0; font-size:12.5px; color:var(--cream); line-height:1.6;"><b style="color:var(--sage);">72-Hour Guarantee.</b> Start the full protocol tonight. If you are not seeing a measurable reduction in crying duration within 72 hours, email me and I will refund it in full. You keep the Blueprint either way.</p></div>' +
+        '<p style="margin:0; font-size:12.5px; color:var(--cream); line-height:1.6;"><b style="color:var(--sage);">72-Hour Guarantee.</b> If it doesn’t produce a meaningful shift in 72 hours, reply and I’ll make it right. You keep the Blueprint either way. The 72 hours covers the first changes, like feeding, positioning and soothing. It is not a promise about any single product.</p></div>' +
       '</div>' +
-      '<div class="illus" style="margin-top:16px; background:none; border:none; box-shadow:none; padding:0;"><img src="'+IMG['3d_product_bundle_mockup_showcase_202608312322']+'" alt="The Calm Baby Blueprint bundle" style="width:100%; height:auto; display:block; border-radius:var(--r-md);"></div>' +
+      '<div class="illus" style="margin-top:16px; background:none; border:none; box-shadow:none; padding:0;"><img src="'+IMG['bundle']+'" alt="The Calm Baby Blueprint bundle" style="width:100%; height:auto; display:block; border-radius:var(--r-md);"></div>' +
     '</div>' +
     '<div class="screen-foot">' +
-      '<a class="btn btn-primary" href="'+blueprintHref+'" target="_blank" rel="noreferrer">Get the Calm Baby Blueprint — $47 →</a>' +
-      '<div class="timer-note" style="margin:6px auto 10px;">72-hour guarantee. Keep it either way.</div>' +
-      (known ? '' : '<a class="btn btn-outline" href="'+quizHref+'">'+quizCtaText+'</a>') +
+      '<a class="btn btn-primary" href="'+blueprintHref+'" target="_blank" rel="noopener">Get the Calm Baby Blueprint, $47 →</a>' +
+      '<div class="timer-note" style="margin:6px auto 10px;">72-Hour Guarantee. Keep it either way.</div>' +
+      '<a class="btn btn-outline" href="'+viewHref+'" target="_blank" rel="noopener">View the full product page</a>' +
+      (known ? '' : '<div class="skiplink"><a class="btn-link" href="'+quizHref+'" style="text-decoration:underline;">Take the free assessment first</a></div>') +
       '<div class="skiplink"><button class="btn-link" data-act="restart">↺ Run the protocol again</button></div>' +
+      '<div class="trust-line">' + DISCLAIMER + '</div>' +
     '</div>';
   var el = buildScreen(html);
   function mount(){
