@@ -249,8 +249,8 @@ a{color:inherit}
 .btn-dm-open:hover{background:var(--terra-deep);border-color:var(--terra-deep)}
 .dm-note{font-size:11px;color:var(--muted-soft);margin-top:8px;line-height:1.5}
 
-.stickybar{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(252,250,247,.97);border-top:1px solid rgba(0,0,0,.1);transform:translateY(100%);transition:transform .3s ease}
-.stickybar.show{transform:none}
+.stickybar{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(252,250,247,.97);border-top:1px solid rgba(0,0,0,.1);transform:translateY(100%);visibility:hidden;transition:transform .3s ease,visibility 0s linear .3s}
+.stickybar.show{transform:none;visibility:visible;transition:transform .3s ease}
 .stickybar .sb-info{font-size:12.5px;color:var(--muted);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .stickybar .sb-info b{color:var(--ink)}
 .stickybar button{flex:none;background:var(--terra);color:#fff;border:none;font-weight:700;font-size:13px;border-radius:999px;padding:11px 18px;cursor:pointer;white-space:nowrap}
@@ -350,6 +350,7 @@ a{color:inherit}
       <input id="nameInput" type="text" placeholder="Your first name" autocomplete="given-name"/>
       <input id="emailInput" type="email" placeholder="Your email address" autocomplete="email"/>
       <input id="ageInput" type="number" inputmode="numeric" min="0" max="52" placeholder="Baby's age in weeks"/>
+      <input id="babyNameInput" type="text" maxlength="40" placeholder="Baby's first name (optional)" autocomplete="off"/>
       <!-- Honeypot: hidden from real users, catches simple bots. Do not remove. -->
       <input id="hpField" type="text" name="website" autocomplete="off" tabindex="-1" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" aria-hidden="true"/>
     </div>
@@ -472,8 +473,8 @@ a{color:inherit}
 
       <div class="testimonial-strip reveal">
         <div class="testimonial-card">
-          <p class="testimonial-quote">"Your blueprint is amazing and I wish I came across your page 5 weeks ago. I've had to learn most of that information on my own from endless hours of research when I could have just read your blueprint."</p>
-          <p class="testimonial-attr">Cassie R., via Instagram DM</p>
+          <p class="testimonial-quote">"When I opened the Blueprint, I was honestly blown away. It had everything I had spent weeks learning on my own, plus so much more, all organized into one resource that was actually easy to understand."</p>
+          <p class="testimonial-attr">Cassie Reardon, Gumroad review (excerpt)</p>
         </div>
       </div>
 

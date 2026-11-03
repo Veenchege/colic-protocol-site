@@ -68,6 +68,7 @@ export async function onRequestPost(context) {
 
   const {
     name,
+    baby_name,
     email,
     website, // honeypot
     consent,
@@ -102,6 +103,7 @@ export async function onRequestPost(context) {
     // custom field in MailerLite before this will persist anywhere.
     tiger_hold_timer_seconds,
     purchase_status,
+    red_flag,
     utm_source,
     utm_medium,
     utm_campaign,
@@ -160,6 +162,10 @@ export async function onRequestPost(context) {
     utm_term: cleanStr(utm_term, 100),
     utm_content: cleanStr(utm_content, 100),
   };
+
+  // 'flagged: <short>' or 'none', same values the quiz writes. The email
+  // automations use this field to skip parents who reported a warning sign.
+  const cleanRedFlag = cleanStr(red_flag, 120);
 
   const API_KEY = env.MAILERLITE_API_KEY;
   // Deliberately a separate env var from the quiz's group. See the
@@ -262,6 +268,7 @@ export async function onRequestPost(context) {
     checklist_status: cleanStatus,
     ...only({
       baby_age_weeks: cleanNum(baby_age_weeks),
+      baby_name: cleanStr(baby_name, 40),
       assessment_id: mailerliteAssessmentId,
       lead_source: cleanStr(lead_source),
       checklist_last_stage: cleanStr(checklist_last_stage),
@@ -270,6 +277,7 @@ export async function onRequestPost(context) {
       tiger_hold_outcome: cleanStr(tiger_hold_outcome, 50),
       final_outcome: cleanStr(final_outcome, 50),
       purchase_status: purchaseToSend,
+      red_flag: cleanRedFlag,
       ...utm,
     }),
   };
@@ -442,6 +450,31 @@ export async function onRequestPost(context) {
             p_midnight_completed: cleanStatus === 'completed',
           }),
         }),
+        // 3. red_flag gets its own upsert so a missing column can only fail this
+        // write, never the session row above. Needs:
+        //   alter table midnight_sessions add column if not exists red_flag text;
+        ...(cleanRedFlag ? [
+          fetch(`${SUPABASE_URL}/rest/v1/midnight_sessions?on_conflict=assessment_id`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              apikey: SUPABASE_SERVICE_KEY,
+              Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`,
+              Prefer: 'resolution=merge-duplicates',
+            },
+            body: JSON.stringify({
+              assessment_id: cleanAssessmentId,
+              email: email.trim().toLowerCase(),
+              name: name.trim(),
+              colic_type_from_quiz: cameFromQuiz,
+              checklist_status: cleanStatus,
+              updated_at: new Date().toISOString(),
+              red_flag: cleanRedFlag,
+            }),
+          }).then(async (r) => {
+            if (!r.ok) console.error('[midnight-subscribe] red_flag write rejected:', r.status, await r.text());
+          }),
+        ] : []),
       ]).catch((err) => {
         console.warn('[midnight-subscribe] Supabase write failed silently:', err);
       });

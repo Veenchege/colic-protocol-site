@@ -80,6 +80,7 @@ export async function onRequestPost(context) {
 
   const {
     name,
+    baby_name,
     email,
     colic_type,
     colic_type_detail,
@@ -201,6 +202,7 @@ export async function onRequestPost(context) {
         confidence_pct: cleanNum(confidence_pct),
         baby_age_weeks: cleanNum(baby_age_weeks),
         tried_items: cleanStr(tried_items, 300),
+        baby_name: cleanStr(baby_name, 40),
         assessment_id: cleanAssessmentId,
         lead_source: cleanStr(lead_source),
         quiz_version: cleanStr(quiz_version, 20),
@@ -226,7 +228,11 @@ export async function onRequestPost(context) {
       }),
     });
 
-    const data = await mlRes.json();
+    const data = await mlRes.json().catch(() => ({}));
+    // 422 stays non-fatal for the quiz, but it is no longer invisible.
+    if (mlRes.status === 422) {
+      console.error('[subscribe] MailerLite 422:', JSON.stringify(data), 'group:', GROUP_ID);
+    }
 
     if (!mlRes.ok && mlRes.status !== 422) {
       console.error('[subscribe] MailerLite error:', mlRes.status, JSON.stringify(data));

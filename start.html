@@ -1,0 +1,107 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Start tonight · Colic Protocol</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4ede4;--card:#fff;--ink:#2c1f18;--mu:#7a6555;--terra:#c4603a;--sage:#5c7a5f;--bd:rgba(44,31,24,.14);--red:#b84040}
+*{box-sizing:border-box;margin:0}body{font:15px/1.6 'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--ink);padding:max(16px,env(safe-area-inset-top)) 16px 90px}
+main{max-width:560px;margin:0 auto}h1,h2{font-family:'Cormorant Garamond',serif;line-height:1.1}h1{font-size:32px;margin:14px 0 6px}h2{font-size:22px;margin-bottom:8px}
+.c{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px;margin:12px 0}.mu{color:var(--mu);font-size:13px}
+button,.b{font:600 15px 'DM Sans';min-height:46px;border-radius:10px;border:1px solid var(--bd);background:#fff;color:var(--ink);padding:10px 14px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+.p{background:var(--terra);color:#fff;border-color:var(--terra)}.s{background:var(--sage);color:#fff;border-color:var(--sage)}
+.door{display:block;width:100%;text-align:left;margin:8px 0;padding:14px;display:block;line-height:1.35}.door small{display:block;font-weight:400;color:var(--mu);margin-top:2px}
+.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1 1 40%}label{display:block;font-size:13px;color:var(--mu);margin:8px 0 3px}
+input,select{width:100%;font:15px 'DM Sans';padding:11px;border:1px solid var(--bd);border-radius:10px;background:#fff}
+.opt{display:flex;gap:10px;align-items:flex-start;padding:10px;border:1px solid var(--bd);border-radius:10px;margin:6px 0}.opt input{width:20px;margin-top:3px}
+.stop{border-color:var(--red);background:#fbeeee}.ev{display:flex;justify-content:space-between;font-size:13px;padding:6px 0;border-bottom:1px solid var(--bd)}
+.sig{padding:8px 0;border-bottom:1px solid var(--bd);font-size:14px}.hid{display:none}.offer{border-color:var(--terra);background:#fdf3ec}
+.nav{display:flex;gap:6px;margin:10px 0}.nav button{flex:1;min-height:40px;font-size:13px}.nav .on{background:var(--ink);color:#fff}
+.fine{font-size:12px;color:var(--mu);margin-top:18px}.fine a{color:var(--mu)}
+</style></head><body><main id="app"></main>
+<script>
+(function(){
+try{var _p=new URLSearchParams(location.search),_k=['utm_source','utm_medium','utm_campaign','utm_term','utm_content'];if(_k.some(function(k){return _p.has(k)})){var _u={};_k.forEach(function(k){_u[k]=_p.get(k)||''});sessionStorage.setItem('cp_utm',JSON.stringify(_u))}}catch(e){}
+var K='cpx_v1',API='/api/track',QUIZ='quiz.html',MP='midnight-protocol.html',BP='/blueprint';
+var RF=[["Fever of 38°C / 100.4°F or higher","fever"],["Green or yellow-green vomit, or forceful vomiting after most feeds","vomiting"],["Blood in the stool","blood in stool"],["Poor feeding or refusing feeds","poor feeding"],["Unusually sleepy, limp, or very hard to wake","sleepy or limp"],["Trouble breathing, or blue lips or face","breathing trouble"],["A hair wrapped tightly around a finger, toe, or genitals","hair tourniquet"]];
+var TRIED=[["","Nothing yet"],["gripe","Gripe water or gas drops"],["rock","Rocking, bouncing or swinging"],["sound","Sound machine"],["pos","Changed feeding position"],["hold","Supported hold"],["burp","Burping or tummy massage"]];
+var TRIED_Q4={gripe:0,rock:1,sound:2,pos:3};
+var app=document.getElementById('app'),view='home',pending=[],offersQ=[];
+function uid(){return crypto.randomUUID?crypto.randomUUID():'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,function(c){var r=Math.random()*16|0;return(c=='x'?r:r&3|8).toString(16)})}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+var S=(function(){try{var s=JSON.parse(localStorage.getItem(K));if(s&&s.id)return s}catch(e){}return{id:uid(),rf:'pending',age:'',feed:'',name:'',email:'',consent:false,ev:[],q:[],shown:{},door:'',utm:{}}})();
+(function(){try{var p=new URLSearchParams(location.search);['utm_source','utm_medium','utm_campaign'].forEach(function(k){if(p.get(k)&&!S.utm[k])S.utm[k]=p.get(k).slice(0,100)});var d=p.get('door');if(/^(quiz|tonight|track)$/.test(d))S.door=d}catch(e){}})();
+function save(){try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}}
+function sync(extra){if(!S.sync&&!(extra&&extra.action))return Promise.resolve(false);var body=Object.assign({device_id:S.id,profile:{rf:S.rf,age:S.age,feeding:S.feed,name:S.name,email:S.email,consent:S.consent,door:S.door,utm:S.utm},events:S.q.slice(),offers:offersQ.slice()},extra||{});
+ var n=S.q.length,o=offersQ.length;
+ return fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},keepalive:true,body:JSON.stringify(body)}).then(function(r){if(r.ok&&!(extra&&extra.action)){S.q=S.q.slice(n);offersQ=offersQ.slice(o);save()}return r.ok}).catch(function(){return false})}
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')sync()});
+function log(k,d,t){S.ev.push({id:uid(),t:(t||new Date()).toISOString(),k:k,d:d||{}});S.q.push(S.ev[S.ev.length-1]);save();sync()}
+
+/* signals: patterns in her own log. Never a type, never a diagnosis. */
+function signals(){var cry=S.ev.filter(function(e){return e.k==='cry'}),days={};S.ev.forEach(function(e){days[e.t.slice(0,10)]=1});
+ var o={n:S.ev.length,cry:cry.length,days:Object.keys(days).length,items:[],q:{},ready:false};
+ var feeds=S.ev.filter(function(e){return e.k==='feed'}).map(function(e){return+new Date(e.t)}).sort();
+ if(S.feed)o.q.q7={'Breastfed':0,'Formula-fed':1,'Mixed':2}[S.feed];
+ var tr=[];cry.forEach(function(e){var i=TRIED_Q4[e.d.tried];if(i!=null&&tr.indexOf(i)<0)tr.push(i)});if(tr.length){o.q.q4=tr;o.items.push('You have already tried '+tr.length+' of the common things the quiz asks about.')}
+ var dp=S.ev.filter(function(e){return e.k==='diaper'});if(dp.length>=3){var g=dp.filter(function(e){return e.d.s==='green'}).length/dp.length,nm=dp.filter(function(e){return e.d.s==='normal'}).length/dp.length;
+  if(g>=.4){o.q.q6=0;o.items.push('Green, frothy or mucousy stools in '+Math.round(g*100)+'% of '+dp.length+' diaper entries.')}else if(nm>=.7)o.q.q6=1}
+ if(cry.length>=5&&o.days>=2){o.ready=true;var ev=0,late=0,near=0,m=0;
+  cry.forEach(function(e){var t=+new Date(e.t),h=new Date(e.t).getHours();if(h>=17)ev++;var f=feeds.filter(function(x){return x<=t&&t-x<=6*36e5}).pop();if(f!=null){m++;var d=(t-f)/6e4;if(d>=60&&d<=180)late++;else if(d<=30)near++}});
+  var es=ev/cry.length;if(m>=4&&late/m>=.5){o.q.q1=3;o.items.push('Crying started 1 to 3 hours after a feed in '+late+' of '+m+' episodes with a feed logged before them.')}
+  else if(m>=4&&near/m>=.5){o.q.q1=1;o.items.push('Crying started within 30 minutes of a feed in '+near+' of '+m+' episodes.')}
+  else if(es>=.6){o.q.q1=0;o.items.push('Crying started after 5PM in '+ev+' of '+cry.length+' episodes.')}else{o.q.q1=2;o.items.push('No clear time-of-day or after-feed pattern yet.')}}
+ return o}
+function dayMins(){var d={};S.ev.forEach(function(e){if(e.k==='cry'&&e.d.min){var k=e.t.slice(0,10);d[k]=(d[k]||0)+Number(e.d.min)}});return Object.keys(d).sort().map(function(k){return d[k]})}
+var fmt=/^(Formula-fed|Mixed)$/;
+function offerRule(sg){if(S.rf!=='none'||sg.days<3||sg.cry<6)return null;var m=dayMins(),helped=S.ev.some(function(e){return e.k==='cry'&&e.d.helped==='yes'}),tried={};S.ev.forEach(function(e){if(e.k==='cry'&&e.d.tried)tried[e.d.tried]=1});
+ var cands=[];
+ if(m.length>=4){var a=(m[0]+m[1])/2,b=(m[m.length-1]+m[m.length-2])/2;if(b>=a*.8)cands.push(['no_drop','Your log shows no clear drop in crying yet','Colic also eases on its own, so a log is how you tell what is changing. The Blueprint gives you an order to try things in and a way to read the log, so you stop guessing.'])}
+ if(Object.keys(tried).length>=3&&!helped)cands.push(['tried_many','You have tried '+Object.keys(tried).length+' things and none is marked as helping','The Blueprint covers what each of these does and does not have trial evidence for, and what to try next for your starting point.'])
+ if(fmt.test(S.feed)&&(sg.q.q1===1||sg.q.q1===3))cands.push(['feed_tree','Your crying follows feeds and your baby is not exclusively breastfed','The Blueprint leads with the paced-feeding and soothing steps for this situation and explains the probiotic evidence honestly, including the trial that found no benefit.'])
+ for(var i=0;i<cands.length;i++)if(S.shown[cands[i][0]]!=='dismissed')return cands[i];return null}
+
+function go(v){view=v;render();scrollTo(0,0)}
+function nav(){return'<div class="nav"><button data-v="home" class="'+(view==='home'?'on':'')+'">Start</button><button data-v="track" class="'+(view==='track'?'on':'')+'">Track</button><button data-v="insights" class="'+(view==='insights'?'on':'')+'">Patterns</button></div>'}
+function gate(){return'<h1>Before we start</h1><p class="mu">Some signs need a doctor, not a home protocol. Does your baby have any of these right now?</p><div class="c" id="rf">'+RF.map(function(r,i){return'<label class="opt"><input type="checkbox" data-i="'+i+'"><span>'+r[0]+'</span></label>'}).join('')+'<label class="opt"><input type="checkbox" data-none="1"><span>None of these</span></label></div><p class="mu" style="margin:8px 0">Your answers stay on this device unless you choose to save your log online later. <a href="/privacy">Privacy</a>.</p><button class="p" id="rfgo" style="width:100%">Continue</button>'}
+function stop(){return'<div class="c stop" role="alert"><h2>Please call your doctor now</h2><p>You told us: '+esc(S.rf.replace('flagged: ',''))+'. These are not signs we can help with at home. No assessment or tracker result is shown while these are present.</p><button id="rfback" style="margin-top:10px">Go back and change my answer</button></div>'}
+function home(){return'<h1>Where would you like to start?</h1><p class="mu">Everything you do here feeds the same picture, so you can start anywhere.</p>'+
+ '<a class="b door" href="'+MP+'?via=start_tonight" data-door="tonight"><b>Tonight, right now</b><small>A guided, timed protocol for the next hour.</small></a>'+
+ '<a class="b door" href="'+QUIZ+'?via=start_quiz" data-door="quiz"><b>Find my starting point</b><small>The 90-second assessment. A place to start, not a diagnosis.</small></a>'+
+ '<a class="b door" href="tracker.html?via=start_track" data-door="track"><b>Track and see patterns</b><small>One-tap logging. Your own log can pre-fill the assessment.</small></a>'+offerHtml()}
+function offerHtml(){var sg=signals(),r=offerRule(sg);if(!r)return'';if(!S.shown[r[0]]){S.shown[r[0]]='shown';offersQ.push({r:r[0],a:'shown'});save()}
+ return'<div class="c offer"><h2>'+r[1]+'</h2><p>'+r[2]+'</p><p class="mu" style="margin-top:6px">72-Hour Guarantee. If it does not produce a meaningful shift in 72 hours, reply and I will make it right. You keep the Blueprint either way. $47.</p><div class="row" style="margin-top:10px"><a class="b p" data-offer="'+r[0]+'" href="'+BP+'?via=start_offer&offer='+r[0]+'">See the Blueprint</a><button data-dismiss="'+r[0]+'">Not now</button></div><p class="mu" style="margin-top:8px;font-size:12px">Educational, not medical advice. It does not replace your baby\'s doctor.</p></div>'}
+function track(){var cs=S.age===''||!S.feed;
+ var h='<h1>Track</h1>'+(cs?'<div class="c"><div class="row"><div><label>Baby age (weeks)</label><input id="age" type="number" min="0" max="60" inputmode="numeric" value="'+esc(S.age)+'"></div><div><label>Feeding</label><select id="feed"><option value="">Choose</option><option>Breastfed</option><option>Formula-fed</option><option>Mixed</option></select></div></div><button class="s" id="pgo" style="margin-top:10px;width:100%">Save</button></div>':'');
+ h+='<div class="c"><div class="row"><button data-q="feed">Feed</button><button data-q="sleep">Sleep</button><button data-q="diaper">Diaper</button><button data-q="cry" class="p">Crying</button></div><div id="sheet"></div></div>';
+ h+='<div class="c"><h2>Recent</h2>'+(S.ev.slice(-8).reverse().map(function(e){var t=new Date(e.t);return'<div class="ev"><span>'+esc(e.k)+(e.d.min?' '+esc(e.d.min)+' min':'')+(e.d.s?' '+esc(e.d.s):'')+(e.d.hrs?' '+esc(e.d.hrs)+' h':'')+'</span><span class="mu">'+t.toLocaleDateString([], {month:'short',day:'numeric'})+' '+t.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})+'</span></div>'}).join('')||'<p class="mu">Nothing logged yet. Tap Feed after the next feed so crying can be timed against it.</p>')+(S.ev.length?'<button id="undo" style="margin-top:8px;min-height:36px">Undo last</button>':'')+'</div>';return h}
+function insights(){var sg=signals(),h='<h1>Patterns</h1>';
+ if(!sg.ready)return h+'<div class="c"><p>Patterns need at least 5 crying episodes across 2 days. You have '+sg.cry+' episodes over '+sg.days+' day'+(sg.days===1?'':'s')+'. Logging feeds as well lets us time crying against them.</p></div>';
+ h+='<div class="c"><h2>What your log shows</h2>'+sg.items.map(function(i){return'<div class="sig">'+esc(i)+'</div>'}).join('')+'<p class="mu" style="margin-top:8px">These are patterns in '+sg.n+' entries, not a diagnosis. Colic also changes on its own.</p></div>';
+ h+='<div class="c"><h2>Use this in the assessment</h2><p class="mu">We can pre-fill the questions your log can answer. You can change every one. Questions about the sound of the cry and body signs are still yours to answer.</p><button class="p" id="toquiz" style="margin-top:10px;width:100%">Take the assessment with my log</button></div>';
+ if(!S.email)h+='<div class="c"><h2>Keep your log safe</h2><p class="mu">Save it so it survives a lost phone or a cleared browser.</p><label>First name</label><input id="nm" autocomplete="given-name"><label>Email</label><input id="em" type="email" autocomplete="email"><label class="opt"><input type="checkbox" id="cs"><span>I agree to receive my results and occasional emails from Colic Protocol.</span></label><button class="s" id="save" style="width:100%">Save my log</button><p class="mu" id="msg"></p></div>';
+ return h+offerHtml()}
+function render(){var h;if(S.rf==='pending')h=gate();else if(/^flagged/.test(S.rf))h=stop();else h=home();
+ app.innerHTML=h+'<p class="fine">Educational, not medical advice. <a href="/privacy">Privacy</a> · <a href="#" id="del">Delete my data</a></p>';bind()}
+function q(s){return app.querySelector(s)}
+function bind(){var el;
+ app.querySelectorAll('[data-v]').forEach(function(b){b.onclick=function(){go(b.dataset.v)}});
+ if(el=q('#rfgo'))el.onclick=function(){var sel=[],none=q('[data-none]').checked;app.querySelectorAll('#rf [data-i]').forEach(function(c){if(c.checked)sel.push(RF[c.dataset.i][1])});if(!sel.length&&!none)return;S.rf=sel.length?'flagged: '+sel.join(', '):'none';save();sync();render()};
+ if(el=q('#rfback'))el.onclick=function(){S.rf='pending';save();render()};
+ if(el=q('#pgo'))el.onclick=function(){S.age=q('#age').value;S.feed=q('#feed').value;save();sync();render()};
+ app.querySelectorAll('[data-q]').forEach(function(b){b.onclick=function(){var k=b.dataset.q,sh=q('#sheet');
+  if(k==='feed'){log('feed');return render()}
+  if(k==='diaper')sh.innerHTML='<label>Diaper</label><div class="row"><button data-s="normal">Normal</button><button data-s="green">Green or frothy</button><button data-s="other">Other</button></div>';
+  if(k==='sleep')sh.innerHTML='<label>Hours slept</label><input id="hrs" type="number" step="0.5" min="0" max="24" inputmode="decimal"><button class="s" id="sv" style="width:100%;margin-top:8px">Save</button>';
+  if(k==='cry')sh.innerHTML='<label>How long (minutes)</label><input id="min" type="number" min="1" max="600" inputmode="numeric"><label>What you tried</label><select id="tr">'+TRIED.map(function(t){return'<option value="'+t[0]+'">'+t[1]+'</option>'}).join('')+'</select><label>Did it help?</label><select id="hp"><option value="">Not sure</option><option value="yes">Yes</option><option value="some">A little</option><option value="no">No</option></select><button class="p" id="sv" style="width:100%;margin-top:8px">Save</button>';
+  app.querySelectorAll('[data-s]').forEach(function(x){x.onclick=function(){log('diaper',{s:x.dataset.s});render()}});
+  var sv=q('#sv');if(sv)sv.onclick=function(){if(k==='sleep'){var v=parseFloat(q('#hrs').value);if(!(v>=0))return;log('sleep',{hrs:v})}else{var m=parseInt(q('#min').value,10);if(!(m>0))return;log('cry',{min:m,tried:q('#tr').value,helped:q('#hp').value})}render()}}});
+ if(el=q('#undo'))el.onclick=function(){var e=S.ev.pop();S.q=S.q.filter(function(x){return x.id!==e.id});save();render()};
+ if(el=q('#toquiz'))el.onclick=function(){var sg=signals();try{sessionStorage.setItem('cp_signals',JSON.stringify({q1:sg.q.q1,q4:sg.q.q4,q6:sg.q.q6,q7:sg.q.q7,n:sg.n,days:sg.days}))}catch(e){}S.door='track';save();sync();location.href=QUIZ+'?via=tracker_prefill'};
+ if(el=q('#save'))el.onclick=function(){var em=q('#em').value.trim(),nm=q('#nm').value.trim(),m=q('#msg');if(!nm||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)||!q('#cs').checked){m.textContent='Please add your name, a valid email and tick the consent box.';return}S.name=nm;S.email=em.toLowerCase();S.consent=true;save();sync().then(function(){render()})};
+ app.querySelectorAll('[data-door]').forEach(function(a){a.onclick=function(){S.door=a.dataset.door;save();if(a.dataset.door==='tonight'&&S.email){try{sessionStorage.setItem('cp_lead',JSON.stringify({name:S.name,email:S.email,age:S.age===''?null:Number(S.age),consent:true}))}catch(e){}}sync()}});
+ app.querySelectorAll('[data-offer]').forEach(function(a){a.onclick=function(){offersQ.push({r:a.dataset.offer,a:'clicked'});sync()}});
+ app.querySelectorAll('[data-dismiss]').forEach(function(b){b.onclick=function(){S.shown[b.dataset.dismiss]='dismissed';offersQ.push({r:b.dataset.dismiss,a:'dismissed'});save();sync();render()}});
+ if(el=q('#del'))el.onclick=function(e){e.preventDefault();if(!confirm('Delete all data saved on this device and on our servers?'))return;sync({action:'delete'}).then(function(){localStorage.removeItem(K);location.reload()})}}
+if(/[?&]door=track/.test(location.search)){location.replace('tracker.html'+location.search);return}render();
+})();
+</script></body></html>

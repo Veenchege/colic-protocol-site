@@ -314,14 +314,17 @@ var TYPE_MAP = {
 
 /* 10 random characters from crypto, no 0/O/1/I. The old 5-digit ID had only
    100,000 values, so two sessions could share one and overwrite each other. */
-var ASSESSMENT_ID = (function(){
+function newSessionId(){
   var ALPHA = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   var b = new Uint8Array(10), r = '', i;
   try { crypto.getRandomValues(b); }
   catch(e){ for (i = 0; i < b.length; i++) b[i] = Math.floor(Math.random()*256); }
   for (i = 0; i < b.length; i++) r += ALPHA[b[i] % 32];
   return 'MP-' + new Date().getFullYear() + '-' + r;
-})();
+}
+// A restart gets a fresh ID, so each run is its own midnight_sessions row and
+// a skipped stage can never inherit the previous run's outcome.
+var ASSESSMENT_ID = newSessionId();
 var SESSION_STARTED_AT = Date.now();
 
 var state = {
@@ -334,23 +337,47 @@ var state = {
   colicTypeConfidence: null,
   quick: { diaper:null, fed:null },
   outcomes: { environment:null, tigerHold:null, final:null },
-  cleanups: []
+  cleanups: [],
+  leadSource: CONFIG.SOURCE,
+  redFlag: ''
 };
 
 (function captureUTMandHandoff(){
   try{
     var p = new URLSearchParams(window.location.search);
-    state.utm.utm_source = p.get('utm_source') || CONFIG.SOURCE;
-    state.utm.utm_medium = p.get('utm_medium') || '';
-    state.utm.utm_campaign = p.get('utm_campaign') || '';
-    state.utm.utm_term = p.get('utm_term') || '';
-    state.utm.utm_content = p.get('utm_content') || '';
+    // UTMs: this page's own URL wins (e.g. a DM link). Otherwise use the
+    // visitor's original UTMs saved by the quiz in sessionStorage 'cp_utm'.
+    // The quiz handoff link carries no utm_* params (only handoff=), so it
+    // can no longer overwrite the real source.
+    var UTM_KEYS = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'];
+    var urlHasUtm = UTM_KEYS.some(function(k){ return p.has(k); });
+    var src = {};
+    if (urlHasUtm){
+      UTM_KEYS.forEach(function(k){ src[k] = p.get(k) || ''; });
+      try{ sessionStorage.setItem('cp_utm', JSON.stringify(src)); }catch(e){}
+    } else {
+      try{
+        var stored = JSON.parse(sessionStorage.getItem('cp_utm') || 'null');
+        if (stored && typeof stored === 'object'){
+          UTM_KEYS.forEach(function(k){ src[k] = typeof stored[k] === 'string' ? stored[k] : ''; });
+        }
+      }catch(e){}
+    }
+    UTM_KEYS.forEach(function(k){ state.utm[k] = src[k] || ''; });
     var aidParam = (p.get('aid') || '').trim();
     if (/^CP-[A-Za-z0-9-]{3,40}$/.test(aidParam)) state.quizAssessmentId = aidParam;
     var t = (p.get('type') || '').toUpperCase();
+    // Unknown or retired codes (old email links with ?type=AC) are ignored on
+    // purpose. The parent picks on the type screen. The Acoustic model is
+    // retired, so it is not remapped to another type.
     if (TYPE_MAP[t]){ state.colicType = t; state.colicTypeFromQuiz = true; }
+    var fromQuiz = !!state.quizAssessmentId || state.colicTypeFromQuiz;
+    if (state.utm.utm_source){ state.leadSource = state.utm.utm_source; }
+    else if (fromQuiz){ state.leadSource = 'direct'; } // matches the quiz's own fallback
+    else { state.utm.utm_source = CONFIG.SOURCE; state.leadSource = CONFIG.SOURCE; }
     var confParam = p.get('confidence');
-    if (confParam !== null && confParam !== '' && !isNaN(Number(confParam))){
+    // Confidence only counts when the type it belongs to was accepted.
+    if (state.colicTypeFromQuiz && confParam !== null && confParam !== '' && !isNaN(Number(confParam))){
       var confNum = Number(confParam);
       if (confNum >= 0 && confNum <= 100) state.colicTypeConfidence = confNum;
     }
@@ -374,10 +401,11 @@ var state = {
     var l = JSON.parse(raw);
     var emailOK = l && typeof l.email === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(l.email);
     var nameVal = l && l.name ? String(l.name).slice(0, 60) : state.lead.name;
+    var babyVal = l && l.babyName ? String(l.babyName).slice(0, 40) : '';
     var ageNum = (l && l.age !== null && l.age !== '' && !isNaN(Number(l.age))) ? Number(l.age) : null;
     var ageOK = ageNum !== null && ageNum >= 0 && ageNum <= 60;
     if (emailOK && l.consent === true && nameVal && ageOK){
-      state.lead = { name:nameVal, email:l.email.toLowerCase(), babyAgeWeeks:ageNum, consent:true, hp:'' };
+      state.lead = { name:nameVal, babyName:babyVal, email:l.email.toLowerCase(), babyAgeWeeks:ageNum, consent:true, hp:'' };
       state.hasHandoff = true;
     }
   }catch(e){}
@@ -387,7 +415,7 @@ function withUTM(url, campaign){
   try{
     var isAbsolute = /^https?:\/\//i.test(url);
     var u = new URL(url, window.location.origin);
-    u.searchParams.set('utm_source', state.utm.utm_source);
+    u.searchParams.set('utm_source', state.utm.utm_source || state.leadSource);
     u.searchParams.set('utm_medium', state.utm.utm_medium || 'midnight_protocol');
     u.searchParams.set('utm_campaign', campaign || state.utm.utm_campaign || 'midnight_protocol');
     return isAbsolute ? u.href : (u.pathname + u.search);
@@ -413,14 +441,16 @@ function post(extra){
       website: state.lead.hp || '',
       consent: !!state.lead.consent,
       baby_age_weeks: state.lead.babyAgeWeeks,
+      baby_name: state.lead.babyName || '',
       colic_type: state.colicType ? (TYPE_MAP[state.colicType] ? TYPE_MAP[state.colicType].label : 'Unassigned') : '',
       colic_type_detail: state.colicTypeFromQuiz ? 'Confirmed from quiz handoff' : (state.colicType ? 'Selected in Midnight Protocol' : ''),
       colic_type_confidence: state.colicTypeConfidence,
       assessment_id: ASSESSMENT_ID,
       quiz_assessment_id: state.quizAssessmentId || null,
-      lead_source: state.utm.utm_source,
+      lead_source: state.leadSource,
       checklist_version: '1.3-evidence',
-      purchase_status: 'pending'
+      purchase_status: 'pending',
+      red_flag: state.redFlag
     }, state.utm, state.sticky, extra || {});
     fetch(CONFIG.ENDPOINT, {
       method:'POST',
@@ -453,10 +483,6 @@ function submitOutcome(stage, result, extraFields){
   if (extraFields) Object.assign(extra, extraFields);
   remember(extra);
   post(extra);
-}
-function submitCompleted(){
-  if (!state.lead.email) return;
-  post({ checklist_status:'completed', checklist_last_stage:'bridge' });
 }
 
 var ICONS = {
@@ -559,7 +585,7 @@ function mountStopwatch(container, opts){
       '</svg>' +
       '<div class="timer-digits"><span class="t">0:00</span>'+(pulse?'<span class="p" style="background:'+color+';color:'+color+'"></span>':'')+'</div>' +
     '</div>' +
-    (pulse ? '<div class="metro-badge"><span class="metro-dot"></span>Pacing guide: about one pulse per second</div>' : '') +
+    (pulse ? '<div class="metro-badge"><span class="metro-dot"></span>Pacing guide: slow and steady</div>' : '') +
     '<div class="timer-controls"></div>' +
     '<div class="timer-note-slot"></div>';
   container.appendChild(wrap);
@@ -695,7 +721,7 @@ function buildScreen(html, extraClass){
 }
 function $(el, sel){ return el.querySelector(sel); }
 function $all(el, sel){ return Array.prototype.slice.call(el.querySelectorAll(sel)); }
-function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
 
 function dotsHTML(activeStage){
   var stages = 4;
@@ -785,13 +811,13 @@ function buildTechniqueScreen(cfg){
 
 // Safety list matches the quiz safety check. Any tap goes to the stop screen.
 var DANGERS = [
-  { key:'fever', text:'Fever of 38°C / 100.4°F or higher' },
-  { key:'vomit', text:'Green vomit, or forceful vomiting after most feeds' },
-  { key:'blood', text:'Blood in the stool' },
-  { key:'feeding', text:'Poor feeding or refusing feeds' },
-  { key:'limp', text:'Unusually sleepy, limp, or very hard to wake' },
-  { key:'breathing', text:'Trouble breathing, or blue lips or face' },
-  { key:'tourniquet', text:'A hair wrapped tightly around a finger, toe, or genitals' }
+  { key:'fever', text:'Fever of 38°C / 100.4°F or higher', short:'fever' },
+  { key:'vomit', text:'Green or yellow-green vomit, or forceful vomiting after most feeds', short:'green or forceful vomiting' },
+  { key:'blood', text:'Blood in the stool', short:'blood in stool' },
+  { key:'feeding', text:'Poor feeding or refusing feeds', short:'poor feeding' },
+  { key:'limp', text:'Unusually sleepy, limp, or very hard to wake', short:'sleepy, limp or hard to wake' },
+  { key:'breathing', text:'Trouble breathing, or blue lips or face', short:'breathing trouble' },
+  { key:'tourniquet', text:'A hair wrapped tightly around a finger, toe, or genitals', short:'hair tourniquet' }
 ];
 var SYSTEMS = [
   { code:'GUT', key:'gut', name:'Gut Microbiome Imbalance', icon:ICONS.gut, tint:'terra',
@@ -873,7 +899,7 @@ function renderWelcome(){
       errEmail.hidden = emailOK; errEmail.textContent = 'Enter a valid email, that’s where tonight’s protocol is saved to.';
       errConsent.hidden = consent; errConsent.textContent = 'Check the box to continue, we only send what you agree to.';
       if (!(nameOK && ageOK && emailOK && consent)) return;
-      state.lead = { name:name, email:email.toLowerCase(), babyAgeWeeks:Number(age), consent:true, hp:hp };
+      state.lead = { name:name, babyName:(state.lead && state.lead.babyName) || '', email:email.toLowerCase(), babyAgeWeeks:Number(age), consent:true, hp:hp };
       submitLead(false);
       goTo('stopscan');
     });
@@ -904,12 +930,19 @@ function renderStopScan(){
   var el = buildScreen(html);
   function mount(){
     $all(el, '.danger-item').forEach(function(row){
-      row.addEventListener('click', function(){ goTo('emergency'); });
+      row.addEventListener('click', function(){
+        // Saved as red_flag so the automations can skip this parent. Same
+        // values as the quiz: 'flagged: <short>' or 'none'.
+        var key = row.getAttribute('data-danger');
+        var hit = DANGERS.filter(function(d){ return d.key === key; })[0];
+        state.redFlag = 'flagged: ' + (hit ? hit.short : key);
+        goTo('emergency');
+      });
     });
     $all(el, '.toggle-row').forEach(function(row){
       row.addEventListener('click', function(){ row.classList.toggle('on'); });
     });
-    $(el,'[data-act=continue]').addEventListener('click', function(){ goTo('colicType'); });
+    $(el,'[data-act=continue]').addEventListener('click', function(){ state.redFlag = 'none'; goTo('colicType'); });
   }
   return { el:el, mount:mount };
 }
@@ -993,7 +1026,7 @@ function renderEnvironment(){
     ['screens','Screens off','TV, tablets, phones turned away',
       'A lit screen nearby adds light and movement when you are trying to reduce what your baby has to take in. This is common sense, not trial-tested. It includes your own phone if it is propped up and lit.'],
     ['temp','Room feels comfortable','Not too warm',
-      'Overheating is a safe-sleep concern, and many safe-sleep guides suggest roughly 16 to 20°C (61 to 68°F). If you would be comfortable in a light long-sleeve layer, the room is likely in range.']
+      'Overheating is a safe-sleep concern. If you would be comfortable in a light long-sleeve layer, the room is likely about right. Check your local safe-sleep guidance for a recommended room temperature.']
   ];
   var rowsHtml = items.map(function(it, i){
     return '<div class="toggle-row" data-env="'+it[0]+'">' +
@@ -1098,13 +1131,13 @@ function renderTigerHold(){
     steps:[
       'Lay your baby face-down along your forearm, head resting in your palm, legs either side of your elbow. Awake and supervised only.',
       'Keep the hold firm and supported, with your baby’s belly resting on your forearm.',
-      'Move in a slow, steady rhythm, forward and back, about one pulse per second. Smooth and slow, not jiggling.',
+      'Move in a slow, steady rhythm, forward and back. Smooth and slow, not jiggling.',
       'If your baby is still upset after a few minutes, that is common. No technique works every time.'
     ],
     evidence:'Small, unblinded studies. No trial shows it beats other supported holds',
     safety:'Face-down holds are for awake, supervised holding only. Never put your baby to sleep face-down.',
     stopwatch:true,
-    pulse:true,
+    pulse:false, // 1 Hz metronome removed: it encoded the retired 60 BPM spec. Tiger Hold tempo is still undecided.
     tipLabel:'There is no fixed time here. Stop whenever your baby, or your arm, needs a break.',
     continueLabel:'Done, how\'s baby? →',
     onStopwatchElapsed:function(sec){ state.tigerHoldTimerSeconds = sec; },
@@ -1236,8 +1269,12 @@ function renderFinalCheck(){
       state.outcomes.final = val;
       var extra = {};
       if (gasReleaseSeconds !== null) extra.gas_release_dwell_seconds = gasReleaseSeconds;
+      // ONE request. Two near-simultaneous pings (outcome, then completed) race
+      // on the server and the slower one wins, which can flip a finished
+      // session back to in_progress.
+      extra.checklist_status = 'completed';
+      extra.checklist_last_stage = 'bridge';
       submitOutcome('final', val, extra);
-      submitCompleted();
       goTo('bridge');
     }
   });
@@ -1324,6 +1361,9 @@ function renderBridge(){
   function mount(){
     $(el,'[data-act=restart]').addEventListener('click', function(){
       state.outcomes = { environment:null, tigerHold:null, final:null };
+      state.sticky = {};   // a second run must not resend the first run's outcomes
+      state.redFlag = '';
+      ASSESSMENT_ID = newSessionId();
       goTo('stopscan');
     });
   }

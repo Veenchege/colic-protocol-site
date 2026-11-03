@@ -74,6 +74,7 @@ const RED_FLAG_OPTIONS = [
   { text: "Poor feeding or refusing feeds", short: "poor feeding" },
   { text: "Unusually sleepy, limp, or very hard to wake", short: "sleepy, limp or hard to wake" },
   { text: "Trouble breathing, or blue lips or face", short: "breathing trouble" },
+  { text: "A hair wrapped tightly around a finger, toe, or genitals", short: "hair tourniquet" },
 ];
 const RF_NONE = RED_FLAG_OPTIONS.length; // index of "None of these"
 const rfSelected = new Set();
@@ -85,7 +86,7 @@ let redFlagStatus = 'pending';
    (Q7 only, null elsewhere), tried tag (Q4 only, null elsewhere),
    reason line shown in the answer audit].
    Scoring weights are heuristic starting points, not validated against
-   outcomes. Q1, Q2, Q3, Q6 and Q7 are single-select, Q4 and Q5 multi.
+   outcomes. Q1, Q2, Q3, Q5, Q6 and Q7 are single-select, Q4 is multi.
    ══════════════════════════════════════════════════════════════════════ */
 const QUESTIONS = [
   {
@@ -133,7 +134,8 @@ const QUESTIONS = [
   },
   {
     q: "How does your baby typically respond when being held during a crying episode?",
-    sub: "",
+    sub: "Pick the closest match.",
+    single: true,
     opts: [
       ["Calms somewhat when held face-down with gentle pressure on the abdomen",           {GUT:3,NS:0,FM:0}, null, null, "Face-down pressure holding brings some relief."],
       ["Calms briefly when moved rhythmically, but starts again when movement stops",      {GUT:0,NS:4,FM:0}, null, null, "Rhythmic movement calms your baby only while it continues."],
@@ -363,8 +365,9 @@ const ASSESSMENT_ID = (() => {
 })();
 
 /* ── STATE ───────────────────────────────────────────────────────────── */
-let userName = '', userEmail = '', userConsent = false, babyAgeWeeks = null, qIndex = 0;
+let userName = '', userEmail = '', userConsent = false, babyAgeWeeks = null, babyName = '', qIndex = 0;
 let suppressSubscribe = false;
+let resultShown = false; // true only once the result screen is on screen
 
 let qTimerInterval = null, qTimerSeconds = 0;
 function startQTimer(){
@@ -416,13 +419,14 @@ async function subscribeToMailerLite(name, email, colcType, detail, status) {
         // only send it once the quiz is completed.
         confidence_pct:    status === 'completed' ? confidencePct : null,
         baby_age_weeks:    babyAgeWeeks,
+        baby_name:         babyName,
         feeding_method:    feedingMethod || 'Not specified',
         tried_items:       triedItems.join(', '),
         group_id:          CFG.group_id,
         assessment_id:     ASSESSMENT_ID,
         lead_source:       UTM_SOURCE,
         quiz_status:       status,
-        quiz_version:      '2.1',
+        quiz_version:      '2.2',
         red_flag:          redFlagStatus,
         purchase_status:   'pending',
         ...utm,
@@ -436,6 +440,7 @@ async function subscribeToMailerLite(name, email, colcType, detail, status) {
 /* ── HELPERS ─────────────────────────────────────────────────────────── */
 const show = id => document.getElementById(id).classList.remove('hidden');
 const hide = id => document.getElementById(id).classList.add('hidden');
+const escHtml = s => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 
 const DEFAULT_PLACEHOLDERS = {
   nameInput: 'Your first name',
@@ -477,6 +482,7 @@ function startQuiz() {
   userEmail    = email;
   userConsent  = true;
   babyAgeWeeks = ageNum;
+  babyName     = ((document.getElementById('babyNameInput') || {}).value || '').trim().slice(0, 40);
 
   scores = {GUT:0, NS:0, FM:0};
   feedingMethod = '';
@@ -520,6 +526,7 @@ function renderRedFlag() {
     div.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleRedFlag(i, div); } };
     box.appendChild(div);
   });
+  applyLogHint(qIndex);
 }
 
 function toggleRedFlag(i, el) {
@@ -576,6 +583,25 @@ function backFromRedFlagStop() {
 }
 
 /* ── QUESTIONS ───────────────────────────────────────────────────────── */
+/* Pre-fill from the parent's own tracker log (written by tracker.html to
+   sessionStorage 'cp_signals'). Only Q1, Q4, Q6, Q7 can be answered from a log.
+   Every pre-selected answer can be changed. */
+function applyLogHint(i) {
+  document.querySelectorAll('.log-hint').forEach((n) => n.remove());
+  try {
+    const s = JSON.parse(sessionStorage.getItem('cp_signals') || 'null');
+    if (!s) return;
+    const v = s[{ 0: 'q1', 3: 'q4', 5: 'q6', 6: 'q7' }[i]];
+    if (v === undefined || v === null) return;
+    const els = document.querySelectorAll('#optionsBox .option');
+    (Array.isArray(v) ? v : [v]).forEach((ix) => { if (els[ix]) els[ix].click(); });
+    const n = document.createElement('div');
+    n.className = 'q-sub log-hint';
+    n.textContent = 'Suggested from your log (' + s.n + ' entries over ' + s.days + ' days). Change it if it is wrong.';
+    document.getElementById('optionsBox').before(n);
+  } catch (e) {}
+}
+
 function renderQuestion() {
   const q = QUESTIONS[qIndex];
   document.getElementById('qCount').textContent = `${qIndex + 1} / ${QUESTIONS.length}`;
@@ -769,6 +795,7 @@ async function showResult() {
   });
 
   paintCount();
+  resultShown = true;
   show('resultScreen');
   window.scrollTo({top: 0, behavior: 'smooth'});
 }
@@ -793,13 +820,20 @@ function viewProduct() {
 }
 
 function goToChecklist() {
+  if (!resultShown) return; // the sticky bar must never act before a result exists
   trackPathClick('checklist');
   const type = getPrimaryType(scores);
   // Same-origin handoff: Midnight Protocol reads this so the parent isn't
   // asked for email and consent a second time. sessionStorage keeps the
   // email out of the URL and out of referrer headers.
+  // ATTRIBUTION: the visitor's original UTMs already sit in sessionStorage
+  // 'cp_utm' (captureUTMs above) and Midnight Protocol reads them from there.
+  // The handoff link deliberately carries NO utm_* params, only its own
+  // `handoff` param. utm_source=quiz here used to overwrite the real source
+  // (instagram, tiktok...) in MailerLite and Supabase, label every Midnight
+  // bridge purchase as quiz/result_page, and start a new GA4 campaign session.
   try {
-    sessionStorage.setItem('cp_lead', JSON.stringify({
+    sessionStorage.setItem('cp_lead', JSON.stringify({ babyName: babyName,
       name: userName,
       email: userEmail,
       age: babyAgeWeeks,
@@ -811,7 +845,7 @@ function goToChecklist() {
     `&aid=${encodeURIComponent(ASSESSMENT_ID)}` +
     `&name=${encodeURIComponent(userName)}` +
     `&age=${encodeURIComponent(babyAgeWeeks != null ? babyAgeWeeks : '')}` +
-    `&utm_source=quiz&utm_medium=result_page&utm_campaign=checklist_handoff`;
+    `&handoff=quiz_result`;
   window.location.href = url;
 }
 
@@ -852,7 +886,7 @@ function buildProfileNarrative() {
     'Mixed': 'mixed breast and formula fed',
   }[feedingMethod] || 'feeding';
 
-  let sentence = `${userName}, you told us about a ${babyAgeWeeks}-week-old who's ${feedingPhrase}`;
+  let sentence = `${escHtml(userName)}, you told us about a ${babyAgeWeeks}-week-old who's ${feedingPhrase}`;
 
   if (triedItems.length) {
     const list = triedItems.length === 1
@@ -1002,13 +1036,14 @@ function trackPathClick(path) {
         colic_type_detail: R.mailerliteField,
         feeding_method: feedingMethod || 'Not specified',
         baby_age_weeks: babyAgeWeeks,
+        baby_name: babyName,
         confidence_pct: getConfidencePct(),
         tried_items: triedItems.join(', '),
         group_id: CFG.group_id,
         assessment_id: ASSESSMENT_ID,
         lead_source: UTM_SOURCE,
         quiz_status: 'completed',
-        quiz_version: '2.1',
+        quiz_version: '2.2',
         red_flag: redFlagStatus,
         path_clicked: path,
         purchase_status: 'pending',
@@ -1080,7 +1115,7 @@ if ('IntersectionObserver' in window) {
   if (banner && stickyBar) {
     const bannerObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        stickyBar.classList.toggle('show', !entry.isIntersecting);
+        stickyBar.classList.toggle('show', resultShown && !entry.isIntersecting);
       });
     }, { threshold: 0 });
     bannerObserver.observe(banner);

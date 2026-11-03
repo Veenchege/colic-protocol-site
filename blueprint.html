@@ -245,6 +245,18 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offse
 .footer-links a{color:rgba(251,244,234,.6);font-size:13px}
 .footer-links a:hover{color:rgba(251,244,234,.92)}
 .footer-disc{font-size:11.5px;color:rgba(251,244,234,.5);width:100%;line-height:1.7;margin-top:16px;border-top:1px solid rgba(251,244,234,.08);padding-top:14px}
+.pb-hero h1 br{display:block}
+.pull{font-family:var(--fd);font-size:clamp(22px,3vw,28px);line-height:1.35;color:var(--ink);font-weight:600;margin-bottom:18px}
+.pull-line{font-family:var(--fd);font-size:24px!important;line-height:1.3;color:var(--ink)!important;font-weight:700;margin-bottom:16px}
+.start-line{text-align:center;margin-top:18px;font-size:16px;color:var(--ink);font-weight:600}
+details.more{margin-top:14px;border-top:1px solid var(--line);padding-top:12px}
+details.more summary{cursor:pointer;font-weight:600;color:var(--terra-deep);font-size:15px;margin-bottom:12px}
+details.faq-item summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:14px}
+details.faq-item summary::-webkit-details-marker{display:none}
+details.faq-item summary::after{content:'+';font-size:24px;line-height:1;color:var(--terra-deep);flex:none}
+details.faq-item[open] summary::after{content:'\2212'}
+details.faq-item summary h3{margin:0}
+details.faq-item p{margin-top:10px}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
@@ -285,8 +297,8 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offse
       </div>
       <div class="pb-hero-text">
         <span class="eyebrow">The Calm Baby Blueprint · For babies 2 to 12 weeks</span>
-        <h1>It&rsquo;s 3 AM and nothing is working. You need a plan, not another guess.</h1>
-        <p class="lede">The Calm Baby Blueprint is an 88-page colic management system. Pick where to start, change one thing at a time, and track what helps. A management system, not a cure.</p>
+        <h1>You&rsquo;ve tried five things this week.<br>You can&rsquo;t tell which one helped.<br>This is how you find out.</h1>
+        <p class="lede">Pick a starting point, change one thing at a time, and log what happens. An 88-page management system, not a cure.</p>
         <div class="pb-price-row">
           <span class="pb-price">$47</span>
           <span class="pb-price-note">one-time purchase, no subscription</span>
@@ -294,7 +306,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offse
         <a id="heroCta" href="https://colicprotocol.gumroad.com/l/TheCalmBabyBlueprint?utm_source=website&utm_medium=sales_page&wanted=true" class="btn btn-hero gumroad-button" rel="noopener" onclick="gtag('event','begin_checkout',{value:47,currency:'USD',placement:'hero',items:[{item_name:'Calm Baby Blueprint'}]});">Get the Blueprint, $47 &rarr;</a>
         <div class="pb-trust">
           <span class="pb-pill">72-hour guarantee</span>
-          <span class="pb-pill">Keep it either way</span>
+          <span class="pb-pill">Full refund</span>
           <span class="pb-pill">Instant download</span>
         </div>
         <p class="pb-secondary">Want a free starting point first? <a href="quiz.html" class="btn-ghost-link">Take the 90-second assessment &rarr;</a></p>
@@ -313,14 +325,13 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offse
           </div>
           <span class="proof-rating">5.0 &middot; 1 rating on Gumroad</span>
         </div>
-        <blockquote class="proof-text" id="cassieQuote">
-          <p>I came across The Colic Protocol’s Instagram when my baby was 11 weeks old. It was 5 a.m. after a really rough night, and as soon as I saw the Blueprint, I purchased it. At that point, I had already spent about five weeks doing my own research on colic and reflux. I was spending hours Googling, reading, and trying to figure out what could be going on with my baby. Anytime she was finally asleep, I was researching.</p>
-          <p>When I opened the Blueprint, I was honestly blown away. It had everything I had spent weeks learning on my own, plus so much more, all organized into one resource that was actually easy to understand. I immediately wished I had found it sooner because it would have saved me so many hours of searching and trying to piece everything together myself.</p>
-          <p>I highly recommend the Blueprint to any parent dealing with colic, reflux, or even just a very fussy baby. Having all of this information in one place is incredibly helpful, especially when you’re exhausted, overwhelmed, and just trying to understand how to help your baby.</p>
-        </blockquote>
+        <p class="pull">&ldquo;It had everything I had spent weeks learning on my own, plus so much more, all organized into one resource that was actually easy to understand.&rdquo;</p>
+        <details class="more"><summary>Read her full review</summary>
+        <blockquote class="proof-text" id="cassieQuote"><p>I came across The Colic Protocol’s Instagram when my baby was 11 weeks old. It was 5 a.m. after a really rough night, and as soon as I saw the Blueprint, I purchased it. At that point, I had already spent about five weeks doing my own research on colic and reflux. I was spending hours Googling, reading, and trying to figure out what could be going on with my baby. Anytime she was finally asleep, I was researching.</p><p>When I opened the Blueprint, I was honestly blown away. It had everything I had spent weeks learning on my own, plus so much more, all organized into one resource that was actually easy to understand. I immediately wished I had found it sooner because it would have saved me so many hours of searching and trying to piece everything together myself.</p></blockquote>
+        <p class="proof-note"><a class="btn-ghost-link" href="https://colicprotocol.gumroad.com/l/TheCalmBabyBlueprint" target="_blank" rel="noopener">See the complete review on Gumroad</a></p></details>
         <figcaption class="proof-sign">
           <div class="proof-avatar" aria-hidden="true">C</div>
-          <div><strong>Cassie Reardon</strong><span>Parent &middot; Gumroad review, shown exactly as she wrote it</span></div>
+          <div><strong>Cassie Reardon</strong><span>Parent &middot; Gumroad review, in her own words</span></div>
         </figcaption>
       </figure>
       <div class="proof-cta">
@@ -339,7 +350,8 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offse
           <h2 style="margin-bottom:18px">You have probably already done the right things.</h2>
           <p>You tried the gas drops. Maybe the gripe water. You read forums until your eyes hurt, and every one told you something different.</p>
           <p>Here is the part nobody says out loud. When you change three things in one night, you cannot tell which one helped, or whether anything did.</p>
-          <p>That is not a you problem. It is a tools problem. You have been trying to solve a pattern with no way to see the pattern.</p>
+          <p class="pull-line">That is not a you problem. It is a tools problem.</p>
+          <p>These weeks cost more than sleep. They cost patience with the person next to you, and some of your trust in your own judgment. The Blueprint can&rsquo;t give those weeks back. What it can do is turn the guessing into a plan.</p>
         </div>
         <aside class="why-aside">
           <span class="eyebrow">What changes</span>
@@ -350,21 +362,50 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offse
     </div>
   </section>
 
-  <!-- 4. FOUNDER -->
-  <section class="sec founder-sec" data-track="founder">
+  <!-- 6. HOW IT WORKS -->
+  <section class="sec how-sec" data-track="how">
     <div class="wrap">
-      <div class="founder-grid">
-        <img src="images/vincent-400.jpg" alt="Vincent, epidemiologist and dad to Zion" class="founder-photo" width="200" height="200" loading="lazy" decoding="async">
-        <div class="founder-text">
-          <span class="eyebrow">Why I wrote this</span>
-          <h2>I&rsquo;m Vincent. Zion is my daughter.</h2>
-          <p>When Zion was 3 weeks old, her colic was severe. We were told to wait it out. Waiting was not something I could do at 3 AM with her in my arms.</p>
-          <p>I am an epidemiologist, so I did the one thing I know how to do. I went back to the research, read what the studies actually found, and built a plan for her. Within 48 hours, her crying had settled.</p>
-          <p>That was one baby, and one baby proves nothing. But it is why I wrote this down for other parents, and why I am careful about what I claim.</p>
-          <div class="scope">
-            <p><strong>What I am:</strong> someone trained to read and weigh research. <strong>What I am not:</strong> a pediatrician, a GI specialist or a lactation consultant. Please keep yours in the loop.</p>
-          </div>
+      <div class="section-header">
+        <span class="eyebrow">How it works</span>
+        <h2>Three places to start. One change at a time.</h2>
+        <p>Colic has no single known cause. So the Blueprint gives you three practical places to start, then helps you test them in order. They are a way to choose your first step, not a diagnosis.</p>
+      </div>
+
+      <div class="how-grid">
+        <div>
+          <svg class="rings" viewBox="0 0 300 276" role="img" aria-label="Three overlapping circles: gut, nervous system and feeding">
+            <circle cx="112" cy="104" r="76" fill="#BC5A33" fill-opacity=".10" stroke="#BC5A33" stroke-width="2.6"/>
+            <circle cx="188" cy="104" r="76" fill="#6C8759" fill-opacity=".12" stroke="#6C8759" stroke-width="2.6"/>
+            <circle cx="150" cy="170" r="76" fill="#C0963F" fill-opacity=".14" stroke="#C0963F" stroke-width="2.6"/>
+            <text x="82" y="92" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="700" font-size="15" fill="#8A3F22">Gut</text>
+            <text x="222" y="88" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="700" font-size="15" fill="#37452F">Nervous</text>
+            <text x="222" y="106" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="700" font-size="15" fill="#37452F">system</text>
+            <text x="150" y="214" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="700" font-size="15" fill="#7A5A16">Feeding</text>
+            <text x="150" y="136" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="600" font-size="11" fill="#241A12" letter-spacing=".08em">YOUR BABY</text>
+          </svg>
+          <p class="rings-cap">A way to choose your first step, not a diagnosis.</p>
         </div>
+        <ol class="steps">
+          <li><h3>Find your starting point</h3><p>Answer a few questions about when and how your baby cries. You get the pattern that fits best.</p></li>
+          <li><h3>Change one thing</h3><p>Use the steps for that pattern, starting tonight. If nothing shifts after a fair trial, move to the next one.</p></li>
+          <li><h3>Log it and check in</h3><p>Track each cry in the Bloom Baby Tracker App. At 72 hours, look at the log and see what moved.</p></li>
+        </ol>
+      </div>
+
+      <div class="legend">
+        <div><b><i style="background:#BC5A33"></i>Gut</b>The gut bacteria question, including what the probiotic research does and does not show.</div>
+        <div><b><i style="background:#6C8759"></i>Nervous system</b>Supported holds like the Tiger Hold, a dim and quiet room, and looking after your own stress too.</div>
+        <div><b><i style="background:#C0963F"></i>Feeding</b>How your baby feeds. Paced feeding, bottle position and latch.</div>
+      </div>
+
+      <div class="t72">
+        <h3>Your first 72 hours, in three steps</h3>
+        <div class="t72-row">
+          <div class="t72-step"><span class="t72-dot"></span><div><b>Tonight</b><p>Pick your starting point and make one change.</p></div></div>
+          <div class="t72-step"><span class="t72-dot"></span><div><b>Hours 0 to 72</b><p>Log every cry. Keep everything else steady.</p></div></div>
+          <div class="t72-step"><span class="t72-dot"></span><div><b>Hour 72</b><p>Check the log. A shift? Keep going. No shift? Write to me.</p></div></div>
+        </div>
+        <p class="guar-fine" style="margin-top:18px;text-align:center">The 72 hours covers the first changes: feeding, positioning and soothing. It isn&rsquo;t a promise about any single product. Probiotic trials measured change over weeks, so judge that step on a longer clock.</p>
       </div>
     </div>
   </section>
@@ -397,14 +438,14 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offse
         <div class="tile">
           <svg viewBox="0 0 52 52" fill="none" aria-hidden="true"><circle cx="26" cy="26" r="20" fill="#FFFCF7" stroke="#8A3F22" stroke-width="2.4"/><path d="M21 17.5v17l14-8.5z" fill="#BC5A33"/></svg>
           <h3>Cry Decoder Masterclass</h3>
-          <p>Learn to tell a gas cry, an overtired cry and a dysregulation cry apart by ear.</p>
+          <p>Audio lessons on listening to your baby&rsquo;s cry and logging what you hear, so patterns show up in the tracker.</p>
         </div>
       </div>
 
       <p class="guide-title">Inside the 88 pages</p>
       <div class="inc-grid">
         <div class="inc-card"><span class="inc-num">01</span><h3>Starting-point assessment</h3><p>A deeper version of the free assessment, for babies where more than one pattern may be involved.</p></div>
-        <div class="inc-card"><span class="inc-num">02</span><h3>Gut support</h3><p>The probiotic strain and dose used in the research, who it was tested in, and separate guidance for breastfed and formula-fed babies.</p></div>
+        <div class="inc-card"><span class="inc-num">02</span><h3>Gut support</h3><p>The probiotic strain and dose used in the research, who it was tested in, and what to ask your pediatrician.</p></div>
         <div class="inc-card"><span class="inc-num">03</span><h3>Soothing techniques</h3><p>Tiger Hold, gentle massage and positioning, matched to your baby&rsquo;s starting point.</p></div>
         <div class="inc-card"><span class="inc-num">04</span><h3>Feeding mechanics</h3><p>Paced feeding, bottle position and a latch check, with separate steps for breastfeeding and formula-feeding.</p></div>
       </div>
@@ -423,48 +464,20 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offse
     </div>
   </section>
 
-  <!-- 6. HOW IT WORKS -->
-  <section class="sec how-sec" data-track="how">
+  <!-- 4. FOUNDER -->
+  <section class="sec founder-sec" data-track="founder">
     <div class="wrap">
-      <div class="section-header">
-        <span class="eyebrow">How it works</span>
-        <h2>Three places to start. One change at a time.</h2>
-        <p>Colic has no single known cause. So the Blueprint gives you three practical places to start, then helps you test them in order. They are a way to choose your first step, not a diagnosis.</p>
-      </div>
-
-      <div class="how-grid">
-        <div>
-          <svg class="rings" viewBox="0 0 300 276" role="img" aria-label="Three overlapping circles: gut, nervous system and feeding">
-            <circle cx="112" cy="104" r="76" fill="#BC5A33" fill-opacity=".10" stroke="#BC5A33" stroke-width="2.6"/>
-            <circle cx="188" cy="104" r="76" fill="#6C8759" fill-opacity=".12" stroke="#6C8759" stroke-width="2.6"/>
-            <circle cx="150" cy="170" r="76" fill="#C0963F" fill-opacity=".14" stroke="#C0963F" stroke-width="2.6"/>
-            <text x="82" y="92" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="700" font-size="15" fill="#8A3F22">Gut</text>
-            <text x="222" y="88" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="700" font-size="15" fill="#37452F">Nervous</text>
-            <text x="222" y="106" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="700" font-size="15" fill="#37452F">system</text>
-            <text x="150" y="214" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="700" font-size="15" fill="#7A5A16">Feeding</text>
-            <text x="150" y="136" text-anchor="middle" font-family="DM Sans, sans-serif" font-weight="600" font-size="11" fill="#241A12" letter-spacing=".08em">YOUR BABY</text>
-          </svg>
-          <p class="rings-cap">Most babies fit one pattern best. Some overlap.</p>
-        </div>
-        <ol class="steps">
-          <li><h3>Find your starting point</h3><p>Answer a few questions about when and how your baby cries. You get the pattern that fits best.</p></li>
-          <li><h3>Change one thing</h3><p>Use the steps for that pattern, starting tonight. If nothing shifts after a fair trial, add the next one.</p></li>
-          <li><h3>Log it and check in</h3><p>Track each cry in the Bloom Baby Tracker App. At 72 hours, look at the log and see what moved.</p></li>
-        </ol>
-      </div>
-
-      <div class="legend">
-        <div><b><i style="background:#BC5A33"></i>Gut</b>The gut bacteria question, including what the probiotic research does and does not show.</div>
-        <div><b><i style="background:#6C8759"></i>Nervous system</b>Tiger Hold, a quiet room, and calming yourself so you can calm your baby.</div>
-        <div><b><i style="background:#C0963F"></i>Feeding</b>How your baby feeds. Paced feeding, bottle position and latch.</div>
-      </div>
-
-      <div class="t72">
-        <h3>Your first 72 hours</h3>
-        <div class="t72-row">
-          <div class="t72-step"><span class="t72-dot"></span><div><b>Tonight</b><p>Pick your starting point and make one change.</p></div></div>
-          <div class="t72-step"><span class="t72-dot"></span><div><b>Hours 0 to 72</b><p>Log every cry. Keep everything else steady.</p></div></div>
-          <div class="t72-step"><span class="t72-dot"></span><div><b>Hour 72</b><p>Check the log. A shift? Keep going. No shift? Write to me.</p></div></div>
+      <div class="founder-grid">
+        <img src="images/vincent-400.jpg" alt="Vincent, epidemiologist and dad to Zion" class="founder-photo" width="200" height="200" loading="lazy" decoding="async">
+        <div class="founder-text">
+          <span class="eyebrow">Why I wrote this</span>
+          <h2>I&rsquo;m Vincent. Zion is my daughter.</h2>
+          <p>When Zion was 3 weeks old, her colic was severe. We were told to wait it out. Waiting was not something I could do at 3 AM with her in my arms.</p>
+          <p>I am an epidemiologist, so I did the one thing I know how to do. I went back to the research, read what the studies actually found, and built a plan for her. Within 48 hours, her crying had settled.</p>
+          <p>That was one baby, with no control group, and colic often eases on its own. It is why I wrote this down for other parents, and why I am careful about what I claim.</p>
+          <div class="scope">
+            <p><strong>What I am:</strong> someone trained to read and weigh research. <strong>What I am not:</strong> a pediatrician, a GI specialist or a lactation consultant. Please keep yours in the loop.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -479,13 +492,13 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offse
         <p>You are going to check this anyway. So here it is, including the part that is not flattering.</p>
       </div>
       <div class="res-grid">
-        <div class="res-card"><span class="tag">In favor</span><h3>Savino et al., Pediatrics, 2010</h3><p>50 exclusively breastfed babies. The probiotic L. reuteri DSM 17938 was compared with simethicone drops, and the probiotic group did better. Small trial, breastfed babies only.</p></div>
-        <div class="res-card"><span class="tag">Against</span><h3>Sung et al., BMJ, 2014</h3><p>A larger trial that included formula-fed babies. It found no benefit over placebo.</p></div>
-        <div class="res-card"><span class="tag">Overall</span><h3>Later pooled analyses</h3><p>Combining several trials suggests a modest effect, mostly in breastfed babies, with a lot of uncertainty.</p></div>
-        <div class="res-card"><span class="tag">Unproven</span><h3>Paced feeding</h3><p>It slows the flow and makes feeds last longer. Whether that reduces colic has not been proven.</p></div>
+        <div class="res-card"><span class="tag">In favor</span><h3>One small trial in breastfed babies</h3><p>Savino et al., Pediatrics, 2010. 50 exclusively breastfed babies (46 finished) got the probiotic L. reuteri DSM 17938 or placebo drops for 21 days. By day 21, median crying time was 35 minutes a day on the probiotic and 90 on placebo. Both groups improved. Small trial, breastfed babies only.</p></div>
+        <div class="res-card"><span class="tag">Against</span><h3>A larger trial found no difference</h3><p>Sung et al., BMJ, 2014. 167 babies under 3 months, breastfed and formula-fed, got the same probiotic or placebo for a month. Crying and fussing time were similar in both groups, in breastfed and formula-fed babies alike.</p></div>
+        <div class="res-card"><span class="tag">Overall</span><h3>A modest effect at best</h3><p>Later pooled analyses. Combining several trials suggests a modest effect, mostly in breastfed babies, with a lot of uncertainty.</p></div>
+        <div class="res-card"><span class="tag">Unproven</span><h3>Paced feeding for colic</h3><p>It slows the flow and makes feeds last longer. Whether that reduces colic has not been proven.</p></div>
       </div>
       <div class="res-after">
-        <p>Nothing here is a promise, and no single product is the answer. That is why the Blueprint starts with feeding and soothing steps, and treats the probiotic as an option to talk through with your pediatrician.</p>
+        <p><strong>Nothing here is a promise.</strong> No single product is the answer. That is why the Blueprint starts with feeding and soothing steps, and treats the probiotic as an option to talk through with your pediatrician.</p>
         <p style="margin-top:12px">I would rather you know all of this before you buy than find it out later.</p>
       </div>
     </div>
@@ -504,7 +517,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offse
           <ul>
             <li>Your baby is about 2 to 12 weeks old and the crying does not look like &ldquo;just tired&rdquo; or &ldquo;just hungry&rdquo;</li>
             <li>You breastfeed, formula-feed or do both. Each has its own steps</li>
-            <li>You have already tried a remedy or two and want to know why it stopped working</li>
+            <li>You have already tried a remedy or two and want a way to tell what actually helps</li>
             <li>You want to understand the why, not just follow steps blindly</li>
           </ul>
         </div>
@@ -524,6 +537,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offse
           <p>A fever, green or bilious vomiting, blood in the stool, poor feeding, or a baby who is unusually sleepy or limp. These need medical care before any home plan. If something feels wrong to you, trust that and call.</p>
         </div>
       </div>
+      <p class="start-line">If none of these apply, you can start tonight.</p>
     </div>
   </section>
 
@@ -539,8 +553,8 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offse
       </svg>
       <div class="guar-text">
         <span class="eyebrow">The guarantee, in plain words</span>
-        <h2>No meaningful shift in 72 hours? I&rsquo;ll make it right.</h2>
-        <p>If the Blueprint doesn&rsquo;t produce a meaningful shift in 72 hours, reply to your receipt or write to <a href="mailto:hello@colicprotocol.baby" class="btn-ghost-link">hello@colicprotocol.baby</a> and I&rsquo;ll make it right. You keep the Blueprint, the tracker and the soundscape either way.</p>
+        <h2>No meaningful shift in 72 hours? Get a full refund.</h2>
+        <p>Use the Blueprint&rsquo;s first changes for 72 hours and check your log. If nothing meaningful has shifted, email <a href="mailto:hello@colicprotocol.baby" class="btn-ghost-link">hello@colicprotocol.baby</a> and I&rsquo;ll refund you in full. You can ask any time in the first 30 days. No forms. You keep the Blueprint, the tracker and the soundscape either way.</p>
         <p class="guar-fine">The 72 hours covers the Blueprint&rsquo;s first changes, like feeding, positioning and soothing. It is not a promise about any single product.</p>
         <div class="guar-sign">
           <img src="images/vincent-400.jpg" alt="" width="52" height="52" loading="lazy" decoding="async">
@@ -553,51 +567,75 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offse
   <!-- 10. FAQ -->
   <script type="application/ld+json">
   {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "Is this just another thing that won't work?",
-        "acceptedAnswer": { "@type": "Answer", "text": "I can't promise it will work for your baby, and nobody honestly can. The Blueprint is a management system, not a cure. It gives you a structured way to try one change at a time and see what helps. If it does not produce a meaningful shift in 72 hours, you are covered by the guarantee." }
-      },
-      {
-        "@type": "Question",
-        "name": "How fast will I see a difference?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Some parents try the first change the night they buy. The Blueprint asks you to check your log at 72 hours. Colic often peaks around week 6 and eases by about 3 to 4 months, so the goal is a plan for getting through those weeks." }
-      },
-      {
-        "@type": "Question",
-        "name": "What about my pediatrician?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Keep them in the loop. The Blueprint does not replace medical care. The tracker log is easy to show at an appointment, and any red-flag sign such as fever, green vomit, blood in the stool, poor feeding or unusual sleepiness needs a doctor first." }
-      },
-      {
-        "@type": "Question",
-        "name": "Is the brown noise safe for my baby?",
-        "acceptedAnswer": { "@type": "Answer", "text": "My advice is to keep any sound quiet and low, across the room, on a timer. Never run it loud or right next to the crib. If you have questions about sound for your baby, ask your pediatrician." }
-      },
-      {
-        "@type": "Question",
-        "name": "Is this different for breastfed and formula-fed babies?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Yes. The main probiotic trial was done in exclusively breastfed babies, and a larger trial that included formula-fed babies found no benefit. So the Blueprint has separate guidance for each, and formula-fed babies start with feeding and soothing steps." }
-      },
-      {
-        "@type": "Question",
-        "name": "What does \"I'll make it right\" mean?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Email me. If you want a refund, you will get one, and you keep the Blueprint either way. I would also like to hear what you saw, so I can help." }
-      },
-      {
-        "@type": "Question",
-        "name": "Is this a subscription?",
-        "acceptedAnswer": { "@type": "Answer", "text": "No. It is a one-time $47 purchase. No recurring charge, no upsell tier." }
-      },
-      {
-        "@type": "Question",
-        "name": "Do I need the free assessment first?",
-        "acceptedAnswer": { "@type": "Answer", "text": "It helps. The Blueprint includes a deeper assessment, but the free 90-second version gives you a quick starting point tonight if you would rather begin there." }
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Is this just another thing that won’t work?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It doesn’t ask you to believe in it. You change one thing, log what happens and look at the result. I can’t promise it will work for your baby, and nobody honestly can. If nothing moves in 72 hours, you get a full refund."
       }
-    ]
-  }
+    },
+    {
+      "@type": "Question",
+      "name": "How fast will I see a difference?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "At 72 hours you’ll know whether your log has moved after the first changes. Probiotic trials measured change over weeks, not days, so judge that step separately. Colic often peaks around week 6 and eases by about 3 to 4 months, so the goal is a plan for getting through those weeks."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What about my pediatrician?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Keep them in the loop. The Blueprint does not replace medical care. The tracker log is easy to show at an appointment, and any red-flag sign such as fever, green vomit, blood in the stool, poor feeding or unusual sleepiness needs a doctor first."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is the brown noise safe for my baby?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "My advice is to keep any sound quiet and low, across the room, on a timer. Never run it loud or right next to the crib. If you have questions about sound for your baby, ask your pediatrician."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this different for breastfed and formula-fed babies?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The steps are different: latch for breastfeeding, paced feeding and bottle position for bottles. On the probiotic, the one small trial with good results was in exclusively breastfed babies, and a larger trial of breastfed and formula-fed babies found no difference in either group. So the Blueprint treats it as an option to discuss with your pediatrician, not a first step."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does the guarantee cover?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The first changes, for 72 hours: feeding, positioning and soothing. If nothing meaningful has shifted, email me and you get a full refund, any time in the first 30 days. It isn’t a promise about any single product."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this a subscription?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. It is a one-time $47 purchase. No recurring charge, no upsell tier."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need the free assessment first?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It helps. The Blueprint includes a deeper assessment, but the free 90-second version gives you a quick starting point tonight if you would rather begin there."
+      }
+    }
+  ]
+}
   </script>
   <section class="sec faq-sec" data-track="faq">
     <div class="wrap-narrow">
@@ -605,38 +643,14 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offse
         <span class="eyebrow">Questions</span>
         <h2>Before you buy</h2>
       </div>
-      <div class="faq-item">
-        <h3>Is this just another thing that won&rsquo;t work?</h3>
-        <p>I can&rsquo;t promise it will work for your baby, and nobody honestly can. The Blueprint is a management system, not a cure. It gives you a structured way to try one change at a time and see what helps. If it does not produce a meaningful shift in 72 hours, you are covered by the guarantee.</p>
-      </div>
-      <div class="faq-item">
-        <h3>How fast will I see a difference?</h3>
-        <p>Some parents try the first change the night they buy. The Blueprint asks you to check your log at 72 hours. Colic often peaks around week 6 and eases by about 3 to 4 months, so the goal is a plan for getting through those weeks.</p>
-      </div>
-      <div class="faq-item">
-        <h3>What about my pediatrician?</h3>
-        <p>Keep them in the loop. The Blueprint does not replace medical care. The tracker log is easy to show at an appointment, and any red-flag sign such as fever, green vomit, blood in the stool, poor feeding or unusual sleepiness needs a doctor first.</p>
-      </div>
-      <div class="faq-item">
-        <h3>Is the brown noise safe for my baby?</h3>
-        <p>My advice is to keep any sound quiet and low, across the room, on a timer. Never run it loud or right next to the crib. If you have questions about sound for your baby, ask your pediatrician.</p>
-      </div>
-      <div class="faq-item">
-        <h3>Is this different for breastfed and formula-fed babies?</h3>
-        <p>Yes. The main probiotic trial was done in exclusively breastfed babies, and a larger trial that included formula-fed babies found no benefit. So the Blueprint has separate guidance for each, and formula-fed babies start with feeding and soothing steps.</p>
-      </div>
-      <div class="faq-item">
-        <h3>What does &ldquo;I&rsquo;ll make it right&rdquo; mean?</h3>
-        <p>Email me. If you want a refund, you will get one, and you keep the Blueprint either way. I would also like to hear what you saw, so I can help.</p>
-      </div>
-      <div class="faq-item">
-        <h3>Is this a subscription?</h3>
-        <p>No. It is a one-time $47 purchase. No recurring charge, no upsell tier.</p>
-      </div>
-      <div class="faq-item">
-        <h3>Do I need the free assessment first?</h3>
-        <p>It helps. The Blueprint includes a deeper assessment, but the free 90-second version gives you a quick starting point tonight if you would rather begin there.</p>
-      </div>
+      <details class="faq-item" open><summary><h3>Is this just another thing that won’t work?</h3></summary><p>It doesn’t ask you to believe in it. You change one thing, log what happens and look at the result. I can’t promise it will work for your baby, and nobody honestly can. If nothing moves in 72 hours, you get a full refund.</p></details>
+      <details class="faq-item"><summary><h3>How fast will I see a difference?</h3></summary><p>At 72 hours you’ll know whether your log has moved after the first changes. Probiotic trials measured change over weeks, not days, so judge that step separately. Colic often peaks around week 6 and eases by about 3 to 4 months, so the goal is a plan for getting through those weeks.</p></details>
+      <details class="faq-item"><summary><h3>What about my pediatrician?</h3></summary><p>Keep them in the loop. The Blueprint does not replace medical care. The tracker log is easy to show at an appointment, and any red-flag sign such as fever, green vomit, blood in the stool, poor feeding or unusual sleepiness needs a doctor first.</p></details>
+      <details class="faq-item"><summary><h3>Is the brown noise safe for my baby?</h3></summary><p>My advice is to keep any sound quiet and low, across the room, on a timer. Never run it loud or right next to the crib. If you have questions about sound for your baby, ask your pediatrician.</p></details>
+      <details class="faq-item"><summary><h3>Is this different for breastfed and formula-fed babies?</h3></summary><p>The steps are different: latch for breastfeeding, paced feeding and bottle position for bottles. On the probiotic, the one small trial with good results was in exclusively breastfed babies, and a larger trial of breastfed and formula-fed babies found no difference in either group. So the Blueprint treats it as an option to discuss with your pediatrician, not a first step.</p></details>
+      <details class="faq-item"><summary><h3>What does the guarantee cover?</h3></summary><p>The first changes, for 72 hours: feeding, positioning and soothing. If nothing meaningful has shifted, email me and you get a full refund, any time in the first 30 days. It isn’t a promise about any single product.</p></details>
+      <details class="faq-item"><summary><h3>Is this a subscription?</h3></summary><p>No. It is a one-time $47 purchase. No recurring charge, no upsell tier.</p></details>
+      <details class="faq-item"><summary><h3>Do I need the free assessment first?</h3></summary><p>It helps. The Blueprint includes a deeper assessment, but the free 90-second version gives you a quick starting point tonight if you would rather begin there.</p></details>
     </div>
   </section>
 
