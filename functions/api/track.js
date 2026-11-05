@@ -100,17 +100,8 @@ export async function onRequestPost({ request, env, waitUntil }) {
     .map((o) => ({ device_id: b.device_id, rule: o.r, action: o.a }));
   if (offers.length) await rest('offer_log', { method: 'POST', headers: { ...H, Prefer: 'return=minimal' }, body: JSON.stringify(offers) });
 
-  // Link the anonymous history to a real lead once she gives an email + consent.
-  if (emailOk && p.consent === true) {
-    const lead = rest('rpc/upsert_lead', { method: 'POST', body: JSON.stringify({
-      p_email: email, p_name: str(p.name, 60) || 'Friend',
-      p_baby_age_weeks: profile.baby_age_weeks ?? null, p_colic_type: '',
-      p_source: 'tracker', p_lead_source: str(p.utm && p.utm.utm_source),
-      p_utm_medium: str(p.utm && p.utm.utm_medium), p_utm_campaign: str(p.utm && p.utm.utm_campaign),
-      p_quiz_completed: false, p_midnight_completed: false,
-    }) }).then(async (r) => { if (!r.ok) console.error('[track] upsert_lead', r.status, await r.text()); }).catch(() => {});
-    if (typeof waitUntil === 'function') waitUntil(lead); else await lead;
-  }
+  // The email saved here is used only to restore the log. It is deliberately NOT
+  // added to the leads table or MailerLite: marketing emails come only from the quiz opt-in.
   return json(200, { ok: true }, allowed);
 }
 

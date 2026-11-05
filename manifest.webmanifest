@@ -1,1 +1,1 @@
-{"name":"Bloom Baby Tracker","short_name":"Bloom","start_url":"/tracker.html?via=pwa","display":"standalone","background_color":"#f4ede4","theme_color":"#c4603a","icons":[{"src":"/images/logo.png","sizes":"512x512","type":"image/png"}]}
+{"name":"Bloom Tracker","short_name":"Bloom","start_url":"/tracker.html?via=pwa","display":"standalone","background_color":"#f4ede4","theme_color":"#c4603a","icons":[{"src":"/images/logo.png","sizes":"512x512","type":"image/png"}]}

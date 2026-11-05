@@ -526,7 +526,6 @@ function renderRedFlag() {
     div.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleRedFlag(i, div); } };
     box.appendChild(div);
   });
-  applyLogHint(qIndex);
 }
 
 function toggleRedFlag(i, el) {
@@ -632,6 +631,7 @@ function renderQuestion() {
     div.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleOption(i, o[1], div, !!q.single, o[2] || null, o[3] || null, o[4] || null); } };
     box.appendChild(div);
   });
+  applyLogHint(qIndex);
 }
 
 function toggleOption(idx, weights, el, single, feeding, triedTag, reason) {
