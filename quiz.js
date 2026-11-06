@@ -8,7 +8,7 @@ const CFG = {
   group_id: '190431733303215887',
   productUrl: 'https://colicprotocol.gumroad.com/l/TheCalmBabyBlueprint',
   productPageUrl: '/blueprint',
-  checklistUrl: 'midnight-protocol.html',
+  checklistUrl: '/midnight-protocol',
   dmUrl: 'https://ig.me/m/colicprotocol',
 };
 
@@ -398,6 +398,14 @@ function getConfidencePct() {
   return total > 0 ? Math.round((dominant / total) * 100) : 0;
 }
 
+function sendEvent(name, params) {
+  try {
+    if (typeof gtag === 'function') {
+      gtag('event', name, params);
+    }
+  } catch (e) {}
+}
+
 /* ── SECURE SUBSCRIPTION ─────────────────────────────────────────────── */
 async function subscribeToMailerLite(name, email, colcType, detail, status) {
   if (suppressSubscribe) return;
@@ -405,7 +413,7 @@ async function subscribeToMailerLite(name, email, colcType, detail, status) {
   const utm = getStoredUTMs();
 
   try {
-    await fetch('/api/subscribe', {
+    const res = await fetch('/api/subscribe', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -432,8 +440,20 @@ async function subscribeToMailerLite(name, email, colcType, detail, status) {
         ...utm,
       })
     });
+    if (!res.ok) {
+      sendEvent('lead_capture_failed', { colic_type: colcType || 'Unassigned', ml_status: res.status });
+    } else {
+      const data = await res.json().catch(() => ({}));
+      if (data && data.mailerlite_synced === false) {
+        sendEvent('lead_capture_failed', {
+          colic_type: colcType || 'Unassigned',
+          ml_status: typeof data.ml_status === 'number' ? data.ml_status : 0
+        });
+      }
+    }
   } catch(e) {
     console.warn('Subscribe proxy silent error:', e);
+    sendEvent('lead_capture_failed', { colic_type: colcType || 'Unassigned', ml_status: 0 });
   }
 }
 
@@ -567,6 +587,7 @@ function submitRedFlag() {
   const labels = flagged.map(i => RED_FLAG_OPTIONS[i].short);
   redFlagStatus = 'flagged: ' + labels.join(', ');
   subscribeToMailerLite(userName, userEmail, 'Unassigned', 'Safety check flagged', 'red_flag');
+  sendEvent('red_flag_stop', { colic_type: 'Unassigned' });
   document.getElementById('rfStopList').textContent = labels.join(', ');
   hide('redFlagScreen');
   show('redFlagStopScreen');
@@ -735,6 +756,7 @@ async function showResult() {
   const R = RESULTS[type];
 
   subscribeToMailerLite(userName, userEmail, R.type, R.mailerliteField, 'completed');
+  sendEvent('quiz_complete', { colic_type: R.type });
 
   try {
     localStorage.setItem('colic_type', type);
@@ -808,12 +830,26 @@ async function showResult() {
    (TikTok, Instagram) handle new tabs inconsistently. */
 function goToProduct() {
   trackPathClick('blueprint');
+  const type = getPrimaryType(scores);
+  const R = RESULTS[type];
+  sendEvent('blueprint_checkout_click', {
+    colic_type: R.type,
+    surface: 'quiz_result',
+    transport_type: 'beacon'
+  });
   const url = `${CFG.productUrl}?ref=${ASSESSMENT_ID}&wanted=true&utm_source=quiz&utm_medium=assessment&utm_campaign=${UTM_SOURCE}`;
   window.location.href = url;
 }
 
 function viewProduct() {
   trackPathClick('blueprint_view');
+  const type = getPrimaryType(scores);
+  const R = RESULTS[type];
+  sendEvent('blueprint_view_click', {
+    colic_type: R.type,
+    surface: 'quiz_result',
+    transport_type: 'beacon'
+  });
   const url = `${CFG.productPageUrl}?ref=${encodeURIComponent(ASSESSMENT_ID)}` +
     `&utm_source=quiz&utm_medium=assessment_view&utm_campaign=${encodeURIComponent(UTM_SOURCE)}`;
   window.location.href = url;

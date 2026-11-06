@@ -284,6 +284,14 @@ a.btn{text-decoration:none;}
 (function(){
 'use strict';
 
+function sendEvent(name, params){
+  try{
+    if (typeof gtag === 'function'){
+      gtag('event', name, params);
+    }
+  }catch(e){}
+}
+
 // Only images that are actually used on a screen. mp-01, mp-03, mp-04,
 // mp-06 and mp-14 were removed because they carry claims (cortisol and
 // melatonin chart, "systems interact" graphic, bouncing comparison)
@@ -339,7 +347,8 @@ var state = {
   outcomes: { environment:null, tigerHold:null, final:null },
   cleanups: [],
   leadSource: CONFIG.SOURCE,
-  redFlag: ''
+  redFlag: '',
+  redFlagFired: false
 };
 
 (function captureUTMandHandoff(){
@@ -457,7 +466,24 @@ function post(extra){
       headers:{'Content-Type':'application/json'},
       keepalive:true,
       body: JSON.stringify(body)
-    })['catch'](function(){});
+    }).then(function(res){
+      var tLabel = state.colicType ? (TYPE_MAP[state.colicType] ? TYPE_MAP[state.colicType].label : 'Unassigned') : 'Unassigned';
+      if (!res.ok) {
+        sendEvent('lead_capture_failed', { colic_type: tLabel, ml_status: res.status });
+      } else {
+        return res.json().then(function(data){
+          if (data && (data.mailerlite_synced === false || data.success === false)) {
+            sendEvent('lead_capture_failed', {
+              colic_type: tLabel,
+              ml_status: typeof data.ml_status === 'number' ? data.ml_status : 0
+            });
+          }
+        })['catch'](function(){});
+      }
+    })['catch'](function(){
+      var tLabel = state.colicType ? (TYPE_MAP[state.colicType] ? TYPE_MAP[state.colicType].label : 'Unassigned') : 'Unassigned';
+      sendEvent('lead_capture_failed', { colic_type: tLabel, ml_status: 0 });
+    });
   }catch(e){}
 }
 // force = true is used when she arrives with details already captured by
@@ -465,6 +491,11 @@ function post(extra){
 function submitLead(force){
   var isBot = (Date.now() - SESSION_STARTED_AT) < 1500;
   if (isBot && !force) return;
+  if (!state.startFired) {
+    state.startFired = true;
+    var tLabel = state.colicType ? (TYPE_MAP[state.colicType] ? TYPE_MAP[state.colicType].label : 'Unassigned') : 'Unassigned';
+    sendEvent('midnight_start', { colic_type: tLabel });
+  }
   post({ checklist_status:'started', checklist_last_stage:'welcome' });
 }
 function markStage(stageName, extra){
@@ -936,6 +967,11 @@ function renderStopScan(){
         var key = row.getAttribute('data-danger');
         var hit = DANGERS.filter(function(d){ return d.key === key; })[0];
         state.redFlag = 'flagged: ' + (hit ? hit.short : key);
+        if (!state.redFlagFired) {
+          state.redFlagFired = true;
+          var tLabel = state.colicType ? (TYPE_MAP[state.colicType] ? TYPE_MAP[state.colicType].label : 'Unassigned') : 'Unassigned';
+          sendEvent('red_flag_stop', { colic_type: tLabel });
+        }
         goTo('emergency');
       });
     });
@@ -1299,6 +1335,11 @@ function sysCardHtml(sys, matched){
 }
 
 function renderBridge(){
+  if (!state.bridgeFired) {
+    state.bridgeFired = true;
+    var tLabel = state.colicType ? (TYPE_MAP[state.colicType] ? TYPE_MAP[state.colicType].label : 'Unassigned') : 'Unassigned';
+    sendEvent('midnight_bridge', { colic_type: tLabel });
+  }
   var copy = BRIDGE_COPY[state.outcomes.final || 'mid'];
   var refId = encodeURIComponent(state.quizAssessmentId || ASSESSMENT_ID);
 
@@ -1359,10 +1400,35 @@ function renderBridge(){
     '</div>';
   var el = buildScreen(html);
   function mount(){
+    var buyBtn = $(el, 'a[href*="colicprotocol.gumroad.com"]');
+    if (buyBtn) {
+      buyBtn.addEventListener('click', function(){
+        var tLabel = state.colicType ? (TYPE_MAP[state.colicType] ? TYPE_MAP[state.colicType].label : 'Unassigned') : 'Unassigned';
+        sendEvent('blueprint_checkout_click', {
+          colic_type: tLabel,
+          surface: 'midnight_bridge',
+          transport_type: 'beacon'
+        });
+      });
+    }
+    var viewBtn = $(el, 'a[href*="/blueprint"]');
+    if (viewBtn) {
+      viewBtn.addEventListener('click', function(){
+        var tLabel = state.colicType ? (TYPE_MAP[state.colicType] ? TYPE_MAP[state.colicType].label : 'Unassigned') : 'Unassigned';
+        sendEvent('blueprint_view_click', {
+          colic_type: tLabel,
+          surface: 'midnight_bridge',
+          transport_type: 'beacon'
+        });
+      });
+    }
     $(el,'[data-act=restart]').addEventListener('click', function(){
       state.outcomes = { environment:null, tigerHold:null, final:null };
       state.sticky = {};   // a second run must not resend the first run's outcomes
       state.redFlag = '';
+      state.startFired = false;
+      state.bridgeFired = false;
+      state.redFlagFired = false;
       ASSESSMENT_ID = newSessionId();
       goTo('stopscan');
     });

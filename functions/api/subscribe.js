@@ -230,13 +230,14 @@ export async function onRequestPost(context) {
 
     const data = await mlRes.json().catch(() => ({}));
     // 422 stays non-fatal for the quiz, but it is no longer invisible.
+    const mlFailed = !mlRes.ok;
     if (mlRes.status === 422) {
       console.error('[subscribe] MailerLite 422:', JSON.stringify(data), 'group:', GROUP_ID);
     }
 
-    if (!mlRes.ok && mlRes.status !== 422) {
-      console.error('[subscribe] MailerLite error:', mlRes.status, JSON.stringify(data));
-      return json(502, { error: 'Subscription failed, please try again' }, allowed);
+    else if (mlFailed) {
+      console.error('[subscribe] MailerLite error:', mlRes.status);
+
     }
 
     // Optional Supabase mirror. One evolving row per assessment_id.
@@ -322,7 +323,7 @@ export async function onRequestPost(context) {
       }
     }
 
-    return json(200, { success: true, status: cleanStatus, colic_type: cleanType }, allowed);
+    return json(200, { success: true, mailerlite_synced: !mlFailed, ml_status: mlRes.status, status: cleanStatus, colic_type: cleanType }, allowed);
   } catch (err) {
     console.error('[subscribe] Unexpected error:', err);
     return json(500, { error: 'Internal server error' }, allowed);
