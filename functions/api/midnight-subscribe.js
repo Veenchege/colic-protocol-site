@@ -354,11 +354,10 @@ export async function onRequestPost(context) {
     // logged. Supabase writes below still run so the lead is not lost, and the
     // response at the end reports the failure.
     const mlFailed = !mlRes.ok;
-    if (mlFailed) {
-      console.error(
-        '[midnight-subscribe] MailerLite rejected:', mlRes.status,
-        JSON.stringify(data), 'group:', GROUP_ID, 'email:', email.trim().toLowerCase()
-      );
+    if (mlRes.status === 422) {
+      console.error('[midnight-subscribe] MailerLite 422 rejected, group:', GROUP_ID);
+    } else if (mlFailed) {
+      console.error('[midnight-subscribe] MailerLite error:', mlRes.status);
     }
 
     // ── Supabase: two writes, both best-effort, both inactive no-ops
@@ -397,9 +396,6 @@ export async function onRequestPost(context) {
             Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`,
             Prefer: 'resolution=merge-duplicates',
           },
-          // Same wipe fix as MailerLite: merge-duplicates overwrites every
-          // column present in the body, including explicit nulls, so empty
-          // values are dropped and each ping only writes what it knows.
           body: JSON.stringify({
             assessment_id: cleanAssessmentId,
             email: email.trim().toLowerCase(),
@@ -426,10 +422,10 @@ export async function onRequestPost(context) {
             ...(cleanNum(final_dwell_seconds) !== '' ? { final_dwell_seconds: Number(cleanNum(final_dwell_seconds)) } : {}),
             ...(cleanNum(tiger_hold_timer_seconds) !== '' ? { tiger_hold_timer_seconds: Number(cleanNum(tiger_hold_timer_seconds)) } : {}),
           }),
+        }).then(async (r) => {
+          if (!r.ok) console.error('[midnight-subscribe] midnight_sessions write rejected:', r.status, await r.text());
         }),
-        // 2. Identity row, via the RPC function, NOT a raw table
-        // upsert, so first-touch fields and the colic_type clobber
-        // fix both apply the same way for both quiz and midnight.
+        // 2. Identity row, via the RPC function
         fetch(`${SUPABASE_URL}/rest/v1/rpc/upsert_lead`, {
           method: 'POST',
           headers: {
@@ -449,6 +445,8 @@ export async function onRequestPost(context) {
             p_quiz_completed: cameFromQuiz,
             p_midnight_completed: cleanStatus === 'completed',
           }),
+        }).then(async (r) => {
+          if (!r.ok) console.error('[midnight-subscribe] upsert_lead rejected:', r.status, await r.text());
         }),
         // 3. red_flag gets its own upsert so a missing column can only fail this
         // write, never the session row above. Needs:
@@ -487,8 +485,15 @@ export async function onRequestPost(context) {
     }
 
     return json(
-      mlFailed ? 502 : 200,
-      { success: !mlFailed, status: cleanStatus, colic_type: cleanType, group: MIDNIGHT_GROUP_ID ? 'midnight' : 'fallback_quiz' },
+      200,
+      {
+        success: true,
+        mailerlite_synced: !mlFailed,
+        ml_status: mlRes.status,
+        status: cleanStatus,
+        colic_type: cleanType,
+        group: MIDNIGHT_GROUP_ID ? 'midnight' : 'fallback_quiz'
+      },
       allowed
     );
   } catch (err) {
