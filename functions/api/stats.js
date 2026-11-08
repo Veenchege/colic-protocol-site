@@ -73,7 +73,7 @@ export async function onRequestGet(context) {
     // Content-Range response header without transferring any actual
     // rows, the cheapest possible count query against PostgREST.
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/assessments?select=assessment_id&quiz_status=eq.completed`,
+      `${SUPABASE_URL}/rest/v1/assessments?select=assessment_id&quiz_status=eq.completed&email=not.ilike.*test*&email=not.ilike.*example.com*`,
       {
         headers: {
           apikey: SUPABASE_SERVICE_KEY,
