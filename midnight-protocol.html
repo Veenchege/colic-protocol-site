@@ -748,6 +748,15 @@ function buildScreen(html, extraClass){
   var el = document.createElement('div');
   el.className = 'screen' + (extraClass ? ' ' + extraClass : '');
   el.innerHTML = html;
+  var roadBtn = el.querySelector('.btn-roadmap-toggle');
+  var drawer = el.querySelector('#roadmapDrawer');
+  if (roadBtn && drawer) {
+    roadBtn.addEventListener('click', function(){
+      var isHidden = drawer.style.display === 'none';
+      drawer.style.display = isHidden ? 'block' : 'none';
+      roadBtn.textContent = isHidden ? 'Roadmap ▴' : 'Roadmap ▾';
+    });
+  }
   return el;
 }
 function $(el, sel){ return el.querySelector(sel); }
@@ -761,6 +770,46 @@ function dotsHTML(activeStage){
     out += '<div class="dot ' + (i===activeStage?'active':(i<activeStage?'done':'')) + '"></div>';
   }
   return out;
+}
+
+function protocolHeaderHTML(stageNum, stageTitle, pct){
+  var pctVal = pct || (stageNum === 1 ? 25 : (stageNum === 2 ? 50 : (stageNum === 3 ? 75 : 90)));
+  var drawerHtml =
+    '<div class="roadmap-drawer" id="roadmapDrawer" style="display:none; background:#181310; border:1px solid var(--border); border-radius:12px; padding:12px; margin-bottom:14px; font-size:12px;">' +
+      '<div style="font-size:11px; text-transform:uppercase; letter-spacing:.08em; color:var(--gold); font-weight:600; margin-bottom:8px;">Midnight Protocol Roadmap</div>' +
+      '<div style="display:flex; flex-direction:column; gap:6px;">' +
+        '<div style="display:flex; justify-content:space-between; color:' + (stageNum > 1 ? 'var(--sage)' : (stageNum === 1 ? 'var(--cream)' : 'var(--muted)')) + ';">' +
+          '<span>' + (stageNum > 1 ? '✓ ' : '1. ') + 'Safety Check (StopScan)</span>' +
+          '<span>' + (stageNum > 1 ? 'Done' : (stageNum === 1 ? 'Current' : 'Next')) + '</span>' +
+        '</div>' +
+        '<div style="display:flex; justify-content:space-between; color:' + (stageNum > 2 ? 'var(--sage)' : (stageNum === 2 ? 'var(--cream)' : 'var(--muted)')) + ';">' +
+          '<span>' + (stageNum > 2 ? '✓ ' : '2. ') + 'Calm the Room First</span>' +
+          '<span>' + (stageNum > 2 ? 'Done' : (stageNum === 2 ? 'Current' : 'Next')) + '</span>' +
+        '</div>' +
+        '<div style="display:flex; justify-content:space-between; color:' + (stageNum > 3 ? 'var(--sage)' : (stageNum === 3 ? 'var(--cream)' : 'var(--muted)')) + ';">' +
+          '<span>' + (stageNum > 3 ? '✓ ' : '3. ') + 'Physical Relief Hold</span>' +
+          '<span>' + (stageNum > 3 ? 'Done' : (stageNum === 3 ? 'Current' : 'Next')) + '</span>' +
+        '</div>' +
+        '<div style="display:flex; justify-content:space-between; color:' + (stageNum === 4 ? 'var(--cream)' : 'var(--muted)') + ';">' +
+          '<span>4. Settling &amp; 72-Hr Reset</span>' +
+          '<span>' + (stageNum === 4 ? 'Current' : 'Final') + '</span>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+
+  return '<div class="protocol-header" style="margin-bottom:12px;">' +
+    '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">' +
+      '<span style="font-size:12px; font-weight:600; color:var(--cream);">' + esc(stageTitle) + '</span>' +
+      '<div style="display:flex; align-items:center; gap:8px;">' +
+        '<span class="prog-pct-label" style="font-size:11.5px; font-family:var(--mono); color:var(--sage); font-weight:700;">' + pctVal + '% Complete</span>' +
+        '<button type="button" class="btn-roadmap-toggle" style="background:#28201a; border:1px solid var(--border); color:var(--gold); border-radius:12px; padding:2px 8px; font-size:11px; cursor:pointer;">Roadmap ▾</button>' +
+      '</div>' +
+    '</div>' +
+    '<div class="progress-track" style="margin:0 0 10px; height:4px; background:var(--border); border-radius:2px; overflow:hidden;">' +
+      '<div class="progress-fill" style="width:' + pctVal + '%; height:100%; background:linear-gradient(90deg,var(--sage),#b3d0b3); border-radius:2px; transition:width .4s ease;"></div>' +
+    '</div>' +
+    drawerHtml +
+  '</div>';
 }
 
 function typeBadgeHtml(forCode, text){
@@ -794,9 +843,7 @@ function buildOutcomeScreen(cfg){
 }
 
 function buildTechniqueScreen(cfg){
-  var topHtml = '';
-  if (cfg.stageDots){ topHtml += '<div class="dots">' + dotsHTML(cfg.stageDots) + '</div>'; }
-  topHtml += '<div class="eyebrow" style="color:'+cfg.color+'">'+esc(cfg.eyebrow)+'</div>';
+  var topHtml = protocolHeaderHTML(cfg.stageDots || 3, cfg.eyebrow || 'Stage 3 · Relief Technique', (cfg.stageDots === 4 ? 90 : 75));
   if (cfg.stepbar){
     var sb = '';
     for (var i=0;i<cfg.stepbar.total;i++){
@@ -805,7 +852,12 @@ function buildTechniqueScreen(cfg){
     topHtml += '<div class="stepbar">'+sb+'</div>';
   }
   if (cfg.badge){ topHtml += cfg.badge; }
-  var stepsHtml = '<ul class="steps-list">' + cfg.steps.map(function(s){ return '<li>'+s+'</li>'; }).join('') + '</ul>';
+  var stepsHtml = '<div class="card" style="margin-bottom:14px; margin-top:12px;">' + cfg.steps.map(function(s, idx){
+    return '<div class="toggle-row technique-step" data-step="'+idx+'">' +
+      '<div class="toggle-box">'+ICONS.check+'</div>' +
+      '<div class="toggle-text"><span style="color:var(--cream); font-size:13.5px; line-height:1.5;">'+s+'</span></div>' +
+    '</div>';
+  }).join('') + '</div>';
   var imgHtml = '<div class="illus" style="padding:0;">' + cfg.svg + '</div>';
   var html =
     '<div class="screen-body">' +
@@ -826,8 +878,29 @@ function buildTechniqueScreen(cfg){
   function mount(){
     var contBtn = $(el,'[data-act=continue]');
     var stopwatchApi = null;
+    var steps = $all(el, '.technique-step');
+    if (steps.length > 0) {
+      contBtn.disabled = true;
+      contBtn.textContent = 'Complete ' + steps.length + ' steps →';
+      steps.forEach(function(step){
+        step.addEventListener('click', function(){
+          step.classList.toggle('on');
+          var onCount = $all(el, '.technique-step.on').length;
+          if (onCount === steps.length) {
+            contBtn.disabled = false;
+            contBtn.textContent = 'Ready! Next →';
+            contBtn.style.boxShadow = '0 0 25px rgba(92,122,95,0.7), 0 0 10px rgba(200,154,62,0.35)';
+            contBtn.style.border = '1px solid #b3d0b3';
+          } else {
+            contBtn.disabled = true;
+            contBtn.textContent = 'Complete ' + (steps.length - onCount) + ' more steps →';
+            contBtn.style.boxShadow = 'none';
+            contBtn.style.border = 'none';
+          }
+        });
+      });
+    }
     if (cfg.stopwatch){
-      // Non-blocking on purpose: the timer is a pacing aid, not a gate.
       var swSlot = $(el,'[data-timer]');
       stopwatchApi = mountStopwatch(swSlot, { color: cfg.color, pulse: !!cfg.pulse });
       state.cleanups.push(stopwatchApi.cleanup);
@@ -944,8 +1017,7 @@ function renderStopScan(){
   }).join('');
   var html =
     '<div class="screen-body">' +
-      '<div class="dots">' + dotsHTML(1) + '</div>' +
-      '<div class="eyebrow" style="color:var(--terra)">Stage 1 · Stop &amp; Scan</div>' +
+      protocolHeaderHTML(1, 'Stage 1: Safety StopScan', 25) +
       '<h1 class="h1" style="font-size:25px;">Check for warning signs, first.</h1>' +
       '<p class="sub">These need a doctor, not a technique. Tap any that apply.</p>' +
       '<div class="illus" style="margin-top:14px;"><img src="'+IMG['parent_holding_unsettled_newborn']+'" alt="Parent holding unsettled newborn" style="width:100%; height:auto; display:block;"></div>' +
@@ -1076,8 +1148,7 @@ function renderEnvironment(){
   }).join('');
   var html =
     '<div class="screen-body">' +
-      '<div class="dots">' + dotsHTML(2) + '</div>' +
-      '<div class="eyebrow" style="color:var(--sage)">Stage 2 · Calm the Room</div>' +
+      protocolHeaderHTML(2, 'Stage 2: Calm the Room', 50) +
       typeBadgeHtml('NS','A good place to start for your result') +
       '<h1 class="h1" style="font-size:25px;">Calm the room<br>first.</h1>' +
       '<p class="sub">Fewer inputs can make it easier to settle a baby. This is common sense rather than a proven step, so keep it simple. Tap any item for the reasoning.</p>' +
@@ -1095,9 +1166,13 @@ function renderEnvironment(){
   var el = buildScreen(html);
   function mount(){
     var fill = $(el,'[data-fill]'), cont = $(el,'[data-act=continue]'), card = $(el, '.card');
+    var topFill = $(el, '.protocol-header .progress-fill'), pctLabel = $(el, '.prog-pct-label');
     function update(){
       var on = $all(el,'.toggle-row.on').length;
-      fill.style.width = Math.round((on/items.length)*100) + '%';
+      var pct = Math.round(25 + (on / items.length) * 25);
+      if (fill) fill.style.width = Math.round((on/items.length)*100) + '%';
+      if (topFill) topFill.style.width = pct + '%';
+      if (pctLabel) pctLabel.textContent = pct + '% Complete';
       cont.disabled = on < items.length;
       var bgShades = ['#140f0c', '#110d0a', '#0e0a08', '#0b0806', '#080605'];
       el.style.backgroundColor = bgShades[on];
@@ -1377,8 +1452,43 @@ function renderBridge(){
     ? 'A starting point, not a diagnosis. Your baby can show signs of more than one pattern.'
     : 'A free 90-second assessment can suggest where to start.';
 
+  var outcomeLabels = {
+    good: 'Calmer, settling shift observed',
+    mid: 'Moderate settling, some fussiness remains',
+    low: 'High fussiness persists, needs longer clock'
+  };
+  var finalOutcomeText = outcomeLabels[state.outcomes.final] || outcomeLabels[state.outcomes.tigerHold] || outcomeLabels[state.outcomes.environment] || 'Protocol completed';
+  var typeName = (TYPE_MAP[state.colicType] ? TYPE_MAP[state.colicType].label : 'Starting-Point Pattern');
+
+  var summaryHtml =
+    '<div class="card" style="border:1px solid var(--sage-line); background:rgba(92,122,95,0.12); padding:16px; margin-bottom:18px;">' +
+      '<div class="eyebrow" style="color:var(--sage); margin-bottom:8px;">Protocol Session Summary</div>' +
+      '<div style="display:flex; flex-direction:column; gap:8px; font-size:13px; line-height:1.5;">' +
+        '<div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(147,179,148,0.2); padding-bottom:6px;">' +
+          '<span>1. Safety Screen</span>' +
+          '<b style="color:var(--sage);">✓ Cleared (Safe to proceed)</b>' +
+        '</div>' +
+        '<div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(147,179,148,0.2); padding-bottom:6px;">' +
+          '<span>2. Calmed Environment</span>' +
+          '<b style="color:var(--sage);">✓ 4/4 Steps Applied</b>' +
+        '</div>' +
+        '<div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(147,179,148,0.2); padding-bottom:6px;">' +
+          '<span>3. Soothing Hold</span>' +
+          '<b style="color:var(--sage);">✓ Technique Completed</b>' +
+        '</div>' +
+        '<div style="display:flex; justify-content:space-between; padding-top:2px;">' +
+          '<span>Observed Response</span>' +
+          '<b style="color:var(--cream);">' + finalOutcomeText + '</b>' +
+        '</div>' +
+      '</div>' +
+      '<div style="margin-top:12px; padding-top:10px; border-top:1px solid rgba(147,179,148,0.25); font-size:12px; color:var(--cream); line-height:1.55;">' +
+        '<b style="color:var(--sage);">What this means:</b> You established baseline comfort and tested physical relief. For your baby\'s pattern (<b>' + esc(typeName) + '</b>), the weeks ahead require changing one variable at a time rather than guessing multiple fixes simultaneously.' +
+      '</div>' +
+    '</div>';
+
   var html =
     '<div class="screen-body">' +
+      summaryHtml +
       '<div class="eyebrow" style="color:var(--terra)">A starting point for the weeks ahead</div>' +
       '<h1 class="h1" style="font-size:24px; white-space:pre-line;">'+esc(copy.h)+'</h1>' +
       introHtml +
