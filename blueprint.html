@@ -697,8 +697,13 @@ details.faq-item p{margin-top:10px}
   // Forward the lead's email (?le=) and the quiz assessment ID (?ref=)
   // onto every Gumroad checkout link so the webhook can match the sale.
   var params = new URLSearchParams(window.location.search);
-  var leadEmail = params.get('le');
-  var ref = params.get('ref');
+  var localAid = null, localEmail = null;
+  try {
+    localAid = localStorage.getItem('colic_aid');
+    localEmail = localStorage.getItem('colic_email');
+  } catch (e) {}
+  var leadEmail = params.get('le') || localEmail;
+  var ref = params.get('ref') || localAid;
   if (!leadEmail && !ref) return;
   document.querySelectorAll('a[href*="colicprotocol.gumroad.com"]').forEach(function (a) {
     var url = new URL(a.href);

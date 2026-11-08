@@ -761,6 +761,8 @@ async function showResult() {
   try {
     localStorage.setItem('colic_type', type);
     localStorage.setItem('colic_name', userName);
+    localStorage.setItem('colic_aid', ASSESSMENT_ID);
+    localStorage.setItem('colic_email', userEmail);
   } catch(e){}
 
   const banner = document.getElementById('resultBanner');
@@ -1057,35 +1059,50 @@ function renderGuaranteeCard(type, name) {
    subscribe.js must list each of these or it drops the value. */
 function trackPathClick(path) {
   try {
+    try {
+      localStorage.setItem('colic_path_clicked', path);
+    } catch(e){}
     const type = getPrimaryType(scores);
-    const R = RESULTS[type];
-    fetch('/api/subscribe', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      keepalive: true, // the page navigates away right after this call
-      body: JSON.stringify({
-        email: userEmail,
-        name: userName,
-        website: '',
-        consent: !!userConsent,
-        colic_type: R.type,
-        colic_type_detail: R.mailerliteField,
-        feeding_method: feedingMethod || 'Not specified',
-        baby_age_weeks: babyAgeWeeks,
-        baby_name: babyName,
-        confidence_pct: getConfidencePct(),
-        tried_items: triedItems.join(', '),
-        group_id: CFG.group_id,
-        assessment_id: ASSESSMENT_ID,
-        lead_source: UTM_SOURCE,
-        quiz_status: 'completed',
-        quiz_version: '2.2',
-        red_flag: redFlagStatus,
-        path_clicked: path,
-        purchase_status: 'pending',
-        ...getStoredUTMs(),
-      }),
-    }).catch(e => console.warn('Path click tracking failed silently:', e));
+    const R = RESULTS[type] || {};
+    const payload = JSON.stringify({
+      email: userEmail,
+      name: userName,
+      website: '',
+      consent: !!userConsent,
+      colic_type: R.type || '',
+      colic_type_detail: R.mailerliteField || '',
+      feeding_method: feedingMethod || 'Not specified',
+      baby_age_weeks: babyAgeWeeks,
+      baby_name: babyName,
+      confidence_pct: getConfidencePct(),
+      tried_items: triedItems.join(', '),
+      group_id: CFG.group_id,
+      assessment_id: ASSESSMENT_ID,
+      lead_source: UTM_SOURCE,
+      quiz_status: 'completed',
+      quiz_version: '2.2',
+      red_flag: redFlagStatus,
+      path_clicked: path,
+      purchase_status: 'pending',
+      ...getStoredUTMs(),
+    });
+
+    let sent = false;
+    if (typeof navigator !== 'undefined' && typeof navigator.sendBeacon === 'function') {
+      try {
+        const blob = new Blob([payload], { type: 'application/json' });
+        sent = navigator.sendBeacon('/api/subscribe', blob);
+      } catch (e) {}
+    }
+
+    if (!sent && typeof fetch === 'function') {
+      fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        keepalive: true,
+        body: payload,
+      }).catch(e => console.warn('Path click tracking failed silently:', e));
+    }
   } catch(e) {
     console.warn('trackPathClick error:', e);
   }
