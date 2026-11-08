@@ -865,10 +865,10 @@ function buildTechniqueScreen(cfg){
       '<h1 class="h1" style="font-size:24px; margin-bottom:14px;">'+esc(cfg.title)+'</h1>' +
       (cfg.extraHtml ? '<div class="card tint-sage extra-card">'+cfg.extraHtml+'</div>' : '') +
       imgHtml +
+      (cfg.stopwatch ? '<div data-timer></div>' : '') +
       stepsHtml +
       (cfg.evidence ? '<div class="ev-line">Evidence: '+esc(cfg.evidence)+'</div>' : '') +
       (cfg.safety ? '<div class="card tint-red" style="margin-top:12px; font-size:12px; color:var(--cream); line-height:1.6;"><b style="color:var(--red);">Safety: </b>'+cfg.safety+'</div>' : '') +
-      (cfg.stopwatch ? '<div data-timer></div>' : '') +
       (cfg.tipLabel ? '<div class="tip-hint">'+esc(cfg.tipLabel)+'</div>' : '') +
     '</div>' +
     '<div class="screen-foot">' +
@@ -1305,7 +1305,7 @@ function renderBicycleLegs(){
     : '';
   return buildTechniqueScreen({
     stageDots:4, eyebrow:'Stage 4 · Belly Comfort', color:'var(--blush)',
-    stepbar:{current:1,total:4},
+    stepbar:{current:1,total:3},
     badge: typeBadgeHtml('GUT','A good place to start for your result'),
     extraHtml: fmCard,
     title:'Bicycle Legs',
@@ -1326,7 +1326,7 @@ function renderBicycleLegs(){
 function renderIluMassage(){
   return buildTechniqueScreen({
     stageDots:4, eyebrow:'Stage 4 · Belly Comfort', color:'var(--blush)',
-    stepbar:{current:2,total:4},
+    stepbar:{current:2,total:3},
     title:'Tummy Massage (I-L-U)',
     svg: '<img src="'+IMG['abdominal_massage_pathway_diagram']+'" onerror="__mpFallback(this,\'ilu\')" alt="I-L-U abdominal massage pathway diagram" style="width:100%; height:auto; display:block; border-radius:var(--r-md);">',
     steps:[
@@ -1337,24 +1337,6 @@ function renderIluMassage(){
     ],
     evidence:'Small, unblinded studies suggest massage may reduce distress for some babies',
     tipLabel:'Repeat the full sequence 2 or 3 times. Stop if your baby resists.',
-    continueLabel:'Done, next: football hold →',
-    onContinue:function(){ goTo('footballHold'); }
-  });
-}
-
-function renderFootballHold(){
-  return buildTechniqueScreen({
-    stageDots:4, eyebrow:'Stage 4 · Belly Comfort', color:'var(--blush)',
-    stepbar:{current:3,total:4},
-    title:'Football Hold',
-    svg: '<img src="'+IMG['football_hold']+'" onerror="__mpFallback(this,\'football\')" alt="Football hold" style="width:100%; height:auto; display:block; border-radius:var(--r-md);">',
-    steps:[
-      'Tuck your baby along your forearm, facing you, body upright and supported.',
-      'Support the head in your palm. Ear, shoulder, and hip in one line.',
-      'Keep your baby upright and well supported, and pause to burp gently every minute or so.'
-    ],
-    evidence:'Common practice, not trial-tested',
-    tipLabel:'Keep your baby upright and supported. Stop if they resist.',
     continueLabel:'Done, next: warm compress →',
     onContinue:function(){ goTo('warmCompress'); }
   });
@@ -1363,7 +1345,7 @@ function renderFootballHold(){
 function renderWarmCompress(){
   return buildTechniqueScreen({
     stageDots:4, eyebrow:'Stage 4 · Belly Comfort', color:'var(--blush)',
-    stepbar:{current:4,total:4},
+    stepbar:{current:3,total:3},
     title:'Warm Compress',
     svg: ICONS.compress,
     steps:[
@@ -1572,7 +1554,6 @@ var SCREENS = {
   tigerHoldTroubleshoot: renderTigerHoldTroubleshoot,
   bicycleLegs: renderBicycleLegs,
   iluMassage: renderIluMassage,
-  footballHold: renderFootballHold,
   warmCompress: renderWarmCompress,
   finalCheck: renderFinalCheck,
   bridge: renderBridge
