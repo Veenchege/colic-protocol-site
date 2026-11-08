@@ -30,7 +30,7 @@
  * The displayed count is always max(live, floor), so it can only grow,
  * never regress below the last confirmed real number.
  */
-const FLOOR_COMPLETED = 250;
+const FLOOR_COMPLETED = 709;
 
 function corsHeaders(allowedOrigin) {
   return {
