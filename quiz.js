@@ -37,7 +37,7 @@ const UTM_SOURCE = getStoredUTMs().utm_source || new URLSearchParams(window.loca
    verified figure, so the page never shows a lower number than it
    honestly could. The number shown is rounded DOWN to the nearest 50,
    so it always reads as a true "N+". */
-const COUNT_FLOOR = 600;
+const COUNT_FLOOR = 700;
 let ASSESSMENT_COUNT_LIVE = COUNT_FLOOR;
 function shownCount() { return Math.floor(ASSESSMENT_COUNT_LIVE / 50) * 50; }
 function paintCount() {
