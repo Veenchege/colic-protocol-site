@@ -207,12 +207,8 @@ a{color:inherit}
 .btn-checklist:hover{transform:scale(1.01);box-shadow:0 10px 24px rgba(108,135,89,.35)}
 .path-primary-sub{display:block;font-size:11.5px;font-weight:500;opacity:.85;margin-top:5px}
 
-.offer-details-full{margin:16px 0 4px;border-top:1px dashed rgba(0,0,0,.14);padding-top:14px}
-.offer-details-full summary{cursor:pointer;list-style:none;font-family:var(--fb);font-size:13px;font-weight:700;color:var(--terra-deep)}
-.offer-details-full summary::-webkit-details-marker{display:none}
-.offer-details-full summary::after{content:'  ▾';font-weight:500;opacity:.75}
-.offer-details-full[open] summary::after{content:'  ▴'}
-.offer-details-full .path-card-paid{background:rgba(255,255,255,.5);border:1.5px solid rgba(188,90,51,.22);border-radius:14px;padding:16px;margin-top:12px;position:relative}
+.path-card-paid{background:rgba(255,255,255,.6);border:1.5px solid rgba(188,90,51,.28);border-radius:14px;padding:18px 16px;margin-top:20px;position:relative;box-shadow:0 8px 24px rgba(196,96,58,.08)}
+.path-card-paid .path-title{font-size:18px;margin-bottom:6px}
 .price-badge{position:absolute;top:6px;right:6px;width:40px;height:40px;border-radius:50%;background:var(--terra);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(188,90,51,.4);transform:rotate(6deg);z-index:2}
 .price-badge b{font-size:12px;line-height:1;font-family:var(--fb)}
 .price-badge small{font-size:6px;letter-spacing:.04em;opacity:.9}
@@ -490,14 +486,12 @@ a{color:inherit}
         <span class="path-primary-sub">We'll carry your details over, so there's nothing to re-enter.</span>
       </div>
 
-      <details class="offer-details-full">
-        <summary>Already sure you want the full $47 Blueprint? See it here</summary>
-
-        <div class="path-card-paid">
-          <img class="path-cover" src="/images/blueprint-cover.jpg" alt="The Calm Baby Blueprint book cover" loading="lazy" onerror="this.remove()">
-          <span class="price-badge" aria-hidden="true"><b>$47</b><small>ONE TIME</small></span>
-          <span class="path-kicker">$47 · Complete system</span>
-          <p class="path-desc" id="offerForBaby"></p>
+      <div class="path-card-paid">
+        <img class="path-cover" src="/images/blueprint-cover.jpg" alt="The Calm Baby Blueprint book cover" loading="lazy" onerror="this.remove()">
+        <span class="price-badge" aria-hidden="true"><b>$47</b><small>ONE TIME</small></span>
+        <span class="path-kicker">$47 · Complete system</span>
+        <div class="path-title">The Calm Baby Blueprint</div>
+        <p class="path-desc" id="offerForBaby"></p>
 
           <details class="offer-details">
             <summary>Why this, not just tonight's protocol</summary>
@@ -539,7 +533,6 @@ a{color:inherit}
             <span class="cta-sub">Read the details first. Nothing is charged.</span>
           </button>
         </div>
-      </details>
 
       <div class="dm-path">
         <div class="dm-path-text">
