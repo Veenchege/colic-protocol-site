@@ -173,7 +173,7 @@ a.btn{text-decoration:none;}
 .why-btn{background:none; border:none; padding:5px 0 0; margin:0; font-family:inherit; font-size:11.5px; font-weight:600; color:var(--sage); cursor:pointer; text-align:left;}
 .why-body{font-size:12px; color:var(--muted); line-height:1.55; padding-top:6px; max-width:96%;}
 .solidarity-note{display:flex; gap:10px; align-items:flex-start; background:rgba(147,179,148,0.08); border:1px solid var(--sage-line); border-radius:12px; padding:12px 14px; margin-top:14px; font-size:12px; color:var(--cream); line-height:1.6;}
-.solidarity-note svg{flex-shrink:0; color:var(--sage); margin-top:1px;}
+.solidarity-note svg{flex-shrink:0; color:var(--sage); margin-top:1px; width:18px; height:18px; min-width:18px;}
 
 .danger-item{display:flex; align-items:center; gap:13px; padding:14px 4px; cursor:pointer; border-radius:10px; transition:background .15s;}
 .danger-item:hover{background:rgba(226,104,92,0.08);}
@@ -1039,7 +1039,7 @@ function renderEmergency(){
     '<div class="screen-body center-text" style="align-items:center; justify-content:center; display:flex; flex-direction:column;">' +
       '<div class="pill" style="border-color:var(--red-line); color:var(--red); background:var(--red-soft); margin-bottom:18px;">Stop the protocol</div>' +
       '<div class="h1" style="font-size:26px; color:var(--red);">Call your baby’s doctor now</div>' +
-      '<div class="big-num" style="font-size:40px; color:var(--cream); margin:10px 0 6px; letter-spacing:.04em;">911 · 999 · 112</div>' +
+      '<div class="big-num" style="font-size:34px; color:var(--cream); margin:10px 0 6px; letter-spacing:.04em;">911 · 999 · 112 · 000 · 1122</div>' +
       '<div class="label-sm" style="text-align:center;">Local emergency numbers</div>' +
       '<p class="sub" style="max-width:290px; margin-top:12px;">Call your baby’s doctor now. If your baby is struggling to breathe, has blue lips or face, or is very hard to wake, call your local emergency number instead. This protocol can wait. Your baby’s safety can’t.</p>' +
     '</div>' +
@@ -1081,7 +1081,6 @@ function renderEnvironment(){
       typeBadgeHtml('NS','A good place to start for your result') +
       '<h1 class="h1" style="font-size:25px;">Calm the room<br>first.</h1>' +
       '<p class="sub">Fewer inputs can make it easier to settle a baby. This is common sense rather than a proven step, so keep it simple. Tap any item for the reasoning.</p>' +
-      '<div class="illus" style="margin-top:14px;">' + SVGS.environment + '</div>' +
       '<div class="card" style="margin-top:16px;">' + rowsHtml + '</div>' +
       '<div class="ev-line" style="margin-top:8px;">Evidence: common practice, not trial-tested for colic</div>' +
       '<div class="progress-track"><div class="progress-fill" data-fill style="width:0%;"></div></div>' +
@@ -1095,11 +1094,25 @@ function renderEnvironment(){
     '</div>';
   var el = buildScreen(html);
   function mount(){
-    var fill = $(el,'[data-fill]'), cont = $(el,'[data-act=continue]');
+    var fill = $(el,'[data-fill]'), cont = $(el,'[data-act=continue]'), card = $(el, '.card');
     function update(){
       var on = $all(el,'.toggle-row.on').length;
       fill.style.width = Math.round((on/items.length)*100) + '%';
       cont.disabled = on < items.length;
+      var bgShades = ['#140f0c', '#110d0a', '#0e0a08', '#0b0806', '#080605'];
+      el.style.backgroundColor = bgShades[on];
+      el.style.transition = 'background-color .4s ease';
+      if (on === items.length) {
+        cont.textContent = 'Ready! Continue →';
+        cont.style.boxShadow = '0 0 25px rgba(92,122,95,0.7), 0 0 10px rgba(200,154,62,0.35)';
+        cont.style.border = '1px solid #b3d0b3';
+        if (card) { card.style.opacity = '0.75'; card.style.transition = 'opacity .4s ease'; }
+      } else {
+        cont.textContent = on === 0 ? 'Continue →' : 'Complete ' + (items.length - on) + ' more checks →';
+        cont.style.boxShadow = 'none';
+        cont.style.border = 'none';
+        if (card) { card.style.opacity = '1'; card.style.transition = 'opacity .4s ease'; }
+      }
     }
     $all(el, '.toggle-row').forEach(function(row){
       row.addEventListener('click', function(e){
