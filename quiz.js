@@ -416,6 +416,7 @@ async function subscribeToMailerLite(name, email, colcType, detail, status) {
     const res = await fetch('/api/subscribe', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      keepalive: true,
       body: JSON.stringify({
         email,
         name,

@@ -213,37 +213,12 @@ export async function onRequestPost(context) {
       }),
     };
 
-    const mlRes = await fetch('https://connect.mailerlite.com/api/subscribers', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        Authorization: `Bearer ${API_KEY}`,
-      },
-      body: JSON.stringify({
-        email: email.trim().toLowerCase(),
-        fields,
-        groups: [GROUP_ID],
-        status: 'active',
-      }),
-    });
-
-    const data = await mlRes.json().catch(() => ({}));
-    // 422 stays non-fatal for the quiz, but it is no longer invisible.
-    const mlFailed = !mlRes.ok;
-    if (mlRes.status === 422) {
-      console.error('[subscribe] MailerLite 422:', JSON.stringify(data), 'group:', GROUP_ID);
-    }
-
-    else if (mlFailed) {
-      console.error('[subscribe] MailerLite error:', mlRes.status);
-
-    }
-
     // Optional Supabase mirror. One evolving row per assessment_id.
-    // Needs: alter table assessments add column if not exists red_flag text;
+    // Started in parallel with MailerLite so slow API response or early
+    // page navigation cannot abort database persistence.
     const SUPABASE_URL = env.SUPABASE_URL;
     const SUPABASE_SERVICE_KEY = env.SUPABASE_SERVICE_KEY;
+    let supabasePromise = Promise.resolve();
 
     if (SUPABASE_URL && SUPABASE_SERVICE_KEY && cleanAssessmentId) {
       const row = {
@@ -314,13 +289,38 @@ export async function onRequestPost(context) {
           console.warn('[subscribe] Lead upsert failed silently:', err);
         });
 
+      supabasePromise = Promise.all([supabaseWrite, leadUpsert]);
       if (typeof context.waitUntil === 'function') {
-        context.waitUntil(supabaseWrite);
-        context.waitUntil(leadUpsert);
-      } else {
-        await supabaseWrite;
-        await leadUpsert;
+        context.waitUntil(supabasePromise);
       }
+    }
+
+    const mlRes = await fetch('https://connect.mailerlite.com/api/subscribers', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        Authorization: `Bearer ${API_KEY}`,
+      },
+      body: JSON.stringify({
+        email: email.trim().toLowerCase(),
+        fields,
+        groups: [GROUP_ID],
+        status: 'active',
+      }),
+    });
+
+    const data = await mlRes.json().catch(() => ({}));
+    // 422 stays non-fatal for the quiz, but it is no longer invisible.
+    const mlFailed = !mlRes.ok;
+    if (mlRes.status === 422) {
+      console.error('[subscribe] MailerLite 422:', JSON.stringify(data), 'group:', GROUP_ID);
+    } else if (mlFailed) {
+      console.error('[subscribe] MailerLite error:', mlRes.status);
+    }
+
+    if (typeof context.waitUntil !== 'function') {
+      await supabasePromise;
     }
 
     return json(200, { success: true, mailerlite_synced: !mlFailed, ml_status: mlRes.status, status: cleanStatus, colic_type: cleanType }, allowed);
