@@ -1050,7 +1050,15 @@ function renderStopScan(){
     $all(el, '.toggle-row').forEach(function(row){
       row.addEventListener('click', function(){ row.classList.toggle('on'); });
     });
-    $(el,'[data-act=continue]').addEventListener('click', function(){ state.redFlag = 'none'; goTo('colicType'); });
+    $(el,'[data-act=continue]').addEventListener('click', function(){
+      state.redFlag = 'none';
+      if (state.colicTypeFromQuiz && state.colicType && TYPE_MAP[state.colicType]){
+        markStage('colic_type');
+        goTo('environment');
+      } else {
+        goTo('colicType');
+      }
+    });
   }
   return { el:el, mount:mount };
 }
@@ -1074,21 +1082,26 @@ function renderColicType(){
     '</button>';
   }).join('');
   var headline = !fromQuiz
-    ? 'Already know where\nyou want to start?'
+    ? 'Where would you like\nto start tonight?'
     : (lowConfidence ? 'Your answers leaned\ntoward one pattern.' : 'We’ll point out the steps\nthat match your result.');
   var subText = !fromQuiz
-    ? 'If you’ve taken the free assessment, tell us. We’ll point out the steps that match your baby’s starting point.'
+    ? 'Choose a pattern below if you recognize it, or start with general soothing if you are not sure.'
     : (lowConfidence
         ? 'It wasn’t a clear-cut result, your answers touched more than one pattern. This is our best read, a starting point and not a diagnosis. Keep it if it fits tonight, or switch if it doesn’t.'
         : 'Your assessment pointed to one starting pattern. Keep it, or pick a different one if tonight feels different.');
+  var confirmBtnHtml = fromQuiz && TYPE_MAP[state.colicType]
+    ? '<div style="margin-top:14px;"><button class="btn btn-sage" data-act="confirm-type" style="width:100%;">Continue with ' + TYPE_MAP[state.colicType].label + ' →</button></div>'
+    : '';
+  var unsureBtnHtml = !fromQuiz
+    ? '<button class="opt" data-type="UNSURE" style="border-color:var(--terra); background:rgba(196,96,58,0.1);"><span style="font-size:16px; color:var(--terra);">★</span><span style="font-weight:600; color:var(--cream);">Not sure, just start calming steps →</span></button>'
+    : '<button class="opt" data-type="UNSURE" style="border-color:var(--border-strong); background:none;"><span style="font-size:16px;">•</span><span>Not sure, just help me now</span></button>';
   var html =
     '<div class="screen-body">' +
       '<div class="eyebrow" style="color:var(--terra)">Optional · 5 seconds</div>' +
       '<h1 class="h1" style="font-size:23px; white-space:pre-line;">' + headline + '</h1>' +
       '<p class="sub">' + subText + '</p>' +
-      '<div style="margin-top:14px;">' + cardsHtml +
-        '<button class="opt" data-type="UNSURE" style="border-color:var(--border-strong); background:none;"><span style="font-size:16px;">•</span><span>Not sure, just help me now</span></button>' +
-      '</div>' +
+      '<div style="margin-top:14px;">' + cardsHtml + unsureBtnHtml + '</div>' +
+      confirmBtnHtml +
     '</div>';
   var el = buildScreen(html);
   function mount(){
@@ -1101,6 +1114,13 @@ function renderColicType(){
         goTo('environment');
       });
     });
+    var confirmBtn = $(el, '[data-act=confirm-type]');
+    if (confirmBtn) {
+      confirmBtn.addEventListener('click', function(){
+        markStage('colic_type');
+        goTo('environment');
+      });
+    }
   }
   return { el:el, mount:mount };
 }
