@@ -204,7 +204,7 @@ body{
   background:var(--terra);
   animation:zPulse 2s ease-in-out infinite;
 }
-@keyframes zPulse{0%,100%{opacity:.4;transform:scale(.85)}50%{opacity:1;transform:scale(1.2)}}
+@keyframes zPulse{0%,100%{opacity:.35}50%{opacity:1}}
 .z-right{
   font-family:var(--fm);
   font-size:11px;
@@ -306,7 +306,7 @@ body{
   display:none;
   animation:fadeIn .25s ease;
 }
-@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
 .amb-kicker{
   font-family:var(--fm);
   font-size:10px;
@@ -1304,7 +1304,7 @@ function presentResult(state, topCat, secondCat, scores, feedMethod) {
       addGuideCard(blogGuides.witching_room);
       addGuideCard(blogGuides.swaddling_moro);
 
-      vsTitle.textContent = "Top Settling Video: Upright Posture, Gravity & 60 BPM Gentle Rhythm";
+      vsTitle.textContent = "Top Settling Video: Upright Posture, Gravity & Gentle Settling Rhythm";
       vsDesc.textContent = "How 10-15 minutes of gentle upright resting rhythm allows the gas to rise naturally while calming the startle reflex.";
       vsLinkBtn.href = "https://www.tiktok.com/@colicprotocol/video/7660020460431740173";
       vsLinkBtn.textContent = "Watch Settling & Burping Rhythm Video →";
