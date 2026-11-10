@@ -1,0 +1,1444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Colic Protocol Starting-Point Assessment | Prototype v2.3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+
+:root{
+  --paper:#FAF4EC;
+  --paper-deep:#F0E4D2;
+  --paper-card:rgba(255, 252, 248, 0.95);
+  --ink:#261B14;
+  --muted:#7A6856;
+  --muted-soft:#9E8E7D;
+  --pine:#37452F;
+  --pine-deep:#222C1D;
+  --terra:#BA5731;
+  --terra-deep:#853A1D;
+  --terra-soft:#F3E3D7;
+  --sage:#698457;
+  --sage-soft:#DFE7D6;
+  --gold:#BE933B;
+  --gold-soft:#F4ECCF;
+  --border-subtle:rgba(38, 27, 20, 0.08);
+  --shadow:0 18px 48px rgba(38, 27, 20, 0.09);
+  --fd:'Cormorant Garamond',Georgia,serif;
+  --fb:'DM Sans',system-ui,sans-serif;
+  --fm:'DM Mono',monospace;
+}
+
+body{
+  font-family:var(--fb);
+  background:radial-gradient(ellipse at 80% 0%, #F5E8D6 0%, #FAF4EC 55%, #F0E4D2 100%);
+  min-height:100vh;
+  color:var(--ink);
+  overflow-x:hidden;
+  line-height:1.6;
+}
+
+.ambient-glow-1{
+  position:fixed;
+  top:-140px;
+  right:-140px;
+  width:440px;
+  height:440px;
+  background:radial-gradient(circle, rgba(186,87,49,0.08) 0%, transparent 70%);
+  pointer-events:none;
+  z-index:0;
+}
+.ambient-glow-2{
+  position:fixed;
+  bottom:-160px;
+  left:-140px;
+  width:420px;
+  height:420px;
+  background:radial-gradient(circle, rgba(105,132,87,0.09) 0%, transparent 70%);
+  pointer-events:none;
+  z-index:0;
+}
+
+/* Nursery Background Elements (Warmth without clutter or lag) */
+.nursery-bg-elements{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  overflow:hidden;
+}
+.nb-item{
+  position:absolute;
+  opacity:0.06;
+  color:var(--terra);
+  animation:nbPulse 7s ease-in-out infinite alternate;
+}
+.nb-item.sage{color:var(--sage);animation-delay:2.5s}
+.nb-item.gold{color:var(--gold);animation-delay:5s}
+.nb-stars{top:7%;left:3%;width:90px;height:90px}
+.nb-mobile{top:12%;right:4%;width:110px;height:110px}
+.nb-blocks{bottom:9%;left:4%;width:96px;height:96px}
+.nb-moon{bottom:14%;right:5%;width:88px;height:88px}
+@keyframes nbPulse{
+  0%{opacity:0.04}
+  100%{opacity:0.08}
+}
+@media (prefers-reduced-motion: reduce){
+  .nb-item{animation:none;opacity:0.05}
+}
+
+.quiz-nav{
+  background:var(--pine-deep);
+  padding:14px 20px;
+  position:sticky;
+  top:0;
+  z-index:100;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+}
+.qnav-inner{
+  max-width:680px;
+  margin:0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.qn-logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  text-decoration:none;
+}
+.qn-name{
+  font-family:var(--fd);
+  font-size:17px;
+  color:rgba(250,244,236,0.96);
+  font-weight:700;
+  letter-spacing:.02em;
+}
+.qn-status{
+  font-family:var(--fm);
+  font-size:10.5px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  background:rgba(255,255,255,0.1);
+  color:var(--gold-soft);
+  padding:4px 10px;
+  border-radius:14px;
+}
+
+.wrap{
+  max-width:680px;
+  margin:0 auto;
+  padding:20px 16px 80px;
+  position:relative;
+  z-index:2;
+}
+
+/* Prototype Bar */
+.prototype-bar{
+  background:rgba(255,255,255,0.85);
+  border:1px solid var(--border-subtle);
+  border-radius:14px;
+  padding:12px 14px;
+  margin-bottom:16px;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:8px;
+  font-size:12px;
+  color:var(--muted);
+}
+.preset-btn{
+  background:#fff;
+  border:1px solid rgba(0,0,0,0.12);
+  border-radius:6px;
+  padding:5px 10px;
+  font-family:var(--fb);
+  font-size:11.5px;
+  font-weight:600;
+  cursor:pointer;
+  transition:all .15s;
+}
+.preset-btn:hover{
+  background:var(--terra);
+  color:#fff;
+  border-color:var(--terra);
+}
+
+.card{
+  background:var(--paper-card);
+  border:1px solid rgba(255, 255, 255, 0.9);
+  border-radius:24px;
+  box-shadow:var(--shadow);
+  padding:36px 30px;
+  position:relative;
+}
+.hidden{display:none!important}
+
+/* Zeigarnik Banner */
+.zeigarnik-strip{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:linear-gradient(90deg, rgba(186,87,49,0.07) 0%, rgba(190,147,59,0.07) 100%);
+  border:1px solid rgba(186,87,49,0.16);
+  border-radius:16px;
+  padding:9px 16px;
+  margin-bottom:22px;
+}
+.z-left{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-size:13px;
+  color:var(--terra-deep);
+}
+.z-pulse-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--terra);
+  animation:zPulse 2s ease-in-out infinite;
+}
+@keyframes zPulse{0%,100%{opacity:.4;transform:scale(.85)}50%{opacity:1;transform:scale(1.2)}}
+.z-right{
+  font-family:var(--fm);
+  font-size:11px;
+  font-weight:600;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.04em;
+}
+
+/* REAL CRAWLING BABY PROGRESS TRACK (Using user's uploaded asset) */
+.progress-block{margin-bottom:26px}
+.pb-meta{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.pb-step{font-family:var(--fm);font-size:11.5px;font-weight:600;color:var(--muted-soft);text-transform:uppercase;letter-spacing:.08em}
+.pb-badge{font-family:var(--fm);font-size:11.5px;font-weight:700;color:var(--terra-deep)}
+
+.crawler-track-container{
+  position:relative;
+  padding-top:34px; /* Space for crawling baby above the rail */
+  padding-bottom:6px;
+}
+.crawler-baby-marker{
+  position:absolute;
+  top:2px;
+  left:12.5%;
+  transform:translateX(-50%);
+  transition:left .45s cubic-bezier(.22,.8,.32,1);
+  pointer-events:none;
+  z-index:10;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+.crawler-baby-img{
+  width:50px;
+  height:auto;
+  filter:drop-shadow(0 4px 8px rgba(38,27,20,0.18));
+  animation:babyCrawlBob .75s ease-in-out infinite alternate;
+  transform-origin:bottom center;
+  display:block;
+}
+@keyframes babyCrawlBob{
+  0%{transform:translateY(0) rotate(-1.5deg)}
+  100%{transform:translateY(-3.5px) rotate(2deg)}
+}
+@media (prefers-reduced-motion: reduce){
+  .crawler-baby-img{animation:none}
+}
+
+.progress-rail{
+  position:relative;
+  width:100%;
+  height:7px;
+  background:rgba(38,27,20,0.08);
+  border-radius:999px;
+}
+.progress-bar-fill{
+  position:absolute;
+  left:0;
+  top:0;
+  height:100%;
+  width:12.5%;
+  background:linear-gradient(90deg, var(--terra) 0%, var(--gold) 100%);
+  border-radius:999px;
+  transition:width .45s cubic-bezier(.22,.8,.32,1);
+}
+.crawler-destination-star{
+  position:absolute;
+  right:-4px;
+  top:-9px;
+  width:25px;
+  height:25px;
+  border-radius:50%;
+  background:#fff;
+  border:1.5px solid var(--gold);
+  display:grid;
+  place-items:center;
+  font-size:12px;
+  box-shadow:0 2px 6px rgba(0,0,0,0.08);
+  z-index:2;
+}
+
+/* Badges & Text */
+.cat-tag{display:inline-flex;align-items:center;gap:6px;font-family:var(--fm);font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:6px;margin-bottom:12px}
+.tag-intake{background:rgba(105,132,87,0.12);color:var(--pine)}
+.tag-pattern{background:rgba(186,87,49,0.12);color:var(--terra-deep)}
+.tag-personal{background:rgba(190,147,59,0.14);color:#6D5018}
+
+.q-title{font-family:var(--fd);font-size:clamp(22px,4vw,27px);color:var(--ink);line-height:1.24;font-weight:700;margin-bottom:8px}
+.q-desc{font-size:13.5px;color:var(--muted);line-height:1.6;margin-bottom:20px}
+.multi-hint{font-family:var(--fm);font-size:10px;font-weight:700;color:var(--terra);text-transform:uppercase;letter-spacing:.07em;margin-bottom:12px;display:block}
+
+/* Age Developmental Milestone Callout */
+.age-milestone-box{
+  background:linear-gradient(135deg, rgba(186,87,49,0.06) 0%, rgba(190,147,59,0.06) 100%);
+  border:1.5px solid rgba(186,87,49,0.22);
+  border-radius:14px;
+  padding:15px 16px;
+  margin-top:16px;
+  display:none;
+  animation:fadeIn .25s ease;
+}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.amb-kicker{
+  font-family:var(--fm);
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--terra-deep);
+  margin-bottom:4px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.amb-text{font-size:13px;color:var(--ink);line-height:1.55}
+.amb-text strong{color:var(--terra-deep)}
+
+/* Options */
+.options-list{display:flex;flex-direction:column;gap:10px}
+.opt{display:flex;align-items:flex-start;gap:14px;padding:15px 17px;background:rgba(255,255,255,0.72);border:1.5px solid rgba(255,255,255,0.85);border-radius:16px;cursor:pointer;transition:all .18s ease;user-select:none}
+.opt:hover{background:#fff;border-color:rgba(186,87,49,0.3);box-shadow:0 4px 14px rgba(38,27,20,0.04)}
+.opt.selected{background:rgba(186,87,49,0.06);border-color:var(--terra)}
+.opt-check{width:21px;height:21px;border-radius:6px;border:2px solid rgba(0,0,0,0.18);flex-shrink:0;margin-top:2px;display:grid;place-items:center;font-size:13px;color:#fff;background:#fff;transition:all .18s}
+.opt.is-radio .opt-check{border-radius:50%}
+.opt.selected .opt-check{background:var(--terra);border-color:var(--terra)}
+.opt-content{flex:1}
+.opt-text{font-size:14.5px;font-weight:600;color:var(--ink);line-height:1.45}
+.opt-sub{font-size:12.5px;color:var(--muted);margin-top:3px;line-height:1.4}
+
+/* Buttons */
+.nav-actions{display:flex;gap:12px;margin-top:24px}
+.btn-back{padding:15px 20px;background:transparent;border:1.5px solid rgba(38,27,20,0.12);border-radius:12px;color:var(--muted);font-family:var(--fb);font-size:14px;font-weight:600;cursor:pointer;transition:all .15s}
+.btn-back:hover{background:rgba(0,0,0,0.03);color:var(--ink)}
+.btn-next{flex:1;padding:15px;background:linear-gradient(135deg, var(--terra) 0%, var(--terra-deep) 100%);color:#fff;border:none;border-radius:12px;font-family:var(--fb);font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 8px 22px rgba(186,87,49,0.28);transition:all .18s}
+.btn-next:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
+.btn-next:not(:disabled):hover{transform:translateY(-1px);box-shadow:0 12px 26px rgba(186,87,49,0.36)}
+
+/* Analysis Screen */
+.analysis-wrap{text-align:center;padding:40px 10px}
+.pulse-spinner{width:44px;height:44px;border:3px solid rgba(186,87,49,0.15);border-top-color:var(--terra);border-radius:50%;animation:spin 1s linear infinite;margin:20px auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.analysis-step{font-family:var(--fm);font-size:12px;color:var(--muted);margin-top:10px}
+
+/* Results */
+.result-header{padding:26px 24px;border-radius:18px;margin-bottom:22px;border:1.5px solid}
+.res-lead-gut{background:var(--terra-soft);border-color:rgba(186,87,49,0.3);color:var(--terra-deep)}
+.res-lead-ns{background:var(--sage-soft);border-color:rgba(105,132,87,0.3);color:var(--pine)}
+.res-lead-fm{background:var(--gold-soft);border-color:rgba(190,147,59,0.35);color:#6D5018}
+.res-mixed{background:#F7EEDB;border-color:rgba(190,147,59,0.4);color:#5A4015}
+.res-nolead{background:rgba(38,27,20,0.04);border-color:rgba(38,27,20,0.12);color:var(--ink)}
+
+.rh-eyebrow{font-family:var(--fm);font-size:10px;letter-spacing:.09em;text-transform:uppercase;padding:3px 9px;border-radius:6px;background:rgba(255,255,255,0.7);display:inline-block;margin-bottom:10px;font-weight:700}
+.rh-title{font-family:var(--fd);font-size:clamp(23px,4.5vw,29px);font-weight:700;line-height:1.2;margin-bottom:6px}
+.rh-status{font-size:13.5px;font-weight:600;opacity:.9}
+
+.eval-box{background:rgba(255,255,255,0.65);border:1px solid var(--border-subtle);border-radius:16px;padding:20px;margin-bottom:20px}
+.eval-box h4{font-family:var(--fd);font-size:18px;font-weight:700;color:var(--ink);margin-bottom:12px}
+.cluster-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:13px}
+.cluster-rail{width:140px;height:7px;background:rgba(0,0,0,0.06);border-radius:999px;overflow:hidden}
+.cluster-fill{height:100%;border-radius:999px}
+
+.plan-card{background:#fff;border:1.5px solid var(--border-subtle);border-radius:16px;padding:22px;margin-bottom:20px}
+.plan-card h4{font-family:var(--fd);font-size:19px;color:var(--ink);margin-bottom:8px}
+.plan-card p{font-size:13.5px;color:var(--muted);line-height:1.65;margin-bottom:14px}
+.plan-steps{list-style:none;display:flex;flex-direction:column;gap:10px}
+.plan-steps li{display:flex;gap:10px;font-size:13.5px;color:var(--ink);line-height:1.5}
+.step-num{width:22px;height:22px;border-radius:50%;background:var(--pine);color:#fff;font-family:var(--fm);font-size:11px;font-weight:700;display:grid;place-items:center;flex-shrink:0;margin-top:1px}
+
+/* BLOG GUIDES */
+.blog-recs-section{margin-top:22px;padding-top:20px;border-top:1px dashed var(--border-subtle)}
+.blog-recs-title{font-family:var(--fd);font-size:19px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.blog-recs-desc{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:14px}
+.guide-card-grid{display:flex;flex-direction:column;gap:12px}
+.guide-card{background:rgba(255,255,255,0.85);border:1px solid rgba(38,27,20,0.08);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:6px;text-decoration:none;color:inherit;transition:all .18s ease}
+.guide-card:hover{background:#fff;border-color:var(--terra);transform:translateY(-2px);box-shadow:0 8px 20px rgba(186,87,49,0.12)}
+.guide-tag{font-family:var(--fm);font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--terra-deep)}
+.guide-title{font-family:var(--fb);font-size:14.5px;font-weight:700;color:var(--ink);line-height:1.35}
+.guide-summary{font-size:12.5px;color:var(--muted);line-height:1.5}
+.guide-cta{font-family:var(--fb);font-size:12px;font-weight:700;color:var(--terra);margin-top:4px;display:inline-flex;align-items:center;gap:4px}
+
+/* PROVEN VIRAL VIDEO DEMONSTRATIONS (Direct Links from Project Data) */
+.video-spotlight-box{
+  margin-top:18px;
+  background:rgba(255,255,255,0.8);
+  border:1.5px solid rgba(186,87,49,0.24);
+  border-radius:14px;
+  padding:16px 18px;
+}
+.vs-kicker{
+  font-family:var(--fm);
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:var(--terra-deep);
+  display:flex;
+  align-items:center;
+  gap:6px;
+  margin-bottom:4px;
+}
+.vs-title{font-size:14px;font-weight:700;color:var(--ink);line-height:1.35;margin-bottom:4px}
+.vs-desc{font-size:12.5px;color:var(--muted);line-height:1.5;margin-bottom:10px}
+.vs-actions{display:flex;gap:10px;flex-wrap:wrap}
+.vs-link-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 14px;
+  background:var(--ink);
+  color:#fff;
+  border-radius:8px;
+  font-size:12px;
+  font-weight:700;
+  text-decoration:none;
+  transition:all .18s;
+}
+.vs-link-btn:hover{background:var(--terra);color:#fff}
+.vs-secondary-link{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 12px;
+  background:transparent;
+  border:1px solid rgba(38,27,20,0.15);
+  border-radius:8px;
+  font-size:12px;
+  font-weight:600;
+  color:var(--muted);
+  text-decoration:none;
+  transition:all .15s;
+}
+.vs-secondary-link:hover{background:rgba(0,0,0,0.04);color:var(--ink)}
+
+/* HANDOFF TO MIDNIGHT CHECKLIST & BLUEPRINT AT BOTTOM */
+.handoff-section{margin-top:28px;padding-top:26px;border-top:1.5px solid rgba(38,27,20,0.1)}
+.handoff-kicker{font-family:var(--fm);font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted-soft);margin-bottom:12px}
+
+.path-card-free{
+  background:var(--sage-soft);
+  border:1.5px solid rgba(105,132,87,0.35);
+  border-radius:16px;
+  padding:20px;
+  margin-bottom:18px;
+  box-shadow:0 6px 20px rgba(105,132,87,0.12);
+}
+.path-badge{font-family:var(--fm);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--pine);font-weight:700;margin-bottom:6px;display:block}
+.path-title{font-family:var(--fd);font-size:21px;font-weight:700;color:var(--ink);line-height:1.25;margin-bottom:6px}
+.path-desc{font-size:13px;color:var(--muted);line-height:1.55;margin-bottom:14px}
+.btn-midnight{
+  width:100%;
+  padding:15px;
+  background:linear-gradient(135deg, var(--sage), var(--pine));
+  color:#fff;
+  border:none;
+  border-radius:12px;
+  font-family:var(--fb);
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+  transition:all .18s;
+  box-shadow:0 6px 18px rgba(55,69,47,0.25);
+}
+.btn-midnight:hover{transform:scale(1.01);box-shadow:0 8px 24px rgba(55,69,47,0.35)}
+
+.path-card-blueprint{
+  background:rgba(255,255,255,0.9);
+  border:1.5px solid rgba(186,87,49,0.3);
+  border-radius:16px;
+  padding:22px;
+  position:relative;
+  box-shadow:0 8px 24px rgba(186,87,49,0.08);
+  margin-bottom:18px;
+}
+.price-pill{position:absolute;top:16px;right:16px;background:var(--terra);color:#fff;border-radius:20px;padding:4px 12px;font-family:var(--fb);font-size:12px;font-weight:700;letter-spacing:.02em}
+.guarantee-box{background:rgba(190,147,59,0.08);border:1px solid rgba(190,147,59,0.25);border-radius:12px;padding:12px 14px;font-size:12.5px;color:var(--ink);line-height:1.55;margin:14px 0}
+.guarantee-box strong{color:var(--terra-deep)}
+.btn-blueprint{
+  width:100%;
+  padding:15px;
+  background:linear-gradient(135deg, var(--terra), var(--terra-deep));
+  color:#fff;
+  border:none;
+  border-radius:12px;
+  font-family:var(--fb);
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+  transition:all .18s;
+  box-shadow:0 6px 20px rgba(186,87,49,0.3);
+}
+.btn-blueprint:hover{transform:scale(1.01);box-shadow:0 10px 26px rgba(186,87,49,0.4)}
+
+.dm-route-box{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.7);border:1px solid var(--border-subtle);border-radius:14px;padding:14px 16px}
+.dm-avatar{width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid var(--terra-soft);flex-shrink:0}
+.dm-info{flex:1}
+.dm-title{font-size:13px;font-weight:700;color:var(--ink)}
+.dm-sub{font-size:11.5px;color:var(--muted);line-height:1.4}
+.btn-dm{padding:8px 14px;background:transparent;border:1.5px solid var(--ink);border-radius:10px;font-family:var(--fb);font-size:12px;font-weight:700;color:var(--ink);cursor:pointer;white-space:nowrap;transition:all .15s}
+.btn-dm:hover{background:var(--ink);color:#fff}
+
+.redflag-screen{background:#FFF4F0;border:2px solid var(--terra);border-radius:18px;padding:26px;margin-top:12px}
+.redflag-screen h2{font-family:var(--fd);font-size:25px;color:var(--terra-deep);margin-bottom:10px}
+.redflag-screen p{font-size:14px;color:var(--ink);line-height:1.65;margin-bottom:12px}
+
+@media (max-width:480px){
+  .card{padding:26px 18px}
+  .zeigarnik-strip{flex-direction:column;align-items:flex-start;gap:4px}
+  .cluster-rail{width:90px}
+  .dm-route-box{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+
+<div class="ambient-glow-1" aria-hidden="true"></div>
+<div class="ambient-glow-2" aria-hidden="true"></div>
+
+<!-- Ambient Nursery Play Motifs in Background -->
+<div class="nursery-bg-elements" aria-hidden="true">
+  <!-- Soft stars & constellation -->
+  <svg class="nb-item nb-stars" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M20 20 L25 35 L40 40 L25 45 L20 60 L15 45 L0 40 L15 35 Z" fill="currentColor" opacity="0.3"/>
+    <circle cx="70" cy="25" r="3" fill="currentColor"/>
+    <circle cx="85" cy="50" r="2" fill="currentColor"/>
+    <path d="M60 70 L63 78 L72 80 L63 83 L60 92 L57 83 L48 80 L57 78 Z" fill="currentColor" opacity="0.25"/>
+  </svg>
+  <!-- Gentle nursery mobile -->
+  <svg class="nb-item sage nb-mobile" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2">
+    <line x1="50" y1="5" x2="50" y2="25"/>
+    <line x1="20" y1="25" x2="80" y2="25"/>
+    <line x1="20" y1="25" x2="20" y2="50"/>
+    <line x1="80" y1="25" x2="80" y2="45"/>
+    <circle cx="20" cy="58" r="8" fill="currentColor" opacity="0.2"/>
+    <polygon points="80,50 88,64 72,64" fill="currentColor" opacity="0.2"/>
+  </svg>
+  <!-- Wooden play blocks -->
+  <svg class="nb-item nb-blocks" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2">
+    <rect x="15" y="45" width="34" height="34" rx="4" stroke="currentColor"/>
+    <text x="25" y="68" font-family="sans-serif" font-size="18" font-weight="bold" fill="currentColor">A</text>
+    <rect x="42" y="18" width="34" height="34" rx="4" stroke="currentColor"/>
+    <text x="52" y="41" font-family="sans-serif" font-size="18" font-weight="bold" fill="currentColor">B</text>
+  </svg>
+  <!-- Crescent moon & calm cloud -->
+  <svg class="nb-item gold nb-moon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M50 15 A32 32 0 1 0 78 72 A28 28 0 0 1 50 15 Z" fill="currentColor" opacity="0.25"/>
+  </svg>
+</div>
+
+<nav class="quiz-nav">
+  <div class="qnav-inner">
+    <a href="/" class="qn-logo">
+      <svg width="22" height="20" viewBox="0 0 40 36"><circle cx="15" cy="14" r="10.5" fill="none" stroke="#BA5731" stroke-width="3" opacity=".9"/><circle cx="25" cy="14" r="10.5" fill="none" stroke="#698457" stroke-width="3" opacity=".9"/><circle cx="20" cy="23" r="10.5" fill="none" stroke="#BE933B" stroke-width="3" opacity=".9"/></svg>
+      <span class="qn-name">Colic Protocol</span>
+    </a>
+    <span class="qn-status">Integrated Prototype v2.3</span>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <!-- Interactive Preset Toolbar for rapid testing of all engine states -->
+  <div class="prototype-bar">
+    <strong style="color:var(--ink)">Test Scenarios:</strong>
+    <button class="preset-btn" onclick="loadScenario('fm_bottle')">Feeding (Bottle Paced)</button>
+    <button class="preset-btn" onclick="loadScenario('fm_breast')">Feeding (Breast Latch / Flipple)</button>
+    <button class="preset-btn" onclick="loadScenario('gut')">Gut (Tiger Hold & Spasms)</button>
+    <button class="preset-btn" onclick="loadScenario('ns')">Nervous System (Sensory Room)</button>
+    <button class="preset-btn" onclick="loadScenario('mixed')">Mixed Pattern (The 37% Fix)</button>
+    <button class="preset-btn" onclick="loadScenario('nolead')">Foundational (Diffuse)</button>
+  </div>
+
+  <!-- ASSESSMENT INTERFACE CARD -->
+  <div class="card" id="quizCard">
+
+    <!-- Zeigarnik Effect Completion Anchor -->
+    <div class="zeigarnik-strip" id="zeigarnikStrip">
+      <div class="z-left">
+        <div class="z-pulse-dot"></div>
+        <span>Assessment in progress: <strong><span id="zCountdown">8 questions</span></strong> to your customized plan</span>
+      </div>
+      <div class="z-right" id="zTimer">About 90 sec</div>
+    </div>
+
+    <!-- CRAWLING BABY PROGRESS TRACK -->
+    <div class="progress-block" aria-label="Assessment Progress">
+      <div class="pb-meta">
+        <span class="pb-step" id="stepCounterText">Question 1 of 8</span>
+        <span class="pb-badge" id="stepPctText">12% Complete</span>
+      </div>
+
+      <div class="crawler-track-container">
+        <!-- Crawling Baby Marker (Animated baby image provided by user) -->
+        <div class="crawler-baby-marker" id="crawlerMarker">
+          <img src="images/crawling-baby.png" alt="Baby crawling forward" class="crawler-baby-img" onerror="this.onerror=null; this.src='https://placehold.co/100x60/FAF4EC/BA5731?text=Baby';">
+        </div>
+
+        <!-- The Progress Bar Rail & Destination -->
+        <div class="progress-rail">
+          <div class="progress-bar-fill" id="progressFill"></div>
+          <div class="crawler-destination-star" title="Action Card">✨</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Question Container -->
+    <div id="qBlock">
+      <div class="cat-tag" id="catTag">Context & Baseline</div>
+      <div class="multi-hint hidden" id="multiHint">Select all that apply</div>
+      <h2 class="q-title" id="qTitle">How many weeks old is your baby today?</h2>
+      <p class="q-desc" id="qDesc">Crying commonly increases during early weeks and typically peaks around week 6 to 8 before easing.</p>
+
+      <div class="options-list" id="optionsBox">
+        <!-- Injected via JavaScript -->
+      </div>
+
+      <!-- DYNAMIC AGE DEVELOPMENTAL MILESTONE CALLOUT -->
+      <div class="age-milestone-box" id="ageMilestoneBox">
+        <div class="amb-kicker"><span>🌱</span> What is happening developmentally at this age:</div>
+        <div class="amb-text" id="ageMilestoneText"></div>
+      </div>
+
+      <div class="nav-actions">
+        <button class="btn-back" id="btnBack" onclick="goBack()" style="display:none">Back</button>
+        <button class="btn-next" id="btnNext" onclick="goNext()" disabled>Continue &rarr;</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ANALYSIS SCREEN -->
+  <div class="card analysis-wrap hidden" id="analysisCard">
+    <div style="font-family:var(--fd);font-size:24px;color:var(--ink);font-weight:700">Evaluating Observable Patterns...</div>
+    <p style="font-size:13.5px;color:var(--muted);margin-top:6px">Analyzing feeding aerophagia, visceral cramping signs, and settling response.</p>
+    <div class="pulse-spinner"></div>
+    <div class="analysis-step" id="analysisStepText">Evaluating feeding mechanics cluster...</div>
+  </div>
+
+  <!-- RESULT SCREEN -->
+  <div class="card hidden" id="resultCard">
+    <div class="result-header" id="resHeader">
+      <span class="rh-eyebrow" id="resEyebrow">Clear Leading Pattern</span>
+      <h1 class="rh-title" id="resTitle">Feeding Mechanics Starting Point</h1>
+      <div class="rh-status" id="resStatus">Stronger Pattern Signal</div>
+    </div>
+
+    <div class="eval-box">
+      <h4>Observable Pattern Signals</h4>
+      
+      <div class="cluster-row">
+        <span><strong>Feeding Mechanics:</strong> <span id="fmScore">3</span> pts</span>
+        <div class="cluster-rail"><div class="cluster-fill" id="fmBar" style="background:var(--gold);width:75%"></div></div>
+      </div>
+      <div class="cluster-row">
+        <span><strong>Gut Visceral Signs:</strong> <span id="gutScore">1</span> pts</span>
+        <div class="cluster-rail"><div class="cluster-fill" id="gutBar" style="background:var(--terra);width:25%"></div></div>
+      </div>
+      <div class="cluster-row">
+        <span><strong>Sensory / Settling Signs:</strong> <span id="nsScore">0</span> pts</span>
+        <div class="cluster-rail"><div class="cluster-fill" id="nsBar" style="background:var(--sage);width:0%"></div></div>
+      </div>
+
+      <p style="font-size:12px;color:var(--muted-soft);margin-top:12px;line-height:1.5">
+        * Scored using clustered direct observations. Demographic intake (age, feeding method) and prior remedy attempts are excluded from pattern scoring to prevent diagnostic distortion.
+      </p>
+    </div>
+
+    <div class="plan-card">
+      <h4 id="planHeading">Your Starting-Point Sequence</h4>
+      <p id="planDesc">Based on your observations, your baby demonstrates clear signs of aerophagia or flow rate mismatch. Start with mechanical feed adjustments before altering formula or supplements.</p>
+      
+      <ul class="plan-steps" id="planStepsList">
+        <!-- Rendered dynamically -->
+      </ul>
+
+      <!-- RECOMMENDED BLOG / DEEP-DIVE GUIDES -->
+      <div class="blog-recs-section">
+        <h4 class="blog-recs-title">Deep-Dive Technique Guides</h4>
+        <p class="blog-recs-desc">Read the exact step-by-step physical techniques tailored to your baby's starting point:</p>
+
+        <div class="guide-card-grid" id="guideCardGrid">
+          <!-- Populated dynamically based on pattern & feeding method -->
+        </div>
+
+        <!-- DYNAMIC PROVEN VIRAL REELS/VIDEOS SPOTLIGHT WITH EXACT LINKS -->
+        <div class="video-spotlight-box" id="videoSpotlightBox">
+          <div class="vs-kicker"><span>🎬</span> Video Demonstration from Our Channel</div>
+          <div class="vs-title" id="vsTitle">Watch the Technique in Action</div>
+          <p class="vs-desc" id="vsDesc">See the physical positioning demonstrated step-by-step.</p>
+          <div class="vs-actions">
+            <a class="vs-link-btn" id="vsLinkBtn" href="https://www.tiktok.com/@colicprotocol" target="_blank" rel="noopener">
+              <span>Watch Video Demonstration</span> &rarr;
+            </a>
+            <a class="vs-secondary-link" id="vsIgLink" href="https://instagram.com/colicprotocol" target="_blank" rel="noopener">
+              <span>View on Instagram</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- SMOOTH HANDOFF TO MIDNIGHT CHECKLIST & BLUEPRINT AT BOTTOM -->
+      <div class="handoff-section">
+        <div class="handoff-kicker">Next Steps Tonight</div>
+
+        <!-- Free Guided Protocol Card -->
+        <div class="path-card-free">
+          <span class="path-badge">Free · Guided Tool · Matched to your result</span>
+          <div class="path-title">Start Tonight's Guided Protocol</div>
+          <p class="path-desc">A step-by-step calming checklist for 3AM with automated timers and exact hold instructions. No reading required in the dark.</p>
+          <button class="btn-midnight" onclick="goToMidnightProtocol()">Start Guided Protocol Now &rarr;</button>
+        </div>
+
+        <!-- Paid Blueprint Card -->
+        <div class="path-card-blueprint">
+          <span class="price-pill">$47 ONE TIME</span>
+          <div class="path-title">The Calm Baby Blueprint</div>
+          <p class="path-desc">The complete management system: full gut biome protocols, feeding mechanics correction, sensory calming setups, and the 72-hour Bloom log.</p>
+          
+          <div class="guarantee-box">
+            <strong>72-Hour Guarantee:</strong> If it doesn't produce a meaningful shift in 72 hours, reply and I'll make it right. You keep the Blueprint either way.
+          </div>
+
+          <button class="btn-blueprint" onclick="goToBlueprint()">Get the Calm Baby Blueprint ($47) &rarr;</button>
+        </div>
+
+        <!-- Message Vincent Directly -->
+        <div class="dm-route-box">
+          <img src="images/vincent-400.jpg" alt="Vincent" class="dm-avatar" onerror="this.src='https://placehold.co/80x80/222C1D/FFFFFF?text=V'">
+          <div class="dm-info">
+            <div class="dm-title">Want Vincent to review your result?</div>
+            <div class="dm-sub">Epidemiologist & founder. Send your assessment result for guidance.</div>
+          </div>
+          <button class="btn-dm" onclick="window.open('https://instagram.com/colicprotocol','_blank')">Message Vincent &rarr;</button>
+        </div>
+
+      </div>
+
+    </div>
+
+    <button class="btn-next" onclick="resetQuiz()" style="background:var(--ink);margin-top:20px">Test Another Profile &orarr;</button>
+  </div>
+
+  <!-- RED FLAG SCREEN -->
+  <div class="redflag-screen hidden" id="redFlagCard">
+    <h2>Medical Assessment Recommended First</h2>
+    <p>You indicated that your baby has one or more symptoms that require clinical examination by a doctor (such as fever, green vomit, blood in stool, or unusual limpness).</p>
+    <p>These signs are outside the scope of typical infant colic and cannot be resolved with home soothing protocols. Please contact your pediatrician or local pediatric urgent care right away.</p>
+    <button class="btn-back" onclick="resetQuiz()" style="margin-top:10px;background:#fff">Return to Assessment</button>
+  </div>
+
+</main>
+
+<script>
+// THE 8-QUESTION SYNTHESIZED ARCHITECTURE
+const questions = [
+  // SAFETY GATE (Pre-Quiz Check)
+  {
+    id: 'safety',
+    category: 'Safety Check',
+    tagClass: 'tag-intake',
+    title: "Before we begin: Does your baby have any of these right now?",
+    desc: "These signs require a medical assessment from a pediatrician, not a home soothing protocol.",
+    multi: true,
+    isSafety: true,
+    options: [
+      { text: "Fever of 38°C (100.4°F) or higher", sub: "Elevated body temperature", isRedFlag: true },
+      { text: "Green/bilious vomit, repeated forceful vomiting, or blood in stool", sub: "Potential acute GI conditions", isRedFlag: true },
+      { text: "Difficulty breathing, blue/grey lips, or unusual limpness", sub: "Respiratory or systemic distress", isRedFlag: true },
+      { text: "Refusing feeds completely or markedly fewer wet diapers", sub: "Signs of dehydration or severe illness", isRedFlag: true },
+      { text: "None of these apply to my baby", sub: "Safe to proceed with colic assessment", isNone: true }
+    ]
+  },
+
+  // Q1: AGE (Burden Context - 0 points, with developmental milestone notes)
+  {
+    id: 'age',
+    category: 'Context & Baseline',
+    tagClass: 'tag-intake',
+    title: "How many weeks old is your baby today?",
+    desc: "Crying commonly increases during early weeks and peaks around week 6 to 8 before easing. Age sets timeline expectations without biasing starting points.",
+    multi: false,
+    options: [
+      { 
+        text: "0 to 2 weeks", 
+        sub: "Early newborn transition window",
+        milestone: "<strong>Newborn Adjustment Window:</strong> Crying is usually brief and hunger-driven. Gut microbiome colonization is just beginning; infant suck-swallow coordination is learning flow pacing. Extra burping and wind are normal as swallowing coordination forms."
+      },
+      { 
+        text: "3 to 5 weeks", 
+        sub: "Escalation phase where evening fussiness often starts",
+        milestone: "<strong>The Escalation Phase:</strong> Evening crying begins clustering ('the witching hour'). The infant's sensory awareness expands rapidly, while visceral peristalsis surges. Parents often start trying gas drops or gripe water during this window."
+      },
+      { 
+        text: "6 to 8 weeks", 
+        sub: "Peak colic window for many infants",
+        milestone: "<strong>The Developmental Peak:</strong> Infant crying commonly reaches its maximum duration and intensity (often 2 to 3+ hours daily per Barr 2009). The sensory threshold is at its most reactive point, while biological self-soothing circuitry is still immature. This is the hardest stretch, not a parental failure."
+      },
+      { 
+        text: "9 to 12 weeks", 
+        sub: "Turning point where crying duration begins easing for many",
+        milestone: "<strong>The Turning Point:</strong> Crying duration begins to drop for many babies. Sleep intervals lengthen slightly; the gut microbiome diversifies and oral motor latch mechanics mature."
+      },
+      { 
+        text: "Older than 12 weeks", 
+        sub: "Late infancy: persistent crying should be checked with a doctor",
+        milestone: "<strong>The Easing Window:</strong> Colic typically eases by about 3 to 4 months as circadian rhythm and melatonin regulation stabilize. If intense, inconsolable crying persists past 12-16 weeks, consult your pediatrician to rule out food sensitivities or other clinical factors."
+      }
+    ]
+  },
+
+  // Q2: TOTAL CRYING DURATION (Burden Measurement - 0 points)
+  {
+    id: 'crying_duration',
+    category: 'Context & Baseline',
+    tagClass: 'tag-intake',
+    title: "On a typical day, approximately how long does your baby cry in total?",
+    desc: "Measures total daily burden to create a baseline for tracking in the Midnight Protocol.",
+    multi: false,
+    options: [
+      { text: "Less than 1 hour total", sub: "Mild fussiness" },
+      { text: "1 to 2 hours total", sub: "Moderate unsettled periods" },
+      { text: "2 to 3 hours total", sub: "Meets common clinical colic criteria (Wessel 3-hour rule)" },
+      { text: "3 to 5 hours total", sub: "Severe daily crying load" },
+      { text: "More than 5 hours total", sub: "Intense prolonged crying distress" },
+      { text: "I am not sure / varies day to day", sub: "Unpredictable daily totals" }
+    ]
+  },
+
+  // Q3: DIRECT FEEDING OBSERVATIONS (Observable Pattern: Feeding Mechanics Cluster)
+  {
+    id: 'feeding_obs',
+    category: 'Observable Pattern',
+    tagClass: 'tag-pattern',
+    title: "When your baby is feeding, which of these do you regularly notice?",
+    desc: "Direct observations during feeding differentiate mechanical flow/aerophagia issues from general fussiness.",
+    multi: true,
+    options: [
+      { text: "Repeatedly pulls away from breast or bottle, arches back, or fusses", sub: "Aerophagia / flow rate discomfort sign", signal: 'FM' },
+      { text: "Coughs, sputters, or seems to struggle with milk flow speed", sub: "Swallow coordination or fast let-down sign", signal: 'FM' },
+      { text: "Milk repeatedly leaks from corners of mouth while sucking", sub: "Incomplete lip seal / latch vacuum loss", signal: 'FM' },
+      { text: "Makes frequent clicking or smacking sounds while feeding", sub: "Breaking suction during swallow sequence", signal: 'FM' },
+      { text: "Feeds are consistently exhausting, frantic, or take over 45 minutes", sub: "Fatigue or mechanical feeding inefficiency", signal: 'FM' },
+      { text: "Feeds usually look comfortable with coordinated swallowing", sub: "No observable mechanical feeding struggle", signal: 'NONE' },
+      { text: "None of these / I am not sure", sub: "Uncertain or no obvious feed difficulty", isNone: true }
+    ]
+  },
+
+  // Q4: CRY TIMING RELATIVE TO FEEDS (Observable Pattern)
+  {
+    id: 'cry_timing',
+    category: 'Observable Pattern',
+    tagClass: 'tag-pattern',
+    title: "When does the crying usually happen in relation to feeding?",
+    desc: "Connects distress onset to gastric transit times.",
+    multi: false,
+    options: [
+      { text: "Crying consistently starts during feeds or within 15 to 20 minutes after", sub: "Immediate mechanical or upper esophageal distress", signal: 'FM', pts: 2 },
+      { text: "Crying happens in waves throughout the day or night, unrelated to feeds", sub: "Paroxysmal visceral cramping pattern", signal: 'GUT', pts: 2 },
+      { text: "Crying predictably clusters in late afternoon/evening (5 PM to midnight)", sub: "Classic diurnal sensory saturation ('witching hour')", signal: 'NS', pts: 2 },
+      { text: "Unpredictable / occurs at different times with no pattern", sub: "No consistent temporal link", signal: 'NONE', pts: 0 }
+    ]
+  },
+
+  // Q5: VISCERAL & DIGESTIVE SIGNS (Observable Pattern: Gut Visceral Cluster)
+  {
+    id: 'gut_obs',
+    category: 'Observable Pattern',
+    tagClass: 'tag-pattern',
+    title: "Apart from crying, which digestive clues have you repeatedly noticed?",
+    desc: "Observable visceral responses to intestinal gas and abdominal pressure.",
+    multi: true,
+    options: [
+      { text: "Pulls knees tightly to chest with a firm, swollen, or tight tummy", sub: "Classic abdominal guarding posture", signal: 'GUT' },
+      { text: "Noticeable pause or visible relief in crying after passing gas or stool", sub: "Decompression provides temporary pain relief", signal: 'GUT' },
+      { text: "Frequent very loose, frothy, explosive, or green stools", sub: "Altered gut transit and fermentation", signal: 'GUT' },
+      { text: "Strains uncomfortably for long periods with hard, infrequent stools", sub: "Infant dyschezia or delayed stool transit", signal: 'GUT' },
+      { text: "Frequent wet burps, hiccups, or sour regurgitation after feeds", sub: "Upper gastrointestinal reflux signs", signal: 'FM' },
+      { text: "Normal yellow/seedy stools with no obvious pain", sub: "Healthy typical bowel movements", signal: 'NONE' },
+      { text: "None of these observed", sub: "No distinct digestive signals", isNone: true }
+    ]
+  },
+
+  // Q6: SOOTHING & CALMING RESPONSE (Observable Pattern)
+  {
+    id: 'soothing_resp',
+    category: 'Observable Pattern',
+    tagClass: 'tag-pattern',
+    title: "Which calming position produces the clearest reduction in crying?",
+    desc: "Differential response to counter-pressure, vestibular motion, or upright posture.",
+    multi: false,
+    options: [
+      { text: "Settles noticeably with tummy-down pressure (Tiger Hold across forearm)", sub: "Gentle upward abdominal counter-pressure eases visceral cramping", signal: 'GUT', pts: 2 },
+      { text: "Settles best when kept upright over shoulder (45°–90°); cries when flat", sub: "Gravity assists esophageal comfort and prevents regurgitation", signal: 'FM', pts: 2 },
+      { text: "Settles only with continuous rhythmic bouncing/walking; screams if stopped", sub: "State-regulation dependent on continuous vestibular input", signal: 'NS', pts: 2 },
+      { text: "Almost nothing helps / equally hard to soothe in all positions", sub: "Resistant to common holds", signal: 'NONE', pts: 0 }
+    ]
+  },
+
+  // Q7: FEEDING METHOD (Personalization Router - 0 points)
+  {
+    id: 'feeding_method',
+    category: 'Personalization',
+    tagClass: 'tag-personal',
+    title: "How is your baby currently fed?",
+    desc: "Personalizes your protocol. Does not add points to avoid distorting the diagnosis.",
+    multi: false,
+    options: [
+      { text: "Exclusively breastfed", sub: "Eligible for latch & probiotic guidance (Savino 2010)", method: 'breast' },
+      { text: "Exclusively formula-fed", sub: "Leads with paced feeding and bottle mechanics (Sung 2014 caveat)", method: 'bottle' },
+      { text: "Combination of breast milk and formula", sub: "Mixed feeding protocol", method: 'mixed' },
+      { text: "Expressed breast milk (bottle-fed)", sub: "Focuses on paced bottle mechanics", method: 'bottle' }
+    ]
+  },
+
+  // Q8: PREVIOUSLY TRIED REMEDIES (Personalization - 0 points)
+  {
+    id: 'tried_remedies',
+    category: 'Personalization',
+    tagClass: 'tag-personal',
+    title: "Which of these have you already tried?",
+    desc: "Prevents your customized plan from sending you back through steps that already failed.",
+    multi: true,
+    options: [
+      { text: "Gas drops (simethicone)", sub: "Over-the-counter anti-foaming agent" },
+      { text: "Gripe water", sub: "Herbal / sodium bicarbonate liquid" },
+      { text: "Sound machines / brown noise", sub: "Continuous acoustic calming" },
+      { text: "Paced bottle feeding or different bottles/nipples", sub: "Feeding flow modifications" },
+      { text: "Changing formula brand or type", sub: "Nutritional trial" },
+      { text: "Adjusting mother's diet (if breastfeeding)", sub: "Elimination of dairy/irritants" },
+      { text: "Rhythmic bouncing, driving, or tight swaddling", sub: "Vestibular / sensory techniques" },
+      { text: "None of these yet", sub: "Starting fresh tonight", isNone: true }
+    ]
+  }
+];
+
+let curIndex = 0;
+let answers = {};
+let lastCalculatedType = 'FM';
+
+function renderCurrentQuestion() {
+  const q = questions[curIndex];
+  const total = questions.length;
+  const stepNum = curIndex + 1;
+  const pct = Math.round((stepNum / total) * 100);
+
+  const remaining = total - stepNum;
+  document.getElementById('zCountdown').textContent = remaining === 0 ? "Final step! Almost finished" : `${remaining} question${remaining > 1 ? 's' : ''}`;
+  document.getElementById('zTimer').textContent = remaining === 0 ? "Unlocking plan" : `${Math.max(15, remaining * 12)}s left`;
+
+  document.getElementById('stepCounterText').textContent = `Question ${stepNum} of ${total}`;
+  document.getElementById('stepPctText').textContent = `${pct}% Complete`;
+  document.getElementById('progressFill').style.width = `${pct}%`;
+
+  // CRAWLING BABY PROGRESS POSITION
+  document.getElementById('crawlerMarker').style.left = `${pct}%`;
+
+  document.getElementById('catTag').textContent = q.category;
+  document.getElementById('catTag').className = `cat-tag ${q.tagClass}`;
+  document.getElementById('qTitle').textContent = q.title;
+  document.getElementById('qDesc').textContent = q.desc;
+
+  const multiHint = document.getElementById('multiHint');
+  if (q.multi) multiHint.classList.remove('hidden');
+  else multiHint.classList.add('hidden');
+
+  const box = document.getElementById('optionsBox');
+  box.innerHTML = '';
+  const selected = answers[q.id] || [];
+
+  // Age Milestone display handling
+  const ageBox = document.getElementById('ageMilestoneBox');
+  if (q.id === 'age' && selected.length > 0) {
+    const chosenOpt = q.options[selected[0]];
+    if (chosenOpt && chosenOpt.milestone) {
+      document.getElementById('ageMilestoneText').innerHTML = chosenOpt.milestone;
+      ageBox.style.display = 'block';
+    } else {
+      ageBox.style.display = 'none';
+    }
+  } else {
+    ageBox.style.display = 'none';
+  }
+
+  q.options.forEach((opt, idx) => {
+    const isSel = selected.includes(idx);
+    const div = document.createElement('div');
+    div.className = `opt ${q.multi ? 'is-check' : 'is-radio'} ${isSel ? 'selected' : ''}`;
+    div.onclick = () => handleSelect(idx);
+
+    div.innerHTML = `
+      <div class="opt-check">${isSel ? '✓' : ''}</div>
+      <div class="opt-content">
+        <div class="opt-text">${opt.text}</div>
+        <div class="opt-sub">${opt.sub}</div>
+      </div>
+    `;
+    box.appendChild(div);
+  });
+
+  const nextBtn = document.getElementById('btnNext');
+  nextBtn.disabled = selected.length === 0;
+  nextBtn.textContent = (curIndex === total - 1) ? "Generate Starting-Point Plan →" : "Continue →";
+
+  const backBtn = document.getElementById('btnBack');
+  backBtn.style.display = (curIndex > 0) ? "block" : "none";
+}
+
+function handleSelect(idx) {
+  const q = questions[curIndex];
+  if (!answers[q.id]) answers[q.id] = [];
+
+  if (q.multi) {
+    const opt = q.options[idx];
+    if (opt.isNone) {
+      answers[q.id] = [idx];
+    } else {
+      answers[q.id] = answers[q.id].filter(i => !q.options[i].isNone);
+      if (answers[q.id].includes(idx)) {
+        answers[q.id] = answers[q.id].filter(i => i !== idx);
+      } else {
+        answers[q.id].push(idx);
+      }
+    }
+  } else {
+    answers[q.id] = [idx];
+  }
+
+  renderCurrentQuestion();
+}
+
+function goNext() {
+  const q = questions[curIndex];
+  if (q.isSafety) {
+    const chosen = answers[q.id] || [];
+    const hasRedFlag = chosen.some(idx => q.options[idx].isRedFlag);
+    if (hasRedFlag) {
+      document.getElementById('quizCard').classList.add('hidden');
+      document.getElementById('redFlagCard').classList.remove('hidden');
+      return;
+    }
+  }
+
+  if (curIndex < questions.length - 1) {
+    curIndex++;
+    renderCurrentQuestion();
+  } else {
+    runAnalysisEngine();
+  }
+}
+
+function goBack() {
+  if (curIndex > 0) {
+    curIndex--;
+    renderCurrentQuestion();
+  }
+}
+
+function runAnalysisEngine() {
+  document.getElementById('quizCard').classList.add('hidden');
+  document.getElementById('analysisCard').classList.remove('hidden');
+
+  let scores = { FM: 0, GUT: 0, NS: 0 };
+
+  // Q3: Feeding cluster
+  const q3Chosen = (answers['feeding_obs'] || []).map(i => questions[3].options[i]);
+  const fmCount = q3Chosen.filter(o => o.signal === 'FM').length;
+  if (fmCount === 1) scores.FM += 2;
+  else if (fmCount >= 2) scores.FM += 3;
+
+  // Q4: Cry timing
+  const q4Chosen = (answers['cry_timing'] || []).map(i => questions[4].options[i])[0];
+  if (q4Chosen && q4Chosen.signal && q4Chosen.signal !== 'NONE') {
+    scores[q4Chosen.signal] += q4Chosen.pts;
+  }
+
+  // Q5: Gut cluster
+  const q5Chosen = (answers['gut_obs'] || []).map(i => questions[5].options[i]);
+  const gutCount = q5Chosen.filter(o => o.signal === 'GUT').length;
+  if (gutCount === 1) scores.GUT += 2;
+  else if (gutCount >= 2) scores.GUT += 3;
+  if (q5Chosen.some(o => o.signal === 'FM')) scores.FM += 1;
+
+  // Q6: Soothing response
+  const q6Chosen = (answers['soothing_resp'] || []).map(i => questions[6].options[i])[0];
+  if (q6Chosen && q6Chosen.signal && q6Chosen.signal !== 'NONE') {
+    scores[q6Chosen.signal] += q6Chosen.pts;
+  }
+
+  const sorted = Object.entries(scores).sort((a,b) => b[1] - a[1]);
+  const [topCat, topVal] = sorted[0];
+  const [secondCat, secondVal] = sorted[1];
+  const margin = topVal - secondVal;
+
+  let resultState = 'NO_LEAD';
+  if (topVal >= 4 && margin >= 2) {
+    resultState = 'CLEAR_LEAD';
+  } else if (topVal >= 3 && margin <= 1) {
+    resultState = 'MIXED';
+  } else {
+    resultState = 'NO_LEAD';
+  }
+
+  lastCalculatedType = topCat;
+
+  const q7Method = (answers['feeding_method'] && answers['feeding_method'].length > 0)
+    ? questions[7].options[answers['feeding_method'][0]].method
+    : 'breast';
+
+  const steps = [
+    "Analyzing feeding mechanics cluster...",
+    "Evaluating visceral gastrointestinal comfort markers...",
+    "Assessing diurnal settling response thresholds...",
+    "Synthesizing customized blog guides and starting-point action sequence..."
+  ];
+  let s = 0;
+  const timer = setInterval(() => {
+    s++;
+    if (s < steps.length) {
+      document.getElementById('analysisStepText').textContent = steps[s];
+    } else {
+      clearInterval(timer);
+      presentResult(resultState, topCat, secondCat, scores, q7Method);
+    }
+  }, 400);
+}
+
+function presentResult(state, topCat, secondCat, scores, feedMethod) {
+  document.getElementById('analysisCard').classList.add('hidden');
+  document.getElementById('resultCard').classList.remove('hidden');
+
+  const header = document.getElementById('resHeader');
+  const eyebrow = document.getElementById('resEyebrow');
+  const title = document.getElementById('resTitle');
+  const status = document.getElementById('resStatus');
+  const planHeading = document.getElementById('planHeading');
+  const planDesc = document.getElementById('planDesc');
+  const stepsList = document.getElementById('planStepsList');
+  const guideGrid = document.getElementById('guideCardGrid');
+
+  document.getElementById('fmScore').textContent = scores.FM;
+  document.getElementById('gutScore').textContent = scores.GUT;
+  document.getElementById('nsScore').textContent = scores.NS;
+
+  const maxPossible = 7;
+  document.getElementById('fmBar').style.width = `${Math.min(100, Math.round((scores.FM / maxPossible) * 100))}%`;
+  document.getElementById('gutBar').style.width = `${Math.min(100, Math.round((scores.GUT / maxPossible) * 100))}%`;
+  document.getElementById('nsBar').style.width = `${Math.min(100, Math.round((scores.NS / maxPossible) * 100))}%`;
+
+  const names = {
+    FM: "Feeding Mechanics",
+    GUT: "Gut Visceral / Motility",
+    NS: "Sensory & Settling Regulation"
+  };
+
+  const blogGuides = {
+    paced_bottle: {
+      url: "/blog/paced-bottle-feeding-technique.html",
+      tag: "Feeding Mechanics · Bottle",
+      title: "Paced Bottle Feeding: The Exact Angle and Flow Control",
+      summary: "How to hold the bottle horizontal so your baby controls the swallow rate, stops gulping air, and breathes rhythmically."
+    },
+    flipple_latch: {
+      url: "/blog/breastfeeding-latch-technique.html",
+      tag: "Feeding Mechanics · Breast",
+      title: "The Flipple Technique for a Deep, Air-Free Latch",
+      summary: "A step-by-step method to achieve an asymmetric latch that prevents painful nipple clicking and stops milk leaking from the mouth."
+    },
+    best_bottles: {
+      url: "/blog/best-bottles-feeding-positions-colic.html",
+      tag: "Feeding Mechanics · Equipment",
+      title: "Best Bottle Venting & Semi-Upright Feeding Positions",
+      summary: "Comparing bottom-vented versus standard bottles and how positioning reduces aerophagia."
+    },
+    tiger_hold: {
+      url: "/blog/tiger-hold-guide.html",
+      tag: "Gut Visceral · Physical Hold",
+      title: "How to Do the Tiger Hold Correctly for Gas Relief",
+      summary: "Tummy-down forearm positioning that uses gentle upward palm counter-pressure to ease visceral intestinal spasms."
+    },
+    gentle_burping: {
+      url: "/blog/gentle-burping-techniques.html",
+      tag: "Gut Visceral · Decompression",
+      title: "Gentle Burping & Gastrointestinal Decompression",
+      summary: "Rotational burping techniques that release trapped air without jarring or forceful back pounding."
+    },
+    l_reuteri: {
+      url: "/blog/l-reuteri-evidence.html",
+      tag: "Gut Microbiome · Evidence",
+      title: "L. Reuteri DSM 17938: What the Clinical Trials Show",
+      summary: "Examining the Savino 2010 breastfed trial and Sung 2014 null results to discuss safely with your pediatrician."
+    },
+    witching_room: {
+      url: "/blog/witching-hour-room-setup.html",
+      tag: "Nervous System · Environment",
+      title: "The Witching Hour Room Setup: Sensory Dampening",
+      summary: "Dim lighting, quiet steady sound across the room, and removing visual stimulation 30 minutes before evening fussiness."
+    },
+    swaddling_moro: {
+      url: "/blog/swaddling-moro-reflex-colic.html",
+      tag: "Nervous System · Sensory Holding",
+      title: "Swaddling, the Moro Reflex, and State Regulation",
+      summary: "Containing involuntary startle responses to help overstimulated nervous systems transition into sleep."
+    },
+    colic_timeline: {
+      url: "/blog/colic-timeline-when-does-it-end.html",
+      tag: "Foundational · Timeline",
+      title: "The Colic Timeline: When Does It Peak and When Does It Ease?",
+      summary: "Why infant crying typically peaks around week 6 and eases by 3 to 4 months, backed by the Barr 2009 developmental curve."
+    },
+    why_remedies_stop: {
+      url: "/blog/why-colic-remedies-stop-working.html",
+      tag: "Foundational · Structure",
+      title: "Why Colic Remedies Seem to Work, Then Stop",
+      summary: "The reason cycling through 5 different remedies in one week creates confusion, and how a 72-hour log clarifies the pattern."
+    }
+  };
+
+  guideGrid.innerHTML = '';
+  function addGuideCard(g) {
+    const a = document.createElement('a');
+    a.className = 'guide-card';
+    a.href = g.url;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.innerHTML = `
+      <div class="guide-tag">${g.tag}</div>
+      <div class="guide-title">${g.title}</div>
+      <div class="guide-summary">${g.summary}</div>
+      <div class="guide-cta">Read step-by-step technique guide &rarr;</div>
+    `;
+    guideGrid.appendChild(a);
+  }
+
+  // Dashboard Proven Video Spotlights with Verified Links
+  const vsTitle = document.getElementById('vsTitle');
+  const vsDesc = document.getElementById('vsDesc');
+  const vsLinkBtn = document.getElementById('vsLinkBtn');
+  const vsIgLink = document.getElementById('vsIgLink');
+
+  if (state === 'CLEAR_LEAD') {
+    eyebrow.textContent = "Clear Starting Point";
+    title.textContent = `${names[topCat]} Pattern`;
+    status.textContent = "Stronger Pattern Signal Detected";
+    header.className = `result-header res-lead-${topCat.toLowerCase()}`;
+
+    if (topCat === 'FM') {
+      planHeading.textContent = "Recommended Sequence: Feeding Mechanics Focus";
+      planDesc.textContent = "Your observations point to aerophagia (air swallowing), flow rate struggle, or latch suction loss. Start with mechanical feed adjustments before altering formula or supplements.";
+      stepsList.innerHTML = `
+        <li><span class="step-num">1</span><span><strong>${feedMethod === 'breast' ? 'Asymmetric Latch Adjustment' : 'Horizontal Paced Bottle Feeding'}:</strong> ${feedMethod === 'breast' ? 'Aim the nipple toward the baby’s nose to encourage a wide gape before latching.' : 'Keep bottle parallel to the floor to slow milk gravity rush.'}</span></li>
+        <li><span class="step-num">2</span><span><strong>Mid-Feed Burping Interval:</strong> Vent swallowed air at the halfway point before milk volume builds stomach pressure.</span></li>
+        <li><span class="step-num">3</span><span><strong>Upright Posture:</strong> Keep baby upright (45°–90°) against your shoulder for 20 minutes post-feed.</span></li>
+      `;
+
+      if (feedMethod === 'breast') {
+        addGuideCard(blogGuides.flipple_latch);
+        addGuideCard(blogGuides.gentle_burping);
+        vsTitle.textContent = "Demonstration: Baby Tongue Position & Milk Transfer Mechanics";
+        vsDesc.textContent = "How proper tongue cupping past the lower gum prevents nipple compression, clicking, and air swallowing.";
+        vsLinkBtn.href = "https://www.tiktok.com/@colicprotocol/video/7681719767215901965";
+        vsLinkBtn.textContent = "Watch Latch & Tongue Video (TikTok) →";
+      } else {
+        addGuideCard(blogGuides.paced_bottle);
+        addGuideCard(blogGuides.best_bottles);
+        vsTitle.textContent = "314k-View Video: Paced Bottle Feeding Position & 4 Steps";
+        vsDesc.textContent = "Holding the bottle nearly horizontal so milk covers the teat opening without rapidly pouring into baby's mouth.";
+        vsLinkBtn.href = "https://www.tiktok.com/@colicprotocol/video/7694054422434827534";
+        vsLinkBtn.textContent = "Watch Paced Feeding Video (314k Views) →";
+      }
+
+    } else if (topCat === 'GUT') {
+      planHeading.textContent = "Recommended Sequence: Gut Visceral Calming";
+      planDesc.textContent = "Your baby shows distinctive signs of abdominal cramping waves and relief following gas decompression. Trials show gas drops do not beat placebo (Biagioli Cochrane 2016). Lead with visceral counter-pressure.";
+      stepsList.innerHTML = `
+        <li><span class="step-num">1</span><span><strong>Tiger Hold on Forearm:</strong> Rest baby tummy-down across your forearm with gentle upward palm counter-pressure.</span></li>
+        <li><span class="step-num">2</span><span><strong>Rotational Burping:</strong> Gently swirl baby's torso in circles while upright to release trapped visceral gas bubbles.</span></li>
+        <li><span class="step-num">3</span><span><strong>Pediatric Discussion:</strong> ${feedMethod === 'breast' ? 'Discuss L. reuteri DSM 17938 research (Savino 2010) with your pediatrician.' : 'Formula-fed babies lead with soothing holds and paced feeding (Sung 2014 caveat).'}</span></li>
+      `;
+
+      addGuideCard(blogGuides.tiger_hold);
+      addGuideCard(blogGuides.gentle_burping);
+      if (feedMethod === 'breast') addGuideCard(blogGuides.l_reuteri);
+
+      vsTitle.textContent = "683k-View Reel: Why Patting Harder When Your Baby Won't Burp Doesn't Work";
+      vsDesc.textContent = "Why sudden strikes lock the esophageal sphincter, and how upward spine alignment releases trapped gas gently.";
+      vsLinkBtn.href = "https://www.tiktok.com/@colicprotocol/video/7673678040236444942";
+      vsLinkBtn.textContent = "Watch Burping Technique Video (683k Views) →";
+
+    } else {
+      planHeading.textContent = "Recommended Sequence: Sensory Threshold Calming";
+      planDesc.textContent = "Your baby's crying aligns with evening sensory saturation and state-regulation challenges. Rhythmic continuous vestibular stimulation acts as the primary calming circuit.";
+      stepsList.innerHTML = `
+        <li><span class="step-num">1</span><span><strong>Dim Nursery Lighting:</strong> Lower lights and eliminate television/screen flicker 30 minutes before the evening fussiness window.</span></li>
+        <li><span class="step-num">2</span><span><strong>Continuous Rhythmic Motion:</strong> Steady bouncing on a yoga ball or continuous rhythmic walking.</span></li>
+        <li><span class="step-num">3</span><span><strong>Acoustic Masking:</strong> Place steady, low brown noise across the room on a timer (Hugh et al. 2014 acoustic guidance).</span></li>
+      `;
+
+      addGuideCard(blogGuides.witching_room);
+      addGuideCard(blogGuides.swaddling_moro);
+
+      vsTitle.textContent = "Top Settling Video: Upright Posture, Gravity & 60 BPM Gentle Rhythm";
+      vsDesc.textContent = "How 10-15 minutes of gentle upright resting rhythm allows the gas to rise naturally while calming the startle reflex.";
+      vsLinkBtn.href = "https://www.tiktok.com/@colicprotocol/video/7660020460431740173";
+      vsLinkBtn.textContent = "Watch Settling & Burping Rhythm Video →";
+    }
+
+  } else if (state === 'MIXED') {
+    eyebrow.textContent = "Overlapping Signals";
+    title.textContent = `Mixed Pattern: ${names[topCat]} & ${names[secondCat]}`;
+    status.textContent = "Balanced Signals Detected Across Two Systems";
+    header.className = "result-header res-mixed";
+
+    planHeading.textContent = "How to Sequence Overlapping Signs";
+    planDesc.textContent = `Your baby shows meaningful clues in both ${names[topCat]} and ${names[secondCat]}. This commonly occurs when feeding struggles (like air ingestion) secondarily cause visceral gut distension. Test one system at a time to clearly see what produces a shift.`;
+    stepsList.innerHTML = `
+      <li><span class="step-num">1</span><span><strong>Start with ${names[topCat]} Tonight:</strong> Implement the primary technique for 48 hours while keeping a simple log.</span></li>
+      <li><span class="step-num">2</span><span><strong>Layer in ${names[secondCat]} Next:</strong> If crying persists, add the second hold or calming step.</span></li>
+      <li><span class="step-num">3</span><span><strong>Give Each 48 Hours:</strong> Avoid testing 5 things in one evening so you can tell what helped.</span></li>
+    `;
+
+    if (topCat === 'FM' || secondCat === 'FM') {
+      addGuideCard(feedMethod === 'breast' ? blogGuides.flipple_latch : blogGuides.paced_bottle);
+    }
+    if (topCat === 'GUT' || secondCat === 'GUT') {
+      addGuideCard(blogGuides.tiger_hold);
+    }
+    if (topCat === 'NS' || secondCat === 'NS') {
+      addGuideCard(blogGuides.witching_room);
+    }
+
+    vsTitle.textContent = "Video: Anti-Colic Bottles vs Horizontal Paced Feeding (363k Views)";
+    vsDesc.textContent = "Why the lip seal matters more than the bottle brand when preventing air from entering the gut.";
+    vsLinkBtn.href = "https://www.tiktok.com/@colicprotocol/video/7679543681958857997";
+    vsLinkBtn.textContent = "Watch Bottle vs Paced Feeding Video (363k Views) →";
+
+  } else {
+    eyebrow.textContent = "Foundational Starting Point";
+    title.textContent = "Diffuse / Unclear Systemic Pattern";
+    status.textContent = "No Dominant System Signal";
+    header.className = "result-header res-nolead";
+
+    planHeading.textContent = "Foundational Calming Protocol";
+    planDesc.textContent = "Your baby's crying does not show a dominant mechanical or gut pattern. In infant colic, crying frequently varies day to day (Barr et al. 2009). Start with the universal environmental settling protocol.";
+    stepsList.innerHTML = `
+      <li><span class="step-num">1</span><span><strong>Establish a 3AM Settling Circuit:</strong> Dim nursery lighting, upright burping, and calm rhythmic holding.</span></li>
+      <li><span class="step-num">2</span><span><strong>Log Crying Windows for 48 Hours:</strong> Track feed times and crying episodes to uncover emerging patterns.</span></li>
+      <li><span class="step-num">3</span><span><strong>Follow Pediatrician Guidelines:</strong> Re-screen for red flags if crying changes abruptly in intensity.</span></li>
+    `;
+
+    addGuideCard(blogGuides.colic_timeline);
+    addGuideCard(blogGuides.why_remedies_stop);
+
+    vsTitle.textContent = "224k-View Video: Infant Colic Timeline & Why Crying Peaks at Week 6";
+    vsDesc.textContent = "Understanding the biological crying curve (peaking at week 6, easing by week 12) so you know what is typical.";
+    vsLinkBtn.href = "https://www.tiktok.com/@colicprotocol/video/7677997085173615886";
+    vsLinkBtn.textContent = "Watch Week 6 Colic Timeline Video (224k Views) →";
+  }
+}
+
+function goToMidnightProtocol() {
+  const typeParam = lastCalculatedType || 'FM';
+  window.location.href = `/midnight-protocol.html?type=${typeParam}&source=quiz_prototype`;
+}
+
+function goToBlueprint() {
+  const typeParam = lastCalculatedType || 'FM';
+  window.location.href = `/blueprint?type=${typeParam}&source=quiz_prototype`;
+}
+
+// Preset Loaders
+function loadScenario(type) {
+  resetQuiz();
+
+  answers['safety'] = [4]; // None
+  answers['age'] = [2]; // 6-8 wks
+  answers['crying_duration'] = [3]; // 3-5 hrs
+
+  if (type === 'fm_bottle') {
+    answers['feeding_obs'] = [0, 1, 3];
+    answers['cry_timing'] = [0];
+    answers['gut_obs'] = [4];
+    answers['soothing_resp'] = [1];
+    answers['feeding_method'] = [1]; // Formula / bottle
+    answers['tried_remedies'] = [3];
+  } else if (type === 'fm_breast') {
+    answers['feeding_obs'] = [0, 2, 3];
+    answers['cry_timing'] = [0];
+    answers['gut_obs'] = [5];
+    answers['soothing_resp'] = [1];
+    answers['feeding_method'] = [0]; // Breastfed
+    answers['tried_remedies'] = [5];
+  } else if (type === 'gut') {
+    answers['feeding_obs'] = [5];
+    answers['cry_timing'] = [1];
+    answers['gut_obs'] = [0, 1];
+    answers['soothing_resp'] = [0];
+    answers['feeding_method'] = [0];
+    answers['tried_remedies'] = [0];
+  } else if (type === 'ns') {
+    answers['feeding_obs'] = [5];
+    answers['cry_timing'] = [2];
+    answers['gut_obs'] = [5];
+    answers['soothing_resp'] = [2];
+    answers['feeding_method'] = [0];
+    answers['tried_remedies'] = [2];
+  } else if (type === 'mixed') {
+    answers['feeding_obs'] = [0, 3];
+    answers['cry_timing'] = [0];
+    answers['gut_obs'] = [0, 1];
+    answers['soothing_resp'] = [0];
+    answers['feeding_method'] = [2];
+    answers['tried_remedies'] = [0, 3];
+  } else if (type === 'nolead') {
+    answers['feeding_obs'] = [6];
+    answers['cry_timing'] = [3];
+    answers['gut_obs'] = [6];
+    answers['soothing_resp'] = [3];
+    answers['feeding_method'] = [0];
+    answers['tried_remedies'] = [7];
+  }
+
+  runAnalysisEngine();
+}
+
+function resetQuiz() {
+  curIndex = 0;
+  answers = {};
+  document.getElementById('resultCard').classList.add('hidden');
+  document.getElementById('analysisCard').classList.add('hidden');
+  document.getElementById('redFlagCard').classList.add('hidden');
+  document.getElementById('quizCard').classList.remove('hidden');
+  renderCurrentQuestion();
+}
+
+renderCurrentQuestion();
+</script>
+</body>
+</html>
