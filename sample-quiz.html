@@ -671,6 +671,172 @@ body{
   100%{transform:scale(1) rotate(0deg)}
 }
 
+
+/* AGE INTEGER SELECTOR & STEPPER */
+.age-integer-card{
+  background:#fff;
+  border:1.5px solid rgba(186,87,49,0.18);
+  border-radius:18px;
+  padding:22px;
+  margin-top:16px;
+  box-shadow:0 6px 20px rgba(38,27,20,0.03);
+}
+.aic-label{
+  font-family:var(--fm);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:14px;
+  text-align:center;
+}
+.aic-stepper-wrap{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:18px;
+  margin-bottom:18px;
+}
+.aic-step-btn{
+  width:46px;
+  height:46px;
+  border-radius:12px;
+  background:rgba(38,27,20,0.04);
+  border:1.5px solid rgba(38,27,20,0.12);
+  color:var(--ink);
+  font-size:24px;
+  font-weight:700;
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+  transition:all .15s ease;
+  user-select:none;
+}
+.aic-step-btn:hover{
+  background:var(--terra);
+  color:#fff;
+  border-color:var(--terra);
+}
+.aic-val-box{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  min-width:130px;
+}
+.aic-val-num{
+  font-family:var(--fd);
+  font-size:46px;
+  font-weight:700;
+  color:var(--terra-deep);
+  line-height:1;
+}
+.aic-val-unit{
+  font-family:var(--fm);
+  font-size:11.5px;
+  font-weight:600;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  margin-top:2px;
+}
+
+.aic-slider-wrap{
+  margin-bottom:18px;
+  padding:0 4px;
+}
+.aic-slider{
+  width:100%;
+  height:8px;
+  border-radius:999px;
+  background:linear-gradient(90deg, #F0E4D2 0%, #BA5731 38%, #698457 75%, #F0E4D2 100%);
+  outline:none;
+  appearance:none;
+  cursor:pointer;
+}
+.aic-slider::-webkit-slider-thumb{
+  appearance:none;
+  width:24px;
+  height:24px;
+  border-radius:50%;
+  background:var(--terra-deep);
+  border:2.5px solid #fff;
+  box-shadow:0 2px 8px rgba(0,0,0,0.22);
+  cursor:pointer;
+  transition:transform .1s ease;
+}
+.aic-slider-ticks{
+  display:flex;
+  justify-content:space-between;
+  margin-top:6px;
+  font-family:var(--fm);
+  font-size:10px;
+  color:var(--muted-soft);
+}
+
+.aic-chips-wrap{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  justify-content:center;
+  margin-bottom:18px;
+}
+.aic-chip{
+  padding:7px 13px;
+  background:rgba(255,255,255,0.85);
+  border:1.5px solid rgba(38,27,20,0.12);
+  border-radius:20px;
+  font-family:var(--fb);
+  font-size:12px;
+  font-weight:600;
+  color:var(--ink);
+  cursor:pointer;
+  transition:all .15s ease;
+}
+.aic-chip:hover{
+  background:rgba(186,87,49,0.08);
+  border-color:var(--terra);
+}
+.aic-chip.active{
+  background:var(--terra);
+  color:#fff;
+  border-color:var(--terra);
+}
+
+.aic-classification-box{
+  background:rgba(186,87,49,0.05);
+  border:1px solid rgba(186,87,49,0.15);
+  border-radius:14px;
+  padding:14px 16px;
+}
+.aic-class-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:6px;
+  flex-wrap:wrap;
+  gap:6px;
+}
+.aic-class-tag{
+  font-family:var(--fm);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:var(--terra-deep);
+}
+.aic-class-status{
+  font-family:var(--fm);
+  font-size:10.5px;
+  font-weight:600;
+  color:var(--muted);
+}
+.aic-milestone-text{
+  font-size:13px;
+  color:var(--ink);
+  line-height:1.55;
+}
+
 </style>
 </head>
 <body>
@@ -941,21 +1107,127 @@ function updateTimerDisplay() {
   }
 }
 
-// SVG MINI-SPARKLINE GENERATOR FOR AGE OPTIONS
-function makeSparkline(dotX, dotY, isPeak) {
-  return `
-    <svg width="52" height="28" viewBox="0 0 52 28" fill="none">
-      <!-- Baseline -->
-      <line x1="2" y1="25" x2="50" y2="25" stroke="rgba(38,27,20,0.15)" stroke-width="1"/>
-      <!-- Crying curve (Barr 2009 curve: low at w0, peak at w6, eases by w12) -->
-      <path d="M 4 23 C 12 21, 18 6, 26 6 C 34 6, 40 20, 48 23" fill="none" stroke="${isPeak ? '#BA5731' : '#7A6856'}" stroke-width="2" stroke-linecap="round"/>
-      <!-- Highlighted indicator dot -->
-      <circle cx="${dotX}" cy="${dotY}" r="${isPeak ? '4.5' : '3.5'}" fill="#BA5731" stroke="#fff" stroke-width="1.5"/>
-    </svg>
-  `;
+// MATHEMATICAL COORDINATES ALONG BARR (2009) CRYING CURVE (Weeks 0 to 16)
+function getCurveCoords(w) {
+  const clampedW = Math.min(16, Math.max(0, w));
+  const x = Math.round(40 + (clampedW / 16) * 460);
+  let y = 135;
+  if (clampedW <= 6) {
+    const t = clampedW / 6;
+    y = Math.round(135 - 100 * Math.sin(t * Math.PI / 2));
+  } else {
+    const t = (clampedW - 6) / 10;
+    y = Math.round(35 + 105 * Math.sin(t * Math.PI / 2));
+  }
+  return { x, y };
 }
 
-// THE 8-QUESTION SYNTHESIZED ARCHITECTURE WITH PHYSICAL VISUALS
+// CLASSIFY INTEGER AGE INTO COHORTS FOR CONTINUITY (0-2, 3-5, 6-8, 9-12, 12+)
+function classifyAge(w) {
+  const num = parseInt(w, 10) || 6;
+  if (num <= 2) {
+    return {
+      weeks: num,
+      range: "0 to 2 weeks",
+      bracket: "0-2",
+      tag: "0 to 2 weeks · Newborn Adjustment",
+      status: "Early Transition Phase",
+      milestone: "<strong>Newborn Adjustment Window:</strong> Crying is typically brief and hunger-driven. Gut microbiome colonization is just beginning; infant suck-swallow coordination is learning flow pacing. Wind and frequent burping are normal as swallowing coordination stabilizes."
+    };
+  } else if (num <= 5) {
+    return {
+      weeks: num,
+      range: "3 to 5 weeks",
+      bracket: "3-5",
+      tag: "3 to 5 weeks · The Escalation Phase",
+      status: "Rising Sensory Awareness",
+      milestone: "<strong>The Escalation Phase:</strong> Evening crying begins clustering ('the witching hour'). The infant's sensory awareness expands rapidly, while visceral peristalsis surges. Parents often start trying gas drops or gripe water during this window."
+    };
+  } else if (num <= 8) {
+    return {
+      weeks: num,
+      range: "6 to 8 weeks",
+      bracket: "6-8",
+      tag: "6 to 8 weeks · Peak Colic Window",
+      status: "Biological Crying Peak (Barr 2009)",
+      milestone: "<strong>The Developmental Peak:</strong> Infant crying commonly reaches its maximum daily duration and intensity (often 2 to 3+ hours daily per Barr 2009). The sensory threshold is at its most reactive point, while biological self-soothing circuitry is still immature. This is the hardest stretch, not a parental failure."
+    };
+  } else if (num <= 12) {
+    return {
+      weeks: num,
+      range: "9 to 12 weeks",
+      bracket: "9-12",
+      tag: "9 to 12 weeks · The Turning Point",
+      status: "Developmental Easing",
+      milestone: "<strong>The Turning Point:</strong> Crying duration begins to drop for many babies. Sleep intervals lengthen slightly; the gut microbiome diversifies and oral motor latch mechanics mature."
+    };
+  } else {
+    return {
+      weeks: num,
+      range: "Older than 12 weeks",
+      bracket: "12+",
+      tag: "Older than 12 weeks · Settled Horizon",
+      status: "Late Infancy Transition",
+      milestone: "<strong>The Easing Window:</strong> Colic typically eases by about 3 to 4 months as circadian rhythm and melatonin regulation stabilize. If intense, inconsolable crying persists past 12-16 weeks, consult your pediatrician to rule out food sensitivities or other clinical factors."
+    };
+  }
+}
+
+// CURRENT SELECTED AGE IN WEEKS (Default: 6 weeks)
+let currentAgeWeeks = 6;
+
+function setAgeWeeks(val) {
+  const num = Math.min(16, Math.max(1, parseInt(val, 10) || 1));
+  currentAgeWeeks = num;
+  answers['age'] = num;
+
+  // Update slider & stepper display
+  const numEl = document.getElementById('ageValDisplay');
+  if (numEl) numEl.textContent = num;
+
+  const slider = document.getElementById('ageSlider');
+  if (slider) slider.value = num;
+
+  // Update chips
+  document.querySelectorAll('.aic-chip').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  const matchingChip = document.getElementById('chip-' + num);
+  if (matchingChip) matchingChip.classList.add('active');
+
+  // Update Graph on Top
+  const coords = getCurveCoords(num);
+  const pinGroup = document.getElementById('curvePinGroup');
+  if (pinGroup) {
+    pinGroup.setAttribute('transform', `translate(${coords.x}, ${coords.y})`);
+    const lineEl = document.getElementById('curvePinLine');
+    if (lineEl) lineEl.setAttribute('y2', 140 - coords.y);
+    const pinText = document.getElementById('curvePinText');
+    if (pinText) pinText.textContent = `Week ${num}${num === 6 ? ' (Peak)' : ''}`;
+  }
+
+  // Update Classification & Milestone
+  const classification = classifyAge(num);
+  const tagEl = document.getElementById('ageClassTag');
+  if (tagEl) tagEl.textContent = classification.tag;
+  const statusEl = document.getElementById('ageClassStatus');
+  if (statusEl) statusEl.textContent = classification.status;
+  const milestoneEl = document.getElementById('ageClassMilestone');
+  if (milestoneEl) milestoneEl.innerHTML = classification.milestone;
+
+  // Enable continue button
+  const nextBtn = document.getElementById('btnNext');
+  if (nextBtn) {
+    nextBtn.disabled = false;
+    nextBtn.textContent = `Continue with ${num} Weeks &rarr;`;
+  }
+}
+
+function adjustAgeWeeks(delta) {
+  setAgeWeeks(currentAgeWeeks + delta);
+}
+
+// THE 8-QUESTION SYNTHESIZED ARCHITECTURE
 const questions = [
   // SAFETY GATE (Pre-Quiz Safety Check)
   {
@@ -1001,7 +1273,7 @@ const questions = [
     ]
   },
 
-  // Q1: AGE WITH DEVELOPMENTAL CRYING CURVE (Barr 2009)
+  // Q1: AGE WITH GRAPH ON TOP + INTEGER SELECTOR BELOW
   {
     id: 'age',
     category: 'Context & Baseline',
@@ -1009,58 +1281,7 @@ const questions = [
     title: "How many weeks old is your baby today?",
     desc: "Crying follows a well-documented biological curve: rising in early weeks, peaking around week 6 to 8, and easing by week 12.",
     multi: false,
-    options: [
-      { 
-        text: "0 to 2 weeks", 
-        sub: "Early newborn adjustment window",
-        ageWeeks: 2,
-        pinX: 70, pinY: 132,
-        pinLabel: "Wk 0-2: Baseline",
-        visualClass: 'sparkline',
-        visual: makeSparkline(8, 22, false),
-        milestone: "<strong>Newborn Adjustment Window:</strong> Crying is typically brief and hunger-driven. Gut microbiome colonization is just beginning; infant suck-swallow coordination is learning flow pacing. Wind and frequent burping are normal as swallowing coordination stabilizes."
-      },
-      { 
-        text: "3 to 5 weeks", 
-        sub: "Escalation phase where evening fussiness begins",
-        ageWeeks: 4,
-        pinX: 140, pinY: 82,
-        pinLabel: "Wk 3-5: Escalation",
-        visualClass: 'sparkline',
-        visual: makeSparkline(18, 13, false),
-        milestone: "<strong>The Escalation Phase:</strong> Evening crying begins clustering ('the witching hour'). The infant's sensory awareness expands rapidly, while visceral peristalsis surges. Parents often start trying gas drops or gripe water during this window."
-      },
-      { 
-        text: "6 to 8 weeks", 
-        sub: "Peak colic window for most infants",
-        ageWeeks: 7,
-        pinX: 205, pinY: 35,
-        pinLabel: "Wk 6-8: Peak Colic",
-        visualClass: 'sparkline',
-        visual: makeSparkline(26, 6, true),
-        milestone: "<strong>The Developmental Peak:</strong> Infant crying commonly reaches its maximum daily duration and intensity (often 2 to 3+ hours daily per Barr 2009). The sensory threshold is at its most reactive point, while biological self-soothing circuitry is still immature. This is the hardest stretch, not a parental failure."
-      },
-      { 
-        text: "9 to 12 weeks", 
-        sub: "Turning point where crying begins easing",
-        ageWeeks: 10,
-        pinX: 330, pinY: 105,
-        pinLabel: "Wk 9-12: Easing",
-        visualClass: 'sparkline',
-        visual: makeSparkline(36, 14, false),
-        milestone: "<strong>The Turning Point:</strong> Crying duration begins to drop for many babies. Sleep intervals lengthen slightly; the gut microbiome diversifies and oral motor latch mechanics mature."
-      },
-      { 
-        text: "Older than 12 weeks", 
-        sub: "Late infancy: persistent crying should be evaluated by a pediatrician",
-        ageWeeks: 14,
-        pinX: 430, pinY: 132,
-        pinLabel: "Wk 12+: Settled",
-        visualClass: 'sparkline',
-        visual: makeSparkline(46, 21, false),
-        milestone: "<strong>The Easing Window:</strong> Colic typically eases by about 3 to 4 months as circadian rhythm and melatonin regulation stabilize. If intense, inconsolable crying persists past 12-16 weeks, consult your pediatrician to rule out food sensitivities or other clinical factors."
-      }
-    ]
+    isIntegerAge: true
   },
 
   // Q2: TOTAL CRYING DURATION WITH 24-HOUR INTERACTIVE CLOCK
@@ -1421,7 +1642,7 @@ function renderCurrentQuestion() {
   document.getElementById('stepPctText').textContent = `${pct}% Complete`;
   document.getElementById('progressFill').style.width = `${pct}%`;
 
-  // CRAWLING BABY PROGRESS POSITION (Clamped so head never exceeds rail)
+  // CRAWLING BABY PROGRESS POSITION
   const clampedPct = Math.min(pct, 95);
   const marker = document.getElementById('crawlerMarker');
   marker.style.left = `${clampedPct}%`;
@@ -1439,12 +1660,26 @@ function renderCurrentQuestion() {
 
   const box = document.getElementById('optionsBox');
   box.innerHTML = '';
+
+  // Clear any existing special visual containers
+  const existingSpecial = document.getElementById('dynamicSpecialVisualBox');
+  if (existingSpecial) existingSpecial.remove();
+  const existingBottomSpecial = document.getElementById('dynamicBottomSpecialBox');
+  if (existingBottomSpecial) existingBottomSpecial.remove();
+
+  // SPECIAL CASE: QUESTION 1 AGE (GRAPH ON TOP + INTEGER SELECTOR BELOW)
+  if (q.isIntegerAge) {
+    renderAgeQuestion();
+    return;
+  }
+
+  // SPECIAL CASE: QUESTION 2 CRYING DURATION (24H CLOCK ON TOP)
+  if (q.id === 'crying_duration') {
+    renderDurationClock(q);
+  }
+
+  // RENDER STANDARD OPTIONS
   const selected = answers[q.id] || [];
-
-  // RENDER DYNAMIC VISUAL CARDS FOR SPECIFIC QUESTIONS
-  renderQuestionSpecialVisuals(q, selected);
-
-  // RENDER OPTIONS
   q.options.forEach((opt, idx) => {
     const isSel = selected.includes(idx);
     const div = document.createElement('div');
@@ -1470,152 +1705,182 @@ function renderCurrentQuestion() {
   backBtn.style.display = (curIndex > 0) ? "block" : "none";
 }
 
-// RENDER SPECIAL VISUALS: DEVELOPMENTAL GRAPH (Q1) & 24H CLOCK (Q2)
-function renderQuestionSpecialVisuals(q, selected) {
-  const existingSpecial = document.getElementById('dynamicSpecialVisualBox');
-  if (existingSpecial) existingSpecial.remove();
+// RENDER QUESTION 1: DEVELOPMENTAL CRYING CURVE GRAPH ON TOP + INTEGER INPUT BELOW
+function renderAgeQuestion() {
+  const box = document.getElementById('optionsBox');
+  const selectedWeeks = answers['age'] || currentAgeWeeks;
+  currentAgeWeeks = selectedWeeks;
+  const classification = classifyAge(selectedWeeks);
+  const coords = getCurveCoords(selectedWeeks);
 
-  const existingBottomSpecial = document.getElementById('dynamicBottomSpecialBox');
-  if (existingBottomSpecial) existingBottomSpecial.remove();
+  // 1. THE COMPLETE GRAPH ON TOP
+  const graphCard = document.createElement('div');
+  graphCard.id = 'dynamicSpecialVisualBox';
+  graphCard.className = 'dev-curve-card';
+  graphCard.style.marginTop = '0';
+  graphCard.style.marginBottom = '16px';
 
-  // QUESTION 2: 24-HOUR INTERACTIVE CLOCK
-  if (q.id === 'crying_duration') {
-    const clockCard = document.createElement('div');
-    clockCard.id = 'dynamicSpecialVisualBox';
-    clockCard.className = 'duration-clock-card';
+  graphCard.innerHTML = `
+    <div class="dcc-header">
+      <div class="dcc-badge">Developmental Crying Timeline (Barr 2009)</div>
+      <div class="dcc-title">Where Your Baby Sits on the Biological Crying Curve</div>
+    </div>
+    <div class="dcc-graph-wrap">
+      <svg viewBox="0 0 540 180" width="100%" height="auto">
+        <defs>
+          <linearGradient id="curveShade" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#BA5731" stop-opacity="0.25"/>
+            <stop offset="100%" stop-color="#BA5731" stop-opacity="0.02"/>
+          </linearGradient>
+        </defs>
+        <!-- Baseline & Grid -->
+        <line x1="40" y1="140" x2="500" y2="140" stroke="rgba(38,27,20,0.18)" stroke-width="1.5"/>
+        <line x1="40" y1="85" x2="500" y2="85" stroke="rgba(38,27,20,0.06)" stroke-dasharray="4,4"/>
+        <line x1="40" y1="35" x2="500" y2="35" stroke="rgba(38,27,20,0.06)" stroke-dasharray="4,4"/>
+        
+        <!-- Axis Labels -->
+        <text x="40" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 0</text>
+        <text x="95" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 2</text>
+        <text x="150" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 4</text>
+        <text x="213" y="160" font-family="'DM Mono', monospace" font-size="11" font-weight="700" fill="#BA5731" text-anchor="middle">Wk 6 (Peak)</text>
+        <text x="270" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 8</text>
+        <text x="330" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 10</text>
+        <text x="385" y="160" font-family="'DM Mono', monospace" font-size="11" font-weight="700" fill="#698457" text-anchor="middle">Wk 12 (Ease)</text>
+        <text x="445" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 14</text>
+        <text x="500" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 16</text>
 
-    let chosenAngle = 0;
-    let chosenColor = '#BA5731';
-    let chosenVal = 'Tap an option below to highlight crying hours';
-    let chosenSub = 'Visualizes what fraction of your baby\'s 24 hours is consumed by crying.';
+        <!-- Shaded Area Under Curve -->
+        <path d="M 40 140 L 40 135 C 90 130, 150 95, 205 35 C 240 35, 290 85, 360 120 C 420 135, 470 138, 500 140 Z" fill="url(#curveShade)"/>
+        
+        <!-- The Biological Crying Curve Line -->
+        <path d="M 40 135 C 90 130, 150 95, 205 35 C 240 35, 290 85, 360 120 C 420 135, 470 138, 500 140" fill="none" stroke="#BA5731" stroke-width="3" stroke-linecap="round"/>
 
-    if (selected.length > 0) {
-      const opt = q.options[selected[0]];
-      chosenAngle = opt.clockAngle || 60;
-      chosenColor = opt.clockColor || '#BA5731';
-      chosenVal = opt.clockLabel || opt.text;
-      chosenSub = opt.sub;
-    }
+        <!-- Peak Reference Line -->
+        <line x1="213" y1="35" x2="213" y2="140" stroke="#BA5731" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.6"/>
+        <circle cx="213" cy="35" r="4.5" fill="#BA5731"/>
 
-    // Calculate pie slice arc
-    const rad = (chosenAngle - 90) * Math.PI / 180;
-    const endX = 60 + 48 * Math.cos(rad);
-    const endY = 60 + 48 * Math.sin(rad);
-    const largeArc = chosenAngle > 180 ? 1 : 0;
-    const arcPath = chosenAngle > 0 && chosenAngle < 360
-      ? `M 60 60 L 60 12 A 48 48 0 ${largeArc} 1 ${endX.toFixed(1)} ${endY.toFixed(1)} Z`
-      : (chosenAngle === 360 ? `M 60 12 A 48 48 0 1 1 59.9 12 Z` : '');
-
-    clockCard.innerHTML = `
-      <div class="dcc-clock-left">
-        <svg class="analog-clock-svg" viewBox="0 0 120 120" width="94" height="94">
-          <!-- Outer Rim -->
-          <circle cx="60" cy="60" r="54" fill="#FAF4EC" stroke="#261B14" stroke-width="2.5"/>
-          <!-- Sun (Noon/Day) & Moon (Midnight/Night) -->
-          <circle cx="60" cy="18" r="3.5" fill="#BE933B" title="Day (Noon)"/>
-          <circle cx="60" cy="102" r="3.5" fill="#222C1D" title="Night (Midnight)"/>
-          <circle cx="18" cy="60" r="2.5" fill="#7A6856"/>
-          <circle cx="102" cy="60" r="2.5" fill="#7A6856"/>
-          <!-- Highlighted Crying Sector -->
-          ${arcPath ? `<path d="${arcPath}" fill="${chosenColor}" fill-opacity="0.35" stroke="${chosenColor}" stroke-width="1.5"/>` : ''}
-          <!-- Hour Hand -->
-          <line x1="60" y1="60" x2="${(60 + 26 * Math.cos((chosenAngle - 90) * Math.PI / 180)).toFixed(1)}" y2="${(60 + 26 * Math.sin((chosenAngle - 90) * Math.PI / 180)).toFixed(1)}" stroke="#261B14" stroke-width="3" stroke-linecap="round"/>
-          <!-- Minute Hand -->
-          <line x1="60" y1="60" x2="60" y2="20" stroke="#BA5731" stroke-width="2" stroke-linecap="round" style="transform-origin:60px 60px; transform:rotate(${(chosenAngle * 6) % 360}deg); transition:transform 0.4s ease;"/>
-          <!-- Center Cap -->
-          <circle cx="60" cy="60" r="4" fill="#261B14"/>
-        </svg>
-      </div>
-      <div class="dcc-clock-right">
-        <div class="dcc-clock-kicker">24-Hour Day & Night Burden</div>
-        <div class="dcc-clock-val">${chosenVal}</div>
-        <div class="dcc-clock-sub">${chosenSub}</div>
-      </div>
-    `;
-
-    const box = document.getElementById('optionsBox');
-    box.parentNode.insertBefore(clockCard, box);
-  }
-
-  // QUESTION 1: COMPLETE INTERACTIVE DEVELOPMENTAL CRYING CURVE (BARR 2009)
-  if (q.id === 'age') {
-    const curveCard = document.createElement('div');
-    curveCard.id = 'dynamicBottomSpecialBox';
-    curveCard.className = 'dev-curve-card';
-
-    let pinX = 205;
-    let pinY = 35;
-    let pinText = 'Week 6: Peak Window';
-    let insightHtml = '<strong>Developmental Timeline:</strong> Infant crying follows a natural biological curve peaking around week 6 and easing by week 12 (Barr 2009). Tap your baby\'s age above to map their exact position.';
-
-    if (selected.length > 0) {
-      const opt = q.options[selected[0]];
-      pinX = opt.pinX || 205;
-      pinY = opt.pinY || 35;
-      pinText = opt.pinLabel || 'Selected Stage';
-      if (opt.milestone) insightHtml = opt.milestone;
-    }
-
-    curveCard.innerHTML = `
-      <div class="dcc-header">
-        <div class="dcc-badge">Developmental Crying Timeline (Barr 2009)</div>
-        <div class="dcc-title">Where Your Baby Sits on the Biological Crying Curve</div>
-      </div>
-      <div class="dcc-graph-wrap">
-        <svg viewBox="0 0 540 180" width="100%" height="auto">
-          <defs>
-            <linearGradient id="curveShade" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#BA5731" stop-opacity="0.25"/>
-              <stop offset="100%" stop-color="#BA5731" stop-opacity="0.02"/>
-            </linearGradient>
-          </defs>
-          <!-- Baseline & Grid -->
-          <line x1="40" y1="140" x2="500" y2="140" stroke="rgba(38,27,20,0.18)" stroke-width="1.5"/>
-          <line x1="40" y1="85" x2="500" y2="85" stroke="rgba(38,27,20,0.06)" stroke-dasharray="4,4"/>
-          <line x1="40" y1="35" x2="500" y2="35" stroke="rgba(38,27,20,0.06)" stroke-dasharray="4,4"/>
-          
-          <!-- Axis Labels -->
-          <text x="40" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 0</text>
-          <text x="95" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 2</text>
-          <text x="150" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 4</text>
-          <text x="205" y="160" font-family="'DM Mono', monospace" font-size="11" font-weight="700" fill="#BA5731" text-anchor="middle">Wk 6 (Peak)</text>
-          <text x="270" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 8</text>
-          <text x="330" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 10</text>
-          <text x="390" y="160" font-family="'DM Mono', monospace" font-size="11" font-weight="700" fill="#698457" text-anchor="middle">Wk 12 (Ease)</text>
-          <text x="450" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 14</text>
-          <text x="500" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 16</text>
-
-          <!-- Shaded Area Under Curve -->
-          <path d="M 40 140 L 40 135 C 90 130, 150 95, 205 35 C 240 35, 290 85, 360 120 C 420 135, 470 138, 500 140 Z" fill="url(#curveShade)"/>
-          
-          <!-- The Biological Crying Curve Line -->
-          <path d="M 40 135 C 90 130, 150 95, 205 35 C 240 35, 290 85, 360 120 C 420 135, 470 138, 500 140" fill="none" stroke="#BA5731" stroke-width="3" stroke-linecap="round"/>
-
-          <!-- Peak Reference Line -->
-          <line x1="205" y1="35" x2="205" y2="140" stroke="#BA5731" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.6"/>
-          <circle cx="205" cy="35" r="4.5" fill="#BA5731"/>
-
-          <!-- Dynamic Pin on Curve -->
-          <g transform="translate(${pinX}, ${pinY})" style="transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.3, 1);">
-            <line x1="0" y1="0" x2="0" y2="${140 - pinY}" stroke="#261B14" stroke-width="1.8" stroke-dasharray="2,2"/>
-            <circle cx="0" cy="0" r="8" fill="#fff" stroke="#BA5731" stroke-width="3"/>
-            <circle cx="0" cy="0" r="3" fill="#BA5731"/>
-            <g transform="translate(0, -22)">
-              <rect x="-50" y="-13" width="100" height="20" rx="6" fill="#261B14"/>
-              <text x="0" y="1" font-family="'DM Mono', monospace" font-size="9" font-weight="700" fill="#fff" text-anchor="middle">${pinText}</text>
-            </g>
+        <!-- Dynamic Pin on Curve -->
+        <g id="curvePinGroup" transform="translate(${coords.x}, ${coords.y})" style="transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.3, 1);">
+          <line id="curvePinLine" x1="0" y1="0" x2="0" y2="${140 - coords.y}" stroke="#261B14" stroke-width="1.8" stroke-dasharray="2,2"/>
+          <circle cx="0" cy="0" r="8" fill="#fff" stroke="#BA5731" stroke-width="3"/>
+          <circle cx="0" cy="0" r="3" fill="#BA5731"/>
+          <g transform="translate(0, -22)">
+            <rect x="-55" y="-13" width="110" height="20" rx="6" fill="#261B14"/>
+            <text id="curvePinText" x="0" y="1" font-family="'DM Mono', monospace" font-size="9" font-weight="700" fill="#fff" text-anchor="middle">Week ${selectedWeeks}${selectedWeeks === 6 ? ' (Peak)' : ''}</text>
           </g>
-        </svg>
-      </div>
-      <div class="dcc-footer">
-        <span class="dcc-status-dot"></span>
-        <div>${insightHtml}</div>
-      </div>
-    `;
+        </g>
+      </svg>
+    </div>
+  `;
+  box.appendChild(graphCard);
 
-    const navActions = document.querySelector('.nav-actions');
-    navActions.parentNode.insertBefore(curveCard, navActions);
+  // 2. INTEGER AGE INPUT CONTROLS DIRECTLY BELOW THE GRAPH
+  const inputCard = document.createElement('div');
+  inputCard.className = 'age-integer-card';
+  inputCard.innerHTML = `
+    <div class="aic-label">Set Your Baby's Exact Age in Weeks:</div>
+
+    <div class="aic-stepper-wrap">
+      <button type="button" class="aic-step-btn" onclick="adjustAgeWeeks(-1)">&minus;</button>
+      <div class="aic-val-box">
+        <span class="aic-val-num" id="ageValDisplay">${selectedWeeks}</span>
+        <span class="aic-val-unit">weeks old</span>
+      </div>
+      <button type="button" class="aic-step-btn" onclick="adjustAgeWeeks(1)">&plus;</button>
+    </div>
+
+    <div class="aic-slider-wrap">
+      <input type="range" id="ageSlider" min="1" max="16" value="${selectedWeeks}" step="1" oninput="setAgeWeeks(this.value)" class="aic-slider"/>
+      <div class="aic-slider-ticks">
+        <span>1w</span>
+        <span>3w</span>
+        <span style="color:var(--terra);font-weight:700">6w (Peak)</span>
+        <span>9w</span>
+        <span style="color:var(--sage);font-weight:700">12w (Easing)</span>
+        <span>16w</span>
+      </div>
+    </div>
+
+    <div class="aic-chips-wrap">
+      <button type="button" class="aic-chip ${selectedWeeks === 2 ? 'active' : ''}" id="chip-2" onclick="setAgeWeeks(2)">2 weeks</button>
+      <button type="button" class="aic-chip ${selectedWeeks === 4 ? 'active' : ''}" id="chip-4" onclick="setAgeWeeks(4)">4 weeks</button>
+      <button type="button" class="aic-chip ${selectedWeeks === 6 ? 'active' : ''}" id="chip-6" onclick="setAgeWeeks(6)">6 weeks (Peak)</button>
+      <button type="button" class="aic-chip ${selectedWeeks === 8 ? 'active' : ''}" id="chip-8" onclick="setAgeWeeks(8)">8 weeks</button>
+      <button type="button" class="aic-chip ${selectedWeeks === 10 ? 'active' : ''}" id="chip-10" onclick="setAgeWeeks(10)">10 weeks</button>
+      <button type="button" class="aic-chip ${selectedWeeks >= 12 ? 'active' : ''}" id="chip-12" onclick="setAgeWeeks(12)">12+ weeks</button>
+    </div>
+
+    <div class="aic-classification-box">
+      <div class="aic-class-header">
+        <span class="aic-class-tag" id="ageClassTag">${classification.tag}</span>
+        <span class="aic-class-status" id="ageClassStatus">${classification.status}</span>
+      </div>
+      <div class="aic-milestone-text" id="ageClassMilestone">
+        ${classification.milestone}
+      </div>
+    </div>
+  `;
+  box.appendChild(inputCard);
+
+  const nextBtn = document.getElementById('btnNext');
+  nextBtn.disabled = false;
+  nextBtn.textContent = `Continue with ${selectedWeeks} Weeks &rarr;`;
+
+  const backBtn = document.getElementById('btnBack');
+  backBtn.style.display = (curIndex > 0) ? "block" : "none";
+}
+
+// RENDER QUESTION 2: 24-HOUR INTERACTIVE ANALOG CLOCK
+function renderDurationClock(q) {
+  const selected = answers[q.id] || [];
+  const clockCard = document.createElement('div');
+  clockCard.id = 'dynamicSpecialVisualBox';
+  clockCard.className = 'duration-clock-card';
+
+  let chosenAngle = 0;
+  let chosenColor = '#BA5731';
+  let chosenVal = 'Tap an option below to highlight crying hours';
+  let chosenSub = 'Visualizes what fraction of your baby\'s 24 hours is consumed by crying.';
+
+  if (selected.length > 0) {
+    const opt = q.options[selected[0]];
+    chosenAngle = opt.clockAngle || 60;
+    chosenColor = opt.clockColor || '#BA5731';
+    chosenVal = opt.clockLabel || opt.text;
+    chosenSub = opt.sub;
   }
+
+  const rad = (chosenAngle - 90) * Math.PI / 180;
+  const endX = 60 + 48 * Math.cos(rad);
+  const endY = 60 + 48 * Math.sin(rad);
+  const largeArc = chosenAngle > 180 ? 1 : 0;
+  const arcPath = chosenAngle > 0 && chosenAngle < 360
+    ? `M 60 60 L 60 12 A 48 48 0 ${largeArc} 1 ${endX.toFixed(1)} ${endY.toFixed(1)} Z`
+    : (chosenAngle === 360 ? `M 60 12 A 48 48 0 1 1 59.9 12 Z` : '');
+
+  clockCard.innerHTML = `
+    <div class="dcc-clock-left">
+      <svg class="analog-clock-svg" viewBox="0 0 120 120" width="94" height="94">
+        <circle cx="60" cy="60" r="54" fill="#FAF4EC" stroke="#261B14" stroke-width="2.5"/>
+        <circle cx="60" cy="18" r="3.5" fill="#BE933B" title="Day (Noon)"/>
+        <circle cx="60" cy="102" r="3.5" fill="#222C1D" title="Night (Midnight)"/>
+        <circle cx="18" cy="60" r="2.5" fill="#7A6856"/>
+        <circle cx="102" cy="60" r="2.5" fill="#7A6856"/>
+        ${arcPath ? `<path d="${arcPath}" fill="${chosenColor}" fill-opacity="0.35" stroke="${chosenColor}" stroke-width="1.5"/>` : ''}
+        <line x1="60" y1="60" x2="${(60 + 26 * Math.cos((chosenAngle - 90) * Math.PI / 180)).toFixed(1)}" y2="${(60 + 26 * Math.sin((chosenAngle - 90) * Math.PI / 180)).toFixed(1)}" stroke="#261B14" stroke-width="3" stroke-linecap="round"/>
+        <line x1="60" y1="60" x2="60" y2="20" stroke="#BA5731" stroke-width="2" stroke-linecap="round" style="transform-origin:60px 60px; transform:rotate(${(chosenAngle * 6) % 360}deg); transition:transform 0.4s ease;"/>
+        <circle cx="60" cy="60" r="4" fill="#261B14"/>
+      </svg>
+    </div>
+    <div class="dcc-clock-right">
+      <div class="dcc-clock-kicker">24-Hour Day & Night Burden</div>
+      <div class="dcc-clock-val">${chosenVal}</div>
+      <div class="dcc-clock-sub">${chosenSub}</div>
+    </div>
+  `;
+
+  const box = document.getElementById('optionsBox');
+  box.parentNode.insertBefore(clockCard, box);
 }
 
 function handleSelect(idx) {
@@ -1636,11 +1901,9 @@ function handleSelect(idx) {
     }
     renderCurrentQuestion();
   } else {
-    // Single-select: update state and smooth auto-advance
     answers[q.id] = [idx];
     renderCurrentQuestion();
 
-    // 400ms auto-advance so parent sees selection and graphic update
     setTimeout(() => {
       goNext();
     }, 400);
@@ -1681,26 +1944,26 @@ function runAnalysisEngine() {
   let scores = { FM: 0, GUT: 0, NS: 0 };
 
   // Q3: Feeding cluster
-  const q3Chosen = (answers['feeding_obs'] || []).map(i => questions[3].options[i]);
+  const q3Chosen = (answers['feeding_obs'] || []).map(i => questions[2].options[i]);
   const fmCount = q3Chosen.filter(o => o.signal === 'FM').length;
   if (fmCount === 1) scores.FM += 2;
   else if (fmCount >= 2) scores.FM += 3;
 
   // Q4: Cry timing
-  const q4Chosen = (answers['cry_timing'] || []).map(i => questions[4].options[i])[0];
+  const q4Chosen = (answers['cry_timing'] || []).map(i => questions[3].options[i])[0];
   if (q4Chosen && q4Chosen.signal && q4Chosen.signal !== 'NONE') {
     scores[q4Chosen.signal] += q4Chosen.pts;
   }
 
   // Q5: Gut cluster
-  const q5Chosen = (answers['gut_obs'] || []).map(i => questions[5].options[i]);
+  const q5Chosen = (answers['gut_obs'] || []).map(i => questions[4].options[i]);
   const gutCount = q5Chosen.filter(o => o.signal === 'GUT').length;
   if (gutCount === 1) scores.GUT += 2;
   else if (gutCount >= 2) scores.GUT += 3;
   if (q5Chosen.some(o => o.signal === 'FM')) scores.FM += 1;
 
   // Q6: Soothing response
-  const q6Chosen = (answers['soothing_resp'] || []).map(i => questions[6].options[i])[0];
+  const q6Chosen = (answers['soothing_resp'] || []).map(i => questions[5].options[i])[0];
   if (q6Chosen && q6Chosen.signal && q6Chosen.signal !== 'NONE') {
     scores[q6Chosen.signal] += q6Chosen.pts;
   }
@@ -1722,7 +1985,7 @@ function runAnalysisEngine() {
   lastCalculatedType = topCat;
 
   const q7Method = (answers['feeding_method'] && answers['feeding_method'].length > 0)
-    ? questions[7].options[answers['feeding_method'][0]].method
+    ? questions[6].options[answers['feeding_method'][0]].method
     : 'breast';
 
   const steps = [
@@ -1976,12 +2239,14 @@ function presentResult(state, topCat, secondCat, scores, feedMethod) {
 
 function goToMidnightProtocol() {
   const typeParam = lastCalculatedType || 'FM';
-  window.location.href = `/midnight-protocol.html?type=${typeParam}&source=quiz_prototype`;
+  const ageVal = answers['age'] || currentAgeWeeks;
+  window.location.href = `/midnight-protocol.html?type=${typeParam}&age=${encodeURIComponent(ageVal)}&source=quiz_prototype`;
 }
 
 function goToBlueprint() {
   const typeParam = lastCalculatedType || 'FM';
-  window.location.href = `/blueprint?type=${typeParam}&source=quiz_prototype`;
+  const ageVal = answers['age'] || currentAgeWeeks;
+  window.location.href = `/blueprint?type=${typeParam}&age=${encodeURIComponent(ageVal)}&source=quiz_prototype`;
 }
 
 // Preset Loaders
@@ -1989,7 +2254,7 @@ function loadScenario(type) {
   resetQuiz();
 
   answers['safety'] = [4]; // None
-  answers['age'] = [2]; // 6 to 8 weeks
+  answers['age'] = 6; // 6 weeks integer
   answers['crying_duration'] = [3]; // 3 to 5 hours
 
   if (type === 'fm_bottle') {
@@ -2042,6 +2307,7 @@ function loadScenario(type) {
 function resetQuiz() {
   curIndex = 0;
   answers = {};
+  currentAgeWeeks = 6;
   liveSecondsRemaining = 90;
   startLiveCountdown();
 
