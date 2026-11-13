@@ -68,13 +68,41 @@ loadAssessmentCount();
    assessment emails when red_flag is 'pending' or 'none'.
    ══════════════════════════════════════════════════════════════════════ */
 const RED_FLAG_OPTIONS = [
-  { text: "Fever of 38°C / 100.4°F or higher", short: "fever" },
-  { text: "Green or yellow-green vomit, or forceful vomiting after most feeds", short: "green or forceful vomiting" },
-  { text: "Blood in the stool", short: "blood in stool" },
-  { text: "Poor feeding or refusing feeds", short: "poor feeding" },
-  { text: "Unusually sleepy, limp, or very hard to wake", short: "sleepy, limp or hard to wake" },
-  { text: "Trouble breathing, or blue lips or face", short: "breathing trouble" },
-  { text: "A hair wrapped tightly around a finger, toe, or genitals", short: "hair tourniquet" },
+  { 
+    text: "Fever of 38°C / 100.4°F or higher", 
+    short: "fever",
+    visual: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/><circle cx="11.5" cy="18" r="2.5" fill="#BA5731"/><line x1="11.5" y1="9" x2="11.5" y2="15.5" stroke="#BA5731" stroke-width="2.5"/></svg>`
+  },
+  { 
+    text: "Green or yellow-green vomit, or forceful vomiting after most feeds", 
+    short: "green or forceful vomiting",
+    visual: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2a9 9 0 0 0-9 9c0 4.5 3.5 8.2 8 8.9V22h2v-2.1c4.5-.7 8-4.4 8-8.9a9 9 0 0 0-9-9z"/><path d="M9 13c1 1.5 2.5 2 3 2s2-.5 3-2"/><circle cx="9" cy="9" r="1.2" fill="currentColor"/><circle cx="15" cy="9" r="1.2" fill="currentColor"/><path d="M12 15v5" stroke="#4A7C59" stroke-width="2.5"/><circle cx="12" cy="17.5" r="1.5" fill="#4A7C59"/></svg>`
+  },
+  { 
+    text: "Blood in the stool", 
+    short: "blood in stool",
+    visual: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><path d="M12 7v10M8 12h8" stroke="#BA5731" stroke-width="2"/></svg>`
+  },
+  { 
+    text: "Poor feeding or refusing feeds completely", 
+    short: "poor feeding",
+    visual: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 2h4M9 5h6"/><rect x="7" y="7" width="10" height="13" rx="2.5"/><line x1="7" y1="11" x2="11" y2="11"/><line x1="7" y1="14" x2="13" y2="14"/><line x1="4" y1="4" x2="20" y2="20" stroke="#BA5731" stroke-width="2"/></svg>`
+  },
+  { 
+    text: "Unusually sleepy, limp, or very hard to wake", 
+    short: "sleepy, limp or hard to wake",
+    visual: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><line x1="8" y1="12" x2="16" y2="12"/></svg>`
+  },
+  { 
+    text: "Trouble breathing, or blue lips or face", 
+    short: "breathing trouble",
+    visual: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 4v8"/><path d="M12 7c-2-1.5-5-2-7 0a6 6 0 0 0 4 10c2 0 3-1 3-2"/><path d="M12 7c2-1.5 5-2 7 0a6 6 0 0 1-4 10c-2 0-3-1-3-2"/><path d="M7 11h2M15 11h2" stroke="#BA5731" stroke-width="1.5"/></svg>`
+  },
+  { 
+    text: "A hair wrapped tightly around a finger, toe, or genitals", 
+    short: "hair tourniquet",
+    visual: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="7"/><path d="M12 5a7 7 0 0 1 7 7M5 12a7 7 0 0 1 7-7"/></svg>`
+  }
 ];
 const RF_NONE = RED_FLAG_OPTIONS.length; // index of "None of these"
 const rfSelected = new Set();
@@ -89,82 +117,117 @@ let redFlagStatus = 'pending';
    outcomes. Q1, Q2, Q3, Q5, Q6 and Q7 are single-select, Q4 is multi.
    ══════════════════════════════════════════════════════════════════════ */
 const QUESTIONS = [
+  // Q1: AGE WITH GRAPH ON TOP + INTEGER SELECTOR BELOW
   {
-    q: "When does your baby cry most intensely?",
-    sub: "Think about the pattern over the last few days. Pick the one that fits most nights.",
+    q: "How many weeks old is your baby today?",
+    sub: "Crying follows a well-documented biological curve: rising in early weeks, peaking around week 6 to 8, and easing by week 12.",
+    single: true,
+    isIntegerAge: true
+  },
+
+  // Q2: TOTAL CRYING DURATION WITH 24-HOUR INTERACTIVE CLOCK
+  {
+    q: "On a typical complete day and night, approximately how long does your baby cry in total?",
+    sub: "Measures total daily burden to establish an objective baseline for tracking in the Midnight Protocol.",
+    single: true,
+    isDurationClock: true,
+    opts: [
+      ["Less than 1 hour total", {GUT:0,NS:0,FM:0}, null, null, "Mild daily fussiness", 15, "#698457", "< 1 Hour", `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 14 14"/></svg>`],
+      ["1 to 2 hours total", {GUT:0,NS:0,FM:0}, null, null, "Moderate daily unsettled periods", 45, "#BE933B", "1-2 Hours", `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 12"/></svg>`],
+      ["2 to 3 hours total", {GUT:0,NS:0,FM:0}, null, null, "Meets common clinical colic criteria (Wessel 'Rule of 3s')", 75, "#BA5731", "2-3 Hours (Colic Threshold)", `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 18 13"/></svg>`],
+      ["3 to 5 hours total", {GUT:0,NS:0,FM:0}, null, null, "Severe daily crying load", 120, "#853A1D", "3-5 Hours (Severe Load)", `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 17"/></svg>`],
+      ["More than 5 hours total", {GUT:0,NS:0,FM:0}, null, null, "Intense prolonged infant distress", 180, "#222C1D", "5+ Hours (Prolonged Distress)", `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 12 18"/></svg>`],
+      ["I am not sure / varies day to day", {GUT:0,NS:0,FM:0}, null, null, "Unpredictable daily totals", 360, "#7A6856", "Unpredictable Variance", `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9" stroke-dasharray="3,3"/><polyline points="12 7 12 12 15 15"/></svg>`]
+    ]
+  },
+
+  // Q3: DIRECT FEEDING OBSERVATIONS (Observable Pattern: Feeding Mechanics Cluster)
+  {
+    q: "When your baby is feeding, which of these do you regularly notice?",
+    sub: "Direct observations during feeding differentiate mechanical aerophagia (air swallowing) from general evening fussiness.",
+    single: false,
+    opts: [
+      ["Repeatedly pulls away from breast or bottle, arches back, or fusses", {GUT:0,NS:0,FM:1}, null, null, "Aerophagia / flow rate discomfort sign", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12c-3 0-6 4-10 4-2.5 0-4-2-4-4s1.5-4 4-4c4 0 7 4 10 4z"/></svg>`],
+      ["Coughs, sputters, or seems to struggle with milk flow speed", {GUT:0,NS:0,FM:1}, null, null, "Swallow coordination or fast let-down sign", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v6M8 6l8 0M7 16c1.5 2 4.5 2 6 0"/><circle cx="12" cy="19" r="1.5" fill="currentColor"/></svg>`],
+      ["Milk repeatedly leaks from corners of mouth while sucking", {GUT:0,NS:0,FM:1}, null, null, "Incomplete lip seal / latch vacuum loss", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21a6 6 0 0 0 6-6c0-4-6-10-6-10S6 11 6 15a6 6 0 0 0 6 6z"/></svg>`],
+      ["Makes frequent clicking or smacking sounds while feeding", {GUT:0,NS:0,FM:1}, null, null, "Breaking suction during swallow sequence", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>`],
+      ["Feeds are consistently exhausting, frantic, or take over 45 minutes", {GUT:0,NS:0,FM:1}, null, null, "Fatigue or mechanical feeding inefficiency", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 8 14"/></svg>`],
+      ["Feeds usually look comfortable with coordinated swallowing", {GUT:0,NS:0,FM:0}, null, null, "No observable mechanical feeding struggle", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>`],
+      ["None of these / I am not sure", {GUT:0,NS:0,FM:0}, null, null, "Uncertain or no obvious feed difficulty", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>`]
+    ]
+  },
+
+  // Q4: CRY TIMING RELATIVE TO FEEDS
+  {
+    q: "When does the crying usually happen in relation to feeding?",
+    sub: "Connects distress onset to gastric transit times.",
     single: true,
     opts: [
-      ["Consistently in the evening, usually 5PM to midnight, regardless of feeding",      {GUT:0,NS:3,FM:0}, null, null, "The crying is concentrated in the evening."],
-      ["During or shortly after feeding, often arching away from the breast or bottle",    {GUT:2,NS:0,FM:2}, null, null, "You reported repeated feeding-related discomfort."],
-      ["Seemingly randomly throughout the day with no clear pattern",                      {GUT:1,NS:1,FM:1}, null, null, "The crying doesn't follow an obvious time-of-day pattern."],
-      ["Consistently 1 to 3 hours after a feed, like clockwork",                           {GUT:1,NS:0,FM:4}, null, null, "The crying follows a consistent delay after feeds."],
+      ["Crying consistently starts during feeds or within 15 to 20 minutes after", {GUT:0,NS:0,FM:2}, null, null, "Immediate mechanical or upper esophageal distress", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M10 2h4M12 2v3"/></svg>`],
+      ["Crying happens in waves throughout the day or night, unrelated to feeds", {GUT:2,NS:0,FM:0}, null, null, "Paroxysmal visceral cramping pattern", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12c2.5-4 5-4 7.5 0s5 4 7.5 0 5-4 7.5 0"/></svg>`],
+      ["Crying predictably clusters in late afternoon/evening (5 PM to midnight)", {GUT:0,NS:2,FM:0}, null, null, "Classic diurnal sensory saturation ('witching hour')", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v2M4.93 4.93l1.41 1.41M2 12h2M20 12h2M19.07 4.93l-1.41 1.41"/><path d="M22 17H2M16 17a4 4 0 0 0-8 0"/></svg>`],
+      ["Unpredictable / occurs at different times with no pattern", {GUT:0,NS:0,FM:0}, null, null, "No consistent temporal link", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="10" cy="16" r="2"/><circle cx="19" cy="17" r="2"/></svg>`]
     ]
   },
+
+  // Q5: VISCERAL & DIGESTIVE SIGNS (Observable Pattern: Gut Visceral Cluster)
   {
-    q: "What does your baby's cry sound like?",
-    sub: "Pick the closest match.",
+    q: "Apart from crying, which digestive clues have you repeatedly noticed?",
+    sub: "Observable visceral responses to intestinal gas and abdominal pressure.",
+    single: false,
+    opts: [
+      ["Pulls knees tightly to chest with a firm, swollen, or tight tummy", {GUT:1,NS:0,FM:0}, null, null, "Classic abdominal guarding posture", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 12c2-2 6-2 8 0"/></svg>`],
+      ["Noticeable pause or visible relief in crying after passing gas or stool", {GUT:1,NS:0,FM:0}, null, null, "Decompression provides temporary pain relief", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4M20 4l-4 4M18 18a3 3 0 0 1-3 3h-4"/></svg>`],
+      ["Frequent very loose, frothy, explosive, or green stools", {GUT:1,NS:0,FM:0}, null, null, "Altered gut transit and fermentation", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M8 12c1.5 2 4.5 2 6 0"/></svg>`],
+      ["Strains uncomfortably for long periods with hard, infrequent stools", {GUT:1,NS:0,FM:0}, null, null, "Infant dyschezia or delayed stool transit", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>`],
+      ["Frequent wet burps, hiccups, or sour regurgitation after feeds", {GUT:0,NS:0,FM:1}, null, null, "Upper gastrointestinal reflux signs", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a7 7 0 0 0-7 7v4a7 7 0 0 0 14 0v-4a7 7 0 0 0-7-7z"/><path d="M12 9v4"/></svg>`],
+      ["Normal yellow/seedy stools with no obvious pain", {GUT:0,NS:0,FM:0}, null, null, "Healthy typical bowel movements", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>`],
+      ["None of these observed", {GUT:0,NS:0,FM:0}, null, null, "No distinct digestive signals", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>`]
+    ]
+  },
+
+  // Q6: SOOTHING & CALMING RESPONSE (Observable Pattern)
+  {
+    q: "Which calming position produces the clearest reduction in crying?",
+    sub: "Differential response to counter-pressure, vestibular motion, or upright posture.",
     single: true,
     opts: [
-      ["High-pitched, continuous, and intense from the very first second, with no build-up", {GUT:0,NS:4,FM:0}, null, null, "The cry starts high-pitched and intense with no build-up."],
-      ["Starts softer and escalates over 10 to 15 minutes into inconsolable",               {GUT:2,NS:1,FM:0}, null, null, "The cry builds gradually rather than starting at full intensity."],
-      ["Comes in waves: crying, pause, crying again, with legs pulled to chest",            {GUT:3,NS:0,FM:0}, null, null, "The crying comes in waves, with legs pulled toward the chest."],
-      ["Grunting, straining, or gulping sounds, especially in the first few minutes after a feed", {GUT:1,NS:0,FM:3}, null, null, "You noted grunting or straining sounds after feeds."],
+      ["Settles noticeably with tummy-down pressure (Tiger Hold across forearm)", {GUT:2,NS:0,FM:0}, null, null, "Gentle upward abdominal counter-pressure eases visceral cramping", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="10" width="18" height="6" rx="3"/><circle cx="7" cy="13" r="1.5" fill="currentColor"/></svg>`],
+      ["Settles best when kept upright over shoulder (45°–90°); cries when flat", {GUT:0,NS:0,FM:2}, null, null, "Gravity assists esophageal comfort and prevents regurgitation", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>`],
+      ["Settles only with continuous rhythmic bouncing/walking; screams if stopped", {GUT:0,NS:2,FM:0}, null, null, "State-regulation dependent on continuous vestibular input", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a9 9 0 0 0-9 9c0 3.5 2 6.5 5 8M12 21a9 9 0 0 0 9-9c0-3.5-2-6.5-5-8"/></svg>`],
+      ["Almost nothing helps / equally hard to soothe in all positions", {GUT:0,NS:0,FM:0}, null, null, "Resistant to common holds", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="9" y1="12" x2="15" y2="12"/></svg>`]
     ]
   },
+
+  // Q7: FEEDING METHOD (Personalization Router - 0 points)
   {
-    q: "What does your baby's body do during a crying episode?",
-    sub: "Physical signs can hint at where to start. Pick the most common one.",
+    q: "How is your baby currently fed?",
+    sub: "Personalizes your protocol without distorting the starting-point pattern.",
     single: true,
     opts: [
-      ["Legs pulled toward the chest, abdomen visibly tight or distended",                 {GUT:4,NS:0,FM:0}, null, null, "The abdomen appears tight or distended during episodes."],
-      ["Full-body tension: arching back, fists clenched, face red and straining",          {GUT:0,NS:4,FM:0}, null, null, "The body shows full tension, arching, and clenched fists."],
-      ["Pulls off the breast or bottle repeatedly, coughs or sputters mid-feed",           {GUT:0,NS:0,FM:4}, null, null, "Your baby pulls off or coughs mid-feed."],
-      ["Inconsolable regardless of position, nothing seems to help at all",                {GUT:1,NS:1,FM:1}, null, null, "Nothing about position changes how consolable your baby is."],
+      ["Exclusively breastfed", {GUT:0,NS:0,FM:0}, "Breastfed", null, "Eligible for latch & probiotic guidance (Savino 2010)", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21a6 6 0 0 0 6-6c0-4-6-10-6-10S6 11 6 15a6 6 0 0 0 6 6z"/></svg>`],
+      ["Exclusively formula-fed", {GUT:0,NS:0,FM:0}, "Formula-fed", null, "Leads with paced feeding and bottle mechanics (Sung 2014 caveat)", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2h4M9 5h6"/><rect x="7" y="7" width="10" height="13" rx="2.5"/><line x1="7" y1="11" x2="11" y2="11"/><line x1="7" y1="14" x2="13" y2="14"/></svg>`],
+      ["Combination of breast milk and formula", {GUT:0,NS:0,FM:0}, "Mixed", null, "Mixed feeding protocol", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 16a4 4 0 0 0 4-4c0-2-4-6-4-6s-4 4-4 6a4 4 0 0 0 4 4z"/><rect x="13" y="8" width="8" height="11" rx="2"/></svg>`],
+      ["Expressed breast milk (bottle-fed)", {GUT:0,NS:0,FM:0}, "Bottle-fed", null, "Focuses on paced bottle mechanics", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="7" width="10" height="13" rx="2.5"/><path d="M12 11c1 1.5 1 2.5 0 3"/></svg>`]
     ]
   },
+
+  // Q8: PREVIOUSLY TRIED REMEDIES (Personalization - 0 points)
   {
-    q: "What has already been tried with little or no effect?",
-    sub: "Knowing what you've already tried helps avoid repeating it.",
+    q: "Which of these have you already tried?",
+    sub: "Prevents your customized plan from sending you back through steps that already failed.",
+    single: false,
     opts: [
-      ["Gripe water and simethicone gas drops, tried multiple brands",                     {GUT:3,NS:0,FM:0}, null, "gripe water or gas drops"],
-      ["Rocking, bouncing, swinging: baby calms briefly then starts again",                {GUT:0,NS:3,FM:0}, null, "rocking, bouncing, or swinging"],
-      ["A sound machine or app, didn't help or only helped briefly",                       {GUT:0,NS:1,FM:0}, null, "a sound machine"],
-      ["Changing feeding positions or how often you feed, without a real difference",      {GUT:1,NS:0,FM:3}, null, "changing feeding position or frequency"],
+      ["Gas drops (simethicone)", {GUT:0,NS:0,FM:0}, null, "gas drops", "Over-the-counter anti-foaming agent", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m19 11-8-8-8.5 8.5a5 5 0 0 0 7 7L18 10"/><path d="m5 2 5 5"/><circle cx="19" cy="18" r="2" fill="#BA5731"/></svg>`],
+      ["Gripe water", {GUT:0,NS:0,FM:0}, null, "gripe water", "Herbal / sodium bicarbonate liquid", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="6" y="8" width="8" height="12" rx="2"/><path d="M8 8V5h4v3M16 11l3 3-2 2-3-3"/></svg>`],
+      ["Sound machines / brown noise", {GUT:0,NS:0,FM:0}, null, "brown noise", "Continuous acoustic calming", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>`],
+      ["Paced bottle feeding or different bottles/nipples", {GUT:0,NS:0,FM:0}, null, "paced feeding or bottles", "Feeding flow modifications", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 14l12-4 2 6-12 4z"/><circle cx="6" cy="15" r="1.5" fill="currentColor"/></svg>`],
+      ["Changing formula brand or type", {GUT:0,NS:0,FM:0}, null, "changing formula", "Nutritional trial", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="6" width="14" height="15" rx="3"/><line x1="5" y1="10" x2="19" y2="10"/><path d="M9 3h6v3H9z"/></svg>`],
+      ["Adjusting mother's diet (if breastfeeding)", {GUT:0,NS:0,FM:0}, null, "dietary changes", "Elimination of dairy/irritants", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7c-2 3-1 6 2 7 2 1 3 0 3-2-1-3-3-4-5-5z"/></svg>`],
+      ["Rhythmic bouncing, driving, or tight swaddling", {GUT:0,NS:0,FM:0}, null, "bouncing or swaddling", "Vestibular / sensory techniques", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2a5 5 0 0 0-5 5v10a5 5 0 0 0 10 0V7a5 5 0 0 0-5-5z"/><path d="M7 10l10 4M7 14l10-4"/></svg>`],
+      ["None of these yet", {GUT:0,NS:0,FM:0}, null, null, "Starting fresh tonight", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`]
     ]
-  },
-  {
-    q: "How does your baby typically respond when being held during a crying episode?",
-    sub: "Pick the closest match.",
-    single: true,
-    opts: [
-      ["Calms somewhat when held face-down with gentle pressure on the abdomen",           {GUT:3,NS:0,FM:0}, null, null, "Face-down pressure holding brings some relief."],
-      ["Calms briefly when moved rhythmically, but starts again when movement stops",      {GUT:0,NS:4,FM:0}, null, null, "Rhythmic movement calms your baby only while it continues."],
-      ["Wants to stay upright after feeds, unsettled lying flat or being reclined",        {GUT:0,NS:0,FM:4}, null, null, "Your baby wants to stay upright after feeds."],
-      ["Inconsistent: sometimes holding helps, sometimes it makes things worse",           {GUT:1,NS:1,FM:1}, null, null, "Holding helps inconsistently."],
-    ]
-  },
-  {
-    q: "What does your baby's stool look like?",
-    sub: "Stool can hint at gut-related causes. Pick the one that's typical right now.",
-    single: true,
-    opts: [
-      ["Green, frothy, or mucousy, sometimes with a strong smell",                         {GUT:3,NS:0,FM:0}, null, null, "Stool has been green, frothy, or mucousy."],
-      ["Normal yellow seedy (breastfed) or tan (formula), no stool changes noted",         {GUT:0,NS:1,FM:1}],
-      ["Infrequent, less than once a day, with apparent straining",                        {GUT:2,NS:0,FM:0}, null, null, "Bowel movements have been infrequent, with straining."],
-      ["Not sure, haven't noticed a pattern",                                              {GUT:0,NS:0,FM:0}],
-    ]
-  },
-  {
-    q: "What is your baby's feeding situation?",
-    sub: "Feeding method changes which steps make sense. Pick one.",
-    single: true,
-    opts: [
-      ["Exclusively breastfed",                                                            {GUT:1,NS:0,FM:0}, "Breastfed"],
-      ["Formula-fed, from birth or switched recently",                                     {GUT:0,NS:0,FM:2}, "Formula-fed", null, "Feeding is formula, from birth or a recent switch."],
-      ["Mixed feeding, breast and formula",                                                {GUT:0,NS:0,FM:1}, "Mixed"],
-      ["I've eliminated dairy from my diet already and the crying hasn't changed",         {GUT:0,NS:1,FM:1}, "Breastfed", null, "Dairy has already been eliminated with no change."],
-    ]
-  },
+  }
 ];
 
 /* ══════════════════════════════════════════════════════════════════════
@@ -428,6 +491,7 @@ async function subscribeToMailerLite(name, email, colcType, detail, status) {
         // only send it once the quiz is completed.
         confidence_pct:    status === 'completed' ? confidencePct : null,
         baby_age_weeks:    babyAgeWeeks,
+        baby_age_range:    classifyAge(babyAgeWeeks).range,
         baby_name:         babyName,
         feeding_method:    feedingMethod || 'Not specified',
         tried_items:       triedItems.join(', '),
@@ -435,7 +499,7 @@ async function subscribeToMailerLite(name, email, colcType, detail, status) {
         assessment_id:     ASSESSMENT_ID,
         lead_source:       UTM_SOURCE,
         quiz_status:       status,
-        quiz_version:      '2.2',
+        quiz_version:      '2.3',
         red_flag:          redFlagStatus,
         purchase_status:   'pending',
         ...utm,
@@ -480,6 +544,7 @@ function shake(id, msg) {
 
 /* ── FLOW ────────────────────────────────────────────────────────────── */
 function startQuiz() {
+  startLiveCountdown();
   const name    = document.getElementById('nameInput').value.trim();
   const email   = document.getElementById('emailInput').value.trim();
   const ageRaw  = document.getElementById('ageInput').value.trim();
@@ -625,8 +690,30 @@ function applyLogHint(i) {
 
 function renderQuestion() {
   const q = QUESTIONS[qIndex];
-  document.getElementById('qCount').textContent = `${qIndex + 1} / ${QUESTIONS.length}`;
-  document.getElementById('progressFill').style.width = `${(qIndex / QUESTIONS.length) * 100}%`;
+  const stepNum = qIndex + 1;
+  const total = QUESTIONS.length;
+  const pct = Math.round((stepNum / total) * 100);
+
+  const remaining = total - stepNum;
+  const zCountdown = document.getElementById('zCountdown');
+  if (zCountdown) {
+    zCountdown.textContent = remaining === 0 ? "Final step! Almost finished" : `${remaining} question${remaining > 1 ? 's' : ''} left`;
+  }
+
+  document.getElementById('qCount').textContent = `Question ${stepNum} of ${total}`;
+  const stepPctEl = document.getElementById('stepPctText');
+  if (stepPctEl) stepPctEl.textContent = `${pct}% Complete`;
+  document.getElementById('progressFill').style.width = `${pct}%`;
+
+  // Advance Crawling Baby
+  const clampedPct = Math.min(pct, 95);
+  const marker = document.getElementById('crawlerMarker');
+  if (marker) {
+    marker.style.left = `${clampedPct}%`;
+    marker.classList.add('step-active');
+    setTimeout(() => marker.classList.remove('step-active'), 400);
+  }
+
   document.getElementById('qText').textContent = q.q;
   document.getElementById('qSub').textContent  = q.sub;
 
@@ -637,9 +724,24 @@ function renderQuestion() {
   box.innerHTML = '';
   selectedMap.clear();
 
+  // Clear any existing special visual containers
+  const existingSpecial = document.getElementById('dynamicSpecialVisualBox');
+  if (existingSpecial) existingSpecial.remove();
+
+  // SPECIAL CASE: QUESTION 1 AGE (GRAPH ON TOP + INTEGER SELECTOR BELOW)
+  if (q.isIntegerAge) {
+    renderAgeQuestion();
+    return;
+  }
+
+  // SPECIAL CASE: QUESTION 2 CRYING DURATION (24H CLOCK ON TOP)
+  if (q.isDurationClock) {
+    renderDurationClock(q);
+  }
+
   const btn = document.getElementById('continueBtn');
   btn.classList.remove('visible');
-  btn.textContent = 'Continue';
+  btn.textContent = (qIndex === total - 1) ? 'Generate Starting-Point Plan →' : 'Continue';
 
   q.opts.forEach((o, i) => {
     const div = document.createElement('div');
@@ -647,13 +749,179 @@ function renderQuestion() {
     div.setAttribute('role', q.single ? 'radio' : 'checkbox');
     div.setAttribute('aria-checked', 'false');
     div.setAttribute('tabindex', '0');
-    div.innerHTML = `<span class="opt-text">${o[0]}</span><span class="opt-check" id="chk${i}" aria-hidden="true"></span>`;
+
+    const visualHtml = o[8] ? `<div class="opt-visual">${o[8]}</div>` : '';
+    div.innerHTML = `<span class="opt-check" id="chk${i}" aria-hidden="true"></span>${visualHtml}<span class="opt-text">${o[0]}</span>`;
     div.style.animation = `rise .35s ${i * .07}s ease both`;
     div.onclick = () => toggleOption(i, o[1], div, !!q.single, o[2] || null, o[3] || null, o[4] || null);
     div.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleOption(i, o[1], div, !!q.single, o[2] || null, o[3] || null, o[4] || null); } };
     box.appendChild(div);
   });
   applyLogHint(qIndex);
+}
+
+// RENDER QUESTION 1: DEVELOPMENTAL CRYING CURVE GRAPH ON TOP + INTEGER INPUT BELOW
+function renderAgeQuestion() {
+  const box = document.getElementById('optionsBox');
+  const selectedWeeks = babyAgeWeeks || currentAgeWeeks;
+  currentAgeWeeks = selectedWeeks;
+  const classification = classifyAge(selectedWeeks);
+  const coords = getCurveCoords(selectedWeeks);
+
+  const graphCard = document.createElement('div');
+  graphCard.id = 'dynamicSpecialVisualBox';
+  graphCard.className = 'dev-curve-card';
+
+  graphCard.innerHTML = `
+    <div class="dcc-header">
+      <div class="dcc-badge">Developmental Crying Timeline (Barr 2009)</div>
+      <div class="dcc-title">Where Your Baby Sits on the Biological Crying Curve</div>
+    </div>
+    <div class="dcc-graph-wrap">
+      <svg viewBox="0 0 540 180" width="100%" height="auto">
+        <defs>
+          <linearGradient id="curveShade" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#BA5731" stop-opacity="0.25"/>
+            <stop offset="100%" stop-color="#BA5731" stop-opacity="0.02"/>
+          </linearGradient>
+        </defs>
+        <line x1="40" y1="140" x2="500" y2="140" stroke="rgba(38,27,20,0.18)" stroke-width="1.5"/>
+        <line x1="40" y1="85" x2="500" y2="85" stroke="rgba(38,27,20,0.06)" stroke-dasharray="4,4"/>
+        <line x1="40" y1="35" x2="500" y2="35" stroke="rgba(38,27,20,0.06)" stroke-dasharray="4,4"/>
+        
+        <text x="40" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 0</text>
+        <text x="95" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 2</text>
+        <text x="150" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 4</text>
+        <text x="213" y="160" font-family="'DM Mono', monospace" font-size="11" font-weight="700" fill="#BA5731" text-anchor="middle">Wk 6 (Peak)</text>
+        <text x="270" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 8</text>
+        <text x="330" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 10</text>
+        <text x="385" y="160" font-family="'DM Mono', monospace" font-size="11" font-weight="700" fill="#698457" text-anchor="middle">Wk 12 (Ease)</text>
+        <text x="445" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 14</text>
+        <text x="500" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 16</text>
+
+        <path d="M 40 140 L 40 135 C 90 130, 150 95, 205 35 C 240 35, 290 85, 360 120 C 420 135, 470 138, 500 140 Z" fill="url(#curveShade)"/>
+        <path d="M 40 135 C 90 130, 150 95, 205 35 C 240 35, 290 85, 360 120 C 420 135, 470 138, 500 140" fill="none" stroke="#BA5731" stroke-width="3" stroke-linecap="round"/>
+
+        <line x1="213" y1="35" x2="213" y2="140" stroke="#BA5731" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.6"/>
+        <circle cx="213" cy="35" r="4.5" fill="#BA5731"/>
+
+        <g id="curvePinGroup" transform="translate(${coords.x}, ${coords.y})" style="transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.3, 1);">
+          <line id="curvePinLine" x1="0" y1="0" x2="0" y2="${140 - coords.y}" stroke="#261B14" stroke-width="1.8" stroke-dasharray="2,2"/>
+          <circle cx="0" cy="0" r="8" fill="#fff" stroke="#BA5731" stroke-width="3"/>
+          <circle cx="0" cy="0" r="3" fill="#BA5731"/>
+          <g transform="translate(0, -22)">
+            <rect x="-55" y="-13" width="110" height="20" rx="6" fill="#261B14"/>
+            <text id="curvePinText" x="0" y="1" font-family="'DM Mono', monospace" font-size="9" font-weight="700" fill="#fff" text-anchor="middle">Week ${selectedWeeks}${selectedWeeks === 6 ? ' (Peak)' : ''}</text>
+          </g>
+        </g>
+      </svg>
+    </div>
+  `;
+  box.appendChild(graphCard);
+
+  const inputCard = document.createElement('div');
+  inputCard.className = 'age-integer-card';
+  inputCard.innerHTML = `
+    <div class="aic-label">Set Your Baby's Exact Age in Weeks:</div>
+
+    <div class="aic-stepper-wrap">
+      <button type="button" class="aic-step-btn" onclick="adjustAgeWeeks(-1)">&minus;</button>
+      <div class="aic-val-box">
+        <span class="aic-val-num" id="ageValDisplay">${selectedWeeks}</span>
+        <span class="aic-val-unit">weeks old</span>
+      </div>
+      <button type="button" class="aic-step-btn" onclick="adjustAgeWeeks(1)">&plus;</button>
+    </div>
+
+    <div class="aic-slider-wrap">
+      <input type="range" id="ageSlider" min="1" max="16" value="${selectedWeeks}" step="1" oninput="setAgeWeeks(this.value)" class="aic-slider"/>
+      <div class="aic-slider-ticks">
+        <span>1w</span>
+        <span>3w</span>
+        <span style="color:var(--terra);font-weight:700">6w (Peak)</span>
+        <span>9w</span>
+        <span style="color:var(--sage);font-weight:700">12w (Easing)</span>
+        <span>16w</span>
+      </div>
+    </div>
+
+    <div class="aic-chips-wrap">
+      <button type="button" class="aic-chip ${selectedWeeks === 2 ? 'active' : ''}" id="chip-2" onclick="setAgeWeeks(2)">2 weeks</button>
+      <button type="button" class="aic-chip ${selectedWeeks === 4 ? 'active' : ''}" id="chip-4" onclick="setAgeWeeks(4)">4 weeks</button>
+      <button type="button" class="aic-chip ${selectedWeeks === 6 ? 'active' : ''}" id="chip-6" onclick="setAgeWeeks(6)">6 weeks (Peak)</button>
+      <button type="button" class="aic-chip ${selectedWeeks === 8 ? 'active' : ''}" id="chip-8" onclick="setAgeWeeks(8)">8 weeks</button>
+      <button type="button" class="aic-chip ${selectedWeeks === 10 ? 'active' : ''}" id="chip-10" onclick="setAgeWeeks(10)">10 weeks</button>
+      <button type="button" class="aic-chip ${selectedWeeks >= 12 ? 'active' : ''}" id="chip-12" onclick="setAgeWeeks(12)">12+ weeks</button>
+    </div>
+
+    <div class="aic-classification-box">
+      <div class="aic-class-header">
+        <span class="aic-class-tag" id="ageClassTag">${classification.tag}</span>
+        <span class="aic-class-status" id="ageClassStatus">${classification.status}</span>
+      </div>
+      <div class="aic-milestone-text" id="ageClassMilestone">
+        ${classification.milestone}
+      </div>
+    </div>
+  `;
+  box.appendChild(inputCard);
+
+  const btn = document.getElementById('continueBtn');
+  btn.classList.add('visible');
+  btn.textContent = `Continue with ${selectedWeeks} Weeks →`;
+}
+
+// RENDER QUESTION 2: 24-HOUR INTERACTIVE ANALOG CLOCK
+function renderDurationClock(q) {
+  const selected = Array.from(selectedMap.keys());
+  const clockCard = document.createElement('div');
+  clockCard.id = 'dynamicSpecialVisualBox';
+  clockCard.className = 'duration-clock-card';
+
+  let chosenAngle = 0;
+  let chosenColor = '#BA5731';
+  let chosenVal = 'Tap an option below to highlight crying hours';
+  let chosenSub = 'Visualizes what fraction of your baby\'s 24 hours is consumed by crying.';
+
+  if (selected.length > 0) {
+    const opt = q.opts[selected[0]];
+    chosenAngle = opt[5] || 60;
+    chosenColor = opt[6] || '#BA5731';
+    chosenVal = opt[7] || opt[0];
+    chosenSub = opt[4];
+  }
+
+  const rad = (chosenAngle - 90) * Math.PI / 180;
+  const endX = 60 + 48 * Math.cos(rad);
+  const endY = 60 + 48 * Math.sin(rad);
+  const largeArc = chosenAngle > 180 ? 1 : 0;
+  const arcPath = chosenAngle > 0 && chosenAngle < 360
+    ? `M 60 60 L 60 12 A 48 48 0 ${largeArc} 1 ${endX.toFixed(1)} ${endY.toFixed(1)} Z`
+    : (chosenAngle === 360 ? `M 60 12 A 48 48 0 1 1 59.9 12 Z` : '');
+
+  clockCard.innerHTML = `
+    <div class="dcc-clock-left">
+      <svg class="analog-clock-svg" viewBox="0 0 120 120" width="94" height="94">
+        <circle cx="60" cy="60" r="54" fill="#FAF4EC" stroke="#261B14" stroke-width="2.5"/>
+        <circle cx="60" cy="18" r="3.5" fill="#BE933B" title="Day (Noon)"/>
+        <circle cx="60" cy="102" r="3.5" fill="#222C1D" title="Night (Midnight)"/>
+        <circle cx="18" cy="60" r="2.5" fill="#7A6856"/>
+        <circle cx="102" cy="60" r="2.5" fill="#7A6856"/>
+        ${arcPath ? `<path d="${arcPath}" fill="${chosenColor}" fill-opacity="0.35" stroke="${chosenColor}" stroke-width="1.5"/>` : ''}
+        <line x1="60" y1="60" x2="${(60 + 26 * Math.cos((chosenAngle - 90) * Math.PI / 180)).toFixed(1)}" y2="${(60 + 26 * Math.sin((chosenAngle - 90) * Math.PI / 180)).toFixed(1)}" stroke="#261B14" stroke-width="3" stroke-linecap="round"/>
+        <line x1="60" y1="60" x2="60" y2="20" stroke="#BA5731" stroke-width="2" stroke-linecap="round" style="transform-origin:60px 60px; transform:rotate(${(chosenAngle * 6) % 360}deg); transition:transform 0.4s ease;"/>
+        <circle cx="60" cy="60" r="4" fill="#261B14"/>
+      </svg>
+    </div>
+    <div class="dcc-clock-right">
+      <div class="dcc-clock-kicker">24-Hour Day & Night Burden</div>
+      <div class="dcc-clock-val">${chosenVal}</div>
+      <div class="dcc-clock-sub">${chosenSub}</div>
+    </div>
+  `;
+
+  const box = document.getElementById('optionsBox');
+  box.parentNode.insertBefore(clockCard, box);
 }
 
 function toggleOption(idx, weights, el, single, feeding, triedTag, reason) {
@@ -748,6 +1016,140 @@ function getPrimaryType(s) {
     if (s[k] > bestVal) { bestVal = s[k]; best = k; }
   });
   return best;
+}
+
+
+/* ── BLOG GUIDES & PROVEN MARKETING VIDEO SPOTLIGHTS ── */
+function renderBlogAndVideoGuides(type, feedMethod) {
+  const guideGrid = document.getElementById('guideCardGrid');
+  if (!guideGrid) return;
+  guideGrid.innerHTML = '';
+
+  const blogGuides = {
+    paced_bottle: {
+      url: "/blog/paced-bottle-feeding-technique.html",
+      tag: "Feeding Mechanics · Bottle",
+      title: "Paced Bottle Feeding: The Exact Angle and Flow Control",
+      summary: "How to hold the bottle horizontal so your baby controls the swallow rate, stops gulping air, and breathes rhythmically."
+    },
+    flipple_latch: {
+      url: "/blog/breastfeeding-latch-technique.html",
+      tag: "Feeding Mechanics · Breast",
+      title: "The Flipple Technique for a Deep, Air-Free Latch",
+      summary: "A step-by-step method to achieve an asymmetric latch that prevents painful nipple clicking and stops milk leaking from the mouth."
+    },
+    best_bottles: {
+      url: "/blog/best-bottles-feeding-positions-colic.html",
+      tag: "Feeding Mechanics · Equipment",
+      title: "Best Bottle Venting & Semi-Upright Feeding Positions",
+      summary: "Comparing bottom-vented versus standard bottles and how positioning reduces aerophagia."
+    },
+    tiger_hold: {
+      url: "/blog/tiger-hold-guide.html",
+      tag: "Gut Visceral · Physical Hold",
+      title: "How to Do the Tiger Hold Correctly for Gas Relief",
+      summary: "Tummy-down forearm positioning that uses gentle upward palm counter-pressure to ease visceral intestinal spasms."
+    },
+    gentle_burping: {
+      url: "/blog/gentle-burping-techniques.html",
+      tag: "Gut Visceral · Decompression",
+      title: "Gentle Burping & Gastrointestinal Decompression",
+      summary: "Rotational burping techniques that release trapped air without jarring or forceful back pounding."
+    },
+    l_reuteri: {
+      url: "/blog/l-reuteri-evidence.html",
+      tag: "Gut Microbiome · Evidence",
+      title: "L. Reuteri DSM 17938: What the Clinical Trials Show",
+      summary: "Examining the Savino 2010 breastfed trial and Sung 2014 null results. Talk to your pediatrician before starting any supplement."
+    },
+    witching_room: {
+      url: "/blog/witching-hour-room-setup.html",
+      tag: "Nervous System · Environment",
+      title: "The Witching Hour Room Setup: Sensory Dampening",
+      summary: "Dim lighting, quiet steady brown noise across the room on a timer, and removing visual stimulation 30 minutes before evening fussiness."
+    },
+    swaddling_moro: {
+      url: "/blog/swaddling-moro-reflex-colic.html",
+      tag: "Nervous System · Sensory Holding",
+      title: "Swaddling, the Moro Reflex, and State Regulation",
+      summary: "Containing involuntary startle responses to help overstimulated nervous systems transition into sleep."
+    },
+    colic_timeline: {
+      url: "/blog/colic-timeline-when-does-it-end.html",
+      tag: "Foundational · Timeline",
+      title: "The Colic Timeline: When Does It Peak and When Does It Ease?",
+      summary: "Why infant crying typically peaks around week 6 and eases by 3 to 4 months, backed by the Barr 2009 developmental curve."
+    },
+    why_remedies_stop: {
+      url: "/blog/why-colic-remedies-stop-working.html",
+      tag: "Foundational · Structure",
+      title: "Why Colic Remedies Seem to Work, Then Stop",
+      summary: "The reason cycling through 5 different remedies in one week creates confusion, and how a 72-hour log clarifies the pattern."
+    }
+  };
+
+  function addGuideCard(g) {
+    const a = document.createElement('a');
+    a.className = 'guide-card';
+    a.href = g.url;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.innerHTML = `
+      <div class="guide-tag">${g.tag}</div>
+      <div class="guide-title">${g.title}</div>
+      <div class="guide-summary">${g.summary}</div>
+      <div class="guide-cta">Read step-by-step technique guide &rarr;</div>
+    `;
+    guideGrid.appendChild(a);
+  }
+
+  const vsTitle = document.getElementById('vsTitle');
+  const vsDesc = document.getElementById('vsDesc');
+  const vsLinkBtn = document.getElementById('vsLinkBtn');
+  const isBreast = (feedMethod || '').toLowerCase().includes('breast');
+
+  if (type === 'FM') {
+    if (isBreast) {
+      addGuideCard(blogGuides.flipple_latch);
+      addGuideCard(blogGuides.gentle_burping);
+      if (vsTitle) vsTitle.textContent = "Demonstration: Baby Tongue Position & Milk Transfer Mechanics";
+      if (vsDesc) vsDesc.textContent = "How proper tongue cupping past the lower gum prevents nipple compression, clicking, and air swallowing.";
+      if (vsLinkBtn) {
+        vsLinkBtn.href = "https://www.tiktok.com/@colicprotocol/video/7681719767215901965";
+        vsLinkBtn.textContent = "Watch Latch & Tongue Video (TikTok) →";
+      }
+    } else {
+      addGuideCard(blogGuides.paced_bottle);
+      addGuideCard(blogGuides.best_bottles);
+      if (vsTitle) vsTitle.textContent = "314k-View Video: Paced Bottle Feeding Position & 4 Steps";
+      if (vsDesc) vsDesc.textContent = "Holding the bottle nearly horizontal so milk covers the teat opening without rapidly pouring into baby's mouth.";
+      if (vsLinkBtn) {
+        vsLinkBtn.href = "https://www.tiktok.com/@colicprotocol/video/7694054422434827534";
+        vsLinkBtn.textContent = "Watch Paced Feeding Video (314k Views) →";
+      }
+    }
+  } else if (type === 'GUT') {
+    addGuideCard(blogGuides.tiger_hold);
+    addGuideCard(blogGuides.gentle_burping);
+    if (isBreast) addGuideCard(blogGuides.l_reuteri);
+
+    if (vsTitle) vsTitle.textContent = "683k-View Reel: Why Patting Harder When Your Baby Won't Burp Doesn't Work";
+    if (vsDesc) vsDesc.textContent = "Why sudden strikes lock the esophageal sphincter, and how upward spine alignment releases trapped gas gently.";
+    if (vsLinkBtn) {
+      vsLinkBtn.href = "https://www.tiktok.com/@colicprotocol/video/7673678040236444942";
+      vsLinkBtn.textContent = "Watch Burping Technique Video (683k Views) →";
+    }
+  } else {
+    addGuideCard(blogGuides.witching_room);
+    addGuideCard(blogGuides.swaddling_moro);
+
+    if (vsTitle) vsTitle.textContent = "Top Settling Video: Upright Posture, Gravity & Gentle Settling Rhythm";
+    if (vsDesc) vsDesc.textContent = "How 10-15 minutes of gentle upright resting rhythm allows the gas to rise naturally while calming the startle reflex.";
+    if (vsLinkBtn) {
+      vsLinkBtn.href = "https://www.tiktok.com/@colicprotocol/video/7660020460431740173";
+      vsLinkBtn.textContent = "Watch Settling & Burping Rhythm Video →";
+    }
+  }
 }
 
 async function showResult() {

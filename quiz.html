@@ -304,9 +304,392 @@ a{color:inherit}
 .guarantee-card p.gc-body{font-size:13.5px;color:#5c4a1e;line-height:1.7}
 .guarantee-card p.gc-body strong{color:#463a17}
 .assessment-count-value{font-weight:700}
+
+/* ── AMBIENT NURSERY BACKGROUND ── */
+.nursery-bg-elements{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  overflow:hidden;
+}
+.nb-item{
+  position:absolute;
+  opacity:0.06;
+  color:var(--terra);
+  animation:nbPulse 7s ease-in-out infinite alternate;
+}
+.nb-item.sage{color:var(--sage);animation-delay:2.5s}
+.nb-item.gold{color:var(--gold);animation-delay:5s}
+.nb-stars{top:7%;left:3%;width:90px;height:90px}
+.nb-mobile{top:12%;right:4%;width:110px;height:110px}
+.nb-blocks{bottom:9%;left:4%;width:96px;height:96px}
+.nb-moon{bottom:14%;right:5%;width:88px;height:88px}
+@keyframes nbPulse{0%{opacity:0.04}100%{opacity:0.08}}
+@media (prefers-reduced-motion: reduce){.nb-item{animation:none;opacity:0.05}}
+
+/* ── ZEIGARNIK BANNER WITH LIVE TICKING TIMER ── */
+.zeigarnik-strip{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:linear-gradient(90deg, rgba(188,90,51,0.08) 0%, rgba(192,150,63,0.08) 100%);
+  border:1px solid rgba(188,90,51,0.18);
+  border-radius:14px;
+  padding:8px 14px;
+  margin-bottom:18px;
+}
+.z-left{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--terra-deep)}
+.z-pulse-dot{width:7px;height:7px;border-radius:50%;background:var(--terra);animation:zPulse 2s ease-in-out infinite}
+@keyframes zPulse{0%,100%{opacity:.35}50%{opacity:1}}
+.z-right{font-family:var(--fm);font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.timer-tick-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--terra);margin-right:5px;animation:tickBlink 1s infinite}
+@keyframes tickBlink{0%,100%{opacity:1}50%{opacity:.2}}
+
+/* ── CRAWLING BABY PROGRESS TRACK ── */
+.crawler-track-container{
+  position:relative;
+  padding-top:34px;
+  padding-bottom:6px;
+  margin-bottom:16px;
+}
+.crawler-baby-marker{
+  position:absolute;
+  top:2px;
+  left:12.5%;
+  transform:translateX(-50%);
+  transition:left .45s cubic-bezier(.22,.8,.32,1);
+  pointer-events:none;
+  z-index:10;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+.crawler-baby-img{
+  width:50px;
+  height:auto;
+  filter:drop-shadow(0 4px 8px rgba(38,27,20,0.16));
+  animation:babyCrawlBob .75s ease-in-out infinite alternate;
+  transform-origin:bottom center;
+  display:block;
+}
+@keyframes babyCrawlBob{0%{transform:translateY(0) rotate(-1.5deg)}100%{transform:translateY(-3.5px) rotate(2deg)}}
+.crawler-baby-marker.step-active .crawler-baby-img{animation:babyStride .35s ease-in-out}
+@keyframes babyStride{0%{transform:scale(1) rotate(0deg)}50%{transform:scale(1.08) rotate(4deg) translateY(-4px)}100%{transform:scale(1) rotate(0deg)}}
+@media (prefers-reduced-motion: reduce){.crawler-baby-img{animation:none}}
+
+.progress-rail{
+  position:relative;
+  width:100%;
+  height:7px;
+  background:rgba(38,27,20,0.08);
+  border-radius:999px;
+}
+.progress-bar-fill{
+  position:absolute;
+  left:0;
+  top:0;
+  height:100%;
+  width:12.5%;
+  background:linear-gradient(90deg, var(--terra) 0%, var(--gold) 100%);
+  border-radius:999px;
+  transition:width .45s cubic-bezier(.22,.8,.32,1);
+}
+.crawler-destination-star{
+  position:absolute;
+  right:-4px;
+  top:-9px;
+  width:25px;
+  height:25px;
+  border-radius:50%;
+  background:#fff;
+  border:1.5px solid var(--gold);
+  display:grid;
+  place-items:center;
+  font-size:12px;
+  box-shadow:0 2px 6px rgba(0,0,0,0.08);
+  z-index:2;
+}
+
+/* ── PHYSICAL OPTION VISUALS ── */
+.opt-visual{
+  width:38px;
+  height:38px;
+  border-radius:10px;
+  background:rgba(188,90,51,0.06);
+  border:1px solid rgba(188,90,51,0.14);
+  display:grid;
+  place-items:center;
+  flex-shrink:0;
+  color:var(--terra);
+  transition:all .18s ease;
+  margin-top:1px;
+}
+.option.selected .opt-visual{
+  background:var(--terra);
+  color:#fff;
+  border-color:var(--terra);
+}
+.opt-visual.sage{background:rgba(108,135,89,0.09);border-color:rgba(108,135,89,0.18);color:var(--pine)}
+.option.selected .opt-visual.sage{background:var(--sage);color:#fff;border-color:var(--sage)}
+.opt-visual.sparkline{
+  width:54px;
+  height:34px;
+  background:rgba(38,27,20,0.03);
+  border:1px solid rgba(38,27,20,0.09);
+  border-radius:8px;
+  padding:2px;
+}
+.option.selected .opt-visual.sparkline{background:rgba(188,90,51,0.12);border-color:var(--terra);color:var(--terra)}
+
+/* ── DEVELOPMENTAL CRYING CURVE (BARR 2009) ── */
+.dev-curve-card{
+  background:#fff;
+  border:1.5px solid rgba(188,90,51,0.22);
+  border-radius:18px;
+  padding:20px;
+  margin-top:0;
+  margin-bottom:16px;
+  box-shadow:0 6px 20px rgba(38,27,20,0.04);
+}
+.dcc-header{margin-bottom:12px}
+.dcc-badge{
+  font-family:var(--fm);
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--terra-deep);
+  background:rgba(188,90,51,0.08);
+  padding:3px 8px;
+  border-radius:6px;
+  display:inline-block;
+  margin-bottom:4px;
+}
+.dcc-title{font-family:var(--fd);font-size:18px;font-weight:700;color:var(--ink);line-height:1.3}
+.dcc-graph-wrap{position:relative;width:100%;margin:10px 0 14px}
+.dcc-graph-wrap svg{display:block;width:100%;height:auto}
+.dcc-footer{
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  background:rgba(188,90,51,0.05);
+  border-radius:12px;
+  padding:11px 14px;
+  font-size:12.5px;
+  color:var(--ink);
+  line-height:1.5;
+}
+.dcc-status-dot{width:8px;height:8px;border-radius:50%;background:var(--terra);flex-shrink:0;margin-top:5px}
+
+/* ── AGE INTEGER SELECTOR & STEPPER ── */
+.age-integer-card{
+  background:#fff;
+  border:1.5px solid rgba(188,90,51,0.18);
+  border-radius:18px;
+  padding:22px;
+  margin-top:16px;
+  box-shadow:0 6px 20px rgba(38,27,20,0.03);
+}
+.aic-label{
+  font-family:var(--fm);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:14px;
+  text-align:center;
+}
+.aic-stepper-wrap{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:18px;
+  margin-bottom:18px;
+}
+.aic-step-btn{
+  width:46px;
+  height:46px;
+  border-radius:12px;
+  background:rgba(38,27,20,0.04);
+  border:1.5px solid rgba(38,27,20,0.12);
+  color:var(--ink);
+  font-size:24px;
+  font-weight:700;
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+  transition:all .15s ease;
+  user-select:none;
+}
+.aic-step-btn:hover{background:var(--terra);color:#fff;border-color:var(--terra)}
+.aic-val-box{display:flex;flex-direction:column;align-items:center;min-width:130px}
+.aic-val-num{font-family:var(--fd);font-size:46px;font-weight:700;color:var(--terra-deep);line-height:1}
+.aic-val-unit{font-family:var(--fm);font-size:11.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:2px}
+
+.aic-slider-wrap{margin-bottom:18px;padding:0 4px}
+.aic-slider{
+  width:100%;
+  height:8px;
+  border-radius:999px;
+  background:linear-gradient(90deg, #F1E5D3 0%, #BC5A33 38%, #6C8759 75%, #F1E5D3 100%);
+  outline:none;
+  appearance:none;
+  cursor:pointer;
+}
+.aic-slider::-webkit-slider-thumb{
+  appearance:none;
+  width:24px;
+  height:24px;
+  border-radius:50%;
+  background:var(--terra-deep);
+  border:2.5px solid #fff;
+  box-shadow:0 2px 8px rgba(0,0,0,0.22);
+  cursor:pointer;
+  transition:transform .1s ease;
+}
+.aic-slider-ticks{display:flex;justify-content:space-between;margin-top:6px;font-family:var(--fm);font-size:10px;color:var(--muted-soft)}
+
+.aic-chips-wrap{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:18px}
+.aic-chip{
+  padding:7px 13px;
+  background:rgba(255,255,255,0.85);
+  border:1.5px solid rgba(38,27,20,0.12);
+  border-radius:20px;
+  font-family:var(--fb);
+  font-size:12px;
+  font-weight:600;
+  color:var(--ink);
+  cursor:pointer;
+  transition:all .15s ease;
+}
+.aic-chip:hover{background:rgba(188,90,51,0.08);border-color:var(--terra)}
+.aic-chip.active{background:var(--terra);color:#fff;border-color:var(--terra)}
+
+.aic-classification-box{
+  background:rgba(188,90,51,0.05);
+  border:1px solid rgba(188,90,51,0.15);
+  border-radius:14px;
+  padding:14px 16px;
+}
+.aic-class-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:6px}
+.aic-class-tag{font-family:var(--fm);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--terra-deep)}
+.aic-class-status{font-family:var(--fm);font-size:10.5px;font-weight:600;color:var(--muted)}
+.aic-milestone-text{font-size:13px;color:var(--ink);line-height:1.55}
+
+/* ── 24-HOUR COMPLETE DAY & NIGHT CLOCK ── */
+.duration-clock-card{
+  background:linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(241,229,211,0.45) 100%);
+  border:1.5px solid rgba(38,27,20,0.1);
+  border-radius:18px;
+  padding:16px 20px;
+  margin-bottom:18px;
+  display:flex;
+  align-items:center;
+  gap:18px;
+  box-shadow:0 6px 18px rgba(38,27,20,0.03);
+}
+.dcc-clock-left{flex-shrink:0}
+.analog-clock-svg{display:block;filter:drop-shadow(0 4px 10px rgba(38,27,20,0.08))}
+.dcc-clock-right{flex:1}
+.dcc-clock-kicker{font-family:var(--fm);font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.dcc-clock-val{font-family:var(--fd);font-size:19px;font-weight:700;color:var(--terra-deep);line-height:1.2;margin-bottom:3px}
+.dcc-clock-sub{font-size:12px;color:var(--muted);line-height:1.45}
+
+/* ── BLOG GUIDES & VERIFIED VIDEO SPOTLIGHT ── */
+.blog-recs-section{margin-top:24px;padding-top:20px;border-top:1px dashed rgba(38,27,20,0.15)}
+.blog-recs-title{font-family:var(--fd);font-size:20px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.guide-grid{display:grid;grid-template-columns:1fr;gap:12px;margin:16px 0 24px}
+.guide-card{
+  background:#fff;
+  border:1.5px solid rgba(38,27,20,0.1);
+  border-radius:14px;
+  padding:16px 18px;
+  text-decoration:none;
+  color:inherit;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  transition:all .18s ease;
+}
+.guide-card:hover{border-color:var(--terra);transform:translateY(-1px);box-shadow:0 6px 16px rgba(38,27,20,0.06)}
+.guide-tag{font-family:var(--fm);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--terra)}
+.guide-title{font-family:var(--fd);font-size:17px;font-weight:700;color:var(--ink);line-height:1.3}
+.guide-summary{font-size:12.5px;color:var(--muted);line-height:1.5}
+.guide-cta{font-size:11.5px;font-weight:700;color:var(--terra-deep);margin-top:4px}
+
+.video-spotlight-card{
+  background:linear-gradient(135deg, rgba(38,27,20,0.03) 0%, rgba(188,90,51,0.06) 100%);
+  border:1.5px solid rgba(188,90,51,0.22);
+  border-radius:16px;
+  padding:18px 20px;
+  margin:20px 0;
+}
+.vs-badge{font-family:var(--fm);font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--terra-deep);margin-bottom:6px}
+.vs-title{font-size:14.5px;font-weight:700;color:var(--ink);line-height:1.35;margin-bottom:4px}
+.vs-desc{font-size:12.5px;color:var(--muted);line-height:1.5;margin-bottom:12px}
+.vs-actions{display:flex;gap:10px;flex-wrap:wrap}
+.vs-link-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 14px;
+  background:var(--ink);
+  color:#fff;
+  border-radius:8px;
+  font-size:12px;
+  font-weight:700;
+  text-decoration:none;
+  transition:all .18s;
+}
+.vs-link-btn:hover{background:var(--terra);color:#fff}
+.vs-secondary-link{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 12px;
+  background:transparent;
+  border:1px solid rgba(38,27,20,0.18);
+  border-radius:8px;
+  font-size:12px;
+  font-weight:600;
+  color:var(--muted);
+  text-decoration:none;
+  transition:all .15s;
+}
+.vs-secondary-link:hover{background:rgba(0,0,0,0.04);color:var(--ink)}
+
 </style>
 </head>
 <body>
+
+<div class="nursery-bg-elements" aria-hidden="true">
+  <svg class="nb-item nb-stars" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M20 20 L25 35 L40 40 L25 45 L20 60 L15 45 L0 40 L15 35 Z" fill="currentColor" opacity="0.3"/>
+    <circle cx="70" cy="25" r="3" fill="currentColor"/>
+    <circle cx="85" cy="50" r="2" fill="currentColor"/>
+    <path d="M60 70 L63 78 L72 80 L63 83 L60 92 L57 83 L48 80 L57 78 Z" fill="currentColor" opacity="0.25"/>
+  </svg>
+  <svg class="nb-item sage nb-mobile" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2">
+    <line x1="50" y1="5" x2="50" y2="25"/>
+    <line x1="20" y1="25" x2="80" y2="25"/>
+    <line x1="20" y1="25" x2="20" y2="50"/>
+    <line x1="80" y1="25" x2="80" y2="45"/>
+    <circle cx="20" cy="58" r="8" fill="currentColor" opacity="0.2"/>
+    <polygon points="80,50 88,64 72,64" fill="currentColor" opacity="0.2"/>
+  </svg>
+  <svg class="nb-item nb-blocks" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2">
+    <rect x="15" y="45" width="34" height="34" rx="4" stroke="currentColor"/>
+    <text x="25" y="68" font-family="sans-serif" font-size="18" font-weight="bold" fill="currentColor">A</text>
+    <rect x="42" y="18" width="34" height="34" rx="4" stroke="currentColor"/>
+    <text x="52" y="41" font-family="sans-serif" font-size="18" font-weight="bold" fill="currentColor">B</text>
+  </svg>
+  <svg class="nb-item gold nb-moon" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M50 15 A32 32 0 1 0 78 72 A28 28 0 0 1 50 15 Z" fill="currentColor" opacity="0.25"/>
+  </svg>
+</div>
+
 <a href="#main-content" class="skip-link">Skip to main content</a>
 <div class="glow" aria-hidden="true"></div>
 <div class="glow2" aria-hidden="true"></div>
@@ -380,10 +763,29 @@ a{color:inherit}
 
   <!-- SCREEN 2: QUIZ -->
   <div id="quizScreen" class="card hidden">
+    <!-- Zeigarnik Effect Completion Anchor -->
+    <div class="zeigarnik-strip" id="zeigarnikStrip">
+      <div class="z-left">
+        <div class="z-pulse-dot"></div>
+        <span>Assessment in progress: <strong><span id="zCountdown">8 questions left</span></strong> to your customized plan</span>
+      </div>
+      <div class="z-right" id="zTimer"><span class="timer-tick-dot"></span> 90s remaining</div>
+    </div>
+
+    <!-- Crawling Baby Progress Rail -->
+    <div class="crawler-track-container" aria-label="Assessment Progress">
+      <div class="crawler-baby-marker" id="crawlerMarker">
+        <img src="images/crawling-baby.png" alt="Baby crawling forward" class="crawler-baby-img" width="50" height="30" onerror="this.onerror=null; this.src='https://placehold.co/100x60/FAF4EC/BA5731?text=Baby';">
+      </div>
+      <div class="progress-rail">
+        <div class="progress-bar-fill" id="progressFill"></div>
+        <div class="crawler-destination-star" title="Action Card">✨</div>
+      </div>
+    </div>
+
     <div class="q-meta">
-      <span class="q-count" id="qCount">1 / 7</span>
-      <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
-      <span class="q-timer" title="Time elapsed" aria-label="Time elapsed"><span class="dot" aria-hidden="true"></span><span id="qTimer">0:00</span></span>
+      <span class="q-count" id="qCount">Question 1 of 8</span>
+      <span class="q-timer" id="stepPctText">12% Complete</span>
     </div>
     <div class="q-text" id="qText"></div>
     <div class="q-sub" id="qSub"></div>
@@ -460,6 +862,29 @@ a{color:inherit}
       <div class="result-section reveal" style="border-bottom:none; padding-top:6px;">
         <div class="section-label">What to monitor</div>
         <p class="science-text" id="resultMonitor"></p>
+      </div>
+
+      <!-- In-Depth Practical Blog Guides -->
+      <div class="blog-recs-section" id="blogRecsSection">
+        <div class="section-label">In-depth technique guides</div>
+        <h3 class="blog-recs-title">Step-by-Step Practical Reading</h3>
+        <p class="path-desc">Deep-dive protocols matched to your baby's starting point.</p>
+        <div class="guide-grid" id="guideCardGrid"></div>
+      </div>
+
+      <!-- Verified Technique Demonstration Video Spotlight -->
+      <div class="video-spotlight-card" id="videoSpotlightBox">
+        <div class="vs-badge">Demonstration Video</div>
+        <h3 class="vs-title" id="vsTitle">Technique Video</h3>
+        <p class="vs-desc" id="vsDesc">Watch the exact physical positioning demonstrated step-by-step.</p>
+        <div class="vs-actions">
+          <a class="vs-link-btn" id="vsLinkBtn" href="https://www.tiktok.com/@colicprotocol" target="_blank" rel="noopener">
+            <span>Watch Demonstration</span> &rarr;
+          </a>
+          <a class="vs-secondary-link" id="vsIgLink" href="https://instagram.com/colicprotocol" target="_blank" rel="noopener">
+            <span>Instagram @colicprotocol</span>
+          </a>
+        </div>
       </div>
     </div>
     <div class="cta-section">
