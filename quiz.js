@@ -600,14 +600,18 @@ function renderRedFlag() {
   rfSelected.clear();
   document.getElementById('rfContinue').classList.remove('visible');
 
-  const all = RED_FLAG_OPTIONS.map(o => o.text).concat(['None of these']);
-  all.forEach((text, i) => {
+  const all = RED_FLAG_OPTIONS.concat([{
+    text: 'None of these',
+    visual: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#698457" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1.2" fill="#698457"/><circle cx="15" cy="10" r="1.2" fill="#698457"/><path d="M8 14c1.5 2 6.5 2 8 0"/></svg>`
+  }]);
+  all.forEach((item, i) => {
     const div = document.createElement('div');
     div.className = 'option';
     div.setAttribute('role', 'checkbox');
     div.setAttribute('aria-checked', 'false');
     div.setAttribute('tabindex', '0');
-    div.innerHTML = `<span class="opt-text">${text}</span><span class="opt-check" aria-hidden="true"></span>`;
+    const visualHtml = item.visual ? `<div class="opt-visual">${item.visual}</div>` : '';
+    div.innerHTML = `<span class="opt-check" aria-hidden="true"></span>${visualHtml}<span class="opt-text">${item.text}</span>`;
     div.onclick = () => toggleRedFlag(i, div);
     div.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleRedFlag(i, div); } };
     box.appendChild(div);
@@ -758,6 +762,122 @@ function renderQuestion() {
     box.appendChild(div);
   });
   applyLogHint(qIndex);
+}
+
+
+// MATHEMATICAL COORDINATES ALONG BARR (2009) CRYING CURVE (Weeks 0 to 16)
+function getCurveCoords(w) {
+  const clampedW = Math.min(16, Math.max(0, w));
+  const x = Math.round(40 + (clampedW / 16) * 460);
+  let y = 135;
+  if (clampedW <= 6) {
+    const t = clampedW / 6;
+    y = Math.round(135 - 100 * Math.sin(t * Math.PI / 2));
+  } else {
+    const t = (clampedW - 6) / 10;
+    y = Math.round(35 + 105 * Math.sin(t * Math.PI / 2));
+  }
+  return { x, y };
+}
+
+// CLASSIFY INTEGER AGE INTO COHORTS FOR CONTINUITY (0-2, 3-5, 6-8, 9-12, 12+)
+function classifyAge(w) {
+  const num = parseInt(w, 10) || 6;
+  if (num <= 2) {
+    return {
+      weeks: num,
+      range: "0 to 2 weeks",
+      bracket: "0-2",
+      tag: "0 to 2 weeks · Newborn Adjustment",
+      status: "Early Transition Phase",
+      milestone: "<strong>Newborn Adjustment Window:</strong> Crying is typically brief and hunger-driven. Gut microbiome colonization is just beginning; infant suck-swallow coordination is learning flow pacing. Wind and frequent burping are normal as swallowing coordination stabilizes."
+    };
+  } else if (num <= 5) {
+    return {
+      weeks: num,
+      range: "3 to 5 weeks",
+      bracket: "3-5",
+      tag: "3 to 5 weeks · The Escalation Phase",
+      status: "Rising Sensory Awareness",
+      milestone: "<strong>The Escalation Phase:</strong> Evening crying begins clustering ('the witching hour'). The infant's sensory awareness expands rapidly, while visceral peristalsis surges. Parents often start trying gas drops or gripe water during this window."
+    };
+  } else if (num <= 8) {
+    return {
+      weeks: num,
+      range: "6 to 8 weeks",
+      bracket: "6-8",
+      tag: "6 to 8 weeks · Peak Colic Window",
+      status: "Biological Crying Peak (Barr 2009)",
+      milestone: "<strong>The Developmental Peak:</strong> Infant crying commonly reaches its maximum daily duration and intensity (often 2 to 3+ hours daily per Barr 2009). The sensory threshold is at its most reactive point, while biological self-soothing circuitry is still immature. This is the hardest stretch, not a parental failure."
+    };
+  } else if (num <= 12) {
+    return {
+      weeks: num,
+      range: "9 to 12 weeks",
+      bracket: "9-12",
+      tag: "9 to 12 weeks · The Turning Point",
+      status: "Developmental Easing",
+      milestone: "<strong>The Turning Point:</strong> Crying duration begins to drop for many babies. Sleep intervals lengthen slightly; the gut microbiome diversifies and oral motor latch mechanics mature."
+    };
+  } else {
+    return {
+      weeks: num,
+      range: "Older than 12 weeks",
+      bracket: "12+",
+      tag: "Older than 12 weeks · Settled Horizon",
+      status: "Late Infancy Transition",
+      milestone: "<strong>The Easing Window:</strong> Colic typically eases by about 3 to 4 months as circadian rhythm and melatonin regulation stabilize. If intense, inconsolable crying persists past 12-16 weeks, consult your pediatrician to rule out food sensitivities or other clinical factors."
+    };
+  }
+}
+
+let currentAgeWeeks = 6;
+let autoAdvanceTimer = null;
+
+function setAgeWeeks(val) {
+  const num = Math.min(16, Math.max(1, parseInt(val, 10) || 1));
+  currentAgeWeeks = num;
+  babyAgeWeeks = num;
+
+  const numEl = document.getElementById('ageValDisplay');
+  if (numEl) numEl.textContent = num;
+
+  const slider = document.getElementById('ageSlider');
+  if (slider) slider.value = num;
+
+  document.querySelectorAll('.aic-chip').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  const matchingChip = document.getElementById('chip-' + num);
+  if (matchingChip) matchingChip.classList.add('active');
+
+  const coords = getCurveCoords(num);
+  const pinGroup = document.getElementById('curvePinGroup');
+  if (pinGroup) {
+    pinGroup.setAttribute('transform', 'translate(' + coords.x + ', ' + coords.y + ')');
+    const lineEl = document.getElementById('curvePinLine');
+    if (lineEl) lineEl.setAttribute('y2', 140 - coords.y);
+    const pinText = document.getElementById('curvePinText');
+    if (pinText) pinText.textContent = 'Week ' + num + (num === 6 ? ' (Peak)' : '');
+  }
+
+  const classification = classifyAge(num);
+  const tagEl = document.getElementById('ageClassTag');
+  if (tagEl) tagEl.textContent = classification.tag;
+  const statusEl = document.getElementById('ageClassStatus');
+  if (statusEl) statusEl.textContent = classification.status;
+  const milestoneEl = document.getElementById('ageClassMilestone');
+  if (milestoneEl) milestoneEl.innerHTML = classification.milestone;
+
+  const btn = document.getElementById('continueBtn');
+  if (btn) {
+    btn.classList.add('visible');
+    btn.textContent = 'Continue with ' + num + ' Weeks →';
+  }
+}
+
+function adjustAgeWeeks(delta) {
+  setAgeWeeks(currentAgeWeeks + delta);
 }
 
 // RENDER QUESTION 1: DEVELOPMENTAL CRYING CURVE GRAPH ON TOP + INTEGER INPUT BELOW
