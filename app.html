@@ -100,7 +100,7 @@
     }
 
     .container {
-      max-width: 580px;
+      max-width: 600px;
       margin: 0 auto;
       padding: 16px;
     }
@@ -380,7 +380,7 @@
     .modal-card {
       background: #ffffff;
       border-radius: 12px;
-      max-width: 500px;
+      max-width: 520px;
       width: 100%;
       max-height: 85vh;
       overflow-y: auto;
@@ -504,50 +504,94 @@
       color: var(--terra);
     }
 
-    /* Crying Curve */
-    .curve-container {
+    /* Time-of-Day Grid Matrix */
+    .tod-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 12px 0;
+    }
+    .tod-card {
       background: #faf6f0;
       border: 1px solid var(--bd);
       border-radius: 8px;
       padding: 12px;
-      margin: 10px 0;
+      position: relative;
     }
-    .curve-track {
+    .tod-card.active-window {
+      border: 2px solid var(--terra);
+      background: #fffdfb;
+    }
+    .tod-header {
       display: flex;
       justify-content: space-between;
-      position: relative;
-      margin-top: 22px;
-      padding: 0 6px;
+      align-items: center;
+      margin-bottom: 4px;
     }
-    .curve-track::before {
-      content: '';
-      position: absolute;
-      top: 8px;
-      left: 10px;
-      right: 10px;
-      height: 3px;
-      background: #d8cebe;
-      z-index: 1;
-    }
-    .curve-point {
-      position: relative;
-      z-index: 2;
-      text-align: center;
-      font-size: 10px;
+    .tod-title {
       font-weight: 700;
-      color: var(--mu);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
-    .curve-dot {
-      width: 17px;
-      height: 17px;
-      border-radius: 50%;
+    .tod-time { font-size: 10.5px; color: var(--mu); }
+    .tod-dominant {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-top: 4px;
+    }
+    .tod-cue { font-size: 11.5px; color: var(--mu); margin-top: 2px; }
+
+    /* Brick on Brick Educational Studies Layout */
+    .brick-card {
       background: #fff;
-      border: 3px solid #d8cebe;
-      margin: 0 auto 3px;
+      border: 1px solid var(--bd);
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 12px;
     }
-    .curve-point.active .curve-dot { background: var(--terra); border-color: var(--terra); }
-    .curve-point.active { color: var(--terra); }
-    .curve-point.peak .curve-dot { border-color: var(--gold); }
+    .brick-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+    .brick-number {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--terra);
+    }
+    .brick-title {
+      font-family: var(--font-serif);
+      font-size: 19px;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    /* Differential Table (Colic vs Reflux) */
+    .diff-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 12.5px;
+    }
+    .diff-table th {
+      background: #efebe7;
+      text-align: left;
+      padding: 8px 10px;
+      border: 1px solid var(--bd);
+      font-weight: 700;
+    }
+    .diff-table td {
+      padding: 8px 10px;
+      border: 1px solid var(--bd);
+      vertical-align: top;
+      background: #fff;
+    }
+    .diff-table tr:nth-child(even) td { background: #faf8f5; }
   </style>
 </head>
 <body>
@@ -604,7 +648,7 @@
           Your log shows crying occurs within 30 minutes of a bottle feed with clicking sounds. Pacing allows your baby to control milk velocity and swallow less air.
         </p>
 
-        <!-- Illustrated Step Graphics (Using Real Top Social Posts) -->
+        <!-- Illustrated Step Graphics -->
         <div class="graphics-container" id="graphics-container">
           <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--mu); margin-bottom: 8px;">
             Illustrated Side-by-Side Technique (Paced Feeding)
@@ -797,13 +841,80 @@
       </div>
     </div>
 
-    <!-- VIEW 3: INGESTED ASSESSMENT PROFILE -->
+    <!-- VIEW 3: DYNAMIC ASSESSMENT & TIME-OF-DAY PATTERN TRACKER -->
     <div id="view-assessment" style="display: none;">
       <div class="c">
-        <span class="badge badge-terra">Ingested 90-Second Quiz Data</span>
-        <h2>Assessment Diagnostic Profile</h2>
-        <p class="mu">Connected directly to your quiz.js diagnostic results:</p>
+        <span class="badge badge-terra">Dynamic Assessment</span>
+        <h2>Starting-Point Pattern Profiler</h2>
+        <p class="mu">Colic signs fluctuate across the day. Track which starting point dominates during different time windows:</p>
 
+        <!-- 24-Hour Day/Night Pattern Heatmap Matrix -->
+        <div class="tod-grid">
+          <!-- Morning -->
+          <div class="tod-card" id="tod-morning">
+            <div class="tod-header">
+              <span class="tod-title" style="color: var(--terra);">Morning</span>
+              <span class="tod-time">6 AM - 12 PM</span>
+            </div>
+            <div class="tod-dominant" id="tod-dom-morning">Feeding Mechanics</div>
+            <div class="tod-cue">Fast eager flow, milk leakage, clicking.</div>
+          </div>
+          <!-- Afternoon -->
+          <div class="tod-card" id="tod-afternoon">
+            <div class="tod-header">
+              <span class="tod-title" style="color: var(--sage);">Afternoon</span>
+              <span class="tod-time">12 PM - 5 PM</span>
+            </div>
+            <div class="tod-dominant" id="tod-dom-afternoon">Gut & Gas Buildup</div>
+            <div class="tod-cue">Hard belly, knees pulling up after feeds.</div>
+          </div>
+          <!-- Evening / Witching Hour -->
+          <div class="tod-card active-window" id="tod-evening">
+            <div class="tod-header">
+              <span class="tod-title" style="color: var(--gold);">Evening (Peak)</span>
+              <span class="tod-time">5 PM - 10 PM</span>
+            </div>
+            <div class="tod-dominant" id="tod-dom-evening">Overwhelmed Nervous System</div>
+            <div class="tod-cue">Sensory saturation, startling, cluster crying.</div>
+          </div>
+          <!-- Night / Midnight -->
+          <div class="tod-card" id="tod-night">
+            <div class="tod-header">
+              <span class="tod-title" style="color: var(--mu);">Night / 2 AM</span>
+              <span class="tod-time">10 PM - 6 AM</span>
+            </div>
+            <div class="tod-dominant" id="tod-dom-night">Midnight Protocol</div>
+            <div class="tod-cue">Dim nursery, low brown noise, Tiger Hold.</div>
+          </div>
+        </div>
+
+        <!-- 30-Second Real-Time Check-In -->
+        <div style="background: #faf6f0; border: 1px solid var(--bd); border-radius: 8px; padding: 14px; margin-top: 14px;">
+          <h3>Log Current Starting-Point Signs</h3>
+          <p class="mu" style="margin-bottom: 10px;">Notice a shift right now? Log what you see to update your 24-hour profile:</p>
+          
+          <label style="font-size: 12px; font-weight: 700; color: var(--mu);">Current Time Window:</label>
+          <select id="recheck-window" style="width: 100%; padding: 8px; margin: 4px 0 10px; border: 1px solid var(--bd); border-radius: 6px;">
+            <option value="morning">Morning (6 AM - 12 PM)</option>
+            <option value="afternoon">Afternoon (12 PM - 5 PM)</option>
+            <option value="evening" selected>Evening Witching Hour (5 PM - 10 PM)</option>
+            <option value="night">Night (10 PM - 6 AM)</option>
+          </select>
+
+          <label style="font-size: 12px; font-weight: 700; color: var(--mu);">Primary Behavior Right Now:</label>
+          <select id="recheck-symptom" style="width: 100%; padding: 8px; margin: 4px 0 12px; border: 1px solid var(--bd); border-radius: 6px;">
+            <option value="mech">Clicking, gulping air, or milk leaking during feeds</option>
+            <option value="ns" selected>Startling easily, crying builds into evening peak</option>
+            <option value="gut">Hard tight tummy, pulling knees up to chest</option>
+          </select>
+
+          <button class="btn-terra btn-sm" style="width: 100%;" onclick="saveTimepointCheckIn()">
+            Update 24-Hour Profile & Re-Rank Step
+          </button>
+        </div>
+
+        <h3 style="margin-top: 20px;">Baseline Assessment Diagnostic Scores</h3>
+        <p class="mu">Ingested from your 90-second assessment:</p>
         <div class="score-breakdown">
           <div class="score-tile active-type" id="score-tile-fm">
             <b id="score-fm-val">78%</b>
@@ -819,31 +930,139 @@
           </div>
         </div>
 
-        <h3>Why This Starting-Point Pattern Was Flagged</h3>
-        <p class="mu" style="margin-bottom: 12px;" id="assessment-reason-text">
-          Your answers showed clicking sounds during feeds, heavy swallowed air, and crying occurring within 30 minutes of eating.
-        </p>
-
-        <h3>Techniques Already Tried (From Quiz)</h3>
-        <div style="display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0 14px;" id="assessment-tried-tags">
-          <span class="evidence-tag">Gripe Water (No shift)</span>
-          <span class="evidence-tag">Sound Machine (Partial)</span>
-          <span class="evidence-tag">Rocking/Bouncing (No shift)</span>
-        </div>
-
-        <button class="btn-secondary" onclick="openProfileModal()">Edit Intake Profile</button>
+        <button class="btn-secondary" onclick="openProfileModal()" style="margin-top: 8px;">Edit Intake Profile</button>
       </div>
     </div>
 
-    <!-- VIEW 4: CLINICAL EVIDENCE VAULT -->
+    <!-- VIEW 4: CLINICAL EVIDENCE VAULT (BRICK ON BRICK CURRICULUM) -->
     <div id="view-evidence" style="display: none;">
       <div class="c">
-        <span class="badge badge-terra">Clinical Vault</span>
-        <h2>The 17 Research Papers</h2>
-        <p class="mu" style="margin-bottom: 12px;">
-          Every recommendation in the Blueprint is grounded in peer-reviewed clinical research. Tap any study to view what the data showed, and what it did not show.
+        <span class="badge badge-terra">Brick-on-Brick Clinical Vault</span>
+        <h2>The Evidence Curriculum</h2>
+        <p class="mu" style="margin-bottom: 14px;">
+          Built brick on brick from the 44-page Blueprint so you understand exactly what the research shows, starting with what colic is and isn't.
         </p>
-        <div id="citation-list"></div>
+
+        <!-- BRICK 1: WHAT COLIC ACTUALLY IS -->
+        <div class="brick-card">
+          <div class="brick-number">Brick 1 &bull; Foundations</div>
+          <div class="brick-title">What Colic Actually Is (and Isn't)</div>
+          <p class="mu" style="margin-top: 4px;">
+            Colic is not an internal disease, a stomach malformation, or a diagnosis of failure. Since 1954, pediatricians have defined it by a crying timeline: Wessel's Rule of Three.
+          </p>
+          <div class="study-box" style="margin-top: 8px;">
+            <strong>Wessel et al., 1954 (Pediatrics):</strong> Crying for &gt;3 hours a day, &gt;3 days a week, for &gt;3 weeks in an otherwise healthy, growing baby. Colic usually peaks around week 6 and eases naturally by 3 to 4 months.
+          </div>
+        </div>
+
+        <!-- BRICK 2: COLIC VS REFLUX VS CMPA -->
+        <div class="brick-card" style="border-left: 3px solid var(--terra);">
+          <div class="brick-number" style="color: var(--terra);">Brick 2 &bull; Differential Triage</div>
+          <div class="brick-title">Colic or Reflux? (How to Tell)</div>
+          <p class="mu" style="margin-top: 4px;">
+            Reflux is the condition most often confused with colic. In reflux, the stomach valve is immature, causing stomach contents to flow back up. Use this clinical check to tell them apart:
+          </p>
+
+          <table class="diff-table">
+            <thead>
+              <tr>
+                <th>Sign</th>
+                <th>Colic</th>
+                <th>Reflux</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Timing</strong></td>
+                <td>Often worse in the evening (cluster crying)</td>
+                <td>Often worse right after feeds, any time of day</td>
+              </tr>
+              <tr>
+                <td><strong>Spit-Up</strong></td>
+                <td>Not a main feature</td>
+                <td>Frequent spit-up or painful wet burps</td>
+              </tr>
+              <tr>
+                <td><strong>Back Arching</strong></td>
+                <td>Can happen during acute crying spells</td>
+                <td>Often happens during or right after a feed</td>
+              </tr>
+              <tr>
+                <td><strong>Feeding</strong></td>
+                <td>Usually feeds normally and eagerly</td>
+                <td>May arch away or refuse bottle/breast in pain</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div style="background: var(--terra-soft); padding: 10px; border-radius: 6px; font-size: 12px; line-height: 1.4;">
+            <strong>The 5-Sign Cow's Milk Allergy Check:</strong> Blood or mucus in stool, severe eczema, projectile vomiting, hives, or poor weight gain. If present, contact your pediatrician for an allergy review, not simple colic soothing.
+          </div>
+        </div>
+
+        <!-- BRICK 3: FEEDING MECHANICS -->
+        <div class="brick-card">
+          <div class="brick-number">Brick 3 &bull; Mechanics Physics</div>
+          <div class="brick-title">Bottle Pacing, Venting & Latch Physics</div>
+          <p class="mu" style="margin-top: 4px;">
+            When feeding goes too fast, excess swallowed air causes abdominal discomfort later in the evening.
+          </p>
+          <div class="study-box">
+            <strong>2025 Paced Feeding Trial (29 Pairs):</strong> Pacing reliably slows milk flow and extends feed duration to match breastfeeding pace without reducing total nutrition.
+          </div>
+          <div class="study-box">
+            <strong>JAMA Network Open, 2026 (1,055 Infants):</strong> Bottom-vented bottles reduced immediate post-feed fussing, but overall colic rates remained similar across bottle designs. Mechanics matter more than expensive bottle brands.
+          </div>
+        </div>
+
+        <!-- BRICK 4: GUT & PROBIOTICS -->
+        <div class="brick-card">
+          <div class="brick-number">Brick 4 &bull; Gut & Digestion</div>
+          <div class="brick-title">The Honest Probiotic Picture (L. reuteri)</div>
+          <p class="mu" style="margin-top: 4px;">
+            The research on <em>Lactobacillus reuteri</em> DSM 17938 is genuinely mixed, and depends on how your baby is fed:
+          </p>
+          <div class="study-box">
+            <strong>Savino et al., 2010 (Pediatrics):</strong> Found less crying by day 21 with L. reuteri in 50 exclusively breastfed infants.
+          </div>
+          <div class="study-box" style="border-left-color: var(--terra);">
+            <strong>Sung et al., 2014 (BMJ):</strong> A larger trial in 167 mixed and formula-fed infants found no benefit over placebo. Formula parents should lead with feeding mechanics and soothing steps, not probiotics.
+          </div>
+          <div class="study-box">
+            <strong>Biagioli et al., 2016 (Cochrane Review):</strong> Simethicone gas drops (Mylicon) showed no statistically significant difference from placebo.
+          </div>
+        </div>
+
+        <!-- BRICK 5: SENSORY ENVIRONMENT -->
+        <div class="brick-card">
+          <div class="brick-number">Brick 5 &bull; Sensory Science</div>
+          <div class="brick-title">Sound Safety & The Tiger Hold</div>
+          <p class="mu" style="margin-top: 4px;">
+            A newborn's sensory nervous system is brand new. Dim rooms, continuous brown noise, and firm holds give comfort in the moment:
+          </p>
+          <div class="study-box">
+            <strong>Hugh et al., 2014 & AAP 2023 Technical Report:</strong> Tested 14 sound machines; every one exceeded the safe 50 dBA nursery limit at max volume. Sound should always be quiet, low, on a timer, and across the room.
+          </div>
+          <div class="study-box">
+            <strong>Barr et al., 1991 (Pediatrics):</strong> Extra carrying does not shorten the underlying course of colic. The Tiger Hold is an essential comfort hold for tonight, not a cure.
+          </div>
+        </div>
+
+        <!-- BRICK 6: SLEEP & PARENT HEALTH -->
+        <div class="brick-card">
+          <div class="brick-number">Brick 6 &bull; Outlook & Parent Health</div>
+          <div class="brick-title">Long-Term Outcomes & Parent Wellbeing</div>
+          <p class="mu" style="margin-top: 4px;">
+            What the latest research says about your baby's future and your own mental health:
+          </p>
+          <div class="study-box">
+            <strong>Liao et al., 2026 (Scientific Reports, 19,191 Infants):</strong> Found a statistical association with childhood gut sensitivity, but no evidence of lasting cognitive, behavioral, or developmental harm. The large majority of colicky babies grow up completely healthy.
+          </div>
+          <div class="study-box">
+            <strong>Pediatrics Systematic Review, 2026 (2,508 Parents):</strong> Structured parent education with actionable coping steps measurably reduced parental depression and anxiety, protecting the caregiver while the infant matures.
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -1039,7 +1258,7 @@
     </div>
   </div>
 
-  <!-- STUDY CITATION DETAIL MODAL -->
+  <!-- CITATION / DETAIL MODAL -->
   <div class="modal-overlay" id="modal-citation">
     <div class="modal-card">
       <button class="modal-close" onclick="closeCitation()">&times;</button>
@@ -1186,7 +1405,6 @@
     }
 
     function init() {
-      // Ingest URL Search Parameters if passed from assessment quiz or Gumroad
       try {
         const p = new URLSearchParams(window.location.search);
         const s = getStore();
@@ -1203,14 +1421,57 @@
       const s = getStore();
       updateHeaderBadge(s);
       renderActiveStep();
-      renderCitations();
       renderTimeline(s);
       startMidnightClock();
+      highlightActiveTimeWindow();
     }
 
     function updateHeaderBadge(s) {
       const label = s.baby ? `${s.baby} &bull; Wk ${s.age || 5}` : `Baby &bull; Wk ${s.age || 5}`;
       document.getElementById('header-baby-badge').innerHTML = label;
+    }
+
+    function highlightActiveTimeWindow() {
+      const hr = new Date().getHours();
+      document.querySelectorAll('.tod-card').forEach(c => c.classList.remove('active-window'));
+      if (hr >= 6 && hr < 12) {
+        document.getElementById('tod-morning').classList.add('active-window');
+        document.getElementById('recheck-window').value = 'morning';
+      } else if (hr >= 12 && hr < 17) {
+        document.getElementById('tod-afternoon').classList.add('active-window');
+        document.getElementById('recheck-window').value = 'afternoon';
+      } else if (hr >= 17 && hr < 22) {
+        document.getElementById('tod-evening').classList.add('active-window');
+        document.getElementById('recheck-window').value = 'evening';
+      } else {
+        document.getElementById('tod-night').classList.add('active-window');
+        document.getElementById('recheck-window').value = 'night';
+      }
+    }
+
+    function saveTimepointCheckIn() {
+      const win = document.getElementById('recheck-window').value;
+      const sym = document.getElementById('recheck-symptom').value;
+      const s = getStore();
+
+      if (sym === 'mech') {
+        state.activeStepIndex = 0; // Paced feeding
+        if (win === 'morning') document.getElementById('tod-dom-morning').innerText = 'Feeding Mechanics (Logged)';
+        else if (win === 'afternoon') document.getElementById('tod-dom-afternoon').innerText = 'Feeding Mechanics (Logged)';
+        else if (win === 'evening') document.getElementById('tod-dom-evening').innerText = 'Feeding Mechanics (Logged)';
+        else document.getElementById('tod-dom-night').innerText = 'Feeding Mechanics (Logged)';
+      } else if (sym === 'ns') {
+        state.activeStepIndex = 1; // Tiger Hold & sensory
+        if (win === 'evening') document.getElementById('tod-dom-evening').innerText = 'Nervous System (Logged)';
+        else if (win === 'afternoon') document.getElementById('tod-dom-afternoon').innerText = 'Sensory Overwhelm (Logged)';
+      } else {
+        state.activeStepIndex = 1;
+        if (win === 'afternoon') document.getElementById('tod-dom-afternoon').innerText = 'Gut & Gas Buildup (Logged)';
+      }
+
+      renderActiveStep();
+      alert(`Timepoint recorded for ${win}! Starting step updated on 3 AM Console.`);
+      switchTab('console');
     }
 
     function renderActiveStep() {
@@ -1278,43 +1539,6 @@
           </div>
         `;
       }
-    }
-
-    // Ingest Assessment Quiz Results
-    function ingestAssessmentQuiz(type, dominantPct) {
-      state.assessmentType = type;
-      const s = getStore();
-      s.colic_type = type;
-
-      if (type === 'FM') {
-        state.activeStepIndex = 0;
-        document.getElementById('score-fm-val').innerText = dominantPct + '%';
-        document.getElementById('score-ns-val').innerText = '14%';
-        document.getElementById('score-gut-val').innerText = '8%';
-        document.getElementById('score-tile-fm').className = 'score-tile active-type';
-        document.getElementById('score-tile-ns').className = 'score-tile';
-        document.getElementById('score-tile-gut').className = 'score-tile';
-        document.getElementById('assessment-reason-text').innerText = 'Your assessment responses identified swallowed air, clicking during feeds, and discomfort within 30 minutes of eating.';
-        document.getElementById('m3-title').innerText = '3. Paced Feeding Soothing Execution';
-        document.getElementById('m3-desc').innerText = 'Active Step: Hold bottle horizontal with nipple full of milk. Pause every 20-30s.';
-        document.getElementById('m3-img').src = '/images/blog/bottle-angle-correct-paced.jpg';
-      } else if (type === 'NS') {
-        state.activeStepIndex = 1;
-        document.getElementById('score-fm-val').innerText = '10%';
-        document.getElementById('score-ns-val').innerText = dominantPct + '%';
-        document.getElementById('score-gut-val').innerText = '8%';
-        document.getElementById('score-tile-fm').className = 'score-tile';
-        document.getElementById('score-tile-ns').className = 'score-tile active-type';
-        document.getElementById('score-tile-gut').className = 'score-tile';
-        document.getElementById('assessment-reason-text').innerText = 'Your assessment responses identified intense evening cluster crying (after 5 PM), sensory startling, and back arching without feed correlation.';
-        document.getElementById('m3-title').innerText = '3. Tiger Hold Soothing Execution';
-        document.getElementById('m3-desc').innerText = 'Active Step: Lay baby face down on forearm. Head turned safely near elbow. Rhythmic sway.';
-        document.getElementById('m3-img').src = '/images/blog/calms-face-down-hold.jpg';
-      }
-
-      saveStore(s);
-      renderActiveStep();
-      switchTab('assessment');
     }
 
     // MIDNIGHT PROTOCOL 4-STAGE ENGINE
@@ -1579,17 +1803,6 @@
 
     function openRedFlagModal() { document.getElementById('modal-redflag').style.display = 'flex'; }
     function closeRedFlagModal() { document.getElementById('modal-redflag').style.display = 'none'; }
-
-    function renderCitations() {
-      const container = document.getElementById('citation-list');
-      container.innerHTML = studies.map(s => `
-        <div style="padding: 10px 0; border-bottom: 1px solid var(--bd); cursor: pointer;" onclick="openCitation('${s.id}')">
-          <div style="font-size: 11px; font-weight: 700; color: var(--terra); text-transform: uppercase;">${s.chapter}</div>
-          <strong style="font-size: 14px; color: var(--ink);">${s.title}</strong>
-          <div style="font-size: 12px; color: var(--mu); margin-top: 2px;">${s.meta}</div>
-        </div>
-      `).join('');
-    }
 
     function openCitation(id) {
       const study = studies.find(s => s.id === id);
