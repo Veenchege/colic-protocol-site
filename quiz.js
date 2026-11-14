@@ -1013,7 +1013,7 @@ function renderQuestion() {
     box.appendChild(div);
 
     if (prevMap && prevMap.has(i)) {
-      toggleOption(i, o[1], div, !!q.single, o[2] || null, o[3] || null, o[4] || null, o[0]);
+      toggleOption(i, o[1], div, !!q.single, o[2] || null, o[3] || null, o[4] || null, o[0], true);
     }
   });
 
@@ -1033,7 +1033,7 @@ function applyLogHint(i) {
 }
 
 /* ── OPTION SELECTION & MUTUAL EXCLUSIVITY ───────────────────────────── */
-function toggleOption(idx, weights, el, single, feeding, triedTag, reason, oText) {
+function toggleOption(idx, weights, el, single, feeding, triedTag, reason, oText, isRestoring = false) {
   if (autoAdvanceTimer) {
     clearTimeout(autoAdvanceTimer);
     autoAdvanceTimer = null;
@@ -1097,7 +1097,7 @@ function toggleOption(idx, weights, el, single, feeding, triedTag, reason, oText
   if (selectedMap.size > 0) {
     btn.classList.add('visible');
     btn.textContent = selectedMap.size === 1 ? 'Continue' : `Continue (${selectedMap.size} selected)`;
-    if (single && !wasSelected) {
+    if (single && !wasSelected && !isRestoring) {
       autoAdvanceTimer = setTimeout(() => {
         advanceQ();
       }, 420);
