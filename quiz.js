@@ -964,16 +964,30 @@ function getWedgePath(angle, cx, cy, r) {
 
 function generateClockTicks(cx, cy, r) {
   let s = '';
+  // 24 main hours (cardinal, major 3-hour, and minor hours)
   for (let i = 0; i < 24; i++) {
     const angle = i * 15;
     const rad = (angle - 90) * Math.PI / 180;
     const isMajor = (i % 3 === 0);
-    const innerR = isMajor ? r - 8 : r - 4;
+    const isCardinal = (i % 6 === 0);
+    const tickLen = isCardinal ? 10 : (isMajor ? 7 : 4.5);
+    const innerR = r - tickLen;
     const x1 = (cx + innerR * Math.cos(rad)).toFixed(1);
     const y1 = (cy + innerR * Math.sin(rad)).toFixed(1);
     const x2 = (cx + r * Math.cos(rad)).toFixed(1);
     const y2 = (cy + r * Math.sin(rad)).toFixed(1);
-    s += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${isMajor ? 'rgba(38,27,20,0.45)' : 'rgba(38,27,20,0.18)'}" stroke-width="${isMajor ? 1.5 : 0.8}"/>`;
+    const strokeColor = isCardinal ? '#241A12' : (isMajor ? 'rgba(36,26,18,0.55)' : 'rgba(36,26,18,0.22)');
+    const strokeWidth = isCardinal ? 1.8 : (isMajor ? 1.3 : 0.8);
+    s += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${strokeColor}" stroke-width="${strokeWidth}" stroke-linecap="round"/>`;
+  }
+  // 48 half-hour micro-dots for precision instrument calibration
+  for (let i = 0; i < 24; i++) {
+    const angle = i * 15 + 7.5;
+    const rad = (angle - 90) * Math.PI / 180;
+    const dotR = r - 4;
+    const x = (cx + dotR * Math.cos(rad)).toFixed(1);
+    const y = (cy + dotR * Math.sin(rad)).toFixed(1);
+    s += `<circle cx="${x}" cy="${y}" r="1" fill="rgba(36,26,18,0.22)"/>`;
   }
   return s;
 }
@@ -1015,7 +1029,7 @@ const TIMING_CLOCK_META = [
 ];
 
 function getTimingWedgesSvg(idx) {
-  const cx = 140, cy = 140, rIn = 64, rOut = 104;
+  const cx = 140, cy = 140, rIn = 64, rOut = 102;
   if (idx === 0) {
     const p = getAnnularSectorPath(255, 360, cx, cy, rIn, rOut);
     return `<path d="${p}" fill="#BC5A33" fill-opacity="0.45" stroke="#BC5A33" stroke-width="2"/>`;
@@ -1127,57 +1141,89 @@ function renderDurationClockQuestion() {
       <div class="dcc-title">How Much of Your Baby's Day is Consumed by Crying</div>
     </div>
     <div class="dcc-clock-wrap">
-      <svg viewBox="-6 -6 292 292" width="100%" height="auto">
+      <svg viewBox="-8 -8 296 296" style="width:100%;max-width:320px;height:auto;display:block;margin:0 auto">
         <defs>
           <linearGradient id="q2NightGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stop-color="#232B1E" stop-opacity="0.08"/>
-            <stop offset="100%" stop-color="#241A12" stop-opacity="0.03"/>
+            <stop offset="0%" stop-color="#232B1E" stop-opacity="0.10"/>
+            <stop offset="100%" stop-color="#241A12" stop-opacity="0.04"/>
           </linearGradient>
           <linearGradient id="q2DayGrad" x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" stop-color="#C0963F" stop-opacity="0.03"/>
-            <stop offset="100%" stop-color="#C0963F" stop-opacity="0.10"/>
+            <stop offset="100%" stop-color="#C0963F" stop-opacity="0.12"/>
           </linearGradient>
           <radialGradient id="q2HubGrad" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#2D2218"/>
-            <stop offset="100%" stop-color="#1D150E"/>
+            <stop offset="0%" stop-color="#2E2319"/>
+            <stop offset="85%" stop-color="#1E1610"/>
+            <stop offset="100%" stop-color="#140E0A"/>
+          </radialGradient>
+          <radialGradient id="bezelShine" cx="35%" cy="30%" r="65%">
+            <stop offset="0%" stop-color="#FFFDF9" stop-opacity="0.9"/>
+            <stop offset="60%" stop-color="#FAF4EB"/>
+            <stop offset="100%" stop-color="#ECE1CF"/>
           </radialGradient>
         </defs>
 
-        <circle cx="140" cy="140" r="124" fill="#FAF5EE" stroke="rgba(38,27,20,0.14)" stroke-width="1.5"/>
+        <!-- Precision Machined Instrument Bezel -->
+        <circle cx="140" cy="140" r="136" fill="none" stroke="rgba(36,26,18,0.12)" stroke-width="1.5"/>
+        <circle cx="140" cy="140" r="132" fill="url(#bezelShine)" stroke="#3A2C1F" stroke-width="2.2"/>
+        <circle cx="140" cy="140" r="124" fill="#FAF5EE" stroke="rgba(36,26,18,0.2)" stroke-width="1.2"/>
+
+        <!-- 4 Brass Corner Rivets/Screws (at 45, 135, 225, 315 deg) -->
+        <g id="dialScrewsQ2">
+          <circle cx="230.5" cy="49.5" r="3.2" fill="#C0963F" stroke="#7A5D25" stroke-width="0.8"/>
+          <line x1="228.5" y1="47.5" x2="232.5" y2="51.5" stroke="#4A3815" stroke-width="0.8"/>
+          <circle cx="230.5" cy="230.5" r="3.2" fill="#C0963F" stroke="#7A5D25" stroke-width="0.8"/>
+          <line x1="228.5" y1="232.5" x2="232.5" y2="228.5" stroke="#4A3815" stroke-width="0.8"/>
+          <circle cx="49.5" cy="230.5" r="3.2" fill="#C0963F" stroke="#7A5D25" stroke-width="0.8"/>
+          <line x1="47.5" y1="228.5" x2="51.5" y2="232.5" stroke="#4A3815" stroke-width="0.8"/>
+          <circle cx="49.5" cy="49.5" r="3.2" fill="#C0963F" stroke="#7A5D25" stroke-width="0.8"/>
+          <line x1="47.5" y1="51.5" x2="51.5" y2="47.5" stroke="#4A3815" stroke-width="0.8"/>
+        </g>
+
+        <!-- Day / Night Dial Quadrant Backgrounds -->
         <path d="M 16 140 A 124 124 0 0 1 264 140" fill="url(#q2NightGrad)"/>
         <path d="M 264 140 A 124 124 0 0 1 16 140" fill="url(#q2DayGrad)"/>
+        <line x1="16" y1="140" x2="36" y2="140" stroke="rgba(36,26,18,0.3)" stroke-width="1.5"/>
+        <line x1="244" y1="140" x2="264" y2="140" stroke="rgba(36,26,18,0.3)" stroke-width="1.5"/>
 
-        <line x1="16" y1="140" x2="36" y2="140" stroke="rgba(38,27,20,0.25)" stroke-width="1.5"/>
-        <line x1="244" y1="140" x2="264" y2="140" stroke="rgba(38,27,20,0.25)" stroke-width="1.5"/>
+        <!-- Calibrated Radial Ticks -->
+        ${generateClockTicks(140, 140, 122)}
 
-        ${generateClockTicks(140, 140, 124)}
+        <!-- Concentric Guideway Tracks -->
+        <circle cx="140" cy="140" r="102" fill="none" stroke="rgba(36,26,18,0.12)" stroke-width="1"/>
+        <circle cx="140" cy="140" r="82" fill="none" stroke="rgba(36,26,18,0.06)" stroke-width="0.8" stroke-dasharray="2,3"/>
+        <circle cx="140" cy="140" r="64" fill="none" stroke="rgba(36,26,18,0.15)" stroke-width="1"/>
 
-        <text x="140" y="32" font-family="'DM Sans', sans-serif" font-size="8" font-weight="700" letter-spacing="0.05em" fill="#5C4D3C" text-anchor="middle">&#x1F319; NIGHT &middot; 12 AM</text>
-        <text x="140" y="262" font-family="'DM Sans', sans-serif" font-size="8" font-weight="700" letter-spacing="0.05em" fill="#9C7A28" text-anchor="middle">&#x2600;&#xFE0F; DAY &middot; 12 PM</text>
-        <text x="246" y="143" font-family="'DM Mono', monospace" font-size="7.5" font-weight="700" fill="#7A6856" text-anchor="middle">6 AM</text>
-        <text x="34" y="143" font-family="'DM Mono', monospace" font-size="7.5" font-weight="700" fill="#7A6856" text-anchor="middle">6 PM</text>
+        <!-- Dial Face Hour Markers with generous padding -->
+        <text x="140" y="30" font-family="'DM Sans', sans-serif" font-size="8.5" font-weight="700" letter-spacing="0.06em" fill="#37452F" text-anchor="middle">&#x1F319; NIGHT &middot; 12 AM</text>
+        <text x="140" y="260" font-family="'DM Sans', sans-serif" font-size="8.5" font-weight="700" letter-spacing="0.06em" fill="#9C7A28" text-anchor="middle">&#x2600;&#xFE0F; DAY &middot; 12 PM</text>
+        <text x="250" y="143" font-family="'DM Mono', monospace" font-size="8" font-weight="700" fill="#7A6856" text-anchor="middle">6 AM</text>
+        <text x="30" y="143" font-family="'DM Mono', monospace" font-size="8" font-weight="700" fill="#7A6856" text-anchor="middle">6 PM</text>
 
-        <text x="216" y="66" font-family="'DM Mono', monospace" font-size="7" font-weight="600" fill="rgba(122,104,86,0.65)" text-anchor="middle">3 AM</text>
-        <text x="216" y="222" font-family="'DM Mono', monospace" font-size="7" font-weight="600" fill="rgba(122,104,86,0.65)" text-anchor="middle">9 AM</text>
-        <text x="64" y="222" font-family="'DM Mono', monospace" font-size="7" font-weight="600" fill="rgba(122,104,86,0.65)" text-anchor="middle">3 PM</text>
-        <text x="64" y="66" font-family="'DM Mono', monospace" font-size="7" font-weight="600" fill="rgba(122,104,86,0.65)" text-anchor="middle">9 PM</text>
+        <text x="214" y="66" font-family="'DM Mono', monospace" font-size="7.5" font-weight="600" fill="rgba(122,104,86,0.7)" text-anchor="middle">3 AM</text>
+        <text x="214" y="222" font-family="'DM Mono', monospace" font-size="7.5" font-weight="600" fill="rgba(122,104,86,0.7)" text-anchor="middle">9 AM</text>
+        <text x="66" y="222" font-family="'DM Mono', monospace" font-size="7.5" font-weight="600" fill="rgba(122,104,86,0.7)" text-anchor="middle">3 PM</text>
+        <text x="66" y="66" font-family="'DM Mono', monospace" font-size="7.5" font-weight="600" fill="rgba(122,104,86,0.7)" text-anchor="middle">9 PM</text>
 
         <!-- Annular Base Track -->
-        <path d="M 140 36 A 104 104 0 1 1 139.9 36 L 139.9 76 A 64 64 0 1 0 140 76 Z" fill="rgba(38,27,20,0.035)"/>
+        <path d="M 140 38 A 102 102 0 1 1 139.9 38 L 139.9 76 A 64 64 0 1 0 140 76 Z" fill="rgba(38,27,20,0.035)"/>
 
-        <!-- 3h Wessel Colic Threshold line at 45 degrees -->
-        <line x1="185.3" y1="94.7" x2="224.9" y2="55.1" stroke="#BA5731" stroke-width="1.8" stroke-dasharray="3,3"/>
-        <circle cx="224.9" cy="55.1" r="3.5" fill="#BA5731"/>
-        <text x="210" y="44" font-family="'DM Mono', monospace" font-size="7.5" font-weight="700" fill="#BA5731">3h Threshold</text>
+        <!-- 3h Wessel Colic Threshold benchmark (45 deg) -->
+        <line x1="185.3" y1="94.7" x2="228" y2="52" stroke="#BA5731" stroke-width="2" stroke-dasharray="3,2"/>
+        <circle cx="228" cy="52" r="3.5" fill="#BA5731"/>
+        <rect x="202" y="32" width="68" height="15" rx="7.5" fill="#FAF5EE" stroke="#BA5731" stroke-width="1.2"/>
+        <text x="236" y="42.5" font-family="'DM Mono', monospace" font-size="7.5" font-weight="700" fill="#BA5731" text-anchor="middle">3h Colic Bar</text>
 
         <!-- Dynamic Wedge -->
-        <path id="clockArcWedge" d="${getAnnularSectorPath(0, curAngle, 140, 140, 64, 104)}" fill="${curColor}" fill-opacity="0.45" stroke="${curColor}" stroke-width="2" style="transition: all 0.25s ease;"/>
+        <path id="clockArcWedge" d="${getAnnularSectorPath(0, curAngle, 140, 140, 64, 102)}" fill="${curColor}" fill-opacity="0.48" stroke="${curColor}" stroke-width="2.2" style="transition: all 0.25s ease;"/>
 
-        <!-- Center Hub -->
-        <circle cx="140" cy="140" r="48" fill="url(#q2HubGrad)" stroke="#FAF5EE" stroke-width="3"/>
-        <circle cx="140" cy="140" r="46" fill="none" stroke="rgba(192,150,63,0.3)" stroke-width="1"/>
+        <!-- Center Hub (Machined Gauge Core) -->
+        <circle cx="140" cy="140" r="49" fill="#FAF5ED" stroke="rgba(36,26,18,0.2)" stroke-width="1"/>
+        <circle cx="140" cy="140" r="47" fill="none" stroke="#C0963F" stroke-width="1.6"/>
+        <circle cx="140" cy="140" r="45" fill="url(#q2HubGrad)" stroke="#1B130D" stroke-width="1.5"/>
+        <circle cx="140" cy="140" r="43" fill="none" stroke="rgba(192,150,63,0.35)" stroke-width="1" stroke-dasharray="2,2"/>
         <text id="clockHubVal" x="140" y="136" font-family="'Cormorant Garamond', serif" font-size="22" font-weight="700" fill="#FAF5EE" text-anchor="middle">${curMeta.num}</text>
-        <text id="clockHubSub" x="140" y="152" font-family="'DM Mono', monospace" font-size="8.5" font-weight="600" fill="rgba(250,244,236,0.8)" text-anchor="middle">${curMeta.fraction}</text>
+        <text id="clockHubSub" x="140" y="153" font-family="'DM Mono', monospace" font-size="8.5" font-weight="600" fill="#C0963F" text-anchor="middle">${curMeta.fraction}</text>
       </svg>
     </div>
   `;
@@ -1245,7 +1291,7 @@ function setDurationIdx(val) {
 
   const wedge = document.getElementById('clockArcWedge');
   if (wedge) {
-    wedge.setAttribute('d', getAnnularSectorPath(0, opt[5] || 0, 140, 140, 64, 104));
+    wedge.setAttribute('d', getAnnularSectorPath(0, opt[5] || 0, 140, 140, 64, 102));
     wedge.setAttribute('fill', opt[6] || '#BA5731');
     wedge.setAttribute('stroke', opt[6] || '#BA5731');
   }
@@ -1328,43 +1374,72 @@ function renderQuestion() {
         <div class="dcc-title">When Crying Clusters Across the 24-Hour Day</div>
       </div>
       <div class="dcc-clock-wrap">
-        <svg viewBox="-6 -6 292 292" width="100%" height="auto">
+        <svg viewBox="-8 -8 296 296" style="width:100%;max-width:320px;height:auto;display:block;margin:0 auto">
           <defs>
             <linearGradient id="q3NightGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stop-color="#232B1E" stop-opacity="0.08"/>
-              <stop offset="100%" stop-color="#241A12" stop-opacity="0.03"/>
+              <stop offset="0%" stop-color="#232B1E" stop-opacity="0.10"/>
+              <stop offset="100%" stop-color="#241A12" stop-opacity="0.04"/>
             </linearGradient>
             <linearGradient id="q3DayGrad" x1="0%" y1="0%" x2="0%" y2="100%">
               <stop offset="0%" stop-color="#C0963F" stop-opacity="0.03"/>
-              <stop offset="100%" stop-color="#C0963F" stop-opacity="0.10"/>
+              <stop offset="100%" stop-color="#C0963F" stop-opacity="0.12"/>
             </linearGradient>
             <radialGradient id="q3HubGrad" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="#2D2218"/>
-              <stop offset="100%" stop-color="#1D150E"/>
+              <stop offset="0%" stop-color="#2E2319"/>
+              <stop offset="85%" stop-color="#1E1610"/>
+              <stop offset="100%" stop-color="#140E0A"/>
+            </radialGradient>
+            <radialGradient id="bezelShineQ3" cx="35%" cy="30%" r="65%">
+              <stop offset="0%" stop-color="#FFFDF9" stop-opacity="0.9"/>
+              <stop offset="60%" stop-color="#FAF4EB"/>
+              <stop offset="100%" stop-color="#ECE1CF"/>
             </radialGradient>
           </defs>
 
-          <circle cx="140" cy="140" r="124" fill="#FAF5EE" stroke="rgba(38,27,20,0.14)" stroke-width="1.5"/>
+          <!-- Precision Machined Instrument Bezel -->
+          <circle cx="140" cy="140" r="136" fill="none" stroke="rgba(36,26,18,0.12)" stroke-width="1.5"/>
+          <circle cx="140" cy="140" r="132" fill="url(#bezelShineQ3)" stroke="#3A2C1F" stroke-width="2.2"/>
+          <circle cx="140" cy="140" r="124" fill="#FAF5EE" stroke="rgba(36,26,18,0.2)" stroke-width="1.2"/>
+
+          <!-- 4 Brass Corner Rivets/Screws -->
+          <g id="dialScrewsQ3">
+            <circle cx="230.5" cy="49.5" r="3.2" fill="#C0963F" stroke="#7A5D25" stroke-width="0.8"/>
+            <line x1="228.5" y1="47.5" x2="232.5" y2="51.5" stroke="#4A3815" stroke-width="0.8"/>
+            <circle cx="230.5" cy="230.5" r="3.2" fill="#C0963F" stroke="#7A5D25" stroke-width="0.8"/>
+            <line x1="228.5" y1="232.5" x2="232.5" y2="228.5" stroke="#4A3815" stroke-width="0.8"/>
+            <circle cx="49.5" cy="230.5" r="3.2" fill="#C0963F" stroke="#7A5D25" stroke-width="0.8"/>
+            <line x1="47.5" y1="228.5" x2="51.5" y2="232.5" stroke="#4A3815" stroke-width="0.8"/>
+            <circle cx="49.5" cy="49.5" r="3.2" fill="#C0963F" stroke="#7A5D25" stroke-width="0.8"/>
+            <line x1="47.5" y1="51.5" x2="51.5" y2="47.5" stroke="#4A3815" stroke-width="0.8"/>
+          </g>
+
+          <!-- Day / Night Dial Quadrant Backgrounds -->
           <path d="M 16 140 A 124 124 0 0 1 264 140" fill="url(#q3NightGrad)"/>
           <path d="M 264 140 A 124 124 0 0 1 16 140" fill="url(#q3DayGrad)"/>
+          <line x1="16" y1="140" x2="36" y2="140" stroke="rgba(36,26,18,0.3)" stroke-width="1.5"/>
+          <line x1="244" y1="140" x2="264" y2="140" stroke="rgba(36,26,18,0.3)" stroke-width="1.5"/>
 
-          <line x1="16" y1="140" x2="36" y2="140" stroke="rgba(38,27,20,0.25)" stroke-width="1.5"/>
-          <line x1="244" y1="140" x2="264" y2="140" stroke="rgba(38,27,20,0.25)" stroke-width="1.5"/>
+          <!-- Calibrated Radial Ticks -->
+          ${generateClockTicks(140, 140, 122)}
 
-          ${generateClockTicks(140, 140, 124)}
+          <!-- Concentric Guideway Tracks -->
+          <circle cx="140" cy="140" r="102" fill="none" stroke="rgba(36,26,18,0.12)" stroke-width="1"/>
+          <circle cx="140" cy="140" r="82" fill="none" stroke="rgba(36,26,18,0.06)" stroke-width="0.8" stroke-dasharray="2,3"/>
+          <circle cx="140" cy="140" r="64" fill="none" stroke="rgba(36,26,18,0.15)" stroke-width="1"/>
 
-          <text x="140" y="32" font-family="'DM Sans', sans-serif" font-size="8" font-weight="700" letter-spacing="0.05em" fill="#5C4D3C" text-anchor="middle">&#x1F319; NIGHT &middot; 12 AM</text>
-          <text x="140" y="262" font-family="'DM Sans', sans-serif" font-size="8" font-weight="700" letter-spacing="0.05em" fill="#9C7A28" text-anchor="middle">&#x2600;&#xFE0F; DAY &middot; 12 PM</text>
-          <text x="246" y="143" font-family="'DM Mono', monospace" font-size="7.5" font-weight="700" fill="#7A6856" text-anchor="middle">6 AM</text>
-          <text x="34" y="143" font-family="'DM Mono', monospace" font-size="7.5" font-weight="700" fill="#7A6856" text-anchor="middle">6 PM</text>
+          <!-- Dial Face Hour Markers with generous padding -->
+          <text x="140" y="30" font-family="'DM Sans', sans-serif" font-size="8.5" font-weight="700" letter-spacing="0.06em" fill="#37452F" text-anchor="middle">&#x1F319; NIGHT &middot; 12 AM</text>
+          <text x="140" y="260" font-family="'DM Sans', sans-serif" font-size="8.5" font-weight="700" letter-spacing="0.06em" fill="#9C7A28" text-anchor="middle">&#x2600;&#xFE0F; DAY &middot; 12 PM</text>
+          <text x="250" y="143" font-family="'DM Mono', monospace" font-size="8" font-weight="700" fill="#7A6856" text-anchor="middle">6 AM</text>
+          <text x="30" y="143" font-family="'DM Mono', monospace" font-size="8" font-weight="700" fill="#7A6856" text-anchor="middle">6 PM</text>
 
-          <text x="216" y="66" font-family="'DM Mono', monospace" font-size="7" font-weight="600" fill="rgba(122,104,86,0.65)" text-anchor="middle">3 AM</text>
-          <text x="216" y="222" font-family="'DM Mono', monospace" font-size="7" font-weight="600" fill="rgba(122,104,86,0.65)" text-anchor="middle">9 AM</text>
-          <text x="64" y="222" font-family="'DM Mono', monospace" font-size="7" font-weight="600" fill="rgba(122,104,86,0.65)" text-anchor="middle">3 PM</text>
-          <text x="64" y="66" font-family="'DM Mono', monospace" font-size="7" font-weight="600" fill="rgba(122,104,86,0.65)" text-anchor="middle">9 PM</text>
+          <text x="214" y="66" font-family="'DM Mono', monospace" font-size="7.5" font-weight="600" fill="rgba(122,104,86,0.7)" text-anchor="middle">3 AM</text>
+          <text x="214" y="222" font-family="'DM Mono', monospace" font-size="7.5" font-weight="600" fill="rgba(122,104,86,0.7)" text-anchor="middle">9 AM</text>
+          <text x="66" y="222" font-family="'DM Mono', monospace" font-size="7.5" font-weight="600" fill="rgba(122,104,86,0.7)" text-anchor="middle">3 PM</text>
+          <text x="66" y="66" font-family="'DM Mono', monospace" font-size="7.5" font-weight="600" fill="rgba(122,104,86,0.7)" text-anchor="middle">9 PM</text>
 
           <!-- Annular Base Track -->
-          <path d="M 140 36 A 104 104 0 1 1 139.9 36 L 139.9 76 A 64 64 0 1 0 140 76 Z" fill="rgba(38,27,20,0.035)"/>
+          <path d="M 140 38 A 102 102 0 1 1 139.9 38 L 139.9 76 A 64 64 0 1 0 140 76 Z" fill="rgba(38,27,20,0.035)"/>
 
           <!-- Dynamic Wedges -->
           <g id="timingClockWedges"></g>
@@ -1372,11 +1447,13 @@ function renderQuestion() {
           <!-- Dynamic Threshold Lines & Badges -->
           <g id="timingClockThresholds"></g>
 
-          <!-- Center Hub -->
-          <circle cx="140" cy="140" r="48" fill="url(#q3HubGrad)" stroke="#FAF5EE" stroke-width="3"/>
-          <circle cx="140" cy="140" r="46" fill="none" stroke="rgba(192,150,63,0.3)" stroke-width="1"/>
+          <!-- Center Hub (Machined Gauge Core) -->
+          <circle cx="140" cy="140" r="49" fill="#FAF5ED" stroke="rgba(36,26,18,0.2)" stroke-width="1"/>
+          <circle cx="140" cy="140" r="47" fill="none" stroke="#C0963F" stroke-width="1.6"/>
+          <circle cx="140" cy="140" r="45" fill="url(#q3HubGrad)" stroke="#1B130D" stroke-width="1.5"/>
+          <circle cx="140" cy="140" r="43" fill="none" stroke="rgba(192,150,63,0.35)" stroke-width="1" stroke-dasharray="2,2"/>
           <text id="timingClockHubVal" x="140" y="136" font-family="'Cormorant Garamond', Georgia, serif" font-size="20" font-weight="700" fill="#FAF5EE" text-anchor="middle">Daily Cycle</text>
-          <text id="timingClockHubSub" x="140" y="152" font-family="'DM Mono', monospace" font-size="8" font-weight="600" fill="rgba(250,245,238,0.85)" text-anchor="middle">Tap Timing Below</text>
+          <text id="timingClockHubSub" x="140" y="153" font-family="'DM Mono', monospace" font-size="8" font-weight="600" fill="#C0963F" text-anchor="middle">Tap Timing Below</text>
         </svg>
       </div>
 
@@ -1775,180 +1852,209 @@ function showResult() {
   window.scrollTo({top: 0, behavior: 'smooth'});
 }
 
-/* ── CLOSEST FIT PHYSIOLOGICAL VISUAL ARCHITECTURE ── */
+/* ── CLOSEST FIT PHYSIOLOGICAL VISUAL ARCHITECTURE (PEDIATRIC RADIOGRAPHIC SCAN) ── */
 function getClosestFitVisualHtml(type) {
   let badge = '';
   let title = '';
   let sub = '';
   let mechanismTag = '';
   let mechanismText = '';
-  let badgeColor = '#37452F';
-  let badgeBg = 'rgba(108,135,89,0.12)';
-  let specificPaths = '';
+  let patternSpecificSvg = '';
   let callouts = '';
 
   if (type === 'NS') {
-    badge = 'AUTONOMIC & SENSORY ARCHITECTURE';
-    title = "How Sensory Overload & Autonomic Arousal Trigger Evening Clusters";
-    sub = "Developing sensory cortex, vagus nerve tract, and cardiac autonomic regulation.";
-    mechanismTag = "THE SENSORY-CARDIAC FEEDBACK LOOP";
-    mechanismText = "In young infants, sensory inputs accumulate faster than the immature brain can filter them. During evening clusters, sensory fatigue triggers sympathetic autonomic acceleration, elevating heart rate and distress. Steady rhythmic vestibular input and low sensory lighting activate the vagus nerve, calming the cardiac response and returning your baby to baseline.";
-    badgeColor = '#37452F';
-    badgeBg = 'rgba(108,135,89,0.14)';
+    badge = 'AUTONOMIC & SENSORY AXIS';
+    title = 'How Sensory Overload & Autonomic Arousal Trigger Evening Clusters';
+    sub = 'Radiographic projection of developing sensory cortex, vagus pathway, and cardiac regulation.';
+    mechanismTag = 'NEURAL-CARDIAC FEEDBACK ARCHITECTURE';
+    mechanismText = 'In young infants, sensory fatigue in the developing cerebral cortex triggers autonomic acceleration, elevating cardiac arousal and crying distress. Steady rhythmic vestibular input and low lighting activate the vagus nerve pathway to slow the cardiac cycle and restore baseline calm.';
 
-    specificPaths = `
-      <!-- Brain glow & neural network -->
-      <path d="M 112 58 C 114 42, 138 38, 154 44 C 168 50, 172 68, 164 78 C 156 86, 132 86, 120 78 Z" fill="rgba(108,135,89,0.22)" stroke="#6C8759" stroke-width="1.6"/>
-      <circle cx="132" cy="56" r="3.5" fill="#6C8759"/>
-      <circle cx="148" cy="54" r="3" fill="#C0963F"/>
-      <circle cx="140" cy="68" r="3.5" fill="#6C8759"/>
-      <line x1="132" y1="56" x2="148" y2="54" stroke="#6C8759" stroke-width="1.2" stroke-dasharray="2,2"/>
-      <line x1="132" y1="56" x2="140" y2="68" stroke="#6C8759" stroke-width="1.2"/>
-      <line x1="148" y1="54" x2="140" y2="68" stroke="#6C8759" stroke-width="1.2"/>
+    patternSpecificSvg = `
+      <!-- Brain: Developing Cerebral Sensory Cortex with Neural Arborization -->
+      <g id="brainCortex">
+        <path d="M 128 44 C 145 42, 166 50, 172 64 C 178 74, 172 84, 164 88 C 154 94, 138 92, 130 84 Z" 
+              fill="rgba(108,135,89,0.22)" stroke="#6C8759" stroke-width="1.6"/>
+        <circle cx="144" cy="54" r="3.2" fill="#6C8759" stroke="#A4C290" stroke-width="1"/>
+        <circle cx="160" cy="58" r="2.8" fill="#C0963F" stroke="#E6CE94" stroke-width="1"/>
+        <circle cx="152" cy="72" r="3.2" fill="#6C8759" stroke="#A4C290" stroke-width="1"/>
+        <circle cx="136" cy="68" r="2.5" fill="#6C8759"/>
+        <line x1="144" y1="54" x2="160" y2="58" stroke="#6C8759" stroke-width="1.2" stroke-dasharray="2,2"/>
+        <line x1="144" y1="54" x2="152" y2="72" stroke="#6C8759" stroke-width="1.2"/>
+        <line x1="160" y1="58" x2="152" y2="72" stroke="#C0963F" stroke-width="1.2"/>
+        <line x1="136" y1="68" x2="144" y2="54" stroke="#6C8759" stroke-width="1"/>
+        <!-- Sensory Input Wavelets -->
+        <path d="M 186 64 C 180 66, 176 72, 170 70" fill="none" stroke="#C0963F" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M 190 70 C 184 72, 180 78, 174 76" fill="none" stroke="#C0963F" stroke-width="1.8" stroke-linecap="round"/>
+      </g>
 
-      <!-- Sensory Input Wavelets -->
-      <path d="M 88 52 C 94 54, 96 60, 104 60" fill="none" stroke="#C0963F" stroke-width="1.8" stroke-linecap="round"/>
-      <path d="M 84 58 C 90 60, 94 66, 102 66" fill="none" stroke="#C0963F" stroke-width="1.8" stroke-linecap="round"/>
-
-      <!-- Spinal Cord & Vagus Nerve Trunk -->
-      <path d="M 138 84 Q 134 110, 132 140 T 130 190" fill="none" stroke="#6C8759" stroke-width="2.5"/>
-      <path d="M 134 115 Q 138 126, 146 135" fill="none" stroke="#6C8759" stroke-width="1.5" stroke-dasharray="2,2"/>
-      <path d="M 133 130 Q 138 142, 144 148" fill="none" stroke="#6C8759" stroke-width="1.5" stroke-dasharray="2,2"/>
-      <path d="M 131 155 Q 138 165, 148 175" fill="none" stroke="#6C8759" stroke-width="1.5" stroke-dasharray="2,2"/>
+      <!-- Vagus Nerve Trunk (Cranial Nerve X) -->
+      <path d="M 136 92 Q 134 114, 132 138 T 130 185" fill="none" stroke="#6C8759" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M 133 134 Q 138 140, 144 146" fill="none" stroke="#6C8759" stroke-width="1.6" stroke-dasharray="2,2"/>
+      <path d="M 132 144 Q 137 148, 143 152" fill="none" stroke="#6C8759" stroke-width="1.6" stroke-dasharray="2,2"/>
     `;
 
     callouts = `
-      <line x1="154" y1="46" x2="204" y2="34" stroke="rgba(38,27,20,0.35)" stroke-width="1"/>
-      <circle cx="204" cy="34" r="2.5" fill="#6C8759"/>
-      <text x="210" y="32" font-family="'DM Sans', sans-serif" font-size="9" font-weight="700" fill="#241A12">Sensory Cortex</text>
-      <text x="210" y="43" font-family="'DM Mono', monospace" font-size="7.5" fill="#7A6856">Sound & Light Overload</text>
+      <!-- Callout 1: Sensory Cortex -->
+      <line x1="156" y1="52" x2="224" y2="38" stroke="rgba(175,205,230,0.65)" stroke-width="1.2"/>
+      <circle cx="224" cy="38" r="2.8" fill="#6C8759" stroke="#FAF5EE" stroke-width="1"/>
+      <text x="231" y="36" font-family="'DM Sans', sans-serif" font-size="9.5" font-weight="700" fill="#E4EBDC">Sensory Cortex</text>
+      <text x="231" y="47" font-family="'DM Mono', monospace" font-size="7.5" fill="#9C8C77">Neural Arousal Threshold</text>
 
-      <line x1="132" y1="110" x2="68" y2="100" stroke="rgba(38,27,20,0.35)" stroke-width="1"/>
-      <circle cx="68" cy="100" r="2.5" fill="#6C8759"/>
-      <text x="64" y="98" font-family="'DM Sans', sans-serif" font-size="9" font-weight="700" fill="#241A12" text-anchor="end">Vagus Nerve Axis</text>
-      <text x="64" y="109" font-family="'DM Mono', monospace" font-size="7.5" fill="#7A6856" text-anchor="end">Calming Reflex Pathway</text>
+      <!-- Callout 2: Vagus Nerve Trunk -->
+      <line x1="132" y1="118" x2="48" y2="108" stroke="rgba(175,205,230,0.65)" stroke-width="1.2"/>
+      <circle cx="48" cy="108" r="2.8" fill="#6C8759" stroke="#FAF5EE" stroke-width="1"/>
+      <text x="42" y="106" font-family="'DM Sans', sans-serif" font-size="9.5" font-weight="700" fill="#E4EBDC" text-anchor="end">Vagus Nerve Axis</text>
+      <text x="42" y="117" font-family="'DM Mono', monospace" font-size="7.5" fill="#9C8C77" text-anchor="end">Cranial Nerve X Calming</text>
 
-      <line x1="156" y1="140" x2="204" y2="148" stroke="rgba(38,27,20,0.35)" stroke-width="1"/>
-      <circle cx="204" cy="148" r="2.5" fill="#E63946"/>
-      <text x="210" y="146" font-family="'DM Sans', sans-serif" font-size="9" font-weight="700" fill="#E63946">Cardiac Rhythm</text>
-      <text x="210" y="157" font-family="'DM Mono', monospace" font-size="7.5" fill="#7A6856">Pulsating Heart Rate</text>
+      <!-- Callout 3: Cardiac Mediastinum / Pulsating Heart -->
+      <line x1="158" y1="151" x2="224" y2="151" stroke="rgba(230,57,70,0.7)" stroke-width="1.2"/>
+      <circle cx="224" cy="151" r="2.8" fill="#E63946" stroke="#FAF5EE" stroke-width="1"/>
+      <text x="231" y="149" font-family="'DM Sans', sans-serif" font-size="9.5" font-weight="700" fill="#E63946">Cardiac Rhythm</text>
+      <text x="231" y="160" font-family="'DM Mono', monospace" font-size="7.5" fill="rgba(230,57,70,0.85)">Pulsating Heart (78 BPM)</text>
+
+      <!-- Callout 4: Enteric Gut Loop -->
+      <line x1="146" y1="192" x2="224" y2="204" stroke="rgba(175,205,230,0.65)" stroke-width="1.2"/>
+      <circle cx="224" cy="204" r="2.8" fill="#BC5A33" stroke="#FAF5EE" stroke-width="1"/>
+      <text x="231" y="202" font-family="'DM Sans', sans-serif" font-size="9.5" font-weight="700" fill="#F3E1D4">Enteric Gut Loop</text>
+      <text x="231" y="213" font-family="'DM Mono', monospace" font-size="7.5" fill="#9C8C77">Microbiome Transit Axis</text>
     `;
   } else if (type === 'GUT') {
-    badge = 'VISCERAL & ENTERIC NERVOUS SYSTEM';
-    title = "How Visceral Cramps & Gut Sensitivity Drive Crying Waves";
-    sub = "Enteric nervous system plexus, brain-gut communication, and visceral discomfort.";
-    mechanismTag = "THE ENTERIC-AUTONOMIC CONNECTION";
-    mechanismText = "Gas movement and digestive transit create localized smooth-muscle contractions in the immature intestinal wall. The enteric nervous system relays visceral discomfort signals to the brainstem, producing cyclical crying waves with tucked knees until the digestive spasm eases.";
-    badgeColor = '#8A3F22';
-    badgeBg = 'rgba(188,90,51,0.14)';
+    badge = 'ENTERIC & MICROBIOME AXIS';
+    title = 'How Digestive Gas & Enteric Spasms Trigger Wave-Like Distress';
+    sub = 'Radiographic projection of gastric distension, enteric transit, and visceral feedback.';
+    mechanismTag = 'GASTRO-AUTONOMIC FEEDBACK ARCHITECTURE';
+    mechanismText = 'Immature intestinal microbiota produces transient fermentation gas that distends the delicate infant bowel walls. Smooth-muscle spasms send visceral discomfort signals along the enteric-vagal axis, causing sudden legs-tucked crying episodes independent of feeding times.';
 
-    specificPaths = `
-      <!-- Brain-Gut Vagal Trunk -->
-      <path d="M 140 76 Q 134 110, 132 140 T 136 175" fill="none" stroke="#BC5A33" stroke-width="2"/>
-      
-      <!-- Stomach & Intestinal Loops -->
-      <path d="M 136 150 C 130 152, 126 160, 130 166 C 136 172, 146 168, 150 162 Z" fill="rgba(188,90,51,0.22)" stroke="#BC5A33" stroke-width="1.6"/>
-      <path d="M 132 170 C 128 176, 138 184, 144 178 C 150 172, 156 182, 148 188 C 140 192, 134 186, 130 182" fill="none" stroke="#BC5A33" stroke-width="2.2" stroke-linecap="round"/>
-      
-      <!-- Spasm waves -->
-      <circle cx="140" cy="178" r="16" fill="none" stroke="#BC5A33" stroke-width="1.2" stroke-dasharray="2,3"/>
+    patternSpecificSvg = `
+      <!-- Stomach & Intestinal Highlighting -->
+      <path d="M 132 174 C 128 182, 132 195, 144 196 C 152 197, 156 188, 152 179 C 147 172, 137 171, 132 174 Z" 
+            fill="rgba(188,90,51,0.3)" stroke="#BC5A33" stroke-width="2"/>
+      <circle cx="140" cy="182" r="3" fill="#FFF" opacity="0.6"/>
+      <circle cx="146" cy="188" r="2" fill="#FFF" opacity="0.6"/>
+
+      <!-- Distended Intestinal Loops -->
+      <path d="M 134 198 C 142 203, 148 200, 146 208 C 142 216, 132 212, 138 222 C 144 228, 152 221, 149 214" 
+            fill="none" stroke="#BC5A33" stroke-width="2.2" stroke-linecap="round"/>
+      <circle cx="141" cy="205" r="2.5" fill="#FFF" opacity="0.5"/>
+      <circle cx="145" cy="216" r="2" fill="#FFF" opacity="0.5"/>
+
+      <!-- Vagus Gut-Brain Axis -->
+      <path d="M 136 92 Q 134 114, 132 138 T 130 185" fill="none" stroke="#6C8759" stroke-width="1.8" stroke-dasharray="2,2"/>
     `;
 
     callouts = `
-      <line x1="134" y1="110" x2="68" y2="100" stroke="rgba(38,27,20,0.35)" stroke-width="1"/>
-      <circle cx="68" cy="100" r="2.5" fill="#BC5A33"/>
-      <text x="64" y="98" font-family="'DM Sans', sans-serif" font-size="9" font-weight="700" fill="#241A12" text-anchor="end">Brain-Gut Axis</text>
-      <text x="64" y="109" font-family="'DM Mono', monospace" font-size="7.5" fill="#7A6856" text-anchor="end">Visceral Feedback Trunk</text>
+      <line x1="148" y1="184" x2="224" y2="184" stroke="rgba(188,90,51,0.7)" stroke-width="1.2"/>
+      <circle cx="224" cy="184" r="2.8" fill="#BC5A33" stroke="#FAF5EE" stroke-width="1"/>
+      <text x="231" y="182" font-family="'DM Sans', sans-serif" font-size="9.5" font-weight="700" fill="#F3E1D4">Gastric Distension</text>
+      <text x="231" y="193" font-family="'DM Mono', monospace" font-size="7.5" fill="#9C8C77">Fermentation Gas Volume</text>
 
-      <line x1="156" y1="140" x2="204" y2="136" stroke="rgba(38,27,20,0.35)" stroke-width="1"/>
-      <circle cx="204" cy="136" r="2.5" fill="#E63946"/>
-      <text x="210" y="134" font-family="'DM Sans', sans-serif" font-size="9" font-weight="700" fill="#E63946">Cardiac Stress Pulse</text>
-      <text x="210" y="145" font-family="'DM Mono', monospace" font-size="7.5" fill="#7A6856">Autonomic Rhythm</text>
+      <line x1="144" y1="214" x2="224" y2="218" stroke="rgba(188,90,51,0.7)" stroke-width="1.2"/>
+      <circle cx="224" cy="218" r="2.8" fill="#BC5A33" stroke="#FAF5EE" stroke-width="1"/>
+      <text x="231" y="216" font-family="'DM Sans', sans-serif" font-size="9.5" font-weight="700" fill="#F3E1D4">Enteric Spasm Loop</text>
+      <text x="231" y="227" font-family="'DM Mono', monospace" font-size="7.5" fill="#9C8C77">Smooth Muscle Contraction</text>
 
-      <line x1="152" y1="178" x2="204" y2="182" stroke="rgba(38,27,20,0.35)" stroke-width="1"/>
-      <circle cx="204" cy="182" r="2.5" fill="#BC5A33"/>
-      <text x="210" y="180" font-family="'DM Sans', sans-serif" font-size="9" font-weight="700" fill="#241A12">Enteric Spasm Zone</text>
-      <text x="210" y="191" font-family="'DM Mono', monospace" font-size="7.5" fill="#7A6856">Visceral Contractions</text>
+      <line x1="158" y1="151" x2="224" y2="140" stroke="rgba(230,57,70,0.7)" stroke-width="1.2"/>
+      <circle cx="224" cy="140" r="2.8" fill="#E63946" stroke="#FAF5EE" stroke-width="1"/>
+      <text x="231" y="138" font-family="'DM Sans', sans-serif" font-size="9.5" font-weight="700" fill="#E63946">Cardiac Rhythm</text>
+      <text x="231" y="149" font-family="'DM Mono', monospace" font-size="7.5" fill="rgba(230,57,70,0.85)">Pulsating Heart (78 BPM)</text>
+
+      <line x1="132" y1="118" x2="48" y2="108" stroke="rgba(175,205,230,0.65)" stroke-width="1.2"/>
+      <circle cx="48" cy="108" r="2.8" fill="#6C8759" stroke="#FAF5EE" stroke-width="1"/>
+      <text x="42" y="106" font-family="'DM Sans', sans-serif" font-size="9.5" font-weight="700" fill="#E4EBDC" text-anchor="end">Gut-Brain Vagal Axis</text>
+      <text x="42" y="117" font-family="'DM Mono', monospace" font-size="7.5" fill="#9C8C77" text-anchor="end">Visceral Arousal Feedback</text>
     `;
   } else if (type === 'FM') {
-    badge = 'ORAL MECHANICS & GASTRIC DISTENSION';
-    title = "How Milk Flow Velocity & Swallowed Air Drive Post-Feed Distress";
-    sub = "Palate latch dynamics, aerophagia, and gastric volume distension.";
-    mechanismTag = "FLOW VELOCITY & AIR INTAKE";
-    mechanismText = "Rapid milk flow or a shallow latch forces your baby to gulp rapidly to protect their airway, swallowing aerated milk and air pockets. This triggers immediate gastric distension and back-arching within 20 minutes of feeding.";
-    badgeColor = '#8A6A20';
-    badgeBg = 'rgba(192,150,63,0.16)';
+    badge = 'ORAL-GASTRIC MOTOR AXIS';
+    title = 'How Aerophagia & Fluid Dynamics Drive Post-Feed Discomfort';
+    sub = 'Radiographic projection of swallow mechanics, esophageal transit, and gastric distension.';
+    mechanismTag = 'SWALLOW-AEROPHAGIA ARCHITECTURE';
+    mechanismText = 'A shallow latch, high milk flow velocity, or bottle angle mismatch allows micro-air swallows (aerophagia) during feeding. As the gastric fundus distends rapidly, tension on the cardiac sphincter triggers acute post-feed distress within 20 minutes of finishing a feed.';
 
-    specificPaths = `
-      <!-- Oral latch zone -->
-      <path d="M 120 72 C 114 74, 112 80, 118 84" fill="none" stroke="#C0963F" stroke-width="2.5" stroke-linecap="round"/>
-      <circle cx="116" cy="78" r="3.5" fill="#C0963F"/>
+    patternSpecificSvg = `
+      <!-- Oral Cavity & Pharynx -->
+      <path d="M 172 108 C 165 110, 155 114, 148 118" fill="none" stroke="#C0963F" stroke-width="2.4" stroke-linecap="round"/>
+      <circle cx="166" cy="110" r="2.5" fill="#FFF" opacity="0.7"/>
 
-      <!-- Esophagus down to stomach -->
-      <path d="M 124 86 Q 134 110, 136 145" fill="none" stroke="#C0963F" stroke-width="2"/>
+      <!-- Esophagus Transit Tube -->
+      <path d="M 144 122 C 140 134, 138 152, 136 170" fill="none" stroke="#C0963F" stroke-width="2.2" stroke-linecap="round"/>
 
-      <!-- Stomach reservoir with air bubble -->
-      <path d="M 134 148 C 128 152, 126 162, 132 170 C 140 174, 152 170, 154 160 C 154 152, 146 146, 134 148 Z" fill="rgba(192,150,63,0.2)" stroke="#C0963F" stroke-width="1.6"/>
-      <circle cx="138" cy="154" r="4.5" fill="#FFF" stroke="#C0963F" stroke-width="1.2"/>
-      <circle cx="145" cy="158" r="2.5" fill="#FFF" stroke="#C0963F" stroke-width="1"/>
+      <!-- Gastric Aerophagia Air Bubble in Fundus -->
+      <path d="M 132 174 C 128 182, 132 195, 144 196 C 152 197, 156 188, 152 179 C 147 172, 137 171, 132 174 Z" 
+            fill="rgba(192,150,63,0.3)" stroke="#C0963F" stroke-width="2"/>
+      <ellipse cx="142" cy="180" rx="6" ry="4" fill="#FFF" opacity="0.65"/>
+      <ellipse cx="144" cy="189" rx="4" ry="3" fill="#FFF" opacity="0.45"/>
     `;
 
     callouts = `
-      <line x1="114" y1="78" x2="68" y2="72" stroke="rgba(38,27,20,0.35)" stroke-width="1"/>
-      <circle cx="68" cy="72" r="2.5" fill="#C0963F"/>
-      <text x="64" y="70" font-family="'DM Sans', sans-serif" font-size="9" font-weight="700" fill="#241A12" text-anchor="end">Palate Latch Seal</text>
-      <text x="64" y="81" font-family="'DM Mono', monospace" font-size="7.5" fill="#7A6856" text-anchor="end">Flow Rate & Air Entry</text>
+      <line x1="168" y1="108" x2="224" y2="85" stroke="rgba(192,150,63,0.7)" stroke-width="1.2"/>
+      <circle cx="224" cy="85" r="2.8" fill="#C0963F" stroke="#FAF5EE" stroke-width="1"/>
+      <text x="231" y="83" font-family="'DM Sans', sans-serif" font-size="9.5" font-weight="700" fill="#EEDFB9">Pharyngeal Latch Tract</text>
+      <text x="231" y="94" font-family="'DM Mono', monospace" font-size="7.5" fill="#9C8C77">Fluid Flow Velocity</text>
 
-      <line x1="156" y1="138" x2="204" y2="132" stroke="rgba(38,27,20,0.35)" stroke-width="1"/>
-      <circle cx="204" cy="132" r="2.5" fill="#E63946"/>
-      <text x="210" y="130" font-family="'DM Sans', sans-serif" font-size="9" font-weight="700" fill="#E63946">Cardiac-Swallow Pacing</text>
-      <text x="210" y="141" font-family="'DM Mono', monospace" font-size="7.5" fill="#7A6856">Respiratory Sync</text>
+      <line x1="142" y1="180" x2="224" y2="180" stroke="rgba(192,150,63,0.7)" stroke-width="1.2"/>
+      <circle cx="224" cy="180" r="2.8" fill="#C0963F" stroke="#FAF5EE" stroke-width="1"/>
+      <text x="231" y="178" font-family="'DM Sans', sans-serif" font-size="9.5" font-weight="700" fill="#EEDFB9">Gastric Aerophagia</text>
+      <text x="231" y="189" font-family="'DM Mono', monospace" font-size="7.5" fill="#9C8C77">Entrained Air Bubble</text>
 
-      <line x1="154" y1="162" x2="204" y2="170" stroke="rgba(38,27,20,0.35)" stroke-width="1"/>
-      <circle cx="204" cy="170" r="2.5" fill="#C0963F"/>
-      <text x="210" y="168" font-family="'DM Sans', sans-serif" font-size="9" font-weight="700" fill="#241A12">Gastric Air Pocket</text>
-      <text x="210" y="179" font-family="'DM Mono', monospace" font-size="7.5" fill="#7A6856">Volume Distension</text>
+      <line x1="158" y1="151" x2="224" y2="140" stroke="rgba(230,57,70,0.7)" stroke-width="1.2"/>
+      <circle cx="224" cy="140" r="2.8" fill="#E63946" stroke="#FAF5EE" stroke-width="1"/>
+      <text x="231" y="138" font-family="'DM Sans', sans-serif" font-size="9.5" font-weight="700" fill="#E63946">Cardiac Rhythm</text>
+      <text x="231" y="149" font-family="'DM Mono', monospace" font-size="7.5" fill="rgba(230,57,70,0.85)">Pulsating Heart (78 BPM)</text>
     `;
   } else {
     badge = 'MULTISYSTEM DEVELOPMENTAL AXIS';
-    title = "How Feeding, Digestion, and Sensory Input Interact Across the Day";
-    sub = "Integrated overview of sensory accumulation, gut transit, and autonomic regulation.";
-    mechanismTag = "THE INTEGRATED DEVELOPMENTAL LOOP";
-    mechanismText = "When multiple signs appear simultaneously, evening sensory fatigue interacts with digestive transit and feeding pace. A structured 3-step sequence addresses feeding mechanics first, then winding, and finally evening sensory dimming.";
-    badgeColor = '#37452F';
-    badgeBg = 'rgba(108,135,89,0.12)';
+    title = 'How Feeding, Digestion, and Sensory Input Interact Across the Day';
+    sub = 'Radiographic overview of sensory accumulation, gut transit, and autonomic regulation.';
+    mechanismTag = 'INTEGRATED MULTISYSTEM ARCHITECTURE';
+    mechanismText = 'When multiple signs appear simultaneously, evening sensory fatigue interacts with digestive transit and feeding pace. A structured 3-step sequence addresses feeding mechanics first, then winding, and finally evening sensory dimming.';
 
-    specificPaths = `
-      <circle cx="140" cy="62" r="8" fill="rgba(108,135,89,0.22)" stroke="#6C8759" stroke-width="1.4"/>
-      <path d="M 140 70 Q 134 105, 132 140 T 136 175" fill="none" stroke="#6C8759" stroke-width="2"/>
-      <path d="M 132 165 C 128 172, 142 180, 148 172" fill="none" stroke="#BC5A33" stroke-width="2" stroke-linecap="round"/>
+    patternSpecificSvg = `
+      <g id="brainCortex">
+        <path d="M 128 44 C 145 42, 166 50, 172 64 C 178 74, 172 84, 164 88 C 154 94, 138 92, 130 84 Z" 
+              fill="rgba(108,135,89,0.18)" stroke="#6C8759" stroke-width="1.4"/>
+      </g>
+      <path d="M 136 92 Q 134 114, 132 138 T 130 185" fill="none" stroke="#6C8759" stroke-width="1.8"/>
+      <path d="M 132 174 C 128 182, 132 195, 144 196 C 152 197, 156 188, 152 179 C 147 172, 137 171, 132 174 Z" 
+            fill="rgba(188,90,51,0.2)" stroke="#BC5A33" stroke-width="1.6"/>
     `;
 
     callouts = `
-      <line x1="148" y1="62" x2="204" y2="54" stroke="rgba(38,27,20,0.35)" stroke-width="1"/>
-      <circle cx="204" cy="54" r="2.5" fill="#6C8759"/>
-      <text x="210" y="52" font-family="'DM Sans', sans-serif" font-size="9" font-weight="700" fill="#241A12">Sensory Cortex</text>
+      <line x1="156" y1="52" x2="224" y2="45" stroke="rgba(175,205,230,0.65)" stroke-width="1.2"/>
+      <circle cx="224" cy="45" r="2.8" fill="#6C8759" stroke="#FAF5EE" stroke-width="1"/>
+      <text x="231" y="43" font-family="'DM Sans', sans-serif" font-size="9.5" font-weight="700" fill="#E4EBDC">Sensory Cortex</text>
 
-      <line x1="156" y1="140" x2="204" y2="140" stroke="rgba(38,27,20,0.35)" stroke-width="1"/>
-      <circle cx="204" cy="140" r="2.5" fill="#E63946"/>
-      <text x="210" y="138" font-family="'DM Sans', sans-serif" font-size="9" font-weight="700" fill="#E63946">Cardiac Rhythm</text>
+      <line x1="158" y1="151" x2="224" y2="140" stroke="rgba(230,57,70,0.7)" stroke-width="1.2"/>
+      <circle cx="224" cy="140" r="2.8" fill="#E63946" stroke="#FAF5EE" stroke-width="1"/>
+      <text x="231" y="138" font-family="'DM Sans', sans-serif" font-size="9.5" font-weight="700" fill="#E63946">Cardiac Rhythm</text>
 
-      <line x1="148" y1="172" x2="204" y2="180" stroke="rgba(38,27,20,0.35)" stroke-width="1"/>
-      <circle cx="204" cy="180" r="2.5" fill="#BC5A33"/>
-      <text x="210" y="178" font-family="'DM Sans', sans-serif" font-size="9" font-weight="700" fill="#241A12">Enteric Gut</text>
+      <line x1="146" y1="184" x2="224" y2="195" stroke="rgba(188,90,51,0.7)" stroke-width="1.2"/>
+      <circle cx="224" cy="195" r="2.8" fill="#BC5A33" stroke="#FAF5EE" stroke-width="1"/>
+      <text x="231" y="193" font-family="'DM Sans', sans-serif" font-size="9.5" font-weight="700" fill="#F3E1D4">Enteric Gut</text>
     `;
   }
 
   return `
-    <div class="dev-curve-card" style="margin: 18px 0;">
-      <div class="dcc-header">
-        <div class="dcc-badge" style="background:${badgeBg};color:${badgeColor}">${badge}</div>
-        <div class="dcc-title">${title}</div>
-        <p style="font-size:12.5px;color:var(--muted);margin-top:4px">${sub}</p>
+    <div style="background:#090E13;border-radius:18px;border:1px solid #1C2733;padding:16px;box-shadow:0 14px 40px rgba(0,0,0,0.35);position:relative;overflow:hidden;margin:18px 0">
+      <!-- Radiograph Header Scan Metadata -->
+      <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(175,205,230,0.12);padding-bottom:8px;margin-bottom:12px;font-family:'DM Mono',monospace;font-size:8px;color:rgba(175,205,230,0.6);letter-spacing:0.08em;text-transform:uppercase">
+        <span>MODALITY: DIGITAL RADIOGRAPHIC PROJECTION</span>
+        <span style="color:#6C8759">FOV: 240mm &bull; 78 BPM RHYTHM</span>
+        <span>LATERAL PROFILE (SAGITTAL)</span>
       </div>
 
-      <div style="position:relative;width:100%;display:flex;justify-content:center;margin:12px 0">
-        <svg viewBox="0 0 320 230" width="100%" style="max-width:320px;height:auto">
+      <div style="position:relative;width:100%;display:flex;justify-content:center">
+        <svg viewBox="-85 0 440 270" style="width:100%;max-width:410px;height:auto;display:block">
+          <defs>
+            <radialGradient id="xrayGlow" cx="40%" cy="45%" r="60%">
+              <stop offset="0%" stop-color="#142230" stop-opacity="0.9"/>
+              <stop offset="60%" stop-color="#0E1620" stop-opacity="0.7"/>
+              <stop offset="100%" stop-color="#080C10" stop-opacity="0.95"/>
+            </radialGradient>
+            <pattern id="xrayGrid" width="20" height="20" patternUnits="userSpaceOnUse">
+              <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(140,180,210,0.04)" stroke-width="0.8"/>
+            </pattern>
+          </defs>
+
           <style>
             @keyframes heartPulseGlow {
               0%, 100% { opacity: 0.25; }
@@ -1965,40 +2071,134 @@ function getClosestFitVisualHtml(type) {
               80% { opacity: 0.15; }
             }
             .heart-glow-ring {
-              animation: heartPulseGlow 1.3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+              animation: heartPulseGlow 1.25s cubic-bezier(0.4, 0, 0.2, 1) infinite;
             }
             .cardiac-pulse-circle {
-              animation: cardiacWave 1.3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+              animation: cardiacWave 1.25s cubic-bezier(0.4, 0, 0.2, 1) infinite;
             }
           </style>
 
-          <rect x="8" y="8" width="304" height="214" rx="16" fill="#FBF7F0" stroke="rgba(38,27,20,0.08)" stroke-width="1.2"/>
+          <!-- Film Screen Background with Medical Calibration Grid -->
+          <rect x="-80" y="4" width="430" height="262" rx="14" fill="url(#xrayGlow)"/>
+          <rect x="-80" y="4" width="430" height="262" rx="14" fill="url(#xrayGrid)"/>
 
-          <!-- Infant silhouette profile -->
-          <circle cx="140" cy="64" r="32" fill="#FAF3E8" stroke="#241A12" stroke-width="1.8"/>
-          <path d="M 124 94 C 118 120, 116 160, 122 195 C 130 205, 162 205, 170 195 C 174 160, 168 120, 156 94 Z" fill="#FAF3E8" stroke="#241A12" stroke-width="1.8"/>
+          <!-- Calibration Crosshairs & Corner Scales -->
+          <path d="M -72 18 L -66 18 M -72 18 L -72 24" stroke="rgba(175,205,230,0.3)" stroke-width="1"/>
+          <path d="M 342 18 L 336 18 M 342 18 L 342 24" stroke="rgba(175,205,230,0.3)" stroke-width="1"/>
+          <path d="M -72 258 L -66 258 M -72 258 L -72 252" stroke="rgba(175,205,230,0.3)" stroke-width="1"/>
+          <path d="M 342 258 L 336 258 M 342 258 L 342 252" stroke="rgba(175,205,230,0.3)" stroke-width="1"/>
 
-          ${specificPaths}
+          <!-- 1. SOFT TISSUE RADIOGRAPHIC CONTOUR (Infant Profile in True Lateral Perspective) -->
+          <path d="M 122 36 
+                   C 142 36, 172 44, 185 64 
+                   C 192 75, 194 88, 184 98 
+                   C 182 100, 180 102, 178 102 
+                   L 182 108 
+                   C 184 110, 182 113, 178 114
+                   L 175 116
+                   C 178 118, 177 122, 173 124
+                   C 168 126, 162 126, 158 132
+                   C 154 138, 156 150, 158 165
+                   C 162 188, 160 215, 152 232
+                   C 146 244, 126 248, 114 242
+                   C 102 236, 100 220, 102 195
+                   C 104 165, 102 135, 104 105
+                   C 106 72, 110 36, 122 36 Z" 
+                fill="rgba(225,240,255,0.025)" stroke="rgba(175,205,230,0.22)" stroke-width="1.2"/>
 
-          <!-- BRIGHT RED PULSATING HEART -->
-          <circle cx="146" cy="140" r="14" fill="none" stroke="#E63946" stroke-width="1.5" class="cardiac-pulse-circle"/>
-          <circle cx="146" cy="140" r="13" fill="#E63946" class="heart-glow-ring"/>
+          <!-- 2. RADIOPAQUE SKELETAL SYSTEM -->
+          <!-- Cranial Vault (Frontal, Parietal, Occipital Bones with Fontanelles) -->
+          <path d="M 125 40 
+                   C 144 40, 168 48, 178 66 
+                   C 184 76, 182 88, 174 94 
+                   C 164 100, 142 100, 130 92 
+                   C 120 84, 115 62, 125 40 Z" 
+                fill="none" stroke="rgba(225,242,255,0.7)" stroke-width="1.8"/>
 
-          <g transform="translate(146, 140)">
-            <path d="M 0 7 C -6 2, -10 -3, -10 -8 A 5.5 5.5 0 0 1 0 -6 A 5.5 5.5 0 0 1 10 -8 C 10 -3, 6 2, 0 7 Z" fill="#E63946" stroke="#C9182B" stroke-width="1"/>
-            <circle cx="-3" cy="-6" r="1.5" fill="#FFF" opacity="0.7"/>
+          <!-- Coronal & Lambdoid Sutures -->
+          <path d="M 148 42 C 150 54, 147 68, 144 78" fill="none" stroke="rgba(175,205,230,0.4)" stroke-width="0.9" stroke-dasharray="2,2"/>
+          <path d="M 130 46 C 126 58, 124 72, 126 84" fill="none" stroke="rgba(175,205,230,0.35)" stroke-width="0.9" stroke-dasharray="2,2"/>
+          <!-- Anterior Fontanelle Notch -->
+          <ellipse cx="150" cy="42" rx="4" ry="2.2" fill="rgba(108,135,89,0.2)" stroke="rgba(175,205,230,0.5)" stroke-width="1"/>
+
+          <!-- Facial Bones & Mandible (Jawbone) -->
+          <path d="M 172 96 C 176 102, 174 108, 168 112 C 160 116, 148 116, 142 108" fill="none" stroke="rgba(225,242,255,0.6)" stroke-width="1.4"/>
+          <circle cx="166" cy="80" r="5.5" fill="none" stroke="rgba(175,205,230,0.3)" stroke-width="1"/>
+
+          <!-- Cervical Spine (C1-C7 Stacked Vertebral Bodies) -->
+          <g id="cervicalSpine">
+            <rect x="126" y="98" width="8" height="4.2" rx="1.5" fill="rgba(225,242,255,0.25)" stroke="rgba(225,242,255,0.7)" stroke-width="1"/>
+            <rect x="125" y="104" width="8.5" height="4.2" rx="1.5" fill="rgba(225,242,255,0.25)" stroke="rgba(225,242,255,0.7)" stroke-width="1"/>
+            <rect x="124" y="110" width="9" height="4.2" rx="1.5" fill="rgba(225,242,255,0.25)" stroke="rgba(225,242,255,0.7)" stroke-width="1"/>
+            <rect x="123" y="116" width="9.5" height="4.2" rx="1.5" fill="rgba(225,242,255,0.25)" stroke="rgba(225,242,255,0.7)" stroke-width="1"/>
+            <rect x="122" y="122" width="10" height="4.2" rx="1.5" fill="rgba(225,242,255,0.25)" stroke="rgba(225,242,255,0.7)" stroke-width="1"/>
           </g>
 
+          <!-- Thoracic & Lumbar Spine (T1-T12, Gentle Infant C-Curve) -->
+          <g id="thoracolumbarSpine">
+            <rect x="121" y="128" width="10" height="4.5" rx="1.5" fill="rgba(225,242,255,0.25)" stroke="rgba(225,242,255,0.7)" stroke-width="1"/>
+            <rect x="120" y="135" width="10.5" height="4.5" rx="1.5" fill="rgba(225,242,255,0.25)" stroke="rgba(225,242,255,0.7)" stroke-width="1"/>
+            <rect x="119" y="142" width="11" height="4.5" rx="1.5" fill="rgba(225,242,255,0.25)" stroke="rgba(225,242,255,0.7)" stroke-width="1"/>
+            <rect x="118" y="149" width="11" height="4.5" rx="1.5" fill="rgba(225,242,255,0.25)" stroke="rgba(225,242,255,0.7)" stroke-width="1"/>
+            <rect x="117" y="156" width="11" height="4.5" rx="1.5" fill="rgba(225,242,255,0.25)" stroke="rgba(225,242,255,0.7)" stroke-width="1"/>
+            <rect x="117" y="163" width="11" height="4.5" rx="1.5" fill="rgba(225,242,255,0.25)" stroke="rgba(225,242,255,0.7)" stroke-width="1"/>
+            <rect x="118" y="170" width="11.5" height="4.5" rx="1.5" fill="rgba(225,242,255,0.25)" stroke="rgba(225,242,255,0.7)" stroke-width="1"/>
+            <rect x="119" y="177" width="12" height="4.5" rx="1.5" fill="rgba(225,242,255,0.25)" stroke="rgba(225,242,255,0.7)" stroke-width="1"/>
+            <rect x="121" y="184" width="12" height="4.5" rx="1.5" fill="rgba(225,242,255,0.25)" stroke="rgba(225,242,255,0.7)" stroke-width="1"/>
+            <rect x="123" y="191" width="12.5" height="4.5" rx="1.5" fill="rgba(225,242,255,0.25)" stroke="rgba(225,242,255,0.7)" stroke-width="1"/>
+            <rect x="126" y="198" width="12.5" height="5" rx="1.5" fill="rgba(225,242,255,0.25)" stroke="rgba(225,242,255,0.7)" stroke-width="1"/>
+          </g>
+
+          <!-- Clavicle (Collarbone) -->
+          <path d="M 132 126 Q 142 124, 154 128" fill="none" stroke="rgba(225,242,255,0.75)" stroke-width="1.8" stroke-linecap="round"/>
+
+          <!-- Rib Cage (Curved Translucent Pediatric Rib Pairs) -->
+          <g id="ribCage" stroke="rgba(225,242,255,0.5)" stroke-width="1.3" fill="none" stroke-linecap="round">
+            <path d="M 128 132 C 138 131, 150 134, 155 138"/>
+            <path d="M 127 138 C 139 137, 152 141, 157 146"/>
+            <path d="M 126 144 C 139 143, 153 148, 158 154"/>
+            <path d="M 125 151 C 139 150, 153 155, 157 162"/>
+            <path d="M 124 158 C 138 157, 152 163, 155 170"/>
+            <path d="M 124 165 C 136 165, 148 171, 152 178"/>
+            <path d="M 125 172 C 135 172, 144 178, 147 185"/>
+          </g>
+
+          <!-- Diaphragm Dome -->
+          <path d="M 124 168 Q 140 165, 154 172" fill="none" stroke="rgba(175,205,230,0.5)" stroke-width="1.4" stroke-dasharray="4,2"/>
+
+          <!-- Pattern Specific Anatomy Layer -->
+          ${patternSpecificSvg}
+
+          <!-- 3. THE BRIGHT RED PULSATING HEART (Cardiac Mediastinum Focal Point) -->
+          <!-- Cardiac shockwave & pulse rings (Strictly opacity animation - Rule 9) -->
+          <circle cx="147" cy="151" r="19" fill="none" stroke="#E63946" stroke-width="1.2" class="cardiac-pulse-circle"/>
+          <circle cx="147" cy="151" r="15" fill="#E63946" class="heart-glow-ring"/>
+
+          <!-- Anatomical Cardiac Silhouette (Ventricles + Ascending Aorta Arch) -->
+          <path d="M 145 142 Q 145 134, 149 132 T 153 140" fill="none" stroke="#C9182B" stroke-width="2" stroke-linecap="round"/>
+          <line x1="147" y1="133" x2="147" y2="128" stroke="#C9182B" stroke-width="1.2"/>
+          <line x1="150" y1="133" x2="152" y2="129" stroke="#C9182B" stroke-width="1.2"/>
+
+          <g transform="translate(147, 151)">
+            <path d="M 0 9 C -7 3, -11 -3, -11 -9 A 6 6 0 0 1 0 -7 A 6 6 0 0 1 11 -9 C 11 -3, 7 3, 0 9 Z" 
+                  fill="#E63946" stroke="#C9182B" stroke-width="1.4"/>
+            <circle cx="-3.5" cy="-6" r="1.6" fill="#FFF" opacity="0.8"/>
+          </g>
+
+          <!-- 4. CLINICAL CALLOUT ANNOTATIONS -->
           ${callouts}
         </svg>
       </div>
 
-      <div class="aic-classification-box" style="margin-top:10px">
-        <div class="aic-class-header">
-          <span class="aic-class-tag">${mechanismTag}</span>
-          <span class="aic-class-status">Clinical Starting Point</span>
+      <!-- Radiographic Interpretation Strip -->
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(175,205,230,0.12);border-radius:10px;padding:10px 14px;margin-top:10px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+          <span style="font-family:'DM Mono',monospace;font-size:9px;font-weight:700;color:#6C8759;letter-spacing:0.08em;text-transform:uppercase">${mechanismTag}</span>
+          <span style="font-family:'DM Mono',monospace;font-size:8px;color:rgba(175,205,230,0.5)">LATERAL RADIOGRAPHIC VIEW</span>
         </div>
-        <div class="aic-milestone-text">${mechanismText}</div>
+        <p style="font-family:'DM Sans',sans-serif;font-size:12px;color:rgba(250,244,236,0.82);line-height:1.5;margin:0">
+          ${mechanismText}
+        </p>
       </div>
     </div>
   `;
