@@ -96,7 +96,7 @@ p{font-size:15.5px;line-height:1.75;color:var(--muted)}
 .link-soft{font-size:14px;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
 .link-soft:hover{color:var(--ink)}
 /* nav (matches about.html / blueprint.html / quiz.html) */
-.site-nav{position:sticky;top:0;z-index:100;background:rgba(251,244,234,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+.site-nav{position:sticky;top:0;z-index:100;background:var(--paper);border-bottom:1px solid var(--border)}
 .nav-inner{max-width:1100px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
 .nav-logo{display:flex;align-items:center;gap:10px}
 .nav-mark{width:28px;height:28px;flex-shrink:0}
@@ -129,10 +129,7 @@ p{font-size:15.5px;line-height:1.75;color:var(--muted)}
 /* three system cards, triangular cluster */
 .tri-cluster{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:420px;margin:0 auto;position:relative}
 .tri-cluster .tcard:nth-child(3){grid-column:1/3;width:78%;margin:0 auto}
-.tcard{border-radius:13px;overflow:hidden;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.055);animation:floaty 4s ease-in-out infinite}
-.tcard:nth-child(2){animation-delay:1.1s}.tcard:nth-child(3){animation-delay:2.2s}
-@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
-@media(prefers-reduced-motion:reduce){.tcard{animation:none}}
+.tcard{border-radius:13px;overflow:hidden;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.055)}
 .tc-bar{height:3px}
 .tc-gut .tc-bar{background:var(--terra)} .tc-nerv .tc-bar{background:#9FBB8E} .tc-acou .tc-bar{background:var(--gold)} .tc-feed .tc-bar{background:#5A7FA6}
 .tc-body{padding:15px 14px}
@@ -288,7 +285,6 @@ p{font-size:15.5px;line-height:1.75;color:var(--muted)}
 /* responsive */
 @media(max-width:860px){
   .hero-grid{grid-template-columns:1fr;gap:36px}
-  .hero-vis{order:-1}
   .nav-links{display:none}
   .nav-toggle{display:block}
   .pos-grid{grid-template-columns:1fr}
@@ -545,8 +541,8 @@ p{font-size:15.5px;line-height:1.75;color:var(--muted)}
       <h2 id="sci-h2">Named studies you can go verify yourself.</h2>
       <p style="margin-bottom:22px">We'd rather you check these than take our word for it.</p>
       <div class="cite-card">
-        <span class="cite-name">Savino et al., Pediatrics, 2010</span>
-        <p>Randomized controlled trial reporting a 74% reduction in daily crying time by Day 21 using a specific L. reuteri strain. Conducted in <strong>breastfed infants specifically</strong>: if your baby is formula-fed or mixed-fed, this particular trial's population doesn't match yours, and the Blueprint's formula-feeding track uses different, broader evidence instead.</p>
+        <span class="cite-name">Savino et al., Pediatrics, 2010 · Paired with Sung et al., BMJ, 2014</span>
+        <p>Savino reported a daily crying reduction by Day 21 using L. reuteri DSM 17938 in exclusively breastfed infants (50 infants, 46 completed). Sung (BMJ, 167 infants, breastfed and formula-fed) showed no benefit over placebo. Formula-fed and mixed-fed babies lead with feeding and soothing steps, not the probiotic. Talk to your pediatrician before starting any supplement.</p>
       </div>
       <div class="cite-card">
         <span class="cite-name">Network meta-analysis, 32 RCTs, 2,242 infants</span>
@@ -665,7 +661,7 @@ p{font-size:15.5px;line-height:1.75;color:var(--muted)}
         <li>Bloom Baby Tracker, one-tap logging that reveals patterns fast</li>
         <li>60-Minute Brown Noise Soundscape, calibrated to womb frequency</li>
         <li>Cry Decoder Masterclass, tell gas cry from overtired cry from colic cry</li>
-        <li>72-Hour Zero-Cry Guarantee</li>
+        <li>72-Hour Guarantee</li>
       </ul>
       <a href="quiz.html" class="btn btn-terra btn-md">Take the Free Assessment First →</a>
       <p class="bp-secondary">Already know your system? <a href="blueprint.html" class="link-soft">Go straight to the Blueprint →</a></p>
