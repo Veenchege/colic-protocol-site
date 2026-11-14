@@ -1796,7 +1796,7 @@ function showResult() {
 
   const closestFitContainer = document.getElementById('closestFitVisualCard');
   if (closestFitContainer) {
-    closestFitContainer.innerHTML = getClosestFitVisualHtml(type);
+    closestFitContainer.innerHTML = '';
   }
 
   document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
@@ -1850,358 +1850,6 @@ function showResult() {
   resultShown = true;
   show('resultScreen');
   window.scrollTo({top: 0, behavior: 'smooth'});
-}
-
-/* ── CLOSEST FIT PHYSIOLOGICAL VISUAL ARCHITECTURE (PEDIATRIC RADIOGRAPHIC SCAN) ── */
-function getClosestFitVisualHtml(type) {
-  let badge = '';
-  let title = '';
-  let sub = '';
-  let mechanismTag = '';
-  let mechanismText = '';
-  let patternSpecificSvg = '';
-  let callouts = '';
-
-  if (type === 'NS') {
-    badge = 'AUTONOMIC & SENSORY AXIS';
-    title = 'How Sensory Overload & Autonomic Arousal Trigger Evening Clusters';
-    sub = 'Radiographic projection of developing sensory cortex, vagus pathway, and cardiac regulation.';
-    mechanismTag = 'NEURAL-CARDIAC FEEDBACK ARCHITECTURE';
-    mechanismText = 'In young infants, sensory fatigue in the developing cerebral cortex triggers autonomic acceleration, elevating cardiac arousal and crying distress. Steady rhythmic vestibular input and low lighting activate the vagus nerve pathway to slow the cardiac cycle and restore baseline calm.';
-
-    patternSpecificSvg = `
-      <!-- Brain: Developing Cerebral Sensory Cortex with Neural Arborization -->
-      <g id="brainCortex">
-        <path d="M 128 44 C 145 42, 166 50, 172 64 C 178 74, 172 84, 164 88 C 154 94, 138 92, 130 84 Z" 
-              fill="rgba(108,135,89,0.22)" stroke="#6C8759" stroke-width="1.6"/>
-        <circle cx="144" cy="54" r="3.2" fill="#6C8759" stroke="#A4C290" stroke-width="1"/>
-        <circle cx="160" cy="58" r="2.8" fill="#C0963F" stroke="#E6CE94" stroke-width="1"/>
-        <circle cx="152" cy="72" r="3.2" fill="#6C8759" stroke="#A4C290" stroke-width="1"/>
-        <circle cx="136" cy="68" r="2.5" fill="#6C8759"/>
-        <line x1="144" y1="54" x2="160" y2="58" stroke="#6C8759" stroke-width="1.2" stroke-dasharray="2,2"/>
-        <line x1="144" y1="54" x2="152" y2="72" stroke="#6C8759" stroke-width="1.2"/>
-        <line x1="160" y1="58" x2="152" y2="72" stroke="#C0963F" stroke-width="1.2"/>
-        <line x1="136" y1="68" x2="144" y2="54" stroke="#6C8759" stroke-width="1"/>
-        <!-- Sensory Input Wavelets -->
-        <path d="M 186 64 C 180 66, 176 72, 170 70" fill="none" stroke="#C0963F" stroke-width="1.8" stroke-linecap="round"/>
-        <path d="M 190 70 C 184 72, 180 78, 174 76" fill="none" stroke="#C0963F" stroke-width="1.8" stroke-linecap="round"/>
-      </g>
-
-      <!-- Vagus Nerve Trunk (Cranial Nerve X) -->
-      <path d="M 136 92 Q 134 114, 132 138 T 130 185" fill="none" stroke="#6C8759" stroke-width="2.4" stroke-linecap="round"/>
-      <path d="M 133 134 Q 138 140, 144 146" fill="none" stroke="#6C8759" stroke-width="1.6" stroke-dasharray="2,2"/>
-      <path d="M 132 144 Q 137 148, 143 152" fill="none" stroke="#6C8759" stroke-width="1.6" stroke-dasharray="2,2"/>
-    `;
-
-    callouts = `
-      <!-- Callout 1: Sensory Cortex -->
-      <line x1="156" y1="52" x2="224" y2="38" stroke="rgba(175,205,230,0.65)" stroke-width="1.2"/>
-      <circle cx="224" cy="38" r="2.8" fill="#6C8759" stroke="#FAF5EE" stroke-width="1"/>
-      <text x="231" y="36" font-family="'DM Sans', sans-serif" font-size="9.5" font-weight="700" fill="#E4EBDC">Sensory Cortex</text>
-      <text x="231" y="47" font-family="'DM Mono', monospace" font-size="7.5" fill="#9C8C77">Neural Arousal Threshold</text>
-
-      <!-- Callout 2: Vagus Nerve Trunk -->
-      <line x1="132" y1="118" x2="48" y2="108" stroke="rgba(175,205,230,0.65)" stroke-width="1.2"/>
-      <circle cx="48" cy="108" r="2.8" fill="#6C8759" stroke="#FAF5EE" stroke-width="1"/>
-      <text x="42" y="106" font-family="'DM Sans', sans-serif" font-size="9.5" font-weight="700" fill="#E4EBDC" text-anchor="end">Vagus Nerve Axis</text>
-      <text x="42" y="117" font-family="'DM Mono', monospace" font-size="7.5" fill="#9C8C77" text-anchor="end">Cranial Nerve X Calming</text>
-
-      <!-- Callout 3: Cardiac Mediastinum / Pulsating Heart -->
-      <line x1="158" y1="151" x2="224" y2="151" stroke="rgba(230,57,70,0.7)" stroke-width="1.2"/>
-      <circle cx="224" cy="151" r="2.8" fill="#E63946" stroke="#FAF5EE" stroke-width="1"/>
-      <text x="231" y="149" font-family="'DM Sans', sans-serif" font-size="9.5" font-weight="700" fill="#E63946">Cardiac Rhythm</text>
-      <text x="231" y="160" font-family="'DM Mono', monospace" font-size="7.5" fill="rgba(230,57,70,0.85)">Pulsating Heart (78 BPM)</text>
-
-      <!-- Callout 4: Enteric Gut Loop -->
-      <line x1="146" y1="192" x2="224" y2="204" stroke="rgba(175,205,230,0.65)" stroke-width="1.2"/>
-      <circle cx="224" cy="204" r="2.8" fill="#BC5A33" stroke="#FAF5EE" stroke-width="1"/>
-      <text x="231" y="202" font-family="'DM Sans', sans-serif" font-size="9.5" font-weight="700" fill="#F3E1D4">Enteric Gut Loop</text>
-      <text x="231" y="213" font-family="'DM Mono', monospace" font-size="7.5" fill="#9C8C77">Microbiome Transit Axis</text>
-    `;
-  } else if (type === 'GUT') {
-    badge = 'ENTERIC & MICROBIOME AXIS';
-    title = 'How Digestive Gas & Enteric Spasms Trigger Wave-Like Distress';
-    sub = 'Radiographic projection of gastric distension, enteric transit, and visceral feedback.';
-    mechanismTag = 'GASTRO-AUTONOMIC FEEDBACK ARCHITECTURE';
-    mechanismText = 'Immature intestinal microbiota produces transient fermentation gas that distends the delicate infant bowel walls. Smooth-muscle spasms send visceral discomfort signals along the enteric-vagal axis, causing sudden legs-tucked crying episodes independent of feeding times.';
-
-    patternSpecificSvg = `
-      <!-- Stomach & Intestinal Highlighting -->
-      <path d="M 132 174 C 128 182, 132 195, 144 196 C 152 197, 156 188, 152 179 C 147 172, 137 171, 132 174 Z" 
-            fill="rgba(188,90,51,0.3)" stroke="#BC5A33" stroke-width="2"/>
-      <circle cx="140" cy="182" r="3" fill="#FFF" opacity="0.6"/>
-      <circle cx="146" cy="188" r="2" fill="#FFF" opacity="0.6"/>
-
-      <!-- Distended Intestinal Loops -->
-      <path d="M 134 198 C 142 203, 148 200, 146 208 C 142 216, 132 212, 138 222 C 144 228, 152 221, 149 214" 
-            fill="none" stroke="#BC5A33" stroke-width="2.2" stroke-linecap="round"/>
-      <circle cx="141" cy="205" r="2.5" fill="#FFF" opacity="0.5"/>
-      <circle cx="145" cy="216" r="2" fill="#FFF" opacity="0.5"/>
-
-      <!-- Vagus Gut-Brain Axis -->
-      <path d="M 136 92 Q 134 114, 132 138 T 130 185" fill="none" stroke="#6C8759" stroke-width="1.8" stroke-dasharray="2,2"/>
-    `;
-
-    callouts = `
-      <line x1="148" y1="184" x2="224" y2="184" stroke="rgba(188,90,51,0.7)" stroke-width="1.2"/>
-      <circle cx="224" cy="184" r="2.8" fill="#BC5A33" stroke="#FAF5EE" stroke-width="1"/>
-      <text x="231" y="182" font-family="'DM Sans', sans-serif" font-size="9.5" font-weight="700" fill="#F3E1D4">Gastric Distension</text>
-      <text x="231" y="193" font-family="'DM Mono', monospace" font-size="7.5" fill="#9C8C77">Fermentation Gas Volume</text>
-
-      <line x1="144" y1="214" x2="224" y2="218" stroke="rgba(188,90,51,0.7)" stroke-width="1.2"/>
-      <circle cx="224" cy="218" r="2.8" fill="#BC5A33" stroke="#FAF5EE" stroke-width="1"/>
-      <text x="231" y="216" font-family="'DM Sans', sans-serif" font-size="9.5" font-weight="700" fill="#F3E1D4">Enteric Spasm Loop</text>
-      <text x="231" y="227" font-family="'DM Mono', monospace" font-size="7.5" fill="#9C8C77">Smooth Muscle Contraction</text>
-
-      <line x1="158" y1="151" x2="224" y2="140" stroke="rgba(230,57,70,0.7)" stroke-width="1.2"/>
-      <circle cx="224" cy="140" r="2.8" fill="#E63946" stroke="#FAF5EE" stroke-width="1"/>
-      <text x="231" y="138" font-family="'DM Sans', sans-serif" font-size="9.5" font-weight="700" fill="#E63946">Cardiac Rhythm</text>
-      <text x="231" y="149" font-family="'DM Mono', monospace" font-size="7.5" fill="rgba(230,57,70,0.85)">Pulsating Heart (78 BPM)</text>
-
-      <line x1="132" y1="118" x2="48" y2="108" stroke="rgba(175,205,230,0.65)" stroke-width="1.2"/>
-      <circle cx="48" cy="108" r="2.8" fill="#6C8759" stroke="#FAF5EE" stroke-width="1"/>
-      <text x="42" y="106" font-family="'DM Sans', sans-serif" font-size="9.5" font-weight="700" fill="#E4EBDC" text-anchor="end">Gut-Brain Vagal Axis</text>
-      <text x="42" y="117" font-family="'DM Mono', monospace" font-size="7.5" fill="#9C8C77" text-anchor="end">Visceral Arousal Feedback</text>
-    `;
-  } else if (type === 'FM') {
-    badge = 'ORAL-GASTRIC MOTOR AXIS';
-    title = 'How Aerophagia & Fluid Dynamics Drive Post-Feed Discomfort';
-    sub = 'Radiographic projection of swallow mechanics, esophageal transit, and gastric distension.';
-    mechanismTag = 'SWALLOW-AEROPHAGIA ARCHITECTURE';
-    mechanismText = 'A shallow latch, high milk flow velocity, or bottle angle mismatch allows micro-air swallows (aerophagia) during feeding. As the gastric fundus distends rapidly, tension on the cardiac sphincter triggers acute post-feed distress within 20 minutes of finishing a feed.';
-
-    patternSpecificSvg = `
-      <!-- Oral Cavity & Pharynx -->
-      <path d="M 172 108 C 165 110, 155 114, 148 118" fill="none" stroke="#C0963F" stroke-width="2.4" stroke-linecap="round"/>
-      <circle cx="166" cy="110" r="2.5" fill="#FFF" opacity="0.7"/>
-
-      <!-- Esophagus Transit Tube -->
-      <path d="M 144 122 C 140 134, 138 152, 136 170" fill="none" stroke="#C0963F" stroke-width="2.2" stroke-linecap="round"/>
-
-      <!-- Gastric Aerophagia Air Bubble in Fundus -->
-      <path d="M 132 174 C 128 182, 132 195, 144 196 C 152 197, 156 188, 152 179 C 147 172, 137 171, 132 174 Z" 
-            fill="rgba(192,150,63,0.3)" stroke="#C0963F" stroke-width="2"/>
-      <ellipse cx="142" cy="180" rx="6" ry="4" fill="#FFF" opacity="0.65"/>
-      <ellipse cx="144" cy="189" rx="4" ry="3" fill="#FFF" opacity="0.45"/>
-    `;
-
-    callouts = `
-      <line x1="168" y1="108" x2="224" y2="85" stroke="rgba(192,150,63,0.7)" stroke-width="1.2"/>
-      <circle cx="224" cy="85" r="2.8" fill="#C0963F" stroke="#FAF5EE" stroke-width="1"/>
-      <text x="231" y="83" font-family="'DM Sans', sans-serif" font-size="9.5" font-weight="700" fill="#EEDFB9">Pharyngeal Latch Tract</text>
-      <text x="231" y="94" font-family="'DM Mono', monospace" font-size="7.5" fill="#9C8C77">Fluid Flow Velocity</text>
-
-      <line x1="142" y1="180" x2="224" y2="180" stroke="rgba(192,150,63,0.7)" stroke-width="1.2"/>
-      <circle cx="224" cy="180" r="2.8" fill="#C0963F" stroke="#FAF5EE" stroke-width="1"/>
-      <text x="231" y="178" font-family="'DM Sans', sans-serif" font-size="9.5" font-weight="700" fill="#EEDFB9">Gastric Aerophagia</text>
-      <text x="231" y="189" font-family="'DM Mono', monospace" font-size="7.5" fill="#9C8C77">Entrained Air Bubble</text>
-
-      <line x1="158" y1="151" x2="224" y2="140" stroke="rgba(230,57,70,0.7)" stroke-width="1.2"/>
-      <circle cx="224" cy="140" r="2.8" fill="#E63946" stroke="#FAF5EE" stroke-width="1"/>
-      <text x="231" y="138" font-family="'DM Sans', sans-serif" font-size="9.5" font-weight="700" fill="#E63946">Cardiac Rhythm</text>
-      <text x="231" y="149" font-family="'DM Mono', monospace" font-size="7.5" fill="rgba(230,57,70,0.85)">Pulsating Heart (78 BPM)</text>
-    `;
-  } else {
-    badge = 'MULTISYSTEM DEVELOPMENTAL AXIS';
-    title = 'How Feeding, Digestion, and Sensory Input Interact Across the Day';
-    sub = 'Radiographic overview of sensory accumulation, gut transit, and autonomic regulation.';
-    mechanismTag = 'INTEGRATED MULTISYSTEM ARCHITECTURE';
-    mechanismText = 'When multiple signs appear simultaneously, evening sensory fatigue interacts with digestive transit and feeding pace. A structured 3-step sequence addresses feeding mechanics first, then winding, and finally evening sensory dimming.';
-
-    patternSpecificSvg = `
-      <g id="brainCortex">
-        <path d="M 128 44 C 145 42, 166 50, 172 64 C 178 74, 172 84, 164 88 C 154 94, 138 92, 130 84 Z" 
-              fill="rgba(108,135,89,0.18)" stroke="#6C8759" stroke-width="1.4"/>
-      </g>
-      <path d="M 136 92 Q 134 114, 132 138 T 130 185" fill="none" stroke="#6C8759" stroke-width="1.8"/>
-      <path d="M 132 174 C 128 182, 132 195, 144 196 C 152 197, 156 188, 152 179 C 147 172, 137 171, 132 174 Z" 
-            fill="rgba(188,90,51,0.2)" stroke="#BC5A33" stroke-width="1.6"/>
-    `;
-
-    callouts = `
-      <line x1="156" y1="52" x2="224" y2="45" stroke="rgba(175,205,230,0.65)" stroke-width="1.2"/>
-      <circle cx="224" cy="45" r="2.8" fill="#6C8759" stroke="#FAF5EE" stroke-width="1"/>
-      <text x="231" y="43" font-family="'DM Sans', sans-serif" font-size="9.5" font-weight="700" fill="#E4EBDC">Sensory Cortex</text>
-
-      <line x1="158" y1="151" x2="224" y2="140" stroke="rgba(230,57,70,0.7)" stroke-width="1.2"/>
-      <circle cx="224" cy="140" r="2.8" fill="#E63946" stroke="#FAF5EE" stroke-width="1"/>
-      <text x="231" y="138" font-family="'DM Sans', sans-serif" font-size="9.5" font-weight="700" fill="#E63946">Cardiac Rhythm</text>
-
-      <line x1="146" y1="184" x2="224" y2="195" stroke="rgba(188,90,51,0.7)" stroke-width="1.2"/>
-      <circle cx="224" cy="195" r="2.8" fill="#BC5A33" stroke="#FAF5EE" stroke-width="1"/>
-      <text x="231" y="193" font-family="'DM Sans', sans-serif" font-size="9.5" font-weight="700" fill="#F3E1D4">Enteric Gut</text>
-    `;
-  }
-
-  return `
-    <div style="background:#090E13;border-radius:18px;border:1px solid #1C2733;padding:16px;box-shadow:0 14px 40px rgba(0,0,0,0.35);position:relative;overflow:hidden;margin:18px 0">
-      <!-- Radiograph Header Scan Metadata -->
-      <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(175,205,230,0.12);padding-bottom:8px;margin-bottom:12px;font-family:'DM Mono',monospace;font-size:8px;color:rgba(175,205,230,0.6);letter-spacing:0.08em;text-transform:uppercase">
-        <span>MODALITY: DIGITAL RADIOGRAPHIC PROJECTION</span>
-        <span style="color:#6C8759">FOV: 240mm &bull; 78 BPM RHYTHM</span>
-        <span>LATERAL PROFILE (SAGITTAL)</span>
-      </div>
-
-      <div style="position:relative;width:100%;display:flex;justify-content:center">
-        <svg viewBox="-85 0 440 270" style="width:100%;max-width:410px;height:auto;display:block">
-          <defs>
-            <radialGradient id="xrayGlow" cx="40%" cy="45%" r="60%">
-              <stop offset="0%" stop-color="#142230" stop-opacity="0.9"/>
-              <stop offset="60%" stop-color="#0E1620" stop-opacity="0.7"/>
-              <stop offset="100%" stop-color="#080C10" stop-opacity="0.95"/>
-            </radialGradient>
-            <pattern id="xrayGrid" width="20" height="20" patternUnits="userSpaceOnUse">
-              <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(140,180,210,0.04)" stroke-width="0.8"/>
-            </pattern>
-          </defs>
-
-          <style>
-            @keyframes heartPulseGlow {
-              0%, 100% { opacity: 0.25; }
-              20% { opacity: 0.95; }
-              40% { opacity: 0.35; }
-              60% { opacity: 0.85; }
-              80% { opacity: 0.25; }
-            }
-            @keyframes cardiacWave {
-              0%, 100% { opacity: 0.15; }
-              20% { opacity: 0.9; }
-              40% { opacity: 0.25; }
-              60% { opacity: 0.75; }
-              80% { opacity: 0.15; }
-            }
-            .heart-glow-ring {
-              animation: heartPulseGlow 1.25s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-            }
-            .cardiac-pulse-circle {
-              animation: cardiacWave 1.25s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-            }
-          </style>
-
-          <!-- Film Screen Background with Medical Calibration Grid -->
-          <rect x="-80" y="4" width="430" height="262" rx="14" fill="url(#xrayGlow)"/>
-          <rect x="-80" y="4" width="430" height="262" rx="14" fill="url(#xrayGrid)"/>
-
-          <!-- Calibration Crosshairs & Corner Scales -->
-          <path d="M -72 18 L -66 18 M -72 18 L -72 24" stroke="rgba(175,205,230,0.3)" stroke-width="1"/>
-          <path d="M 342 18 L 336 18 M 342 18 L 342 24" stroke="rgba(175,205,230,0.3)" stroke-width="1"/>
-          <path d="M -72 258 L -66 258 M -72 258 L -72 252" stroke="rgba(175,205,230,0.3)" stroke-width="1"/>
-          <path d="M 342 258 L 336 258 M 342 258 L 342 252" stroke="rgba(175,205,230,0.3)" stroke-width="1"/>
-
-          <!-- 1. SOFT TISSUE RADIOGRAPHIC CONTOUR (Infant Profile in True Lateral Perspective) -->
-          <path d="M 122 36 
-                   C 142 36, 172 44, 185 64 
-                   C 192 75, 194 88, 184 98 
-                   C 182 100, 180 102, 178 102 
-                   L 182 108 
-                   C 184 110, 182 113, 178 114
-                   L 175 116
-                   C 178 118, 177 122, 173 124
-                   C 168 126, 162 126, 158 132
-                   C 154 138, 156 150, 158 165
-                   C 162 188, 160 215, 152 232
-                   C 146 244, 126 248, 114 242
-                   C 102 236, 100 220, 102 195
-                   C 104 165, 102 135, 104 105
-                   C 106 72, 110 36, 122 36 Z" 
-                fill="rgba(225,240,255,0.025)" stroke="rgba(175,205,230,0.22)" stroke-width="1.2"/>
-
-          <!-- 2. RADIOPAQUE SKELETAL SYSTEM -->
-          <!-- Cranial Vault (Frontal, Parietal, Occipital Bones with Fontanelles) -->
-          <path d="M 125 40 
-                   C 144 40, 168 48, 178 66 
-                   C 184 76, 182 88, 174 94 
-                   C 164 100, 142 100, 130 92 
-                   C 120 84, 115 62, 125 40 Z" 
-                fill="none" stroke="rgba(225,242,255,0.7)" stroke-width="1.8"/>
-
-          <!-- Coronal & Lambdoid Sutures -->
-          <path d="M 148 42 C 150 54, 147 68, 144 78" fill="none" stroke="rgba(175,205,230,0.4)" stroke-width="0.9" stroke-dasharray="2,2"/>
-          <path d="M 130 46 C 126 58, 124 72, 126 84" fill="none" stroke="rgba(175,205,230,0.35)" stroke-width="0.9" stroke-dasharray="2,2"/>
-          <!-- Anterior Fontanelle Notch -->
-          <ellipse cx="150" cy="42" rx="4" ry="2.2" fill="rgba(108,135,89,0.2)" stroke="rgba(175,205,230,0.5)" stroke-width="1"/>
-
-          <!-- Facial Bones & Mandible (Jawbone) -->
-          <path d="M 172 96 C 176 102, 174 108, 168 112 C 160 116, 148 116, 142 108" fill="none" stroke="rgba(225,242,255,0.6)" stroke-width="1.4"/>
-          <circle cx="166" cy="80" r="5.5" fill="none" stroke="rgba(175,205,230,0.3)" stroke-width="1"/>
-
-          <!-- Cervical Spine (C1-C7 Stacked Vertebral Bodies) -->
-          <g id="cervicalSpine">
-            <rect x="126" y="98" width="8" height="4.2" rx="1.5" fill="rgba(225,242,255,0.25)" stroke="rgba(225,242,255,0.7)" stroke-width="1"/>
-            <rect x="125" y="104" width="8.5" height="4.2" rx="1.5" fill="rgba(225,242,255,0.25)" stroke="rgba(225,242,255,0.7)" stroke-width="1"/>
-            <rect x="124" y="110" width="9" height="4.2" rx="1.5" fill="rgba(225,242,255,0.25)" stroke="rgba(225,242,255,0.7)" stroke-width="1"/>
-            <rect x="123" y="116" width="9.5" height="4.2" rx="1.5" fill="rgba(225,242,255,0.25)" stroke="rgba(225,242,255,0.7)" stroke-width="1"/>
-            <rect x="122" y="122" width="10" height="4.2" rx="1.5" fill="rgba(225,242,255,0.25)" stroke="rgba(225,242,255,0.7)" stroke-width="1"/>
-          </g>
-
-          <!-- Thoracic & Lumbar Spine (T1-T12, Gentle Infant C-Curve) -->
-          <g id="thoracolumbarSpine">
-            <rect x="121" y="128" width="10" height="4.5" rx="1.5" fill="rgba(225,242,255,0.25)" stroke="rgba(225,242,255,0.7)" stroke-width="1"/>
-            <rect x="120" y="135" width="10.5" height="4.5" rx="1.5" fill="rgba(225,242,255,0.25)" stroke="rgba(225,242,255,0.7)" stroke-width="1"/>
-            <rect x="119" y="142" width="11" height="4.5" rx="1.5" fill="rgba(225,242,255,0.25)" stroke="rgba(225,242,255,0.7)" stroke-width="1"/>
-            <rect x="118" y="149" width="11" height="4.5" rx="1.5" fill="rgba(225,242,255,0.25)" stroke="rgba(225,242,255,0.7)" stroke-width="1"/>
-            <rect x="117" y="156" width="11" height="4.5" rx="1.5" fill="rgba(225,242,255,0.25)" stroke="rgba(225,242,255,0.7)" stroke-width="1"/>
-            <rect x="117" y="163" width="11" height="4.5" rx="1.5" fill="rgba(225,242,255,0.25)" stroke="rgba(225,242,255,0.7)" stroke-width="1"/>
-            <rect x="118" y="170" width="11.5" height="4.5" rx="1.5" fill="rgba(225,242,255,0.25)" stroke="rgba(225,242,255,0.7)" stroke-width="1"/>
-            <rect x="119" y="177" width="12" height="4.5" rx="1.5" fill="rgba(225,242,255,0.25)" stroke="rgba(225,242,255,0.7)" stroke-width="1"/>
-            <rect x="121" y="184" width="12" height="4.5" rx="1.5" fill="rgba(225,242,255,0.25)" stroke="rgba(225,242,255,0.7)" stroke-width="1"/>
-            <rect x="123" y="191" width="12.5" height="4.5" rx="1.5" fill="rgba(225,242,255,0.25)" stroke="rgba(225,242,255,0.7)" stroke-width="1"/>
-            <rect x="126" y="198" width="12.5" height="5" rx="1.5" fill="rgba(225,242,255,0.25)" stroke="rgba(225,242,255,0.7)" stroke-width="1"/>
-          </g>
-
-          <!-- Clavicle (Collarbone) -->
-          <path d="M 132 126 Q 142 124, 154 128" fill="none" stroke="rgba(225,242,255,0.75)" stroke-width="1.8" stroke-linecap="round"/>
-
-          <!-- Rib Cage (Curved Translucent Pediatric Rib Pairs) -->
-          <g id="ribCage" stroke="rgba(225,242,255,0.5)" stroke-width="1.3" fill="none" stroke-linecap="round">
-            <path d="M 128 132 C 138 131, 150 134, 155 138"/>
-            <path d="M 127 138 C 139 137, 152 141, 157 146"/>
-            <path d="M 126 144 C 139 143, 153 148, 158 154"/>
-            <path d="M 125 151 C 139 150, 153 155, 157 162"/>
-            <path d="M 124 158 C 138 157, 152 163, 155 170"/>
-            <path d="M 124 165 C 136 165, 148 171, 152 178"/>
-            <path d="M 125 172 C 135 172, 144 178, 147 185"/>
-          </g>
-
-          <!-- Diaphragm Dome -->
-          <path d="M 124 168 Q 140 165, 154 172" fill="none" stroke="rgba(175,205,230,0.5)" stroke-width="1.4" stroke-dasharray="4,2"/>
-
-          <!-- Pattern Specific Anatomy Layer -->
-          ${patternSpecificSvg}
-
-          <!-- 3. THE BRIGHT RED PULSATING HEART (Cardiac Mediastinum Focal Point) -->
-          <!-- Cardiac shockwave & pulse rings (Strictly opacity animation - Rule 9) -->
-          <circle cx="147" cy="151" r="19" fill="none" stroke="#E63946" stroke-width="1.2" class="cardiac-pulse-circle"/>
-          <circle cx="147" cy="151" r="15" fill="#E63946" class="heart-glow-ring"/>
-
-          <!-- Anatomical Cardiac Silhouette (Ventricles + Ascending Aorta Arch) -->
-          <path d="M 145 142 Q 145 134, 149 132 T 153 140" fill="none" stroke="#C9182B" stroke-width="2" stroke-linecap="round"/>
-          <line x1="147" y1="133" x2="147" y2="128" stroke="#C9182B" stroke-width="1.2"/>
-          <line x1="150" y1="133" x2="152" y2="129" stroke="#C9182B" stroke-width="1.2"/>
-
-          <g transform="translate(147, 151)">
-            <path d="M 0 9 C -7 3, -11 -3, -11 -9 A 6 6 0 0 1 0 -7 A 6 6 0 0 1 11 -9 C 11 -3, 7 3, 0 9 Z" 
-                  fill="#E63946" stroke="#C9182B" stroke-width="1.4"/>
-            <circle cx="-3.5" cy="-6" r="1.6" fill="#FFF" opacity="0.8"/>
-          </g>
-
-          <!-- 4. CLINICAL CALLOUT ANNOTATIONS -->
-          ${callouts}
-        </svg>
-      </div>
-
-      <!-- Radiographic Interpretation Strip -->
-      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(175,205,230,0.12);border-radius:10px;padding:10px 14px;margin-top:10px">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
-          <span style="font-family:'DM Mono',monospace;font-size:9px;font-weight:700;color:#6C8759;letter-spacing:0.08em;text-transform:uppercase">${mechanismTag}</span>
-          <span style="font-family:'DM Mono',monospace;font-size:8px;color:rgba(175,205,230,0.5)">LATERAL RADIOGRAPHIC VIEW</span>
-        </div>
-        <p style="font-family:'DM Sans',sans-serif;font-size:12px;color:rgba(250,244,236,0.82);line-height:1.5;margin:0">
-          ${mechanismText}
-        </p>
-      </div>
-    </div>
-  `;
 }
 
 /* ── BLOG GUIDES & PROVEN MARKETING VIDEO SPOTLIGHTS ── */
@@ -2316,6 +1964,103 @@ function renderBlogAndVideoGuides(type, feedMethod) {
   }
 }
 
+const STRATEGY_ACTIONS = {
+  NS: {
+    type: "Nervous System Dysregulation",
+    color: "var(--terra)",
+    stage1Action: "Dim lighting 60 minutes before the evening cluster, maintain quiet low steady sound on a timer across the room, and use a supported forearm hold with slow steady rhythm.",
+    stage2Action: "Address sensory stimulation before evening feeds; ensure quiet surroundings during late-day nursing or bottle sessions."
+  },
+  FM: {
+    type: "Feeding Mechanics",
+    color: "var(--gold)",
+    stage1Action: "Pace feeds at an upright 45-degree angle, ensure the bottle nipple remains fully covered with milk, and pause every 2 to 3 minutes for a gentle burp.",
+    stage2Action: (name) => `Keep ${name} upright against your shoulder for 15 minutes after feeds to let swallowed air release before laying flat.`
+  },
+  GUT: {
+    type: "Gut Microbiome Imbalance",
+    color: "var(--sage)",
+    stage1Action: "Use gentle clockwise tummy massage and slow bicycle legs during calm daytime alert intervals to encourage digestive transit without forcing.",
+    stage2Action: (name) => `Hold ${name} upright against your shoulder with gentle back pats after feeding to ease abdominal tension.`
+  },
+  MIXED: {
+    type: "General Colic Starting Point",
+    color: "var(--muted)",
+    stage1Action: "Begin with evening sensory wind-down and a supported hold during crying peaks.",
+    stage2Action: () => "Follow with daytime feeding pace adjustments."
+  }
+};
+
+function buildScoreStrategyHtml(s, bName) {
+  const total = s.GUT + s.NS + s.FM;
+  const pctOf = k => total > 0 ? Math.round((s[k] / total) * 100) : 33;
+  const order = ['NS', 'FM', 'GUT'].slice().sort((a, b) => (s[b] || 0) - (s[a] || 0));
+
+  const k1 = order[0];
+  const k2 = order[1];
+  const p1 = pctOf(k1);
+  const p2 = pctOf(k2);
+  const combined = p1 + p2;
+
+  const r1 = STRATEGY_ACTIONS[k1] || STRATEGY_ACTIONS['MIXED'];
+  const r2 = STRATEGY_ACTIONS[k2] || STRATEGY_ACTIONS['MIXED'];
+  const name = bName || 'your baby';
+
+  let strategyTitle = '';
+  let strategyIntro = '';
+  let stage1Label = '';
+  let stage1Text = '';
+  let stage2Label = '';
+  let stage2Text = '';
+  let rationale = '';
+
+  const s2Action = typeof r2.stage2Action === 'function' ? r2.stage2Action(name) : r2.stage2Action;
+
+  if (p1 - p2 <= 15 || (p1 < 55 && combined >= 60)) {
+    strategyTitle = `Two-Stage Starting-Point Strategy (${combined}% Combined Profile)`;
+    strategyIntro = `Together, <strong>${r1.type} (${p1}%)</strong> and <strong>${r2.type} (${p2}%)</strong> represent <strong>${combined}%</strong> of ${name}'s crying assessment pattern. When two patterns are this close, trying to change everything at once creates confusion. A sequenced approach works best:`;
+    stage1Label = `Stage 1 &middot; Tonight (Primary Focus)`;
+    stage1Text = `<strong>Tackle ${r1.type} first:</strong> ${r1.stage1Action}`;
+    stage2Label = `Stage 2 &middot; Tomorrow (Layered Focus)`;
+    stage2Text = `<strong>Then layer in ${r2.type}:</strong> ${r2.stage1Action}`;
+    rationale = `Removing peak evening distress first creates the calm baseline needed to accurately observe and fine-tune feeding mechanics and digestive transit during calm daytime hours.`;
+  } else {
+    strategyTitle = `Primary Starting-Point Focus (${p1}% Match)`;
+    strategyIntro = `<strong>${r1.type} (${p1}%)</strong> is the clear primary pattern for ${name}. Focus on this foundation first before introducing adjustments from secondary patterns.`;
+    stage1Label = `Primary Focus &middot; Tonight`;
+    stage1Text = `<strong>First Priority:</strong> ${r1.stage1Action}`;
+    stage2Label = `Secondary Consideration`;
+    stage2Text = `If needed after 48 hours, layer secondary adjustments from <strong>${r2.type} (${p2}%)</strong>: ${s2Action}`;
+    rationale = `Targeting the dominant pattern first avoids overwhelming ${name} with multiple conflicting changes at once.`;
+  }
+
+  return `
+    <div class="score-strategy-card" style="margin-top:16px;background:rgba(255,255,255,0.75);border:1px solid rgba(44,31,24,0.12);border-radius:12px;padding:16px 18px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <span style="font-family:'DM Mono',monospace;font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--terra)">${strategyTitle}</span>
+        <span style="font-family:'DM Mono',monospace;font-size:9.5px;font-weight:700;color:var(--pine);background:var(--sage-soft);padding:3px 8px;border-radius:6px">${combined}% Profile</span>
+      </div>
+      <p style="font-size:13.5px;color:var(--ink);line-height:1.55;margin-bottom:12px">${strategyIntro}</p>
+
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px">
+        <div style="background:rgba(251,244,234,0.75);border:1px solid rgba(44,31,24,0.08);border-left:3px solid var(--terra);border-radius:8px;padding:10px 14px">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--terra);margin-bottom:4px">${stage1Label}</div>
+          <div style="font-size:13px;color:var(--ink);line-height:1.5">${stage1Text}</div>
+        </div>
+
+        <div style="background:rgba(251,244,234,0.75);border:1px solid rgba(44,31,24,0.08);border-left:3px solid var(--gold);border-radius:8px;padding:10px 14px">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#8A6A20;margin-bottom:4px">${stage2Label}</div>
+          <div style="font-size:13px;color:var(--ink);line-height:1.5">${stage2Text}</div>
+        </div>
+      </div>
+
+      <p style="font-size:12px;color:var(--muted);line-height:1.5;margin:0;font-style:italic;border-top:1px solid rgba(44,31,24,0.08);padding-top:10px">
+        <strong>Why this sequence works:</strong> ${rationale}
+      </p>
+    </div>
+  `;
+}
+
 /* ── SCORE PANEL & AUDIT ─────────────────────────────────────────────── */
 function renderScorePanel(s, primaryType) {
   const total = s.GUT + s.NS + s.FM;
@@ -2334,11 +2079,14 @@ function renderScorePanel(s, primaryType) {
       </div>`;
   }).join('');
 
+  const strategyHtml = buildScoreStrategyHtml(s, babyName);
+
   const container = document.getElementById('scorePanel');
   if (container) {
     container.innerHTML = `
       <div class="score-panel-title">Score breakdown across the three patterns</div>
       ${rows}
+      ${strategyHtml}
     `;
   }
 }
