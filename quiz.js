@@ -215,6 +215,7 @@ const QUESTIONS = [
     q: "When does your baby cry most intensely?",
     sub: "Look at the pattern over the last few days. Pick the most frequent timing.",
     single: true,
+    isTimingClock: true,
     opts: [
       ["Consistently in the late afternoon or evening (5 PM to midnight), regardless of feeds", {GUT:0,NS:4,FM:0}, null, null, "Concentrated evening clustering (witching hour)"],
       ["During feeding or within 20 minutes after, often pulling away or arching", {GUT:2,NS:0,FM:4}, null, null, "Discomfort during or immediately following feeding"],
@@ -938,15 +939,27 @@ const DURATION_META = [
   }
 ];
 
+function getAnnularSectorPath(startAngle, endAngle, cx, cy, rInner, rOuter) {
+  let diff = endAngle - startAngle;
+  while (diff < 0) diff += 360;
+  if (diff >= 360) diff = 359.99;
+  if (diff <= 0.01) return '';
+  const sRad = (startAngle - 90) * Math.PI / 180;
+  const eRad = (startAngle + diff - 90) * Math.PI / 180;
+  const x1 = (cx + rOuter * Math.cos(sRad)).toFixed(1);
+  const y1 = (cy + rOuter * Math.sin(sRad)).toFixed(1);
+  const x2 = (cx + rOuter * Math.cos(eRad)).toFixed(1);
+  const y2 = (cy + rOuter * Math.sin(eRad)).toFixed(1);
+  const x3 = (cx + rInner * Math.cos(eRad)).toFixed(1);
+  const y3 = (cy + rInner * Math.sin(eRad)).toFixed(1);
+  const x4 = (cx + rInner * Math.cos(sRad)).toFixed(1);
+  const y4 = (cy + rInner * Math.sin(sRad)).toFixed(1);
+  const largeArc = diff > 180 ? 1 : 0;
+  return `M ${x1} ${y1} A ${rOuter} ${rOuter} 0 ${largeArc} 1 ${x2} ${y2} L ${x3} ${y3} A ${rInner} ${rInner} 0 ${largeArc} 0 ${x4} ${y4} Z`;
+}
+
 function getWedgePath(angle, cx, cy, r) {
-  if (angle <= 0) return '';
-  const startX = cx;
-  const startY = cy - r;
-  const rad = (angle - 90) * Math.PI / 180;
-  const endX = (cx + r * Math.cos(rad)).toFixed(2);
-  const endY = (cy + r * Math.sin(rad)).toFixed(2);
-  const largeArc = angle > 180 ? 1 : 0;
-  return `M ${cx} ${cy} L ${startX} ${startY} A ${r} ${r} 0 ${largeArc} 1 ${endX} ${endY} Z`;
+  return getAnnularSectorPath(0, angle, cx, cy, 64, 104);
 }
 
 function generateClockTicks(cx, cy, r) {
@@ -954,15 +967,134 @@ function generateClockTicks(cx, cy, r) {
   for (let i = 0; i < 24; i++) {
     const angle = i * 15;
     const rad = (angle - 90) * Math.PI / 180;
-    const isMajor = (i % 6 === 0);
-    const innerR = isMajor ? r - 10 : r - 5;
+    const isMajor = (i % 3 === 0);
+    const innerR = isMajor ? r - 8 : r - 4;
     const x1 = (cx + innerR * Math.cos(rad)).toFixed(1);
     const y1 = (cy + innerR * Math.sin(rad)).toFixed(1);
     const x2 = (cx + r * Math.cos(rad)).toFixed(1);
     const y2 = (cy + r * Math.sin(rad)).toFixed(1);
-    s += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${isMajor ? '#241A12' : 'rgba(38,27,20,0.22)'}" stroke-width="${isMajor ? 2 : 1}"/>`;
+    s += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${isMajor ? 'rgba(38,27,20,0.45)' : 'rgba(38,27,20,0.18)'}" stroke-width="${isMajor ? 1.5 : 0.8}"/>`;
   }
   return s;
+}
+
+/* ── TIMING QUESTION (24-HOUR DAILY CLOCK & PATTERNS) ───────────────── */
+const TIMING_CLOCK_META = [
+  {
+    hubVal: "5 PM – 12 AM",
+    hubSub: "Evening Cluster",
+    tag: "Nervous System Pattern",
+    status: "Classic Witching Hour Cluster",
+    milestone: "Concentrated crying between 5 PM and midnight is the classic hallmark of late-day sensory accumulation, where the infant nervous system becomes overwhelmed by normal daily stimulation.",
+    btnLabel: "Continue with Evening Pattern →"
+  },
+  {
+    hubVal: "Post-Feed",
+    hubSub: "Every 2.5–3 Hours",
+    tag: "Feeding Mechanics Pattern",
+    status: "Post-Prandial Discomfort",
+    milestone: "Crying that consistently begins during feeding or within 20 minutes after indicates mechanical discomfort: air swallowing, latch fatigue, milk flow velocity mismatch, or early gastric distension.",
+    btnLabel: "Continue with Feeding Pattern →"
+  },
+  {
+    hubVal: "Sudden Waves",
+    hubSub: "Intermittent Cramps",
+    tag: "Gut Microbiome Pattern",
+    status: "Digestive Spasm Episodes",
+    milestone: "Sudden wave-like distress accompanied by tucked legs and rigid belly indicates smooth-muscle spasms and gas transit discomfort in the immature gut, independent of feeding times.",
+    btnLabel: "Continue with Cramp Wave Pattern →"
+  },
+  {
+    hubVal: "All-Day",
+    hubSub: "Diffuse Fatigue",
+    tag: "Sensory & Sleep Pattern",
+    status: "Overtired Arousal Cycle",
+    milestone: "All-day irritability with heightened startle response indicates difficulty down-regulating between sleep cycles, leading to cumulative overtired distress across the entire day.",
+    btnLabel: "Continue with All-Day Pattern →"
+  }
+];
+
+function getTimingWedgesSvg(idx) {
+  const cx = 140, cy = 140, rIn = 64, rOut = 104;
+  if (idx === 0) {
+    const p = getAnnularSectorPath(255, 360, cx, cy, rIn, rOut);
+    return `<path d="${p}" fill="#BC5A33" fill-opacity="0.45" stroke="#BC5A33" stroke-width="2"/>`;
+  } else if (idx === 1) {
+    const feeds = [0, 3, 6, 9, 12, 15, 18, 21];
+    return feeds.map(h => `<path d="${getAnnularSectorPath(h * 15, h * 15 + 10, cx, cy, rIn, rOut)}" fill="#C0963F" fill-opacity="0.5" stroke="#C0963F" stroke-width="1.8"/>`).join('');
+  } else if (idx === 2) {
+    const waves = [2, 6.5, 10.5, 14, 18.5, 22];
+    return waves.map(h => `<path d="${getAnnularSectorPath(h * 15, h * 15 + 12, cx, cy, rIn, rOut)}" fill="#BC5A33" fill-opacity="0.45" stroke="#BC5A33" stroke-width="1.8"/>`).join('');
+  } else if (idx === 3) {
+    const p = getAnnularSectorPath(120, 300, cx, cy, rIn, rOut);
+    return `<path d="${p}" fill="#6C8759" fill-opacity="0.42" stroke="#6C8759" stroke-width="2"/>`;
+  }
+  return '';
+}
+
+function getTimingThresholdsSvg(idx) {
+  if (idx === 0) {
+    return `
+      <line x1="78.2" y1="156.6" x2="26.0" y2="170.5" stroke="#BC5A33" stroke-width="1.8" stroke-dasharray="3,3"/>
+      <circle cx="26.0" cy="170.5" r="3" fill="#BC5A33"/>
+      <text x="22" y="184" font-family="'DM Mono', monospace" font-size="7.5" font-weight="700" fill="#BC5A33">5 PM Threshold</text>
+      <line x1="140" y1="76" x2="140" y2="24" stroke="#BC5A33" stroke-width="1.8" stroke-dasharray="3,3"/>
+      <circle cx="140" cy="24" r="3" fill="#BC5A33"/>
+      <text x="140" y="14" font-family="'DM Mono', monospace" font-size="7.5" font-weight="700" fill="#BC5A33" text-anchor="middle">Midnight</text>
+    `;
+  } else if (idx === 1) {
+    return `
+      <rect x="65" y="4" width="150" height="17" rx="8.5" fill="#FAF5EE" stroke="#C0963F" stroke-width="1.2"/>
+      <text x="140" y="15.5" font-family="'DM Mono', monospace" font-size="7.5" font-weight="700" fill="#C0963F" text-anchor="middle">Post-Feed Spikes (~20-40m)</text>
+    `;
+  } else if (idx === 2) {
+    return `
+      <rect x="65" y="4" width="150" height="17" rx="8.5" fill="#FAF5EE" stroke="#BC5A33" stroke-width="1.2"/>
+      <text x="140" y="15.5" font-family="'DM Mono', monospace" font-size="7.5" font-weight="700" fill="#BC5A33" text-anchor="middle">Intermittent Cramp Spasms</text>
+    `;
+  } else if (idx === 3) {
+    return `
+      <line x1="195.4" y1="172.0" x2="242.2" y2="199.0" stroke="#6C8759" stroke-width="1.8" stroke-dasharray="3,3"/>
+      <circle cx="242.2" cy="199.0" r="3" fill="#6C8759"/>
+      <text x="238" y="212" font-family="'DM Mono', monospace" font-size="7.5" font-weight="700" fill="#6C8759">8 AM Start</text>
+      <line x1="84.6" y1="108.0" x2="37.8" y2="81.0" stroke="#6C8759" stroke-width="1.8" stroke-dasharray="3,3"/>
+      <circle cx="37.8" cy="81.0" r="3" fill="#6C8759"/>
+      <text x="22" y="74" font-family="'DM Mono', monospace" font-size="7.5" font-weight="700" fill="#6C8759">8 PM Peak</text>
+    `;
+  }
+  return '';
+}
+
+function updateTimingClock(idx) {
+  const meta = TIMING_CLOCK_META[idx];
+  if (!meta) return;
+
+  const wedgesEl = document.getElementById('timingClockWedges');
+  if (wedgesEl) wedgesEl.innerHTML = getTimingWedgesSvg(idx);
+
+  const threshEl = document.getElementById('timingClockThresholds');
+  if (threshEl) threshEl.innerHTML = getTimingThresholdsSvg(idx);
+
+  const hubVal = document.getElementById('timingClockHubVal');
+  if (hubVal) hubVal.textContent = meta.hubVal;
+
+  const hubSub = document.getElementById('timingClockHubSub');
+  if (hubSub) hubSub.textContent = meta.hubSub;
+
+  const tag = document.getElementById('timingClassTag');
+  if (tag) tag.textContent = meta.tag;
+
+  const status = document.getElementById('timingClassStatus');
+  if (status) status.textContent = meta.status;
+
+  const milestone = document.getElementById('timingClassMilestone');
+  if (milestone) milestone.textContent = meta.milestone;
+
+  const btn = document.getElementById('continueBtn');
+  if (btn) {
+    btn.textContent = meta.btnLabel;
+    btn.classList.add('visible');
+  }
 }
 
 function renderDurationClockQuestion() {
@@ -995,27 +1127,57 @@ function renderDurationClockQuestion() {
       <div class="dcc-title">How Much of Your Baby's Day is Consumed by Crying</div>
     </div>
     <div class="dcc-clock-wrap">
-      <svg viewBox="0 0 240 240" width="100%" height="auto">
-        <circle cx="120" cy="120" r="102" fill="#FAF4EC" stroke="rgba(38,27,20,0.16)" stroke-width="2"/>
-        <path d="M 120 18 A 102 102 0 0 1 120 222" fill="none" stroke="rgba(192,150,63,0.22)" stroke-width="6"/>
-        <path d="M 120 222 A 102 102 0 0 1 120 18" fill="none" stroke="rgba(35,43,30,0.18)" stroke-width="6"/>
+      <svg viewBox="-6 -6 292 292" width="100%" height="auto">
+        <defs>
+          <linearGradient id="q2NightGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#232B1E" stop-opacity="0.08"/>
+            <stop offset="100%" stop-color="#241A12" stop-opacity="0.03"/>
+          </linearGradient>
+          <linearGradient id="q2DayGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#C0963F" stop-opacity="0.03"/>
+            <stop offset="100%" stop-color="#C0963F" stop-opacity="0.10"/>
+          </linearGradient>
+          <radialGradient id="q2HubGrad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#2D2218"/>
+            <stop offset="100%" stop-color="#1D150E"/>
+          </radialGradient>
+        </defs>
 
-        ${generateClockTicks(120, 120, 102)}
+        <circle cx="140" cy="140" r="124" fill="#FAF5EE" stroke="rgba(38,27,20,0.14)" stroke-width="1.5"/>
+        <path d="M 16 140 A 124 124 0 0 1 264 140" fill="url(#q2NightGrad)"/>
+        <path d="M 264 140 A 124 124 0 0 1 16 140" fill="url(#q2DayGrad)"/>
 
-        <text x="120" y="38" font-family="'DM Mono', monospace" font-size="8.5" font-weight="700" fill="#7A6856" text-anchor="middle">12 AM (0h)</text>
-        <text x="195" y="123" font-family="'DM Mono', monospace" font-size="8.5" font-weight="700" fill="#7A6856" text-anchor="middle">6 AM</text>
-        <text x="120" y="208" font-family="'DM Mono', monospace" font-size="8.5" font-weight="700" fill="#7A6856" text-anchor="middle">12 PM (Noon)</text>
-        <text x="44" y="123" font-family="'DM Mono', monospace" font-size="8.5" font-weight="700" fill="#7A6856" text-anchor="middle">6 PM</text>
+        <line x1="16" y1="140" x2="36" y2="140" stroke="rgba(38,27,20,0.25)" stroke-width="1.5"/>
+        <line x1="244" y1="140" x2="264" y2="140" stroke="rgba(38,27,20,0.25)" stroke-width="1.5"/>
 
-        <line x1="120" y1="120" x2="182" y2="58" stroke="#BA5731" stroke-width="1.8" stroke-dasharray="3,3"/>
-        <circle cx="182" cy="58" r="3" fill="#BA5731"/>
-        <text x="186" y="52" font-family="'DM Mono', monospace" font-size="8" font-weight="700" fill="#BA5731">3h Threshold</text>
+        ${generateClockTicks(140, 140, 124)}
 
-        <path id="clockArcWedge" d="${getWedgePath(curAngle, 120, 120, 88)}" fill="${curColor}" fill-opacity="0.38" stroke="${curColor}" stroke-width="2" style="transition: all 0.25s ease;"/>
+        <text x="140" y="32" font-family="'DM Sans', sans-serif" font-size="8" font-weight="700" letter-spacing="0.05em" fill="#5C4D3C" text-anchor="middle">&#x1F319; NIGHT &middot; 12 AM</text>
+        <text x="140" y="262" font-family="'DM Sans', sans-serif" font-size="8" font-weight="700" letter-spacing="0.05em" fill="#9C7A28" text-anchor="middle">&#x2600;&#xFE0F; DAY &middot; 12 PM</text>
+        <text x="246" y="143" font-family="'DM Mono', monospace" font-size="7.5" font-weight="700" fill="#7A6856" text-anchor="middle">6 AM</text>
+        <text x="34" y="143" font-family="'DM Mono', monospace" font-size="7.5" font-weight="700" fill="#7A6856" text-anchor="middle">6 PM</text>
 
-        <circle cx="120" cy="120" r="42" fill="#241A12" stroke="#FAF4EC" stroke-width="3"/>
-        <text id="clockHubVal" x="120" y="116" font-family="'Cormorant Garamond', serif" font-size="22" font-weight="700" fill="#FAF4EC" text-anchor="middle">${curMeta.num}</text>
-        <text id="clockHubSub" x="120" y="132" font-family="'DM Mono', monospace" font-size="8.5" font-weight="600" fill="rgba(250,244,236,0.8)" text-anchor="middle">${curMeta.fraction}</text>
+        <text x="216" y="66" font-family="'DM Mono', monospace" font-size="7" font-weight="600" fill="rgba(122,104,86,0.65)" text-anchor="middle">3 AM</text>
+        <text x="216" y="222" font-family="'DM Mono', monospace" font-size="7" font-weight="600" fill="rgba(122,104,86,0.65)" text-anchor="middle">9 AM</text>
+        <text x="64" y="222" font-family="'DM Mono', monospace" font-size="7" font-weight="600" fill="rgba(122,104,86,0.65)" text-anchor="middle">3 PM</text>
+        <text x="64" y="66" font-family="'DM Mono', monospace" font-size="7" font-weight="600" fill="rgba(122,104,86,0.65)" text-anchor="middle">9 PM</text>
+
+        <!-- Annular Base Track -->
+        <path d="M 140 36 A 104 104 0 1 1 139.9 36 L 139.9 76 A 64 64 0 1 0 140 76 Z" fill="rgba(38,27,20,0.035)"/>
+
+        <!-- 3h Wessel Colic Threshold line at 45 degrees -->
+        <line x1="185.3" y1="94.7" x2="224.9" y2="55.1" stroke="#BA5731" stroke-width="1.8" stroke-dasharray="3,3"/>
+        <circle cx="224.9" cy="55.1" r="3.5" fill="#BA5731"/>
+        <text x="210" y="44" font-family="'DM Mono', monospace" font-size="7.5" font-weight="700" fill="#BA5731">3h Threshold</text>
+
+        <!-- Dynamic Wedge -->
+        <path id="clockArcWedge" d="${getAnnularSectorPath(0, curAngle, 140, 140, 64, 104)}" fill="${curColor}" fill-opacity="0.45" stroke="${curColor}" stroke-width="2" style="transition: all 0.25s ease;"/>
+
+        <!-- Center Hub -->
+        <circle cx="140" cy="140" r="48" fill="url(#q2HubGrad)" stroke="#FAF5EE" stroke-width="3"/>
+        <circle cx="140" cy="140" r="46" fill="none" stroke="rgba(192,150,63,0.3)" stroke-width="1"/>
+        <text id="clockHubVal" x="140" y="136" font-family="'Cormorant Garamond', serif" font-size="22" font-weight="700" fill="#FAF5EE" text-anchor="middle">${curMeta.num}</text>
+        <text id="clockHubSub" x="140" y="152" font-family="'DM Mono', monospace" font-size="8.5" font-weight="600" fill="rgba(250,244,236,0.8)" text-anchor="middle">${curMeta.fraction}</text>
       </svg>
     </div>
   `;
@@ -1083,7 +1245,7 @@ function setDurationIdx(val) {
 
   const wedge = document.getElementById('clockArcWedge');
   if (wedge) {
-    wedge.setAttribute('d', getWedgePath(opt[5] || 0, 120, 120, 88));
+    wedge.setAttribute('d', getAnnularSectorPath(0, opt[5] || 0, 140, 140, 64, 104));
     wedge.setAttribute('fill', opt[6] || '#BA5731');
     wedge.setAttribute('stroke', opt[6] || '#BA5731');
   }
@@ -1153,6 +1315,80 @@ function renderQuestion() {
   if (q.isDurationClock) {
     renderDurationClockQuestion();
     return;
+  }
+
+  if (q.isTimingClock) {
+    const clockCard = document.createElement('div');
+    clockCard.id = 'dynamicSpecialVisualBox';
+    clockCard.className = 'dev-curve-card';
+
+    clockCard.innerHTML = `
+      <div class="dcc-header">
+        <div class="dcc-badge">24-Hour Daily Timing Pattern</div>
+        <div class="dcc-title">When Crying Clusters Across the 24-Hour Day</div>
+      </div>
+      <div class="dcc-clock-wrap">
+        <svg viewBox="-6 -6 292 292" width="100%" height="auto">
+          <defs>
+            <linearGradient id="q3NightGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#232B1E" stop-opacity="0.08"/>
+              <stop offset="100%" stop-color="#241A12" stop-opacity="0.03"/>
+            </linearGradient>
+            <linearGradient id="q3DayGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#C0963F" stop-opacity="0.03"/>
+              <stop offset="100%" stop-color="#C0963F" stop-opacity="0.10"/>
+            </linearGradient>
+            <radialGradient id="q3HubGrad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#2D2218"/>
+              <stop offset="100%" stop-color="#1D150E"/>
+            </radialGradient>
+          </defs>
+
+          <circle cx="140" cy="140" r="124" fill="#FAF5EE" stroke="rgba(38,27,20,0.14)" stroke-width="1.5"/>
+          <path d="M 16 140 A 124 124 0 0 1 264 140" fill="url(#q3NightGrad)"/>
+          <path d="M 264 140 A 124 124 0 0 1 16 140" fill="url(#q3DayGrad)"/>
+
+          <line x1="16" y1="140" x2="36" y2="140" stroke="rgba(38,27,20,0.25)" stroke-width="1.5"/>
+          <line x1="244" y1="140" x2="264" y2="140" stroke="rgba(38,27,20,0.25)" stroke-width="1.5"/>
+
+          ${generateClockTicks(140, 140, 124)}
+
+          <text x="140" y="32" font-family="'DM Sans', sans-serif" font-size="8" font-weight="700" letter-spacing="0.05em" fill="#5C4D3C" text-anchor="middle">&#x1F319; NIGHT &middot; 12 AM</text>
+          <text x="140" y="262" font-family="'DM Sans', sans-serif" font-size="8" font-weight="700" letter-spacing="0.05em" fill="#9C7A28" text-anchor="middle">&#x2600;&#xFE0F; DAY &middot; 12 PM</text>
+          <text x="246" y="143" font-family="'DM Mono', monospace" font-size="7.5" font-weight="700" fill="#7A6856" text-anchor="middle">6 AM</text>
+          <text x="34" y="143" font-family="'DM Mono', monospace" font-size="7.5" font-weight="700" fill="#7A6856" text-anchor="middle">6 PM</text>
+
+          <text x="216" y="66" font-family="'DM Mono', monospace" font-size="7" font-weight="600" fill="rgba(122,104,86,0.65)" text-anchor="middle">3 AM</text>
+          <text x="216" y="222" font-family="'DM Mono', monospace" font-size="7" font-weight="600" fill="rgba(122,104,86,0.65)" text-anchor="middle">9 AM</text>
+          <text x="64" y="222" font-family="'DM Mono', monospace" font-size="7" font-weight="600" fill="rgba(122,104,86,0.65)" text-anchor="middle">3 PM</text>
+          <text x="64" y="66" font-family="'DM Mono', monospace" font-size="7" font-weight="600" fill="rgba(122,104,86,0.65)" text-anchor="middle">9 PM</text>
+
+          <!-- Annular Base Track -->
+          <path d="M 140 36 A 104 104 0 1 1 139.9 36 L 139.9 76 A 64 64 0 1 0 140 76 Z" fill="rgba(38,27,20,0.035)"/>
+
+          <!-- Dynamic Wedges -->
+          <g id="timingClockWedges"></g>
+
+          <!-- Dynamic Threshold Lines & Badges -->
+          <g id="timingClockThresholds"></g>
+
+          <!-- Center Hub -->
+          <circle cx="140" cy="140" r="48" fill="url(#q3HubGrad)" stroke="#FAF5EE" stroke-width="3"/>
+          <circle cx="140" cy="140" r="46" fill="none" stroke="rgba(192,150,63,0.3)" stroke-width="1"/>
+          <text id="timingClockHubVal" x="140" y="136" font-family="'Cormorant Garamond', Georgia, serif" font-size="20" font-weight="700" fill="#FAF5EE" text-anchor="middle">Daily Cycle</text>
+          <text id="timingClockHubSub" x="140" y="152" font-family="'DM Mono', monospace" font-size="8" font-weight="600" fill="rgba(250,245,238,0.85)" text-anchor="middle">Tap Timing Below</text>
+        </svg>
+      </div>
+
+      <div class="aic-classification-box" style="margin-top:12px">
+        <div class="aic-class-header">
+          <span class="aic-class-tag" id="timingClassTag">Daily Pattern</span>
+          <span class="aic-class-status" id="timingClassStatus">Select a timing below</span>
+        </div>
+        <div class="aic-milestone-text" id="timingClassMilestone">Select the timing pattern that best matches when your baby's crying reaches its highest intensity.</div>
+      </div>
+    `;
+    box.appendChild(clockCard);
   }
 
   // Restore previously saved answer if parent used Back button
@@ -1246,11 +1482,20 @@ function toggleOption(idx, weights, el, single, feeding, triedTag, reason, oText
     }
   }
 
+  const q = QUESTIONS[qIndex];
+  if (q && q.isTimingClock) {
+    updateTimingClock(idx);
+  }
+
   const btn = document.getElementById('continueBtn');
   if (selectedMap.size > 0) {
     btn.classList.add('visible');
-    btn.textContent = selectedMap.size === 1 ? 'Continue' : `Continue (${selectedMap.size} selected)`;
-    if (single && !wasSelected && !isRestoring) {
+    if (q && q.isTimingClock && TIMING_CLOCK_META[idx]) {
+      btn.textContent = TIMING_CLOCK_META[idx].btnLabel;
+    } else {
+      btn.textContent = selectedMap.size === 1 ? 'Continue' : `Continue (${selectedMap.size} selected)`;
+    }
+    if (single && !wasSelected && !isRestoring && !(q && q.isTimingClock)) {
       autoAdvanceTimer = setTimeout(() => {
         advanceQ();
       }, 420);
