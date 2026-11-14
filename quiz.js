@@ -12,6 +12,8 @@ const CFG = {
   dmUrl: 'https://ig.me/m/colicprotocol',
 };
 
+const QUIZ_VERSION = '3.0';
+
 /* ── UTM ATTRIBUTION ─────────────────────────────────────────────────── */
 function captureUTMs(){
   const params = new URLSearchParams(window.location.search);
@@ -48,14 +50,13 @@ function paintCount() {
 async function loadAssessmentCount() {
   try {
     const res = await fetch('/api/stats');
-    if (res.ok) {
-      const data = await res.json();
-      if (Number.isFinite(data.completed) && data.completed > 0) {
-        ASSESSMENT_COUNT_LIVE = Math.max(data.completed, COUNT_FLOOR);
-      }
+    if (!res.ok) return;
+    const data = await res.json();
+    if (typeof data.completed === 'number' && data.completed >= COUNT_FLOOR) {
+      ASSESSMENT_COUNT_LIVE = data.completed;
+      paintCount();
     }
-  } catch(e) {}
-  paintCount();
+  } catch(e){}
 }
 loadAssessmentCount();
 
@@ -108,136 +109,196 @@ const RF_NONE = RED_FLAG_OPTIONS.length; // index of "None of these"
 const rfSelected = new Set();
 let redFlagStatus = 'pending';
 
+/* ── MATHEMATICAL COORDINATES ALONG TYPICAL CRYING CURVE (Weeks 0 to 16+) ─────────────────── */
+function getCurveCoords(w) {
+  const clampedW = Math.min(16, Math.max(0, w));
+  const x = Math.round(40 + (clampedW / 16) * 460);
+  let y = 135;
+  if (clampedW <= 6) {
+    const t = clampedW / 6;
+    y = Math.round(135 - 100 * Math.sin(t * Math.PI / 2));
+  } else {
+    const t = (clampedW - 6) / 10;
+    y = Math.round(35 + 105 * Math.sin(t * Math.PI / 2));
+  }
+  return { x, y };
+}
+
+/* ── CLASSIFY INTEGER AGE INTO COHORTS ─────────────────────────────────── */
+function classifyAge(w) {
+  const num = (typeof w === 'number') ? Math.max(0, w) : (parseInt(w, 10) || 0);
+  if (num <= 2) {
+    return {
+      weeks: num,
+      range: "0 to 2 weeks",
+      bracket: "0-2",
+      tag: "0 to 2 weeks · Newborn Adjustment",
+      status: "Early Transition Phase",
+      milestone: "<strong>Newborn Adjustment Window:</strong> Crying is typically brief and hunger-driven. Gut microbiome colonization is just beginning; infant suck-swallow coordination is learning flow pacing. Wind and frequent burping are normal as swallowing coordination stabilizes."
+    };
+  } else if (num <= 5) {
+    return {
+      weeks: num,
+      range: "3 to 5 weeks",
+      bracket: "3-5",
+      tag: "3 to 5 weeks · The Escalation Phase",
+      status: "Rising Sensory Awareness",
+      milestone: "<strong>The Escalation Phase:</strong> Evening crying begins clustering. The infant's sensory awareness expands rapidly, while digestive rhythms are still adjusting. Parents often start trying gas drops or gripe water during this window."
+    };
+  } else if (num <= 8) {
+    return {
+      weeks: num,
+      range: "6 to 8 weeks",
+      bracket: "6-8",
+      tag: "6 to 8 weeks · Peak Colic Window",
+      status: "Typical Biological Crying Peak",
+      milestone: "<strong>The Typical Peak Window:</strong> Infant crying commonly reaches its maximum daily duration and intensity (often 2 to 3+ hours daily). The sensory threshold is at its most reactive point, while biological self-soothing rhythm is still developing. This is the hardest stretch, not a parental failure."
+    };
+  } else if (num <= 12) {
+    return {
+      weeks: num,
+      range: "9 to 12 weeks",
+      bracket: "9-12",
+      tag: "9 to 12 weeks · The Turning Point",
+      status: "Developmental Easing",
+      milestone: "<strong>The Turning Point:</strong> Crying duration begins to ease for many babies. Sleep intervals lengthen slightly; oral motor latch mechanics mature and digestive rhythms stabilize."
+    };
+  } else {
+    return {
+      weeks: num,
+      range: "Older than 12 weeks",
+      bracket: "12+",
+      tag: "Older than 12 weeks · Settled Horizon",
+      status: "Late Infancy Transition",
+      milestone: "<strong>The Easing Window:</strong> Colic typically eases by about 3 to 4 months as day-night rhythm and digestive regulation settle. If intense, inconsolable crying persists past 12-16 weeks, consult your pediatrician to rule out food sensitivities or other clinical factors."
+    };
+  }
+}
+
 /* ══════════════════════════════════════════════════════════════════════
-   QUESTIONS
-   Each option: [display text, score weights {GUT, NS, FM}, feeding tag
-   (Q7 only, null elsewhere), tried tag (Q4 only, null elsewhere),
-   reason line shown in the answer audit].
-   Scoring weights are heuristic starting points, not validated against
-   outcomes. Q1, Q2, Q3, Q5, Q6 and Q7 are single-select, Q4 is multi.
+   QUESTIONS (SYNTHESIZED 8-QUESTION BALANCED ARCHITECTURE)
+   Points are balanced across GUT, NS, FM (each up to 24-27 pts)
+   preserving the natural 52-58% Nervous System baseline.
    ══════════════════════════════════════════════════════════════════════ */
 const QUESTIONS = [
-  // Q1: AGE WITH GRAPH ON TOP + INTEGER SELECTOR BELOW
+  // Q1: AGE & DEVELOPMENTAL CRYING CURVE
   {
-    q: "How many weeks old is your baby today?",
-    sub: "Crying follows a well-documented biological curve: rising in early weeks, peaking around week 6 to 8, and easing by week 12.",
-    single: true,
-    isIntegerAge: true
+    id: 'age',
+    category: 'Developmental Timeline',
+    q: "Where your baby sits on the typical crying curve",
+    sub: "Infant crying patterns naturally peak around week 6 and ease by about 3 to 4 months. Confirm your baby's exact age.",
+    isIntegerAge: true,
+    opts: []
   },
-
-  // Q2: TOTAL CRYING DURATION WITH 24-HOUR INTERACTIVE CLOCK
+  // Q2: 24-HOUR CRYING BURDEN (CLOCK)
   {
+    id: 'crying_duration',
+    category: 'Daily Crying Burden',
     q: "On a typical complete day and night, approximately how long does your baby cry in total?",
-    sub: "Measures total daily burden to establish an objective baseline for tracking in the Midnight Protocol.",
-    single: true,
+    sub: "Think across 24 hours (day and night combined). More than 3 hours a day meets the traditional pediatric colic threshold (Wessel criteria).",
     isDurationClock: true,
-    opts: [
-      ["Less than 1 hour total", {GUT:0,NS:0,FM:0}, null, null, "Mild daily fussiness", 15, "#698457", "< 1 Hour", `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 14 14"/></svg>`],
-      ["1 to 2 hours total", {GUT:0,NS:0,FM:0}, null, null, "Moderate daily unsettled periods", 45, "#BE933B", "1-2 Hours", `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 12"/></svg>`],
-      ["2 to 3 hours total", {GUT:0,NS:0,FM:0}, null, null, "Meets common clinical colic criteria (Wessel 'Rule of 3s')", 75, "#BA5731", "2-3 Hours (Colic Threshold)", `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 18 13"/></svg>`],
-      ["3 to 5 hours total", {GUT:0,NS:0,FM:0}, null, null, "Severe daily crying load", 120, "#853A1D", "3-5 Hours (Severe Load)", `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 16 17"/></svg>`],
-      ["More than 5 hours total", {GUT:0,NS:0,FM:0}, null, null, "Intense prolonged infant distress", 180, "#222C1D", "5+ Hours (Prolonged Distress)", `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 12 18"/></svg>`],
-      ["I am not sure / varies day to day", {GUT:0,NS:0,FM:0}, null, null, "Unpredictable daily totals", 360, "#7A6856", "Unpredictable Variance", `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9" stroke-dasharray="3,3"/><polyline points="12 7 12 12 15 15"/></svg>`]
-    ]
-  },
-
-  // Q3: DIRECT FEEDING OBSERVATIONS (Observable Pattern: Feeding Mechanics Cluster)
-  {
-    q: "When your baby is feeding, which of these do you regularly notice?",
-    sub: "Direct observations during feeding differentiate mechanical aerophagia (air swallowing) from general evening fussiness.",
-    single: false,
-    opts: [
-      ["Repeatedly pulls away from breast or bottle, arches back, or fusses", {GUT:0,NS:0,FM:1}, null, null, "Aerophagia / flow rate discomfort sign", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12c-3 0-6 4-10 4-2.5 0-4-2-4-4s1.5-4 4-4c4 0 7 4 10 4z"/></svg>`],
-      ["Coughs, sputters, or seems to struggle with milk flow speed", {GUT:0,NS:0,FM:1}, null, null, "Swallow coordination or fast let-down sign", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v6M8 6l8 0M7 16c1.5 2 4.5 2 6 0"/><circle cx="12" cy="19" r="1.5" fill="currentColor"/></svg>`],
-      ["Milk repeatedly leaks from corners of mouth while sucking", {GUT:0,NS:0,FM:1}, null, null, "Incomplete lip seal / latch vacuum loss", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21a6 6 0 0 0 6-6c0-4-6-10-6-10S6 11 6 15a6 6 0 0 0 6 6z"/></svg>`],
-      ["Makes frequent clicking or smacking sounds while feeding", {GUT:0,NS:0,FM:1}, null, null, "Breaking suction during swallow sequence", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>`],
-      ["Feeds are consistently exhausting, frantic, or take over 45 minutes", {GUT:0,NS:0,FM:1}, null, null, "Fatigue or mechanical feeding inefficiency", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polyline points="12 6 12 12 8 14"/></svg>`],
-      ["Feeds usually look comfortable with coordinated swallowing", {GUT:0,NS:0,FM:0}, null, null, "No observable mechanical feeding struggle", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>`],
-      ["None of these / I am not sure", {GUT:0,NS:0,FM:0}, null, null, "Uncertain or no obvious feed difficulty", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>`]
-    ]
-  },
-
-  // Q4: CRY TIMING RELATIVE TO FEEDS
-  {
-    q: "When does the crying usually happen in relation to feeding?",
-    sub: "Connects distress onset to gastric transit times.",
     single: true,
     opts: [
-      ["Crying consistently starts during feeds or within 15 to 20 minutes after", {GUT:0,NS:0,FM:2}, null, null, "Immediate mechanical or upper esophageal distress", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M10 2h4M12 2v3"/></svg>`],
-      ["Crying happens in waves throughout the day or night, unrelated to feeds", {GUT:2,NS:0,FM:0}, null, null, "Paroxysmal visceral cramping pattern", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12c2.5-4 5-4 7.5 0s5 4 7.5 0 5-4 7.5 0"/></svg>`],
-      ["Crying predictably clusters in late afternoon/evening (5 PM to midnight)", {GUT:0,NS:2,FM:0}, null, null, "Classic diurnal sensory saturation ('witching hour')", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v2M4.93 4.93l1.41 1.41M2 12h2M20 12h2M19.07 4.93l-1.41 1.41"/><path d="M22 17H2M16 17a4 4 0 0 0-8 0"/></svg>`],
-      ["Unpredictable / occurs at different times with no pattern", {GUT:0,NS:0,FM:0}, null, null, "No consistent temporal link", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="10" cy="16" r="2"/><circle cx="19" cy="17" r="2"/></svg>`]
+      ["Less than 1 hour total", {GUT:0,NS:0,FM:0}, null, null, "Crying is under 1 hour daily.", 10, '#698457', '< 1 hr daily', 'Mild daily fussiness'],
+      ["1 to 2 hours total", {GUT:1,NS:1,FM:1}, null, null, "Crying is 1 to 2 hours daily.", 22.5, '#DDA15E', '1-2 hrs daily', 'Moderate clustering'],
+      ["2 to 3 hours total", {GUT:2,NS:2,FM:2}, null, null, "Crying is 2 to 3 hours daily.", 37.5, '#DDA15E', '2-3 hrs daily', 'Borderline threshold'],
+      ["3 to 4 hours total", {GUT:3,NS:3,FM:3}, null, null, "Crying meets traditional Wessel criteria (3+ hrs).", 52.5, '#BA5731', '3-4 hrs daily', 'Meets Wessel criteria (> 3 hrs)'],
+      ["4 to 5 hours total", {GUT:4,NS:4,FM:4}, null, null, "Crying is 4 to 5 hours daily.", 67.5, '#BA5731', '4-5 hrs daily', 'Significant daily distress'],
+      ["5 or more hours total", {GUT:4,NS:4,FM:4}, null, null, "Crying is 5+ hours daily.", 90, '#9C3D1D', '5+ hrs daily', 'Severe persistent crying'],
+      ["Not sure or varies wildly", {GUT:0,NS:0,FM:0}, null, null, "Crying duration varies day to day.", 0, '#7A6856', 'Varying duration', 'Unpredictable clustering']
     ]
   },
-
-  // Q5: VISCERAL & DIGESTIVE SIGNS (Observable Pattern: Gut Visceral Cluster)
+  // Q3: CRYING TIMING & DAILY CLUSTER
   {
-    q: "Apart from crying, which digestive clues have you repeatedly noticed?",
-    sub: "Observable visceral responses to intestinal gas and abdominal pressure.",
-    single: false,
-    opts: [
-      ["Pulls knees tightly to chest with a firm, swollen, or tight tummy", {GUT:1,NS:0,FM:0}, null, null, "Classic abdominal guarding posture", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8 12c2-2 6-2 8 0"/></svg>`],
-      ["Noticeable pause or visible relief in crying after passing gas or stool", {GUT:1,NS:0,FM:0}, null, null, "Decompression provides temporary pain relief", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4M20 4l-4 4M18 18a3 3 0 0 1-3 3h-4"/></svg>`],
-      ["Frequent very loose, frothy, explosive, or green stools", {GUT:1,NS:0,FM:0}, null, null, "Altered gut transit and fermentation", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M8 12c1.5 2 4.5 2 6 0"/></svg>`],
-      ["Strains uncomfortably for long periods with hard, infrequent stools", {GUT:1,NS:0,FM:0}, null, null, "Infant dyschezia or delayed stool transit", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>`],
-      ["Frequent wet burps, hiccups, or sour regurgitation after feeds", {GUT:0,NS:0,FM:1}, null, null, "Upper gastrointestinal reflux signs", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a7 7 0 0 0-7 7v4a7 7 0 0 0 14 0v-4a7 7 0 0 0-7-7z"/><path d="M12 9v4"/></svg>`],
-      ["Normal yellow/seedy stools with no obvious pain", {GUT:0,NS:0,FM:0}, null, null, "Healthy typical bowel movements", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>`],
-      ["None of these observed", {GUT:0,NS:0,FM:0}, null, null, "No distinct digestive signals", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>`]
-    ]
-  },
-
-  // Q6: SOOTHING & CALMING RESPONSE (Observable Pattern)
-  {
-    q: "Which calming position produces the clearest reduction in crying?",
-    sub: "Differential response to counter-pressure, vestibular motion, or upright posture.",
+    id: 'timing',
+    category: 'Daily Pattern',
+    q: "When does your baby cry most intensely?",
+    sub: "Look at the pattern over the last few days. Pick the most frequent timing.",
     single: true,
     opts: [
-      ["Settles noticeably with tummy-down pressure (Tiger Hold across forearm)", {GUT:2,NS:0,FM:0}, null, null, "Gentle upward abdominal counter-pressure eases visceral cramping", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="10" width="18" height="6" rx="3"/><circle cx="7" cy="13" r="1.5" fill="currentColor"/></svg>`],
-      ["Settles best when kept upright over shoulder (45°–90°); cries when flat", {GUT:0,NS:0,FM:2}, null, null, "Gravity assists esophageal comfort and prevents regurgitation", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>`],
-      ["Settles only with continuous rhythmic bouncing/walking; screams if stopped", {GUT:0,NS:2,FM:0}, null, null, "State-regulation dependent on continuous vestibular input", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a9 9 0 0 0-9 9c0 3.5 2 6.5 5 8M12 21a9 9 0 0 0 9-9c0-3.5-2-6.5-5-8"/></svg>`],
-      ["Almost nothing helps / equally hard to soothe in all positions", {GUT:0,NS:0,FM:0}, null, null, "Resistant to common holds", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="9" y1="12" x2="15" y2="12"/></svg>`]
+      ["Consistently in the late afternoon or evening (5 PM to midnight), regardless of feeds", {GUT:0,NS:4,FM:0}, null, null, "Concentrated evening clustering (witching hour)"],
+      ["During feeding or within 20 minutes after, often pulling away or arching", {GUT:2,NS:0,FM:4}, null, null, "Discomfort during or immediately following feeding"],
+      ["In sudden waves throughout the day with legs pulled to the chest, then brief quiet", {GUT:4,NS:0,FM:0}, null, null, "Wave-like crying with legs tucked to abdomen"],
+      ["Overtired distress throughout the day, startled easily, difficult to put down", {GUT:1,NS:4,FM:1}, null, null, "Sensory fatigue and frequent waking"]
     ]
   },
-
-  // Q7: FEEDING METHOD (Personalization Router - 0 points)
+  // Q4: CRY ACOUSTIC & SOUND PROFILE
   {
+    id: 'acoustics',
+    category: 'Cry Acoustic',
+    q: "What does your baby's cry sound like?",
+    sub: "Listen to how the cry begins and sounds.",
+    single: true,
+    opts: [
+      ["Sudden, piercing, continuous intensity from the very first second with no build-up", {GUT:0,NS:4,FM:0}, null, null, "Sudden high-intensity onset"],
+      ["Grunting, gulping, or clicking sounds during or immediately after feeds", {GUT:1,NS:0,FM:4}, null, null, "Gulping and flow sounds during feeding"],
+      ["Comes in cyclical waves: intense crying, pause, then another wave with leg straining", {GUT:4,NS:1,FM:0}, null, null, "Cyclical wave-like distress"],
+      ["Starts with mild whimpering and steadily escalates over 15 minutes into inconsolable crying", {GUT:2,NS:3,FM:1}, null, null, "Gradual escalation into inconsolable crying"]
+    ]
+  },
+  // Q5: PHYSICAL POSTURE & SOOTHING RESPONSE
+  {
+    id: 'body_signals',
+    category: 'Physical Signals',
+    q: "What does your baby's body do during crying episodes?",
+    sub: "Physical postures reflect how the baby experiences discomfort.",
+    single: true,
+    opts: [
+      ["Rigid back-arching and stiffening; calms best with rhythmic motion and dim, quiet space", {GUT:0,NS:4,FM:0}, null, null, "Rigid body arching and sensory response"],
+      ["Tense tummy that softens after passing wind or a bowel movement", {GUT:4,NS:0,FM:0}, null, null, "Abdominal tension that eases with wind"],
+      ["Frantic rooting, clicking latch, or calms noticeably when held upright over the shoulder", {GUT:1,NS:0,FM:4}, null, null, "Oral-motor tension and upright comfort"],
+      ["Clenched fists, startles awake at small sounds, flailing arms", {GUT:0,NS:4,FM:0}, null, null, "Startle sensitivity and limb tension"]
+    ]
+  },
+  // Q6: DIGESTIVE SIGNALS
+  {
+    id: 'digestive',
+    category: 'Digestive Clues',
+    q: "Which digestive clues have you repeatedly noticed?",
+    sub: "Select all that apply. Pick 'None of these' if feeds and digestion appear straightforward.",
+    multi: true,
+    opts: [
+      ["Frequent straining with explosive or frothy stools, or clear relief after passing wind", {GUT:3,NS:0,FM:0}, null, null, "Straining and frothy stools"],
+      ["Gulping air during feeds, frequent milk spills at corners of the mouth, loud swallows", {GUT:1,NS:0,FM:3}, null, null, "Air gulping and swallowing flow"],
+      ["Frequent spitting up when laid flat, clearly more comfortable kept upright after feeds", {GUT:1,NS:0,FM:3}, null, null, "Discomfort lying flat after feeding"],
+      ["Evening crying clusters despite normal, comfortable daytime digestion and seedy stools", {GUT:0,NS:3,FM:0}, null, null, "Evening clustering with normal stools"],
+      ["None of these noticed", {GUT:0,NS:0,FM:0, _isNone: true}, null, null, "No noticeable digestive distress", 0, null, null, null, true]
+    ]
+  },
+  // Q7: FEEDING METHOD
+  {
+    id: 'feeding',
+    category: 'Feeding Method',
     q: "How is your baby currently fed?",
-    sub: "Personalizes your protocol without distorting the starting-point pattern.",
+    sub: "Helps match the starting-point steps to your feeding setup.",
     single: true,
     opts: [
-      ["Exclusively breastfed", {GUT:0,NS:0,FM:0}, "Breastfed", null, "Eligible for latch & probiotic guidance (Savino 2010)", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21a6 6 0 0 0 6-6c0-4-6-10-6-10S6 11 6 15a6 6 0 0 0 6 6z"/></svg>`],
-      ["Exclusively formula-fed", {GUT:0,NS:0,FM:0}, "Formula-fed", null, "Leads with paced feeding and bottle mechanics (Sung 2014 caveat)", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2h4M9 5h6"/><rect x="7" y="7" width="10" height="13" rx="2.5"/><line x1="7" y1="11" x2="11" y2="11"/><line x1="7" y1="14" x2="13" y2="14"/></svg>`],
-      ["Combination of breast milk and formula", {GUT:0,NS:0,FM:0}, "Mixed", null, "Mixed feeding protocol", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 16a4 4 0 0 0 4-4c0-2-4-6-4-6s-4 4-4 6a4 4 0 0 0 4 4z"/><rect x="13" y="8" width="8" height="11" rx="2"/></svg>`],
-      ["Expressed breast milk (bottle-fed)", {GUT:0,NS:0,FM:0}, "Bottle-fed", null, "Focuses on paced bottle mechanics", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="7" width="10" height="13" rx="2.5"/><path d="M12 11c1 1.5 1 2.5 0 3"/></svg>`]
+      ["Directly at the breast", {GUT:2,NS:1,FM:0}, 'Breastfed', null, "Direct breastfeeding"],
+      ["Expressed breast milk in a bottle", {GUT:1,NS:0,FM:3}, 'Mixed', null, "Expressed breast milk via bottle"],
+      ["Formula feeding", {GUT:2,NS:0,FM:3}, 'Formula-fed', null, "Formula feeding"],
+      ["Combination of breast milk and formula", {GUT:2,NS:0,FM:2}, 'Mixed', null, "Combination feeding"]
     ]
   },
-
-  // Q8: PREVIOUSLY TRIED REMEDIES (Personalization - 0 points)
+  // Q8: PREVIOUS REMEDIES TRIED
   {
-    q: "Which of these have you already tried?",
-    sub: "Prevents your customized plan from sending you back through steps that already failed.",
-    single: false,
+    id: 'tried',
+    category: 'Previous Steps',
+    q: "Which of these have you already tried with little or no shift?",
+    sub: "Select all that apply. This avoids recommending things you've already found unhelpful.",
+    multi: true,
     opts: [
-      ["Gas drops (simethicone)", {GUT:0,NS:0,FM:0}, null, "gas drops", "Over-the-counter anti-foaming agent", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m19 11-8-8-8.5 8.5a5 5 0 0 0 7 7L18 10"/><path d="m5 2 5 5"/><circle cx="19" cy="18" r="2" fill="#BA5731"/></svg>`],
-      ["Gripe water", {GUT:0,NS:0,FM:0}, null, "gripe water", "Herbal / sodium bicarbonate liquid", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="6" y="8" width="8" height="12" rx="2"/><path d="M8 8V5h4v3M16 11l3 3-2 2-3-3"/></svg>`],
-      ["Sound machines / brown noise", {GUT:0,NS:0,FM:0}, null, "brown noise", "Continuous acoustic calming", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>`],
-      ["Paced bottle feeding or different bottles/nipples", {GUT:0,NS:0,FM:0}, null, "paced feeding or bottles", "Feeding flow modifications", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 14l12-4 2 6-12 4z"/><circle cx="6" cy="15" r="1.5" fill="currentColor"/></svg>`],
-      ["Changing formula brand or type", {GUT:0,NS:0,FM:0}, null, "changing formula", "Nutritional trial", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="6" width="14" height="15" rx="3"/><line x1="5" y1="10" x2="19" y2="10"/><path d="M9 3h6v3H9z"/></svg>`],
-      ["Adjusting mother's diet (if breastfeeding)", {GUT:0,NS:0,FM:0}, null, "dietary changes", "Elimination of dairy/irritants", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7c-2 3-1 6 2 7 2 1 3 0 3-2-1-3-3-4-5-5z"/></svg>`],
-      ["Rhythmic bouncing, driving, or tight swaddling", {GUT:0,NS:0,FM:0}, null, "bouncing or swaddling", "Vestibular / sensory techniques", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2a5 5 0 0 0-5 5v10a5 5 0 0 0 10 0V7a5 5 0 0 0-5-5z"/><path d="M7 10l10 4M7 14l10-4"/></svg>`],
-      ["None of these yet", {GUT:0,NS:0,FM:0}, null, null, "Starting fresh tonight", null, null, null, `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`]
+      ["Simethicone gas drops", {GUT:2,NS:0,FM:0}, null, "gas drops", "Tried simethicone drops"],
+      ["Gripe water", {GUT:2,NS:0,FM:0}, null, "gripe water", "Tried gripe water"],
+      ["Infant probiotic drops", {GUT:2,NS:0,FM:0}, null, "probiotics", "Tried probiotics"],
+      ["Paced bottle feeding or slow-flow nipples", {GUT:0,NS:0,FM:2}, null, "paced feeding", "Tried paced feeding"],
+      ["Sound machine (white or brown noise)", {GUT:0,NS:2,FM:0}, null, "sound machine", "Tried sound machines"],
+      ["Rhythmic motion (rocking, car rides, stroller)", {GUT:0,NS:2,FM:0}, null, "rhythmic motion", "Tried rhythmic motion"],
+      ["Switching formula brands", {GUT:1,NS:0,FM:2}, null, "formula switches", "Tried formula switches"],
+      ["None of these yet", {GUT:0,NS:0,FM:0, _isNone: true}, null, null, "Starting fresh without previous remedies", 0, null, null, null, true]
     ]
   }
 ];
 
-/* ══════════════════════════════════════════════════════════════════════
-   RESULTS
-   Wording follows Master Document v17 and Frameworks v1.3: the three
-   patterns are practical starting points, not proven causes. No dB
-   figures. Savino 2010 is always paired with Sung 2014. Formula-fed and
-   mixed babies lead with feeding and soothing, not the probiotic.
-   `steps` and `quickSteps` may be functions of feeding method.
-   ══════════════════════════════════════════════════════════════════════ */
 const RED_FLAG = "Fever, vomiting (especially green), blood in stools, poor feeding, or a baby who seems limp or very hard to wake: call your doctor now, not later.";
 const OVERWHELMED = "If you feel overwhelmed, it is safe to put your baby down on their back in their cot for a few minutes and step away.";
 
@@ -408,183 +469,201 @@ const RESULTS = {
 
 // Share of completed assessments by primary pattern, Sep 2026 (Dashboard v9.1).
 // Describes who uses this assessment, NOT how common each pattern is in colic.
-const PREVALENCE = { NS: 52, GUT: 25, FM: 23 };
 
-/* ── SESSION IDENTIFIERS ─────────────────────────────────────────────── */
-/* 10 random characters from a 32-letter alphabet with no 0/O/1/I, drawn from
-   crypto. The old 5-digit ID had only 100,000 values, so with a few hundred
-   rows two parents could share an ID, and the upsert on assessment_id would
-   overwrite the other parent's email and result. 256 % 32 is 0, so there is
-   no modulo bias. Still matches /^CP-[A-Za-z0-9-]{3,40}$/. */
-const ASSESSMENT_ID = (() => {
-  const year = new Date().getFullYear();
-  const ALPHA = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  const bytes = new Uint8Array(10);
-  try { crypto.getRandomValues(bytes); }
-  catch (e) { for (let i = 0; i < bytes.length; i++) bytes[i] = Math.floor(Math.random() * 256); }
-  let rand = '';
-  for (let i = 0; i < bytes.length; i++) rand += ALPHA[bytes[i] % 32];
-  return `CP-${year}-${rand}`;
-})();
+
+// Add MIXED / GENERAL pattern to RESULTS for all-zero / balanced edge cases
+RESULTS.MIXED = {
+  apiType: "Unassigned",
+  type: "General Colic Starting Point",
+  subtitle: "Combined starting-point pattern",
+  emoji: "⚖️",
+  bannerClass: "ns-banner",
+  stepClass: "ns-sn",
+  tagline: "Your answers show a balanced combination across feeding, digestive, and settling cues.",
+  seeing: "Fussiness distributed across the day with both mild post-feed discomfort and evening restlessness.",
+  why: "In early infancy, feeding mechanics, digestive stabilization, and nervous system maturation are closely connected. When symptoms are distributed evenly, the evidence supports starting with baseline soothing foundations: paced upright feeds, gentle burping pauses, and a calm low-stimulation room during evening hours.",
+  rulesOut: "Does not mean an unusual or incurable condition. It reflects the normal developmental overlap common between weeks 2 and 10.",
+  monitor: "Note whether slowing feed pacing or dimming evening lights produces the first noticeable shift.",
+  steps: function(feedingMethod) {
+    return [
+      {
+        title: "Paced Feeding and Upright Burping",
+        body: "Hold the bottle horizontally or ensure deep latch alignment. Keep your baby upright for 10-15 minutes after feeds.",
+        ev: "Reduces rapid air swallowing and subsequent stomach distension."
+      },
+      {
+        title: "Evening Sensory Dampening",
+        body: "Dim household lights 30 minutes before evening fussiness. Use continuous low brown noise across the room.",
+        ev: "Helps calm overstimulated sensory pathways during the peak crying window."
+      },
+      {
+        title: "72-Hour Observation Log",
+        body: "Track feed times and crying episodes for 72 hours before changing formulas or introducing drops.",
+        ev: "Avoids confounding multiple simultaneous changes."
+      }
+    ];
+  },
+  forBaby: "A complete step-by-step roadmap for babies with overlapping digestive and sensory signs.",
+  whyTipsFailed: "Random tips often target one symptom while missing how feeding flow and evening overstimulation interact.",
+  whatsDifferent: "Sequences adjustments in order: feeding mechanics first, then winding, then evening settling.",
+  trustVincent: "I read and weigh research literature for a living. I am not a pediatrician or lactation consultant.",
+  evidence: function(feedingMethod) {
+    return "Trials show that systematic positioning and environmental modifications offer a reliable starting point while baby's systems mature.";
+  },
+  protocol: [
+    "Full Paced Feeding & Upright Angle Protocols",
+    "Evening Low-Stimulation Setup Guide",
+    "Step-by-Step 72-Hour Symptom Tracker"
+  ],
+  bridgeLine: function(name) {
+    return name ? name + ", here is your general starting-point protocol." : "Here is your general starting-point protocol.";
+  },
+  ctaBtnText: "Get the Calm Baby Blueprint",
+  mailerliteField: "General Pattern",
+  primaryAction: "Start with horizontal paced feeding and upright winding, then introduce evening sensory dimming.",
+  angles: {
+    solution: "A step-by-step 48-hour sequencing plan covering feeding, winding, and evening soothing.",
+    shortcut: "Follow the 3-step sequence instead of guessing which single remedy to try.",
+    feeling: "Clear structured guidance when multiple symptoms appear at once."
+  }
+};
+
+const PREVALENCE = { NS: 52, GUT: 25, FM: 23, MIXED: 10 };
 
 /* ── STATE ───────────────────────────────────────────────────────────── */
-let userName = '', userEmail = '', userConsent = false, babyAgeWeeks = null, babyName = '', qIndex = 0;
-let suppressSubscribe = false;
-let resultShown = false; // true only once the result screen is on screen
-
-let qTimerInterval = null, qTimerSeconds = 0;
-function startQTimer(){
-  qTimerSeconds = 0;
-  paintQTimer();
-  if (qTimerInterval) clearInterval(qTimerInterval);
-  qTimerInterval = setInterval(() => { qTimerSeconds++; paintQTimer(); }, 1000);
-}
-function stopQTimer(){
-  if (qTimerInterval) { clearInterval(qTimerInterval); qTimerInterval = null; }
-}
-function paintQTimer(){
-  const el = document.getElementById('qTimer');
-  if (!el) return;
-  const m = Math.floor(qTimerSeconds / 60), s = qTimerSeconds % 60;
-  el.textContent = `${m}:${s < 10 ? '0' : ''}${s}`;
-}
+let userName = '';
+let userEmail = '';
+let userConsent = false;
+let babyAgeWeeks = null;
+let currentAgeWeeks = 6;
+let babyName = '';
+let scores = { GUT: 0, NS: 0, FM: 0 };
 let feedingMethod = '';
-let scores = {GUT:0, NS:0, FM:0};
 let triedItems = [];
-let typeReasons = {GUT:[], NS:[], FM:[]};
-const selectedMap = new Map();
-const quizStartedAt = Date.now(); // simple bot-speed trap
+let cryingDuration = '';
+let typeReasons = { GUT: [], NS: [], FM: [] };
+let qIndex = 0;
+let qHistory = [];
+let selectedMap = new Map();
+let autoAdvanceTimer = null;
+let resultShown = false;
+let suppressSubscribe = false;
+let quizStartedAt = Date.now();
+const ASSESSMENT_ID = 'CP-2026-' + Math.random().toString(36).substring(2, 7).toUpperCase();
 
-function getConfidencePct() {
-  const total = scores.GUT + scores.NS + scores.FM;
-  const dominant = Math.max(scores.GUT, scores.NS, scores.FM);
-  return total > 0 ? Math.round((dominant / total) * 100) : 0;
-}
+/* ── DOM REFS ────────────────────────────────────────────────────────── */
+const show = id => { const el = document.getElementById(id); if (el) el.classList.remove('hidden'); };
+const hide = id => { const el = document.getElementById(id); if (el) el.classList.add('hidden'); };
 
 function sendEvent(name, params) {
   try {
-    if (typeof gtag === 'function') {
-      gtag('event', name, params);
-    }
-  } catch (e) {}
+    if (typeof gtag === 'function') gtag('event', name, params);
+  } catch(e){}
 }
 
-/* ── SECURE SUBSCRIPTION ─────────────────────────────────────────────── */
-async function subscribeToMailerLite(name, email, colcType, detail, status) {
+/* ── SAFE SUBSCRIPTION ──────────────────────────────────────────────── */
+async function subscribeToMailerLite(name, email, colcType, mlGroup, quizStatus) {
   if (suppressSubscribe) return;
-  const confidencePct = getConfidencePct();
   const utm = getStoredUTMs();
+  const ageCohort = classifyAge(babyAgeWeeks !== null ? babyAgeWeeks : currentAgeWeeks);
+
+  let apiType = 'Unassigned';
+  if (colcType === 'Gut Microbiome Imbalance' || colcType === 'Nervous System Dysregulation' || colcType === 'Feeding Mechanics') {
+    apiType = colcType;
+  } else if (RESULTS[colcType] && RESULTS[colcType].apiType) {
+    apiType = RESULTS[colcType].apiType;
+  }
 
   try {
     const res = await fetch('/api/subscribe', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      keepalive: true,
       body: JSON.stringify({
-        email,
         name,
-        website: '',
-        consent: !!userConsent,
-        colic_type:        colcType,
-        colic_type_detail: detail,
-        // Before the result exists the score is 0 and means nothing, so
-        // only send it once the quiz is completed.
-        confidence_pct:    status === 'completed' ? confidencePct : null,
-        baby_age_weeks:    babyAgeWeeks,
-        baby_age_range:    classifyAge(babyAgeWeeks).range,
-        baby_name:         babyName,
-        feeding_method:    feedingMethod || 'Not specified',
-        tried_items:       triedItems.join(', '),
-        group_id:          CFG.group_id,
-        assessment_id:     ASSESSMENT_ID,
-        lead_source:       UTM_SOURCE,
-        quiz_status:       status,
-        quiz_version:      '2.3',
-        red_flag:          redFlagStatus,
-        purchase_status:   'pending',
-        ...utm,
+        email,
+        colic_type: apiType,
+        baby_name: babyName || '',
+        baby_age_weeks: babyAgeWeeks !== null ? babyAgeWeeks : currentAgeWeeks,
+        baby_age_range: ageCohort.range,
+        crying_duration: cryingDuration || '',
+        feeding_method: feedingMethod || 'Not specified',
+        quiz_status: quizStatus || 'completed',
+        quiz_version: QUIZ_VERSION,
+        assessment_id: ASSESSMENT_ID,
+        red_flag: redFlagStatus,
+        ...utm
       })
     });
     if (!res.ok) {
-      sendEvent('lead_capture_failed', { colic_type: colcType || 'Unassigned', ml_status: res.status });
-    } else {
-      const data = await res.json().catch(() => ({}));
-      if (data && data.mailerlite_synced === false) {
-        sendEvent('lead_capture_failed', {
-          colic_type: colcType || 'Unassigned',
-          ml_status: typeof data.ml_status === 'number' ? data.ml_status : 0
-        });
-      }
+      sendEvent('lead_capture_failed', { colic_type: apiType, ml_status: res.status });
     }
   } catch(e) {
-    console.warn('Subscribe proxy silent error:', e);
-    sendEvent('lead_capture_failed', { colic_type: colcType || 'Unassigned', ml_status: 0 });
+    console.warn('Subscribe error:', e);
+    sendEvent('lead_capture_failed', { colic_type: apiType, ml_status: 0 });
   }
 }
 
-/* ── HELPERS ─────────────────────────────────────────────────────────── */
-const show = id => document.getElementById(id).classList.remove('hidden');
-const hide = id => document.getElementById(id).classList.add('hidden');
-const escHtml = s => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+/* ── PROGRESS & NAV ──────────────────────────────────────────────────── */
+function updateProgress(pct) {
+  const pf = document.getElementById('progressFill');
+  const cm = document.getElementById('crawlerMarker');
+  if (pf) pf.style.width = pct + '%';
+  if (cm) cm.style.left = 'calc(' + pct + '% - 23px)';
+}
 
-const DEFAULT_PLACEHOLDERS = {
-  nameInput: 'Your first name',
-  emailInput: 'Your email address',
-  ageInput: "Baby's age in weeks",
-};
 function shake(id, msg) {
   const el = document.getElementById(id);
-  el.style.borderColor = '#c4603a';
+  if (!el) return;
+  el.style.borderColor = '#BA5731';
+  const oldPl = el.placeholder;
   el.placeholder = msg;
   setTimeout(() => {
     el.style.borderColor = '';
-    el.placeholder = DEFAULT_PLACEHOLDERS[id] || '';
+    el.placeholder = oldPl;
   }, 2200);
 }
 
-/* ── FLOW ────────────────────────────────────────────────────────────── */
+/* ── FLOW: START QUIZ ────────────────────────────────────────────────── */
 function startQuiz() {
-  startLiveCountdown();
-  const name    = document.getElementById('nameInput').value.trim();
-  const email   = document.getElementById('emailInput').value.trim();
-  const ageRaw  = document.getElementById('ageInput').value.trim();
+  const name = document.getElementById('nameInput').value.trim();
+  const email = document.getElementById('emailInput').value.trim();
+  const ageRaw = document.getElementById('ageInput').value.trim();
   const honeypot = document.getElementById('hpField').value;
   const consentBox = document.getElementById('consentCheck');
 
-  if (!name)                                          return shake('nameInput', 'Please enter your name');
+  if (!name) return shake('nameInput', 'Please enter your name');
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return shake('emailInput', 'Please enter a valid email');
-  if (!ageRaw)                                         return shake('ageInput', "Please enter baby's age in weeks");
+  if (!ageRaw) return shake('ageInput', "Please enter baby's age in weeks");
   const ageNum = Number(ageRaw);
   if (!Number.isInteger(ageNum) || ageNum < 0 || ageNum > 52) return shake('ageInput', 'Enter age in weeks, 0 to 52');
   if (!consentBox.checked) {
-    consentBox.closest('.consent-row').style.outline = '1.5px solid #c2513a';
-    consentBox.closest('.consent-row').style.borderRadius = '8px';
+    consentBox.closest('.consent-row').style.outline = '1.5px solid #BA5731';
     setTimeout(() => { consentBox.closest('.consent-row').style.outline = ''; }, 2000);
     consentBox.focus();
     return;
   }
 
-  userName     = name;
-  userEmail    = email;
-  userConsent  = true;
+  userName = name;
+  userEmail = email;
+  userConsent = true;
   babyAgeWeeks = ageNum;
-  babyName     = ((document.getElementById('babyNameInput') || {}).value || '').trim().slice(0, 40);
+  currentAgeWeeks = ageNum;
+  babyName = ((document.getElementById('babyNameInput') || {}).value || '').trim().slice(0, 40);
 
-  scores = {GUT:0, NS:0, FM:0};
+  scores = { GUT: 0, NS: 0, FM: 0 };
   feedingMethod = '';
   triedItems = [];
-  typeReasons = {GUT:[], NS:[], FM:[]};
+  cryingDuration = '';
+  typeReasons = { GUT: [], NS: [], FM: [] };
   qIndex = 0;
+  qHistory = [];
   selectedMap.clear();
   rfSelected.clear();
   redFlagStatus = 'pending';
 
   if (honeypot || (Date.now() - quizStartedAt) < 1500) {
-    console.warn('Submission flagged as likely automated, proceeding without subscribing.');
     suppressSubscribe = true;
   } else {
-    // Capture the lead now, before the safety check and questions.
-    // red_flag is 'pending' until the safety screen is answered.
     subscribeToMailerLite(userName, userEmail, 'Unassigned', 'Quiz Started', 'started');
   }
 
@@ -593,7 +672,7 @@ function startQuiz() {
   show('redFlagScreen');
 }
 
-/* ── SAFETY CHECK SCREENS ────────────────────────────────────────────── */
+/* ── SAFETY CHECK ────────────────────────────────────────────────────── */
 function renderRedFlag() {
   const box = document.getElementById('rfOptions');
   box.innerHTML = '';
@@ -604,6 +683,7 @@ function renderRedFlag() {
     text: 'None of these',
     visual: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#698457" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1.2" fill="#698457"/><circle cx="15" cy="10" r="1.2" fill="#698457"/><path d="M8 14c1.5 2 6.5 2 8 0"/></svg>`
   }]);
+
   all.forEach((item, i) => {
     const div = document.createElement('div');
     div.className = 'option';
@@ -627,7 +707,6 @@ function toggleRedFlag(i, el) {
   };
 
   if (i === RF_NONE) {
-    // "None" is exclusive
     const wasOn = rfSelected.has(RF_NONE);
     rfSelected.clear();
     nodes.forEach(n => setOn(n, false));
@@ -649,193 +728,128 @@ function submitRedFlag() {
     subscribeToMailerLite(userName, userEmail, 'Unassigned', 'Safety check passed', 'started');
     hide('redFlagScreen');
     show('quizScreen');
-    startQTimer();
     renderQuestion();
     return;
   }
 
   const labels = flagged.map(i => RED_FLAG_OPTIONS[i].short);
+  document.getElementById('rfStopList').textContent = labels.join(', ');
   redFlagStatus = 'flagged: ' + labels.join(', ');
   subscribeToMailerLite(userName, userEmail, 'Unassigned', 'Safety check flagged', 'red_flag');
   sendEvent('red_flag_stop', { colic_type: 'Unassigned' });
-  document.getElementById('rfStopList').textContent = labels.join(', ');
   hide('redFlagScreen');
   show('redFlagStopScreen');
-  window.scrollTo({top: 0, behavior: 'smooth'});
 }
 
 function backFromRedFlagStop() {
   hide('redFlagStopScreen');
   redFlagStatus = 'pending';
-  renderRedFlag();
   show('redFlagScreen');
-  window.scrollTo({top: 0, behavior: 'smooth'});
 }
 
-/* ── QUESTIONS ───────────────────────────────────────────────────────── */
-/* Pre-fill from the parent's own tracker log (written by tracker.html to
-   sessionStorage 'cp_signals'). Only Q1, Q4, Q6, Q7 can be answered from a log.
-   Every pre-selected answer can be changed. */
-function applyLogHint(i) {
-  document.querySelectorAll('.log-hint').forEach((n) => n.remove());
-  try {
-    const s = JSON.parse(sessionStorage.getItem('cp_signals') || 'null');
-    if (!s) return;
-    const v = s[{ 0: 'q1', 3: 'q4', 5: 'q6', 6: 'q7' }[i]];
-    if (v === undefined || v === null) return;
-    const els = document.querySelectorAll('#optionsBox .option');
-    (Array.isArray(v) ? v : [v]).forEach((ix) => { if (els[ix]) els[ix].click(); });
-    const n = document.createElement('div');
-    n.className = 'q-sub log-hint';
-    n.textContent = 'Suggested from your log (' + s.n + ' entries over ' + s.days + ' days). Change it if it is wrong.';
-    document.getElementById('optionsBox').before(n);
-  } catch (e) {}
-}
-
-function renderQuestion() {
-  const q = QUESTIONS[qIndex];
-  const stepNum = qIndex + 1;
-  const total = QUESTIONS.length;
-  const pct = Math.round((stepNum / total) * 100);
-
-  const remaining = total - stepNum;
-  const zCountdown = document.getElementById('zCountdown');
-  if (zCountdown) {
-    zCountdown.textContent = remaining === 0 ? "Final step! Almost finished" : `${remaining} question${remaining > 1 ? 's' : ''} left`;
-  }
-
-  document.getElementById('qCount').textContent = `Question ${stepNum} of ${total}`;
-  const stepPctEl = document.getElementById('stepPctText');
-  if (stepPctEl) stepPctEl.textContent = `${pct}% Complete`;
-  document.getElementById('progressFill').style.width = `${pct}%`;
-
-  // Advance Crawling Baby
-  const clampedPct = Math.min(pct, 95);
-  const marker = document.getElementById('crawlerMarker');
-  if (marker) {
-    marker.style.left = `${clampedPct}%`;
-    marker.classList.add('step-active');
-    setTimeout(() => marker.classList.remove('step-active'), 400);
-  }
-
-  document.getElementById('qText').textContent = q.q;
-  document.getElementById('qSub').textContent  = q.sub;
-
-  const hintEl = document.getElementById('multiHint');
-  if (hintEl) hintEl.textContent = q.single ? 'Select one' : 'Select all that apply';
-
+/* ── AGE QUESTION (DEVELOPMENTAL CRYING CURVE) ───────────────────────── */
+function renderAgeQuestion() {
   const box = document.getElementById('optionsBox');
-  box.innerHTML = '';
-  selectedMap.clear();
+  const selectedWeeks = (babyAgeWeeks !== null && babyAgeWeeks !== undefined) ? babyAgeWeeks : (currentAgeWeeks || 6);
+  currentAgeWeeks = selectedWeeks;
+  const classification = classifyAge(selectedWeeks);
+  const coords = getCurveCoords(selectedWeeks);
 
-  // Clear any existing special visual containers
-  const existingSpecial = document.getElementById('dynamicSpecialVisualBox');
-  if (existingSpecial) existingSpecial.remove();
+  const graphCard = document.createElement('div');
+  graphCard.id = 'dynamicSpecialVisualBox';
+  graphCard.className = 'dev-curve-card';
 
-  // SPECIAL CASE: QUESTION 1 AGE (GRAPH ON TOP + INTEGER SELECTOR BELOW)
-  if (q.isIntegerAge) {
-    renderAgeQuestion();
-    return;
-  }
+  graphCard.innerHTML = `
+    <div class="dcc-header">
+      <div class="dcc-badge">Developmental Crying Timeline</div>
+      <div class="dcc-title">Where Your Baby Sits on the Typical Crying Curve</div>
+    </div>
+    <div class="dcc-graph-wrap">
+      <svg viewBox="0 0 540 180" width="100%" height="auto">
+        <defs>
+          <linearGradient id="curveShade" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#BA5731" stop-opacity="0.25"/>
+            <stop offset="100%" stop-color="#BA5731" stop-opacity="0.02"/>
+          </linearGradient>
+        </defs>
+        <line x1="40" y1="140" x2="500" y2="140" stroke="rgba(38,27,20,0.18)" stroke-width="1.5"/>
+        <line x1="40" y1="85" x2="500" y2="85" stroke="rgba(38,27,20,0.06)" stroke-dasharray="4,4"/>
+        <line x1="40" y1="35" x2="500" y2="35" stroke="rgba(38,27,20,0.06)" stroke-dasharray="4,4"/>
+        
+        <text x="40" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 0</text>
+        <text x="95" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 2</text>
+        <text x="150" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 4</text>
+        <text x="213" y="160" font-family="'DM Mono', monospace" font-size="11" font-weight="700" fill="#BA5731" text-anchor="middle">Wk 6 (Peak)</text>
+        <text x="270" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 8</text>
+        <text x="330" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 10</text>
+        <text x="385" y="160" font-family="'DM Mono', monospace" font-size="11" font-weight="700" fill="#698457" text-anchor="middle">Wk 12 (Ease)</text>
+        <text x="445" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 14</text>
+        <text x="500" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 16+</text>
 
-  // SPECIAL CASE: QUESTION 2 CRYING DURATION (24H CLOCK ON TOP)
-  if (q.isDurationClock) {
-    renderDurationClock(q);
-  }
+        <path d="M 40 135 C 100 130, 160 55, 212.5 35 C 280 50, 360 120, 500 140 L 500 140 L 40 140 Z" fill="url(#curveShade)"/>
+        <path d="M 40 135 C 100 130, 160 55, 212.5 35 C 280 50, 360 120, 500 140" fill="none" stroke="#BA5731" stroke-width="3.5" stroke-linecap="round"/>
+
+        <g id="curvePinGroup" transform="translate(${coords.x}, ${coords.y})" style="transition: transform 0.25s ease;">
+          <line id="curvePinLine" x1="0" y1="0" x2="0" y2="${140 - coords.y}" stroke="#BA5731" stroke-width="1.8" stroke-dasharray="3,3"/>
+          <circle cx="0" cy="0" r="7" fill="#BA5731" stroke="#FAF4EC" stroke-width="2.5"/>
+          <rect x="-42" y="-28" width="84" height="20" rx="5" fill="#261B14"/>
+          <text id="curvePinText" x="0" y="-14" font-family="'DM Mono', monospace" font-size="10" font-weight="700" fill="#FAF4EC" text-anchor="middle">Week ${selectedWeeks}${selectedWeeks === 6 ? ' (Peak)' : ''}</text>
+        </g>
+      </svg>
+    </div>
+  `;
+  box.appendChild(graphCard);
+
+  const inputCard = document.createElement('div');
+  inputCard.className = 'age-integer-card';
+  inputCard.innerHTML = `
+    <div class="aic-stepper-wrap">
+      <button type="button" class="aic-step-btn" onclick="adjustAgeWeeks(-1)">&minus;</button>
+      <div class="aic-val-box">
+        <span class="aic-val-num" id="ageValDisplay">${selectedWeeks}</span>
+        <span class="aic-val-unit">weeks old</span>
+      </div>
+      <button type="button" class="aic-step-btn" onclick="adjustAgeWeeks(1)">&plus;</button>
+    </div>
+
+    <div class="aic-slider-wrap">
+      <input type="range" id="ageSlider" min="0" max="20" value="${selectedWeeks}" step="1" oninput="setAgeWeeks(this.value)" class="aic-slider"/>
+      <div class="aic-slider-ticks">
+        <span>0w</span>
+        <span>3w</span>
+        <span style="color:var(--terra);font-weight:700">6w (Peak)</span>
+        <span>9w</span>
+        <span style="color:var(--sage);font-weight:700">12w (Easing)</span>
+        <span>16w+</span>
+      </div>
+    </div>
+
+    <div class="aic-chips-wrap">
+      <button type="button" class="aic-chip ${selectedWeeks <= 2 ? 'active' : ''}" id="chip-2" onclick="setAgeWeeks(2)">0-2 weeks</button>
+      <button type="button" class="aic-chip ${selectedWeeks >= 3 && selectedWeeks <= 5 ? 'active' : ''}" id="chip-4" onclick="setAgeWeeks(4)">3-5 weeks</button>
+      <button type="button" class="aic-chip ${selectedWeeks === 6 ? 'active' : ''}" id="chip-6" onclick="setAgeWeeks(6)">6 weeks (Peak)</button>
+      <button type="button" class="aic-chip ${selectedWeeks >= 7 && selectedWeeks <= 8 ? 'active' : ''}" id="chip-8" onclick="setAgeWeeks(8)">7-8 weeks</button>
+      <button type="button" class="aic-chip ${selectedWeeks >= 9 && selectedWeeks <= 12 ? 'active' : ''}" id="chip-10" onclick="setAgeWeeks(10)">9-12 weeks</button>
+      <button type="button" class="aic-chip ${selectedWeeks > 12 ? 'active' : ''}" id="chip-12" onclick="setAgeWeeks(13)">12+ weeks</button>
+    </div>
+
+    <div class="aic-classification-box">
+      <div class="aic-class-header">
+        <span class="aic-class-tag" id="ageClassTag">${classification.tag}</span>
+        <span class="aic-class-status" id="ageClassStatus">${classification.status}</span>
+      </div>
+      <div class="aic-milestone-text" id="ageClassMilestone">${classification.milestone}</div>
+    </div>
+  `;
+  box.appendChild(inputCard);
 
   const btn = document.getElementById('continueBtn');
-  btn.classList.remove('visible');
-  btn.textContent = (qIndex === total - 1) ? 'Generate Starting-Point Plan →' : 'Continue';
-
-  q.opts.forEach((o, i) => {
-    const div = document.createElement('div');
-    div.className = 'option';
-    div.setAttribute('role', q.single ? 'radio' : 'checkbox');
-    div.setAttribute('aria-checked', 'false');
-    div.setAttribute('tabindex', '0');
-
-    const visualHtml = o[8] ? `<div class="opt-visual">${o[8]}</div>` : '';
-    div.innerHTML = `<span class="opt-check" id="chk${i}" aria-hidden="true"></span>${visualHtml}<span class="opt-text">${o[0]}</span>`;
-    div.style.animation = `rise .35s ${i * .07}s ease both`;
-    div.onclick = () => toggleOption(i, o[1], div, !!q.single, o[2] || null, o[3] || null, o[4] || null);
-    div.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleOption(i, o[1], div, !!q.single, o[2] || null, o[3] || null, o[4] || null); } };
-    box.appendChild(div);
-  });
-  applyLogHint(qIndex);
+  btn.classList.add('visible');
+  btn.textContent = `Continue with ${selectedWeeks} Weeks →`;
 }
-
-
-// MATHEMATICAL COORDINATES ALONG BARR (2009) CRYING CURVE (Weeks 0 to 16)
-function getCurveCoords(w) {
-  const clampedW = Math.min(16, Math.max(0, w));
-  const x = Math.round(40 + (clampedW / 16) * 460);
-  let y = 135;
-  if (clampedW <= 6) {
-    const t = clampedW / 6;
-    y = Math.round(135 - 100 * Math.sin(t * Math.PI / 2));
-  } else {
-    const t = (clampedW - 6) / 10;
-    y = Math.round(35 + 105 * Math.sin(t * Math.PI / 2));
-  }
-  return { x, y };
-}
-
-// CLASSIFY INTEGER AGE INTO COHORTS FOR CONTINUITY (0-2, 3-5, 6-8, 9-12, 12+)
-function classifyAge(w) {
-  const num = parseInt(w, 10) || 6;
-  if (num <= 2) {
-    return {
-      weeks: num,
-      range: "0 to 2 weeks",
-      bracket: "0-2",
-      tag: "0 to 2 weeks · Newborn Adjustment",
-      status: "Early Transition Phase",
-      milestone: "<strong>Newborn Adjustment Window:</strong> Crying is typically brief and hunger-driven. Gut microbiome colonization is just beginning; infant suck-swallow coordination is learning flow pacing. Wind and frequent burping are normal as swallowing coordination stabilizes."
-    };
-  } else if (num <= 5) {
-    return {
-      weeks: num,
-      range: "3 to 5 weeks",
-      bracket: "3-5",
-      tag: "3 to 5 weeks · The Escalation Phase",
-      status: "Rising Sensory Awareness",
-      milestone: "<strong>The Escalation Phase:</strong> Evening crying begins clustering ('the witching hour'). The infant's sensory awareness expands rapidly, while visceral peristalsis surges. Parents often start trying gas drops or gripe water during this window."
-    };
-  } else if (num <= 8) {
-    return {
-      weeks: num,
-      range: "6 to 8 weeks",
-      bracket: "6-8",
-      tag: "6 to 8 weeks · Peak Colic Window",
-      status: "Biological Crying Peak (Barr 2009)",
-      milestone: "<strong>The Developmental Peak:</strong> Infant crying commonly reaches its maximum daily duration and intensity (often 2 to 3+ hours daily per Barr 2009). The sensory threshold is at its most reactive point, while biological self-soothing circuitry is still immature. This is the hardest stretch, not a parental failure."
-    };
-  } else if (num <= 12) {
-    return {
-      weeks: num,
-      range: "9 to 12 weeks",
-      bracket: "9-12",
-      tag: "9 to 12 weeks · The Turning Point",
-      status: "Developmental Easing",
-      milestone: "<strong>The Turning Point:</strong> Crying duration begins to drop for many babies. Sleep intervals lengthen slightly; the gut microbiome diversifies and oral motor latch mechanics mature."
-    };
-  } else {
-    return {
-      weeks: num,
-      range: "Older than 12 weeks",
-      bracket: "12+",
-      tag: "Older than 12 weeks · Settled Horizon",
-      status: "Late Infancy Transition",
-      milestone: "<strong>The Easing Window:</strong> Colic typically eases by about 3 to 4 months as circadian rhythm and melatonin regulation stabilize. If intense, inconsolable crying persists past 12-16 weeks, consult your pediatrician to rule out food sensitivities or other clinical factors."
-    };
-  }
-}
-
-let currentAgeWeeks = 6;
-let autoAdvanceTimer = null;
 
 function setAgeWeeks(val) {
-  const num = Math.min(16, Math.max(1, parseInt(val, 10) || 1));
+  const num = Math.min(24, Math.max(0, parseInt(val, 10) || 0));
   currentAgeWeeks = num;
   babyAgeWeeks = num;
 
@@ -845,10 +859,15 @@ function setAgeWeeks(val) {
   const slider = document.getElementById('ageSlider');
   if (slider) slider.value = num;
 
-  document.querySelectorAll('.aic-chip').forEach(btn => {
-    btn.classList.remove('active');
-  });
-  const matchingChip = document.getElementById('chip-' + num);
+  document.querySelectorAll('.aic-chip').forEach(btn => btn.classList.remove('active'));
+  let chipId = 'chip-6';
+  if (num <= 2) chipId = 'chip-2';
+  else if (num <= 5) chipId = 'chip-4';
+  else if (num <= 6) chipId = 'chip-6';
+  else if (num <= 8) chipId = 'chip-8';
+  else if (num <= 12) chipId = 'chip-10';
+  else chipId = 'chip-12';
+  const matchingChip = document.getElementById(chipId);
   if (matchingChip) matchingChip.classList.add('active');
 
   const coords = getCurveCoords(num);
@@ -880,118 +899,7 @@ function adjustAgeWeeks(delta) {
   setAgeWeeks(currentAgeWeeks + delta);
 }
 
-// RENDER QUESTION 1: DEVELOPMENTAL CRYING CURVE GRAPH ON TOP + INTEGER INPUT BELOW
-function renderAgeQuestion() {
-  const box = document.getElementById('optionsBox');
-  const selectedWeeks = babyAgeWeeks || currentAgeWeeks;
-  currentAgeWeeks = selectedWeeks;
-  const classification = classifyAge(selectedWeeks);
-  const coords = getCurveCoords(selectedWeeks);
-
-  const graphCard = document.createElement('div');
-  graphCard.id = 'dynamicSpecialVisualBox';
-  graphCard.className = 'dev-curve-card';
-
-  graphCard.innerHTML = `
-    <div class="dcc-header">
-      <div class="dcc-badge">Developmental Crying Timeline (Barr 2009)</div>
-      <div class="dcc-title">Where Your Baby Sits on the Biological Crying Curve</div>
-    </div>
-    <div class="dcc-graph-wrap">
-      <svg viewBox="0 0 540 180" width="100%" height="auto">
-        <defs>
-          <linearGradient id="curveShade" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#BA5731" stop-opacity="0.25"/>
-            <stop offset="100%" stop-color="#BA5731" stop-opacity="0.02"/>
-          </linearGradient>
-        </defs>
-        <line x1="40" y1="140" x2="500" y2="140" stroke="rgba(38,27,20,0.18)" stroke-width="1.5"/>
-        <line x1="40" y1="85" x2="500" y2="85" stroke="rgba(38,27,20,0.06)" stroke-dasharray="4,4"/>
-        <line x1="40" y1="35" x2="500" y2="35" stroke="rgba(38,27,20,0.06)" stroke-dasharray="4,4"/>
-        
-        <text x="40" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 0</text>
-        <text x="95" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 2</text>
-        <text x="150" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 4</text>
-        <text x="213" y="160" font-family="'DM Mono', monospace" font-size="11" font-weight="700" fill="#BA5731" text-anchor="middle">Wk 6 (Peak)</text>
-        <text x="270" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 8</text>
-        <text x="330" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 10</text>
-        <text x="385" y="160" font-family="'DM Mono', monospace" font-size="11" font-weight="700" fill="#698457" text-anchor="middle">Wk 12 (Ease)</text>
-        <text x="445" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 14</text>
-        <text x="500" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 16</text>
-
-        <path d="M 40 140 L 40 135 C 90 130, 150 95, 205 35 C 240 35, 290 85, 360 120 C 420 135, 470 138, 500 140 Z" fill="url(#curveShade)"/>
-        <path d="M 40 135 C 90 130, 150 95, 205 35 C 240 35, 290 85, 360 120 C 420 135, 470 138, 500 140" fill="none" stroke="#BA5731" stroke-width="3" stroke-linecap="round"/>
-
-        <line x1="213" y1="35" x2="213" y2="140" stroke="#BA5731" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.6"/>
-        <circle cx="213" cy="35" r="4.5" fill="#BA5731"/>
-
-        <g id="curvePinGroup" transform="translate(${coords.x}, ${coords.y})" style="transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.3, 1);">
-          <line id="curvePinLine" x1="0" y1="0" x2="0" y2="${140 - coords.y}" stroke="#261B14" stroke-width="1.8" stroke-dasharray="2,2"/>
-          <circle cx="0" cy="0" r="8" fill="#fff" stroke="#BA5731" stroke-width="3"/>
-          <circle cx="0" cy="0" r="3" fill="#BA5731"/>
-          <g transform="translate(0, -22)">
-            <rect x="-55" y="-13" width="110" height="20" rx="6" fill="#261B14"/>
-            <text id="curvePinText" x="0" y="1" font-family="'DM Mono', monospace" font-size="9" font-weight="700" fill="#fff" text-anchor="middle">Week ${selectedWeeks}${selectedWeeks === 6 ? ' (Peak)' : ''}</text>
-          </g>
-        </g>
-      </svg>
-    </div>
-  `;
-  box.appendChild(graphCard);
-
-  const inputCard = document.createElement('div');
-  inputCard.className = 'age-integer-card';
-  inputCard.innerHTML = `
-    <div class="aic-label">Set Your Baby's Exact Age in Weeks:</div>
-
-    <div class="aic-stepper-wrap">
-      <button type="button" class="aic-step-btn" onclick="adjustAgeWeeks(-1)">&minus;</button>
-      <div class="aic-val-box">
-        <span class="aic-val-num" id="ageValDisplay">${selectedWeeks}</span>
-        <span class="aic-val-unit">weeks old</span>
-      </div>
-      <button type="button" class="aic-step-btn" onclick="adjustAgeWeeks(1)">&plus;</button>
-    </div>
-
-    <div class="aic-slider-wrap">
-      <input type="range" id="ageSlider" min="1" max="16" value="${selectedWeeks}" step="1" oninput="setAgeWeeks(this.value)" class="aic-slider"/>
-      <div class="aic-slider-ticks">
-        <span>1w</span>
-        <span>3w</span>
-        <span style="color:var(--terra);font-weight:700">6w (Peak)</span>
-        <span>9w</span>
-        <span style="color:var(--sage);font-weight:700">12w (Easing)</span>
-        <span>16w</span>
-      </div>
-    </div>
-
-    <div class="aic-chips-wrap">
-      <button type="button" class="aic-chip ${selectedWeeks === 2 ? 'active' : ''}" id="chip-2" onclick="setAgeWeeks(2)">2 weeks</button>
-      <button type="button" class="aic-chip ${selectedWeeks === 4 ? 'active' : ''}" id="chip-4" onclick="setAgeWeeks(4)">4 weeks</button>
-      <button type="button" class="aic-chip ${selectedWeeks === 6 ? 'active' : ''}" id="chip-6" onclick="setAgeWeeks(6)">6 weeks (Peak)</button>
-      <button type="button" class="aic-chip ${selectedWeeks === 8 ? 'active' : ''}" id="chip-8" onclick="setAgeWeeks(8)">8 weeks</button>
-      <button type="button" class="aic-chip ${selectedWeeks === 10 ? 'active' : ''}" id="chip-10" onclick="setAgeWeeks(10)">10 weeks</button>
-      <button type="button" class="aic-chip ${selectedWeeks >= 12 ? 'active' : ''}" id="chip-12" onclick="setAgeWeeks(12)">12+ weeks</button>
-    </div>
-
-    <div class="aic-classification-box">
-      <div class="aic-class-header">
-        <span class="aic-class-tag" id="ageClassTag">${classification.tag}</span>
-        <span class="aic-class-status" id="ageClassStatus">${classification.status}</span>
-      </div>
-      <div class="aic-milestone-text" id="ageClassMilestone">
-        ${classification.milestone}
-      </div>
-    </div>
-  `;
-  box.appendChild(inputCard);
-
-  const btn = document.getElementById('continueBtn');
-  btn.classList.add('visible');
-  btn.textContent = `Continue with ${selectedWeeks} Weeks →`;
-}
-
-// RENDER QUESTION 2: 24-HOUR INTERACTIVE ANALOG CLOCK
+/* ── CRYING DURATION QUESTION (24-HOUR CLOCK) ────────────────────────── */
 function renderDurationClock(q) {
   const selected = Array.from(selectedMap.keys());
   const clockCard = document.createElement('div');
@@ -1005,31 +913,38 @@ function renderDurationClock(q) {
 
   if (selected.length > 0) {
     const opt = q.opts[selected[0]];
-    chosenAngle = opt[5] || 60;
+    chosenAngle = opt[5] || 0;
     chosenColor = opt[6] || '#BA5731';
     chosenVal = opt[7] || opt[0];
-    chosenSub = opt[4];
+    chosenSub = opt[8] || '';
   }
 
-  const rad = (chosenAngle - 90) * Math.PI / 180;
-  const endX = 60 + 48 * Math.cos(rad);
-  const endY = 60 + 48 * Math.sin(rad);
-  const largeArc = chosenAngle > 180 ? 1 : 0;
-  const arcPath = chosenAngle > 0 && chosenAngle < 360
-    ? `M 60 60 L 60 12 A 48 48 0 ${largeArc} 1 ${endX.toFixed(1)} ${endY.toFixed(1)} Z`
-    : (chosenAngle === 360 ? `M 60 12 A 48 48 0 1 1 59.9 12 Z` : '');
+  // Draw wedge starting from midnight (top) clockwise
+  let arcPath = '';
+  if (chosenAngle > 0) {
+    const r = 36;
+    const cx = 60, cy = 60;
+    const startX = cx, startY = cy - r;
+    const rad = (chosenAngle - 90) * Math.PI / 180;
+    const endX = (cx + r * Math.cos(rad)).toFixed(2);
+    const endY = (cy + r * Math.sin(rad)).toFixed(2);
+    const largeArc = chosenAngle > 180 ? 1 : 0;
+    arcPath = `M ${cx} ${cy} L ${startX} ${startY} A ${r} ${r} 0 ${largeArc} 1 ${endX} ${endY} Z`;
+  }
 
   clockCard.innerHTML = `
     <div class="dcc-clock-left">
-      <svg class="analog-clock-svg" viewBox="0 0 120 120" width="94" height="94">
-        <circle cx="60" cy="60" r="54" fill="#FAF4EC" stroke="#261B14" stroke-width="2.5"/>
-        <circle cx="60" cy="18" r="3.5" fill="#BE933B" title="Day (Noon)"/>
-        <circle cx="60" cy="102" r="3.5" fill="#222C1D" title="Night (Midnight)"/>
-        <circle cx="18" cy="60" r="2.5" fill="#7A6856"/>
-        <circle cx="102" cy="60" r="2.5" fill="#7A6856"/>
+      <svg viewBox="0 0 120 120" width="80" height="80">
+        <circle cx="60" cy="60" r="54" fill="#F4EDE4" stroke="rgba(38,27,20,0.18)" stroke-width="2"/>
+        <line x1="60" y1="10" x2="60" y2="18" stroke="#261B14" stroke-width="2"/>
+        <line x1="110" y1="60" x2="102" y2="60" stroke="#261B14" stroke-width="2"/>
+        <line x1="60" y1="110" x2="60" y2="102" stroke="#261B14" stroke-width="2"/>
+        <line x1="10" y1="60" x2="18" y2="60" stroke="#261B14" stroke-width="2"/>
+        <text x="60" y="27" font-family="'DM Mono', monospace" font-size="7" fill="#7A6856" text-anchor="middle">24h</text>
+        <text x="96" y="62.5" font-family="'DM Mono', monospace" font-size="7" fill="#7A6856" text-anchor="middle">6h</text>
+        <text x="60" y="99" font-family="'DM Mono', monospace" font-size="7" fill="#7A6856" text-anchor="middle">12h</text>
+        <text x="24" y="62.5" font-family="'DM Mono', monospace" font-size="7" fill="#7A6856" text-anchor="middle">18h</text>
         ${arcPath ? `<path d="${arcPath}" fill="${chosenColor}" fill-opacity="0.35" stroke="${chosenColor}" stroke-width="1.5"/>` : ''}
-        <line x1="60" y1="60" x2="${(60 + 26 * Math.cos((chosenAngle - 90) * Math.PI / 180)).toFixed(1)}" y2="${(60 + 26 * Math.sin((chosenAngle - 90) * Math.PI / 180)).toFixed(1)}" stroke="#261B14" stroke-width="3" stroke-linecap="round"/>
-        <line x1="60" y1="60" x2="60" y2="20" stroke="#BA5731" stroke-width="2" stroke-linecap="round" style="transform-origin:60px 60px; transform:rotate(${(chosenAngle * 6) % 360}deg); transition:transform 0.4s ease;"/>
         <circle cx="60" cy="60" r="4" fill="#261B14"/>
       </svg>
     </div>
@@ -1044,7 +959,86 @@ function renderDurationClock(q) {
   box.parentNode.insertBefore(clockCard, box);
 }
 
-function toggleOption(idx, weights, el, single, feeding, triedTag, reason) {
+/* ── QUESTION RENDERING ──────────────────────────────────────────────── */
+function renderQuestion() {
+  const existingSpecial = document.getElementById('dynamicSpecialVisualBox');
+  if (existingSpecial) existingSpecial.remove();
+
+  selectedMap.clear();
+  const q = QUESTIONS[qIndex];
+
+  document.getElementById('zStepNum').textContent = (qIndex + 1);
+  document.getElementById('qCount').textContent = `Question ${qIndex + 1} of ${QUESTIONS.length}`;
+  document.getElementById('stepPctText').textContent = `${Math.round(((qIndex + 1) / QUESTIONS.length) * 100)}% Complete`;
+  updateProgress(((qIndex + 1) / QUESTIONS.length) * 100);
+
+  const backBtn = document.getElementById('backBtn');
+  if (backBtn) backBtn.style.display = qIndex > 0 ? 'inline-block' : 'none';
+
+  document.getElementById('qText').textContent = q.q;
+  document.getElementById('qSub').textContent = q.sub;
+  document.getElementById('multiHint').style.display = q.multi ? 'block' : 'none';
+
+  const continueBtn = document.getElementById('continueBtn');
+  continueBtn.classList.remove('visible');
+  continueBtn.textContent = 'Continue';
+
+  const box = document.getElementById('optionsBox');
+  box.innerHTML = '';
+
+  if (q.isIntegerAge) {
+    renderAgeQuestion();
+    return;
+  }
+
+  if (q.isDurationClock) {
+    renderDurationClock(q);
+  }
+
+  // Restore previously saved answer if parent used Back button
+  const prevSaved = qHistory[qIndex];
+  const prevMap = prevSaved ? prevSaved.selected : null;
+
+  q.opts.forEach((o, i) => {
+    const div = document.createElement('div');
+    div.className = 'option' + (q.single ? ' opt-radio' : '');
+    div.setAttribute('role', q.single ? 'radio' : 'checkbox');
+    div.setAttribute('aria-checked', 'false');
+    div.setAttribute('tabindex', '0');
+
+    const visualHtml = o[8] ? `<div class="opt-visual">${o[8]}</div>` : '';
+    div.innerHTML = `<span class="opt-check" id="chk${i}" aria-hidden="true"></span>${visualHtml}<span class="opt-text">${o[0]}</span>`;
+    div.onclick = () => toggleOption(i, o[1], div, !!q.single, o[2] || null, o[3] || null, o[4] || null, o[0]);
+    div.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleOption(i, o[1], div, !!q.single, o[2] || null, o[3] || null, o[4] || null, o[0]); } };
+    box.appendChild(div);
+
+    if (prevMap && prevMap.has(i)) {
+      toggleOption(i, o[1], div, !!q.single, o[2] || null, o[3] || null, o[4] || null, o[0]);
+    }
+  });
+
+  applyLogHint(qIndex);
+}
+
+function applyLogHint(i) {
+  document.querySelectorAll('.log-hint').forEach((n) => n.remove());
+  try {
+    const s = JSON.parse(sessionStorage.getItem('cp_signals') || 'null');
+    if (!s) return;
+    const v = s[{ 2: 'q1', 5: 'q6', 6: 'q7', 7: 'q4' }[i]];
+    if (v === undefined || v === null) return;
+    const els = document.querySelectorAll('#optionsBox .option');
+    (Array.isArray(v) ? v : [v]).forEach((ix) => { if (els[ix]) els[ix].click(); });
+  } catch(e){}
+}
+
+/* ── OPTION SELECTION & MUTUAL EXCLUSIVITY ───────────────────────────── */
+function toggleOption(idx, weights, el, single, feeding, triedTag, reason, oText) {
+  if (autoAdvanceTimer) {
+    clearTimeout(autoAdvanceTimer);
+    autoAdvanceTimer = null;
+  }
+
   const deselect = (node) => {
     node.classList.remove('selected');
     node.setAttribute('aria-checked', 'false');
@@ -1056,38 +1050,126 @@ function toggleOption(idx, weights, el, single, feeding, triedTag, reason) {
     node.querySelector('.opt-check').textContent = '✓';
   };
 
-  if (single) {
-    const wasSelected = selectedMap.has(idx);
+  const wasSelected = selectedMap.has(idx);
+  const isNoneOption = !!(weights && weights._isNone) || (oText && oText.toLowerCase().includes('none of these')) || (oText && oText.toLowerCase().includes('none yet'));
+
+  if (isNoneOption) {
     document.querySelectorAll('#optionsBox .option').forEach(deselect);
     selectedMap.clear();
     if (!wasSelected) {
-      selectedMap.set(idx, { weights, feeding, triedTag, reason });
+      selectedMap.set(idx, { weights, feeding, triedTag, reason, isNone: true });
       select(el);
     }
   } else {
-    if (selectedMap.has(idx)) {
-      selectedMap.delete(idx);
-      deselect(el);
-    } else {
-      selectedMap.set(idx, { weights, feeding, triedTag, reason });
-      select(el);
+    for (const [k, v] of selectedMap.entries()) {
+      if (v.isNone) {
+        selectedMap.delete(k);
+        const noneEl = document.querySelectorAll('#optionsBox .option')[k];
+        if (noneEl) deselect(noneEl);
+      }
     }
+    if (single) {
+      document.querySelectorAll('#optionsBox .option').forEach(deselect);
+      selectedMap.clear();
+      if (!wasSelected) {
+        selectedMap.set(idx, { weights, feeding, triedTag, reason });
+        select(el);
+      }
+    } else {
+      if (wasSelected) {
+        selectedMap.delete(idx);
+        deselect(el);
+      } else {
+        selectedMap.set(idx, { weights, feeding, triedTag, reason });
+        select(el);
+      }
+    }
+  }
+
+  const curQ = QUESTIONS[qIndex];
+  if (curQ && curQ.isDurationClock) {
+    const existingClock = document.getElementById('dynamicSpecialVisualBox');
+    if (existingClock) existingClock.remove();
+    renderDurationClock(curQ);
   }
 
   const btn = document.getElementById('continueBtn');
   if (selectedMap.size > 0) {
     btn.classList.add('visible');
     btn.textContent = selectedMap.size === 1 ? 'Continue' : `Continue (${selectedMap.size} selected)`;
+    if (single && !wasSelected) {
+      autoAdvanceTimer = setTimeout(() => {
+        advanceQ();
+      }, 420);
+    }
   } else {
     btn.classList.remove('visible');
   }
 }
 
+/* ── BACK BUTTON NAVIGATION ──────────────────────────────────────────── */
+function prevQ() {
+  if (autoAdvanceTimer) {
+    clearTimeout(autoAdvanceTimer);
+    autoAdvanceTimer = null;
+  }
+  if (qIndex <= 0) return;
+
+  qIndex--;
+  const prevSaved = qHistory[qIndex];
+  if (prevSaved) {
+    scores = { ...prevSaved.scores };
+    feedingMethod = prevSaved.feedingMethod;
+    triedItems = [...prevSaved.triedItems];
+    cryingDuration = prevSaved.cryingDuration;
+    typeReasons = JSON.parse(JSON.stringify(prevSaved.typeReasons));
+  }
+
+  const card = document.getElementById('quizScreen');
+  card.style.opacity = '0';
+  setTimeout(() => {
+    renderQuestion();
+    card.style.transition = 'none';
+    card.style.opacity = '1';
+    requestAnimationFrame(() => {
+      card.style.transition = 'opacity .2s ease';
+    });
+  }, 150);
+}
+
+/* ── FORWARD ADVANCEMENT ─────────────────────────────────────────────── */
 function advanceQ() {
+  if (autoAdvanceTimer) {
+    clearTimeout(autoAdvanceTimer);
+    autoAdvanceTimer = null;
+  }
+
+  const curQ = QUESTIONS[qIndex];
+  if (curQ && curQ.isIntegerAge) {
+    babyAgeWeeks = currentAgeWeeks;
+  }
+
+  qHistory[qIndex] = {
+    selected: new Map(selectedMap),
+    scores: { ...scores },
+    feedingMethod,
+    triedItems: [...triedItems],
+    cryingDuration,
+    typeReasons: JSON.parse(JSON.stringify(typeReasons))
+  };
+
   selectedMap.forEach(sel => {
-    Object.keys(sel.weights).forEach(k => { scores[k] += sel.weights[k]; });
+    Object.keys(sel.weights).forEach(k => {
+      if (k !== '_isNone' && scores[k] !== undefined) {
+        scores[k] += sel.weights[k];
+      }
+    });
     if (sel.feeding) feedingMethod = sel.feeding;
     if (sel.triedTag) triedItems.push(sel.triedTag);
+
+    if (curQ && curQ.isDurationClock) {
+      cryingDuration = sel.reason || '';
+    }
 
     const text = sel.triedTag
       ? `You have already tried ${sel.triedTag} without a meaningful change.`
@@ -1095,33 +1177,33 @@ function advanceQ() {
 
     if (text) {
       Object.keys(sel.weights).forEach(k => {
-        if (sel.weights[k] > 0) typeReasons[k].push({ text, weight: sel.weights[k] });
+        if (k !== '_isNone' && sel.weights[k] > 0 && typeReasons[k]) {
+          typeReasons[k].push({ text, weight: sel.weights[k] });
+        }
       });
     }
   });
+
   qIndex++;
   selectedMap.clear();
 
   const card = document.getElementById('quizScreen');
   card.style.opacity = '0';
-  card.style.transform = 'translateY(-8px)';
 
   setTimeout(() => {
     if (qIndex < QUESTIONS.length) {
       renderQuestion();
     } else {
-      stopQTimer();
       hide('quizScreen');
       showAnalysis();
       return;
     }
     card.style.transition = 'none';
     card.style.opacity = '1';
-    card.style.transform = 'translateY(0)';
     requestAnimationFrame(() => {
-      card.style.transition = 'opacity .3s, transform .3s';
+      card.style.transition = 'opacity .2s ease';
     });
-  }, 200);
+  }, 150);
 }
 
 function showAnalysis() {
@@ -1129,157 +1211,35 @@ function showAnalysis() {
   setTimeout(showResult, 2800);
 }
 
-/* Highest score wins. Exact tie order: GUT, then FM, then NS. */
+/* ── PRIMARY TYPE CALCULATION (ZERO-SAFE) ────────────────────────────── */
 function getPrimaryType(s) {
-  let best = 'GUT', bestVal = -Infinity;
-  ['GUT', 'FM', 'NS'].forEach(k => {
+  const total = (s.GUT || 0) + (s.NS || 0) + (s.FM || 0);
+  if (total === 0) {
+    return 'MIXED'; // Zero-safe fallback: never default to GUT with 0 confidence
+  }
+  let best = 'NS', bestVal = -1;
+  ['NS', 'FM', 'GUT'].forEach(k => {
     if (s[k] > bestVal) { bestVal = s[k]; best = k; }
   });
   return best;
 }
 
-
-/* ── BLOG GUIDES & PROVEN MARKETING VIDEO SPOTLIGHTS ── */
-function renderBlogAndVideoGuides(type, feedMethod) {
-  const guideGrid = document.getElementById('guideCardGrid');
-  if (!guideGrid) return;
-  guideGrid.innerHTML = '';
-
-  const blogGuides = {
-    paced_bottle: {
-      url: "/blog/paced-bottle-feeding-technique.html",
-      tag: "Feeding Mechanics · Bottle",
-      title: "Paced Bottle Feeding: The Exact Angle and Flow Control",
-      summary: "How to hold the bottle horizontal so your baby controls the swallow rate, stops gulping air, and breathes rhythmically."
-    },
-    flipple_latch: {
-      url: "/blog/breastfeeding-latch-technique.html",
-      tag: "Feeding Mechanics · Breast",
-      title: "The Flipple Technique for a Deep, Air-Free Latch",
-      summary: "A step-by-step method to achieve an asymmetric latch that prevents painful nipple clicking and stops milk leaking from the mouth."
-    },
-    best_bottles: {
-      url: "/blog/best-bottles-feeding-positions-colic.html",
-      tag: "Feeding Mechanics · Equipment",
-      title: "Best Bottle Venting & Semi-Upright Feeding Positions",
-      summary: "Comparing bottom-vented versus standard bottles and how positioning reduces aerophagia."
-    },
-    tiger_hold: {
-      url: "/blog/tiger-hold-guide.html",
-      tag: "Gut Visceral · Physical Hold",
-      title: "How to Do the Tiger Hold Correctly for Gas Relief",
-      summary: "Tummy-down forearm positioning that uses gentle upward palm counter-pressure to ease visceral intestinal spasms."
-    },
-    gentle_burping: {
-      url: "/blog/gentle-burping-techniques.html",
-      tag: "Gut Visceral · Decompression",
-      title: "Gentle Burping & Gastrointestinal Decompression",
-      summary: "Rotational burping techniques that release trapped air without jarring or forceful back pounding."
-    },
-    l_reuteri: {
-      url: "/blog/l-reuteri-evidence.html",
-      tag: "Gut Microbiome · Evidence",
-      title: "L. Reuteri DSM 17938: What the Clinical Trials Show",
-      summary: "Examining the Savino 2010 breastfed trial and Sung 2014 null results. Talk to your pediatrician before starting any supplement."
-    },
-    witching_room: {
-      url: "/blog/witching-hour-room-setup.html",
-      tag: "Nervous System · Environment",
-      title: "The Witching Hour Room Setup: Sensory Dampening",
-      summary: "Dim lighting, quiet steady brown noise across the room on a timer, and removing visual stimulation 30 minutes before evening fussiness."
-    },
-    swaddling_moro: {
-      url: "/blog/swaddling-moro-reflex-colic.html",
-      tag: "Nervous System · Sensory Holding",
-      title: "Swaddling, the Moro Reflex, and State Regulation",
-      summary: "Containing involuntary startle responses to help overstimulated nervous systems transition into sleep."
-    },
-    colic_timeline: {
-      url: "/blog/colic-timeline-when-does-it-end.html",
-      tag: "Foundational · Timeline",
-      title: "The Colic Timeline: When Does It Peak and When Does It Ease?",
-      summary: "Why infant crying typically peaks around week 6 and eases by 3 to 4 months, backed by the Barr 2009 developmental curve."
-    },
-    why_remedies_stop: {
-      url: "/blog/why-colic-remedies-stop-working.html",
-      tag: "Foundational · Structure",
-      title: "Why Colic Remedies Seem to Work, Then Stop",
-      summary: "The reason cycling through 5 different remedies in one week creates confusion, and how a 72-hour log clarifies the pattern."
-    }
-  };
-
-  function addGuideCard(g) {
-    const a = document.createElement('a');
-    a.className = 'guide-card';
-    a.href = g.url;
-    a.target = '_blank';
-    a.rel = 'noopener';
-    a.innerHTML = `
-      <div class="guide-tag">${g.tag}</div>
-      <div class="guide-title">${g.title}</div>
-      <div class="guide-summary">${g.summary}</div>
-      <div class="guide-cta">Read step-by-step technique guide &rarr;</div>
-    `;
-    guideGrid.appendChild(a);
-  }
-
-  const vsTitle = document.getElementById('vsTitle');
-  const vsDesc = document.getElementById('vsDesc');
-  const vsLinkBtn = document.getElementById('vsLinkBtn');
-  const isBreast = (feedMethod || '').toLowerCase().includes('breast');
-
-  if (type === 'FM') {
-    if (isBreast) {
-      addGuideCard(blogGuides.flipple_latch);
-      addGuideCard(blogGuides.gentle_burping);
-      if (vsTitle) vsTitle.textContent = "Demonstration: Baby Tongue Position & Milk Transfer Mechanics";
-      if (vsDesc) vsDesc.textContent = "How proper tongue cupping past the lower gum prevents nipple compression, clicking, and air swallowing.";
-      if (vsLinkBtn) {
-        vsLinkBtn.href = "https://www.tiktok.com/@colicprotocol/video/7681719767215901965";
-        vsLinkBtn.textContent = "Watch Latch & Tongue Video (TikTok) →";
-      }
-    } else {
-      addGuideCard(blogGuides.paced_bottle);
-      addGuideCard(blogGuides.best_bottles);
-      if (vsTitle) vsTitle.textContent = "314k-View Video: Paced Bottle Feeding Position & 4 Steps";
-      if (vsDesc) vsDesc.textContent = "Holding the bottle nearly horizontal so milk covers the teat opening without rapidly pouring into baby's mouth.";
-      if (vsLinkBtn) {
-        vsLinkBtn.href = "https://www.tiktok.com/@colicprotocol/video/7694054422434827534";
-        vsLinkBtn.textContent = "Watch Paced Feeding Video (314k Views) →";
-      }
-    }
-  } else if (type === 'GUT') {
-    addGuideCard(blogGuides.tiger_hold);
-    addGuideCard(blogGuides.gentle_burping);
-    if (isBreast) addGuideCard(blogGuides.l_reuteri);
-
-    if (vsTitle) vsTitle.textContent = "683k-View Reel: Why Patting Harder When Your Baby Won't Burp Doesn't Work";
-    if (vsDesc) vsDesc.textContent = "Why sudden strikes lock the esophageal sphincter, and how upward spine alignment releases trapped gas gently.";
-    if (vsLinkBtn) {
-      vsLinkBtn.href = "https://www.tiktok.com/@colicprotocol/video/7673678040236444942";
-      vsLinkBtn.textContent = "Watch Burping Technique Video (683k Views) →";
-    }
-  } else {
-    addGuideCard(blogGuides.witching_room);
-    addGuideCard(blogGuides.swaddling_moro);
-
-    if (vsTitle) vsTitle.textContent = "Top Settling Video: Upright Posture, Gravity & Gentle Settling Rhythm";
-    if (vsDesc) vsDesc.textContent = "How 10-15 minutes of gentle upright resting rhythm allows the gas to rise naturally while calming the startle reflex.";
-    if (vsLinkBtn) {
-      vsLinkBtn.href = "https://www.tiktok.com/@colicprotocol/video/7660020460431740173";
-      vsLinkBtn.textContent = "Watch Settling & Burping Rhythm Video →";
-    }
-  }
+function getConfidencePct() {
+  const total = scores.GUT + scores.NS + scores.FM;
+  if (total === 0) return 0;
+  const dominant = Math.max(scores.GUT, scores.NS, scores.FM);
+  return Math.round((dominant / total) * 100);
 }
 
-async function showResult() {
+/* ── RESULT SCREEN DISPLAY ───────────────────────────────────────────── */
+function showResult() {
   hide('analysisScreen');
 
   const type = getPrimaryType(scores);
-  const R = RESULTS[type];
+  const R = RESULTS[type] || RESULTS['MIXED'];
 
-  subscribeToMailerLite(userName, userEmail, R.type, R.mailerliteField, 'completed');
-  sendEvent('quiz_complete', { colic_type: R.type });
+  subscribeToMailerLite(userName, userEmail, R.apiType, R.mailerliteField, 'completed');
+  sendEvent('quiz_complete', { colic_type: R.apiType });
 
   try {
     localStorage.setItem('colic_type', type);
@@ -1313,6 +1273,7 @@ async function showResult() {
   renderPrevalenceBar(type);
   document.getElementById('angleStrip').innerHTML = buildAngleStrip(type);
   renderGuaranteeCard(type, userName);
+
   const triedLine = buildTriedFailureLine(type);
   const triedEl = document.getElementById('triedLine');
   if (triedLine) { triedEl.innerHTML = triedLine; triedEl.style.display = ''; }
@@ -1326,7 +1287,8 @@ async function showResult() {
   });
 
   document.getElementById('resultBridge').textContent = R.bridgeLine(userName);
-  document.getElementById('stickyType').textContent = R.type;
+  const stickyType = document.getElementById('stickyType');
+  if (stickyType) stickyType.textContent = R.type;
 
   document.getElementById('offerForBaby').textContent   = R.forBaby;
   document.getElementById('offerWhyFailed').textContent = R.whyTipsFailed;
@@ -1341,162 +1303,132 @@ async function showResult() {
     pBox.innerHTML += `<li><span class="check" aria-hidden="true">&#10003;</span>${item}</li>`;
   });
 
+  // Render on-site step-by-step guides and video spotlights
+  renderBlogAndVideoGuides(type, feedingMethod);
+
   paintCount();
   resultShown = true;
   show('resultScreen');
   window.scrollTo({top: 0, behavior: 'smooth'});
 }
 
-/* ── OFFER BUTTONS ───────────────────────────────────────────────────────
-   Two routes out of the offer card:
-   goToProduct()  -> Gumroad checkout directly (tracked as 'blueprint')
-   viewProduct()  -> /blueprint product page (tracked as 'blueprint_view')
-   window.location.href rather than window.open, because in-app browsers
-   (TikTok, Instagram) handle new tabs inconsistently. */
-function goToProduct() {
-  trackPathClick('blueprint');
-  const type = getPrimaryType(scores);
-  const R = RESULTS[type];
-  sendEvent('blueprint_checkout_click', {
-    colic_type: R.type,
-    surface: 'quiz_result',
-    transport_type: 'beacon'
-  });
-  const url = `${CFG.productUrl}?ref=${ASSESSMENT_ID}&wanted=true&utm_source=quiz&utm_medium=assessment&utm_campaign=${UTM_SOURCE}`;
-  window.location.href = url;
-}
+/* ── BLOG GUIDES & PROVEN MARKETING VIDEO SPOTLIGHTS ── */
+function renderBlogAndVideoGuides(type, feedMethod) {
+  const guideGrid = document.getElementById('guideCardGrid');
+  if (!guideGrid) return;
+  guideGrid.innerHTML = '';
 
-function viewProduct() {
-  trackPathClick('blueprint_view');
-  const type = getPrimaryType(scores);
-  const R = RESULTS[type];
-  sendEvent('blueprint_view_click', {
-    colic_type: R.type,
-    surface: 'quiz_result',
-    transport_type: 'beacon'
-  });
-  const url = `${CFG.productPageUrl}?ref=${encodeURIComponent(ASSESSMENT_ID)}` +
-    `&utm_source=quiz&utm_medium=assessment_view&utm_campaign=${encodeURIComponent(UTM_SOURCE)}`;
-  window.location.href = url;
-}
-
-function goToChecklist() {
-  if (!resultShown) return; // the sticky bar must never act before a result exists
-  trackPathClick('checklist');
-  const type = getPrimaryType(scores);
-  // Same-origin handoff: Midnight Protocol reads this so the parent isn't
-  // asked for email and consent a second time. sessionStorage keeps the
-  // email out of the URL and out of referrer headers.
-  // ATTRIBUTION: the visitor's original UTMs already sit in sessionStorage
-  // 'cp_utm' (captureUTMs above) and Midnight Protocol reads them from there.
-  // The handoff link deliberately carries NO utm_* params, only its own
-  // `handoff` param. utm_source=quiz here used to overwrite the real source
-  // (instagram, tiktok...) in MailerLite and Supabase, label every Midnight
-  // bridge purchase as quiz/result_page, and start a new GA4 campaign session.
-  try {
-    sessionStorage.setItem('cp_lead', JSON.stringify({ babyName: babyName,
-      name: userName,
-      email: userEmail,
-      age: babyAgeWeeks,
-      consent: true,
-    }));
-  } catch(e){}
-  const url = `${CFG.checklistUrl}?type=${type}` +
-    `&confidence=${getConfidencePct()}` +
-    `&aid=${encodeURIComponent(ASSESSMENT_ID)}` +
-    `&name=${encodeURIComponent(userName)}` +
-    `&age=${encodeURIComponent(babyAgeWeeks != null ? babyAgeWeeks : '')}` +
-    `&handoff=quiz_result`;
-  window.location.href = url;
-}
-
-/* ── WHO USES THIS ASSESSMENT ────────────────────────────────────────── */
-function renderPrevalenceBar(type) {
-  const box = document.getElementById('prevalenceBox');
-  const pct = PREVALENCE[type];
-  box.innerHTML = `
-    <div class="eyebrow-mini">Who uses this assessment</div>
-    <p class="prevalence-note">About <strong>${pct} in 100</strong> parents who completed this assessment in September landed on ${RESULTS[type].type} as their closest fit. That describes the parents using this tool, not how common each pattern is in colic.</p>
-    <div class="prevalence-track"><div class="prevalence-fill" style="width:${pct}%"></div></div>
-    <div class="prevalence-labels"><span class="here">● ${RESULTS[type].type}, you're here</span><span>The other two patterns</span></div>
-  `;
-}
-
-/* ── TRIED-ITEMS CALLBACK ────────────────────────────────────────────── */
-function buildTriedFailureLine(type) {
-  if (!triedItems.length) return null;
-
-  const list = triedItems.length === 1
-    ? triedItems[0]
-    : triedItems.slice(0, -1).join(', ') + ' and ' + triedItems[triedItems.length - 1];
-
-  const reasons = {
-    GUT: `Trials have not shown that gas drops beat placebo, so short relief from them doesn't tell you whether they worked.`,
-    NS: `Rocking, bouncing and sound can calm some babies for a few minutes and then stop working when they stop. Changing several things at once also makes it hard to tell what helped.`,
-    FM: `Changing one feeding detail at a time, and writing down how the next few hours go, is the clearest way to see whether feeding is involved.`,
+  const blogGuides = {
+    paced_bottle: {
+      url: "/blog/paced-bottle-feeding-technique.html",
+      tag: "Feeding Mechanics · Bottle",
+      title: "Paced Bottle Feeding: The Exact Angle and Flow Control",
+      summary: "How holding the bottle horizontal allows your baby to control swallow speed, preventing air gulping."
+    },
+    flipple_latch: {
+      url: "/blog/breastfeeding-latch-technique.html",
+      tag: "Feeding Mechanics · Breast",
+      title: "The Flipple Technique for a Deep Latch",
+      summary: "Step-by-step positioning for an asymmetric latch that supports an airtight seal and comfortable feeding."
+    },
+    tiger_hold: {
+      url: "/blog/tiger-hold-guide.html",
+      tag: "Physical Soothing · Technique",
+      title: "How to Do the Upright Forearm Hold for Comfort",
+      summary: "Tummy-down forearm carrying that uses gentle upward palm support to soothe physical discomfort."
+    },
+    gentle_burping: {
+      url: "/blog/gentle-burping-techniques.html",
+      tag: "Winding · Decompression",
+      title: "Gentle Burping & Upright Winding Positions",
+      summary: "Rotational and forward-lean positions that help release wind without jarring or forceful back patting."
+    },
+    gripe_vs_drops: {
+      url: "/blog/gripe-water-vs-gas-drops.html",
+      tag: "Remedies · Evidence",
+      title: "Gripe Water vs Gas Drops: What the Evidence Shows",
+      summary: "Examining clinical trial findings on simethicone and herbal water compared to placebo."
+    },
+    witching_room: {
+      url: "/blog/witching-hour-room-setup.html",
+      tag: "Nervous System · Environment",
+      title: "The Evening Room Setup: Lowering Sensory Stimulation",
+      summary: "Dim lighting, quiet steady sound across the room, and removing visual stimulation before evening fussiness."
+    },
+    l_reuteri: {
+      url: "/blog/l-reuteri-evidence.html",
+      tag: "Gut Microbiome · Evidence",
+      title: "L. Reuteri DSM 17938: What the Clinical Trials Show",
+      summary: "Examining the Savino 2010 breastfed trial and Sung 2014 null results. Talk to your pediatrician before starting any supplement."
+    }
   };
 
-  return `You told us you'd already tried <strong>${list}</strong>. ${reasons[type]}`;
-}
-
-/* ── PROFILE CARD ────────────────────────────────────────────────────── */
-function buildProfileNarrative() {
-  const feedingPhrase = {
-    'Breastfed': 'breastfed',
-    'Formula-fed': 'formula-fed',
-    'Mixed': 'mixed breast and formula fed',
-  }[feedingMethod] || 'feeding';
-
-  let sentence = `${escHtml(userName)}, you told us about a ${babyAgeWeeks}-week-old who's ${feedingPhrase}`;
-
-  if (triedItems.length) {
-    const list = triedItems.length === 1
-      ? triedItems[0]
-      : triedItems.slice(0, -1).join(', ') + ' and ' + triedItems[triedItems.length - 1];
-    const verb = triedItems.length === 1 ? "hasn't" : "haven't";
-    sentence += `, and that <strong>${list}</strong> ${verb} been enough on ${triedItems.length === 1 ? 'its' : 'their'} own`;
+  function addGuideCard(g) {
+    if (!g) return;
+    const a = document.createElement('a');
+    a.href = g.url;
+    a.className = 'guide-card';
+    a.innerHTML = `
+      <div class="guide-tag">${g.tag}</div>
+      <div class="guide-title">${g.title}</div>
+      <div class="guide-summary">${g.summary}</div>
+      <div class="guide-cta">Read step-by-step technique guide &rarr;</div>
+    `;
+    guideGrid.appendChild(a);
   }
 
-  sentence += `. Here's the starting point that fits best.`;
-  return sentence;
+  const vsTitle = document.getElementById('vsTitle');
+  const vsDesc = document.getElementById('vsDesc');
+  const vsLinkBtn = document.getElementById('vsLinkBtn');
+  const isBreast = (feedMethod || '').toLowerCase().includes('breast');
+
+  if (type === 'FM') {
+    if (isBreast) {
+      addGuideCard(blogGuides.flipple_latch);
+      addGuideCard(blogGuides.gentle_burping);
+      if (vsTitle) vsTitle.textContent = "Technique Video: Deep Latch Alignment";
+      if (vsDesc) vsDesc.textContent = "Demonstration of breast positioning to prevent air gaps and clicking swallows during feeds.";
+    } else {
+      addGuideCard(blogGuides.paced_bottle);
+      addGuideCard(blogGuides.gentle_burping);
+      if (vsTitle) vsTitle.textContent = "Technique Video: Horizontal Paced Bottle Feeding";
+      if (vsDesc) vsDesc.textContent = "Holding the bottle nearly horizontal so milk covers the nipple opening without gravity forcing excess flow.";
+    }
+    if (vsLinkBtn) {
+      vsLinkBtn.href = "https://instagram.com/colicprotocol";
+      vsLinkBtn.textContent = "Watch Demonstration on Instagram &rarr;";
+    }
+  } else if (type === 'GUT') {
+    addGuideCard(blogGuides.gentle_burping);
+    addGuideCard(blogGuides.tiger_hold);
+    if (isBreast) addGuideCard(blogGuides.l_reuteri);
+    else addGuideCard(blogGuides.gripe_vs_drops);
+
+    if (vsTitle) vsTitle.textContent = "Technique Video: Gentle Upright Winding";
+    if (vsDesc) vsDesc.textContent = "How upward spine posture and gentle torso rotation help release wind without hard back slapping.";
+    if (vsLinkBtn) {
+      vsLinkBtn.href = "https://instagram.com/colicprotocol";
+      vsLinkBtn.textContent = "Watch Demonstration on Instagram &rarr;";
+    }
+  } else {
+    // NS or MIXED
+    addGuideCard(blogGuides.witching_room);
+    addGuideCard(blogGuides.tiger_hold);
+
+    if (vsTitle) vsTitle.textContent = "Technique Video: Upright Forearm Soothing Hold";
+    if (vsDesc) vsDesc.textContent = "Demonstration of steady forearm support, dim lighting, and continuous calming rhythm during evening clusters.";
+    if (vsLinkBtn) {
+      vsLinkBtn.href = "https://instagram.com/colicprotocol";
+      vsLinkBtn.textContent = "Watch Demonstration on Instagram &rarr;";
+    }
+  }
 }
 
-/* ── ANSWER AUDIT ────────────────────────────────────────────────────── */
-function buildAnswerAudit(type) {
-  const feedingPhrase = {
-    'Breastfed': 'breastfed',
-    'Formula-fed': 'formula-fed',
-    'Mixed': 'mixed breast and formula fed',
-  }[feedingMethod] || null;
-
-  const lines = [`Your baby is ${babyAgeWeeks} week${babyAgeWeeks === 1 ? '' : 's'} old.`];
-  if (feedingPhrase) lines.push(`Your baby is ${feedingPhrase}.`);
-
-  const seen = new Set(lines);
-  typeReasons[type]
-    .slice()
-    .sort((a, b) => b.weight - a.weight)
-    .forEach(r => {
-      if (lines.length >= 6) return;
-      if (seen.has(r.text)) return;
-      seen.add(r.text);
-      lines.push(r.text);
-    });
-
-  const items = lines.map(l => `<li>${l}</li>`).join('');
-
-  return `
-    <div class="audit-title">Why your answers point toward this pattern</div>
-    <ul class="audit-list">${items}</ul>
-    <p class="audit-close">Those answers are what moved your result toward this pattern.</p>
-  `;
-}
-
-/* ── SCORE PANEL ─────────────────────────────────────────────────────── */
+/* ── SCORE PANEL & AUDIT ─────────────────────────────────────────────── */
 function renderScorePanel(s, primaryType) {
   const total = s.GUT + s.NS + s.FM;
-  const pctOf = k => total > 0 ? Math.round((s[k] / total) * 100) : 0;
-  const order = ['GUT', 'NS', 'FM'].slice().sort((a, b) => s[b] - s[a]);
+  const pctOf = k => total > 0 ? Math.round((s[k] / total) * 100) : 33;
+  const order = ['NS', 'FM', 'GUT'].slice().sort((a, b) => (s[b] || 0) - (s[a] || 0));
 
   const rows = order.map(k => {
     const isPrimary = k === primaryType;
@@ -1504,57 +1436,72 @@ function renderScorePanel(s, primaryType) {
       <div class="score-row${isPrimary ? '' : ' is-secondary'}">
         <div class="score-row-head">
           <div class="score-name">${RESULTS[k].type}${isPrimary ? '<span class="primary-tag">Closest fit</span>' : ''}</div>
-          <div class="score-val">${pctOf(k)}</div>
+          <div class="score-val">${pctOf(k)}%</div>
         </div>
-        <div class="score-track"><div class="score-fill" data-pct="${pctOf(k)}"></div></div>
+        <div class="score-track"><div class="score-fill" style="width: ${pctOf(k)}%;"></div></div>
       </div>`;
   }).join('');
 
-  const gap = pctOf(order[0]) - pctOf(order[1]);
-  const closeCall = gap < 10
-    ? ` Your top two are close, ${RESULTS[order[0]].type} and ${RESULTS[order[1]].type}. Start with the first. If nothing shifts after a fair trial, look at the second.`
-    : '';
+  const container = document.getElementById('scorePanel');
+  if (container) {
+    container.innerHTML = `
+      <div class="score-panel-title">Score breakdown across the three patterns</div>
+      ${rows}
+    `;
+  }
+}
 
-  const box = document.getElementById('scorePanel');
-  box.innerHTML = `
-    <div class="score-panel-head">
-      <div class="score-panel-title">How your answers lined up</div>
-      <div class="score-panel-scale">Scale: 0&ndash;100</div>
-    </div>
-    ${rows}
-    <div class="score-panel-foot">These reflect your answers, not a diagnosis.${closeCall}</div>
-  `;
-
-  requestAnimationFrame(() => {
-    setTimeout(() => {
-      box.querySelectorAll('.score-fill').forEach(f => {
-        f.style.width = f.getAttribute('data-pct') + '%';
-      });
-    }, 150);
+function buildAnswerAudit(type) {
+  const reasons = typeReasons[type] || [];
+  const lines = [];
+  const seen = new Set();
+  reasons.slice().sort((a, b) => b.weight - a.weight).forEach(r => {
+    if (lines.length >= 6) return;
+    if (seen.has(r.text)) return;
+    seen.add(r.text);
+    lines.push(r.text);
   });
-}
-
-/* ── QUICK ACTION ────────────────────────────────────────────────────── */
-function renderQuickAction(type) {
-  const R = RESULTS[type];
-  const qs = typeof R.quickSteps === 'function' ? R.quickSteps(feedingMethod) : R.quickSteps;
-  const stepsHtml = qs.map(s => `<li>${s}</li>`).join('');
-  document.getElementById('quickAction').innerHTML = `
-    <div class="qa-eyebrow">Free, right now</div>
-    <div class="qa-title">${R.quickTitle}</div>
-    <ol class="qa-steps">${stepsHtml}</ol>
-    <p class="qa-note">These are a first move, not a fix. No technique works every time. The full list, with how strong the evidence is for each step, is in "What to try tonight" below.</p>
+  if (lines.length === 0) {
+    lines.push("Your answers reflect a combination of early developmental adjustments across digestion and settling.");
+  }
+  const items = lines.map(l => `<li>${l}</li>`).join('');
+  return `
+    <div class="audit-title">Why your answers point toward this pattern</div>
+    <ul class="audit-list">${items}</ul>
+    <p class="audit-close">Those answers are what moved your result toward this starting point.</p>
   `;
 }
 
-/* ── REFRAME ─────────────────────────────────────────────────────────── */
-function buildReframeLine(type, name) {
-  return `What you just tried can help tonight. It may not change tomorrow evening, because colic usually peaks around week 6 and eases by about 3 to 4 months, and nobody can promise a date. That is a long stretch on little sleep, and it is not you failing. <strong>Trying one change at a time and keeping a short log is the cheapest way to see a pattern, with or without the Blueprint.</strong>`;
+function renderQuickAction(type) {
+  const el = document.getElementById('quickAction');
+  if (!el) return;
+  const R = RESULTS[type] || RESULTS['MIXED'];
+  el.innerHTML = `
+    <div class="qa-eyebrow">First Recommended Adjustment</div>
+    <div class="qa-text">${R.primaryAction || R.subtitle}</div>
+  `;
 }
 
-/* ── WHAT THE BLUEPRINT OFFERS, IN THREE LINES ───────────────────────── */
+function buildProfileNarrative() {
+  const name = babyName || 'your baby';
+  const age = classifyAge(babyAgeWeeks !== null ? babyAgeWeeks : currentAgeWeeks).range;
+  return `Based on the answers provided for ${name} (${age}), here is your customized starting-point pattern evaluation.`;
+}
+
+function buildReframeLine(type, name) {
+  const R = RESULTS[type] || RESULTS['MIXED'];
+  return `<p class="reframe-text">Remember: Colic usually peaks around week 6 and eases by about 3 to 4 months. ${R.tagline}</p>`;
+}
+
+function renderPrevalenceBar(type) {
+  const el = document.getElementById('prevalenceBox');
+  if (!el) return;
+  const prev = PREVALENCE[type] || 33;
+  el.innerHTML = `<div class="prevalence-note">About <strong>${prev} in 100</strong> parents completing this assessment land on this pattern.</div>`;
+}
+
 function buildAngleStrip(type) {
-  const a = RESULTS[type].angles;
+  const a = (RESULTS[type] || RESULTS['MIXED']).angles;
   return `
     <div class="angle-row"><div class="angle-tag">Solution</div><div class="angle-text">${a.solution}</div></div>
     <div class="angle-row"><div class="angle-tag">Shortcut</div><div class="angle-text">${a.shortcut}</div></div>
@@ -1562,140 +1509,69 @@ function buildAngleStrip(type) {
   `;
 }
 
-/* ── GUARANTEE ───────────────────────────────────────────────────────────
-   Assessment-volume proof only. Nothing here implies buyers or refunds. */
-function buildGuaranteeProof(type, name) {
-  const countSpan = `<span class="assessment-count-value">${shownCount()}</span>+`;
-  return `${countSpan} assessments have been completed. About <strong>${PREVALENCE[type]} in 100</strong> of September's completers landed on ${RESULTS[type].type} too, so this isn't an unusual read.`;
-}
-
 function renderGuaranteeCard(type, name) {
-  document.getElementById('guaranteeCard').innerHTML = `
-    <p class="guarantee-proof">${buildGuaranteeProof(type, name)}</p>
+  const card = document.getElementById('guaranteeCard');
+  if (!card) return;
+  card.innerHTML = `
     <div class="guarantee-card-label">72-Hour Guarantee</div>
-    <p class="gc-body">If it doesn't produce a meaningful shift in 72 hours, reply and I'll make it right. <strong>You keep the Blueprint either way.</strong> The 72 hours covers the first changes, like feeding, positioning and soothing. It is not a promise about any single product.</p>
+    <p class="gc-body">If it doesn't produce a meaningful shift in 72 hours, reply and I'll make it right. You keep the Blueprint either way. The 72 hours covers the first changes, like feeding, positioning and soothing. It is not a promise about any single product.</p>
   `;
 }
 
-/* ── PATH-CLICK TRACKING ─────────────────────────────────────────────────
-   path_clicked values: 'checklist' | 'blueprint' | 'blueprint_view' | 'dm'.
-   subscribe.js must list each of these or it drops the value. */
-function trackPathClick(path) {
+function buildTriedFailureLine(type) {
+  if (triedItems.length === 0) return '';
+  return `You noted already trying ${triedItems.join(', ')} without lasting relief. That is common when remedies don't address the primary starting-point pattern.`;
+}
+
+function goToProduct() {
+  const type = getPrimaryType(scores);
+  const R = RESULTS[type] || RESULTS['MIXED'];
+  sendEvent('blueprint_checkout_click', { colic_type: R.apiType, surface: 'quiz_result' });
+  const url = `${CFG.productUrl}?ref=${encodeURIComponent(ASSESSMENT_ID)}&wanted=true&utm_source=quiz&utm_medium=assessment&utm_campaign=${encodeURIComponent(UTM_SOURCE)}`;
+  window.location.href = url;
+}
+
+function viewProduct() {
+  const type = getPrimaryType(scores);
+  const R = RESULTS[type] || RESULTS['MIXED'];
+  sendEvent('blueprint_view_click', { colic_type: R.apiType, surface: 'quiz_result' });
+  const url = `${CFG.productPageUrl}?ref=${encodeURIComponent(ASSESSMENT_ID)}&utm_source=quiz&utm_medium=assessment_view&utm_campaign=${encodeURIComponent(UTM_SOURCE)}`;
+  window.location.href = url;
+}
+
+function goToChecklist() {
+  if (!resultShown) return;
+  const type = getPrimaryType(scores);
   try {
-    try {
-      localStorage.setItem('colic_path_clicked', path);
-    } catch(e){}
-    const type = getPrimaryType(scores);
-    const R = RESULTS[type] || {};
-    const payload = JSON.stringify({
-      email: userEmail,
+    sessionStorage.setItem('cp_lead', JSON.stringify({
+      babyName: babyName,
       name: userName,
-      website: '',
-      consent: !!userConsent,
-      colic_type: R.type || '',
-      colic_type_detail: R.mailerliteField || '',
-      feeding_method: feedingMethod || 'Not specified',
-      baby_age_weeks: babyAgeWeeks,
-      baby_name: babyName,
-      confidence_pct: getConfidencePct(),
-      tried_items: triedItems.join(', '),
-      group_id: CFG.group_id,
-      assessment_id: ASSESSMENT_ID,
-      lead_source: UTM_SOURCE,
-      quiz_status: 'completed',
-      quiz_version: '2.2',
-      red_flag: redFlagStatus,
-      path_clicked: path,
-      purchase_status: 'pending',
-      ...getStoredUTMs(),
-    });
-
-    let sent = false;
-    if (typeof navigator !== 'undefined' && typeof navigator.sendBeacon === 'function') {
-      try {
-        const blob = new Blob([payload], { type: 'application/json' });
-        sent = navigator.sendBeacon('/api/subscribe', blob);
-      } catch (e) {}
-    }
-
-    if (!sent && typeof fetch === 'function') {
-      fetch('/api/subscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        keepalive: true,
-        body: payload,
-      }).catch(e => console.warn('Path click tracking failed silently:', e));
-    }
-  } catch(e) {
-    console.warn('trackPathClick error:', e);
-  }
+      email: userEmail,
+      age: babyAgeWeeks !== null ? babyAgeWeeks : currentAgeWeeks,
+      consent: true,
+    }));
+  } catch(e){}
+  const ageVal = babyAgeWeeks !== null ? babyAgeWeeks : currentAgeWeeks;
+  const url = `${CFG.checklistUrl}?type=${type}&confidence=${getConfidencePct()}&aid=${encodeURIComponent(ASSESSMENT_ID)}&name=${encodeURIComponent(userName)}&age=${encodeURIComponent(ageVal)}&handoff=quiz_result`;
+  window.location.href = url;
 }
 
-/* ── DM-TO-VINCENT PATH ──────────────────────────────────────────────── */
 function buildDMMessage(R) {
-  const feeding = (feedingMethod || 'not specified').toLowerCase();
-  let msg = `Hi Vincent, I just completed the Colic Protocol assessment (${ASSESSMENT_ID}). My closest fit was ${R.type}. My baby is ${babyAgeWeeks} weeks old and ${feeding}.`;
-  if (triedItems.length) {
-    msg += ` I've already tried ${triedItems.join(', ')}, without much luck.`;
-  }
-  msg += ` I'd like to talk through what this could mean.`;
-  return msg;
+  const ageStr = classifyAge(babyAgeWeeks !== null ? babyAgeWeeks : currentAgeWeeks).range;
+  return `Hi Vincent, I just finished the Colic Protocol assessment (ID: ${ASSESSMENT_ID}). My baby is ${ageStr} and our result was ${R.type}. Can you review our result?`;
 }
 
-async function copyDMMessage() {
+function copyDMMessage() {
   const text = document.getElementById('dmMessageBox').textContent;
-  const btn = document.getElementById('dmCopyBtn');
-  const original = btn.textContent;
-  let copied = false;
-
-  try {
-    await navigator.clipboard.writeText(text);
-    copied = true;
-  } catch(e) {
-    try {
-      const ta = document.createElement('textarea');
-      ta.value = text;
-      ta.style.position = 'fixed';
-      ta.style.left = '-9999px';
-      document.body.appendChild(ta);
-      ta.select();
-      copied = document.execCommand('copy');
-      document.body.removeChild(ta);
-    } catch(e2) { copied = false; }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => {
+      const b = document.getElementById('dmCopyBtn');
+      if (b) { b.textContent = 'Copied!'; setTimeout(() => { b.textContent = 'Copy message'; }, 2000); }
+    });
   }
-
-  btn.textContent = copied ? 'Copied ✓' : 'Select the text above';
-  setTimeout(() => { btn.textContent = original; }, 2200);
 }
 
 function goToDM() {
-  trackPathClick('dm');
-  window.location.href = CFG.dmUrl;
-}
-
-/* ── SCROLL POLISH ───────────────────────────────────────────────────── */
-if ('IntersectionObserver' in window) {
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('in');
-        revealObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-
-  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
-
-  const banner = document.getElementById('resultBanner');
-  const stickyBar = document.getElementById('stickyBar');
-  if (banner && stickyBar) {
-    const bannerObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        stickyBar.classList.toggle('show', resultShown && !entry.isIntersecting);
-      });
-    }, { threshold: 0 });
-    bannerObserver.observe(banner);
-  }
-} else {
-  document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
+  sendEvent('dm_open_click', { surface: 'quiz_result' });
+  window.open(CFG.dmUrl, '_blank', 'noopener');
 }

@@ -102,6 +102,10 @@ a{color:inherit}
 .opt-text{flex:1}
 .opt-check{width:22px;height:22px;border-radius:6px;border:2px solid rgba(0,0,0,.15);flex-shrink:0;margin-top:1px;display:grid;place-items:center;font-size:13px;font-weight:700;color:#fff;transition:all .2s}
 .option.selected .opt-check{background:var(--terra);border-color:var(--terra)}
+.q-actions{display:flex;align-items:center;gap:12px;margin-top:18px;}
+.btn-back{padding:14px 20px;background:transparent;border:1px solid rgba(38,27,20,0.2);color:var(--muted);border-radius:12px;font-family:var(--fb);font-size:14px;font-weight:600;cursor:pointer;transition:opacity .2s ease;}
+.btn-back:hover{border-color:var(--ink);color:var(--ink);background:rgba(38,27,20,0.04);}
+.q-actions .btn-continue{flex:1;margin-top:0;}
 .btn-continue{width:100%;padding:15px;margin-top:18px;background:var(--ink);color:#fff;border:none;border-radius:12px;font-family:var(--fb);font-size:15px;font-weight:700;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .2s ease}
 .btn-continue.visible{opacity:1;pointer-events:auto}
 .btn-continue:hover{background:var(--terra)}
@@ -442,7 +446,7 @@ a{color:inherit}
 }
 .option.selected .opt-visual.sparkline{background:rgba(188,90,51,0.12);border-color:var(--terra);color:var(--terra)}
 
-/* ── DEVELOPMENTAL CRYING CURVE (BARR 2009) ── */
+/* ── DEVELOPMENTAL CRYING CURVE ── */
 .dev-curve-card{
   background:#fff;
   border:1.5px solid rgba(188,90,51,0.22);
@@ -708,13 +712,13 @@ a{color:inherit}
 
   <!-- SCREEN 1: LANDING -->
   <div id="landingScreen" class="card landing">
-    <span class="eyebrow">Free Assessment · 7 Questions · No Payment Required</span>
+    <span class="eyebrow">Free Assessment · 8 Questions · No Payment Required</span>
     <h1>Not sure where to start with your baby's crying? <em>Find your starting point.</em></h1>
     <p class="sub">Colic has no single known cause. This assessment sorts your answers into three practical starting patterns, gut, nervous system and feeding, so you know what to try first tonight. It is a starting point, not a diagnosis.</p>
 
     <div class="stat-row">
       <div class="stat-box"><span class="num">3</span><div class="lbl">starting<br>patterns</div></div>
-      <div class="stat-box"><span class="num">7</span><div class="lbl">quick<br>questions</div></div>
+      <div class="stat-box"><span class="num">8</span><div class="lbl">quick<br>questions</div></div>
       <div class="stat-box"><span class="num">72h</span><div class="lbl">guarantee<br>on the Blueprint</div></div>
     </div>
 
@@ -767,15 +771,15 @@ a{color:inherit}
     <div class="zeigarnik-strip" id="zeigarnikStrip">
       <div class="z-left">
         <div class="z-pulse-dot"></div>
-        <span>Assessment in progress: <strong><span id="zCountdown">8 questions left</span></strong> to your customized plan</span>
+        <span>Step <strong><span id="zStepNum">1</span> of 8</strong> · Starting-Point Assessment</span>
       </div>
-      <div class="z-right" id="zTimer"><span class="timer-tick-dot"></span> 90s remaining</div>
+      <div class="z-right" id="zTimer">About 90 Seconds</div>
     </div>
 
     <!-- Crawling Baby Progress Rail -->
     <div class="crawler-track-container" aria-label="Assessment Progress">
       <div class="crawler-baby-marker" id="crawlerMarker">
-        <img src="images/crawling-baby.png" alt="Baby crawling forward" class="crawler-baby-img" width="50" height="30" onerror="this.onerror=null; this.src='https://placehold.co/100x60/FAF4EC/BA5731?text=Baby';">
+        <img src="images/crawling-baby.png" alt="Baby crawling forward" class="crawler-baby-img" width="50" height="30" >
       </div>
       <div class="progress-rail">
         <div class="progress-bar-fill" id="progressFill"></div>
@@ -791,7 +795,10 @@ a{color:inherit}
     <div class="q-sub" id="qSub"></div>
     <div class="multi-hint" id="multiHint">Select all that apply</div>
     <div class="options" id="optionsBox"></div>
-    <button class="btn-continue" id="continueBtn" onclick="advanceQ()">Continue</button>
+    <div class="q-actions">
+      <button class="btn-back" id="backBtn" type="button" onclick="prevQ()" style="display:none;">← Back</button>
+      <button class="btn-continue" id="continueBtn" type="button" onclick="advanceQ()">Continue</button>
+    </div>
   </div>
 
   <!-- SCREEN 3: ANALYSIS -->
@@ -878,7 +885,7 @@ a{color:inherit}
         <h3 class="vs-title" id="vsTitle">Technique Video</h3>
         <p class="vs-desc" id="vsDesc">Watch the exact physical positioning demonstrated step-by-step.</p>
         <div class="vs-actions">
-          <a class="vs-link-btn" id="vsLinkBtn" href="https://www.tiktok.com/@colicprotocol" target="_blank" rel="noopener">
+          <a class="vs-link-btn" id="vsLinkBtn" href="https://instagram.com/colicprotocol" target="_blank" rel="noopener">
             <span>Watch Demonstration</span> &rarr;
           </a>
           <a class="vs-secondary-link" id="vsIgLink" href="https://instagram.com/colicprotocol" target="_blank" rel="noopener">
