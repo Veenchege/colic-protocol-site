@@ -924,7 +924,7 @@
           <!-- Mode Selector -->
           <div class="sound-modes">
             <button id="smode-brown" class="sound-mode-btn active" onclick="setSoundMode('brown')">Deep Brown Noise</button>
-            <button id="smode-pulse" class="sound-mode-btn" onclick="setSoundMode('pulse')">Rhythmic Pulse (60 BPM)</button>
+            <button id="smode-pulse" class="sound-mode-btn" onclick="setSoundMode('pulse')">Rhythmic Pulse</button>
             <button id="smode-womb" class="sound-mode-btn" onclick="setSoundMode('womb')">Womb Resonance</button>
           </div>
 
@@ -1297,10 +1297,10 @@
             A newborn's sensory nervous system is brand new. Dim rooms, continuous brown noise, and firm holds give comfort in the moment:
           </p>
           <div class="study-box">
-            <strong>Hugh et al., 2014 & AAP 2023 Technical Report:</strong> Tested 14 sound machines; every one exceeded the safe 50 dBA nursery limit at max volume. Sound should always be quiet, low, on a timer, and across the room.
+            <strong>Hugh et al., 2014 & AAP 2023 Technical Report:</strong> Tested 14 sound machines; every one exceeded recommended nursery sound limits at max volume. Sound should always be quiet, low, on a timer, and across the room.
           </div>
           <div class="study-box">
-            <strong>Barr et al., 1991 (Pediatrics):</strong> Extra carrying does not shorten the underlying course of colic. The Tiger Hold is an essential comfort hold for tonight, not a cure.
+            <strong>Barr et al., 1991 (Pediatrics):</strong> Extra carrying does not shorten the underlying course of colic. The Tiger Hold is an essential comfort hold for tonight, not an instant resolution.
           </div>
           <div class="brick-action-link">Open Full Reading Framework &rarr;</div>
         </div>
@@ -1447,11 +1447,12 @@
       </p>
 
       <div style="background: var(--bg); padding: 12px; border-radius: 8px; margin-bottom: 14px;">
-        <div style="font-size: 12px; font-weight: 700;">Recorded Crying Hours:</div>
-        <div style="display: flex; justify-content: space-between; margin-top: 6px; font-size: 13px;">
-          <span>Before Trial Average: <strong>3.8 hrs/day</strong></span>
-          <span>Last 2 Days Average: <strong>2.3 hrs/day</strong></span>
+        <div style="font-size: 12px; font-weight: 700;">Recorded Crying Duration:</div>
+        <div id="checkin-crying-stats" style="display: flex; justify-content: space-between; margin-top: 6px; font-size: 13px;">
+          <span id="checkin-stat-before">Before Trial Average: <strong>--</strong></span>
+          <span id="checkin-stat-recent">Last 2 Days Average: <strong>--</strong></span>
         </div>
+        <div id="checkin-stat-note" style="font-size: 11px; color: var(--mu); margin-top: 4px;"></div>
       </div>
 
       <label style="font-size: 12px; font-weight: 700; text-transform: uppercase;">What is your decision?</label>
@@ -1772,7 +1773,7 @@
           'Keep lights dim and voices quiet; sway slowly without bouncing.',
           'Safety Rule: Awake hold only. Never lay baby face down to sleep.'
         ],
-        clinicalNote: 'Barr et al., 1991 (Pediatrics, 66 Infants): Extra carrying does not shorten the underlying course of colic. The Tiger Hold provides essential comfort in the moment, not a cure.'
+        clinicalNote: 'Barr et al., 1991 (Pediatrics, 66 Infants): Extra carrying does not shorten the underlying course of colic. The Tiger Hold provides essential comfort in the moment, not an instant resolution.'
       }
     ];
 
@@ -1785,8 +1786,8 @@
         coreQuestion: 'Is my baby suffering from a hidden stomach defect, permanent injury, or failing care?',
         cohort: 'Evaluated healthy, thriving infants presenting with severe paroxysmal crying bouts. Established the pediatric benchmark: Rule of Three (>3 hours/day, >3 days/week, for >3 weeks in an otherwise healthy infant).',
         proved: 'Colic is not an internal disease or structural defect. It is a temporary, developmental peak of normal infant crying that typically starts around week 2, peaks around week 6, and resolves naturally by 3 to 4 months as the infant nervous system matures.',
-        limits: 'Did not identify a single biological malfunction. Did not prove that prescription drugs, drastic maternal elimination diets, or invasive medical interventions cure colic.',
-        action: 'If red flags are absent, stop searching for a physical cure. Colic is a developmental storm to manage together, not a disease to fix. Focus on dim lighting, firm soothing holds, and tag-teaming with your partner to protect your nervous system.'
+        limits: 'Did not identify a single biological malfunction. Did not prove that prescription drugs, drastic maternal elimination diets, or invasive medical interventions resolve colic.',
+        action: 'If red flags are absent, stop searching for an instant fix. Colic is a developmental storm to manage together, not a disease to fix. Focus on dim lighting, firm soothing holds, and tag-teaming with your partner to protect your nervous system.'
       },
       'brick-2': {
         brickNumber: 'Brick 2 &bull; Differential Triage',
@@ -1815,7 +1816,7 @@
         title: 'The Honest Probiotic Picture (L. reuteri)',
         citation: 'Savino et al., 2010 (Pediatrics) paired with Sung et al., 2014 (BMJ)',
         blueprintChapter: 'Chapter 2 & Chapter 5: Probiotics & Gut Flora',
-        coreQuestion: 'Does Lactobacillus reuteri DSM 17938 cure infant colic, and does feeding method matter?',
+        coreQuestion: 'Does Lactobacillus reuteri DSM 17938 ease infant crying, and does feeding method matter?',
         cohort: 'Savino 2010: 50 exclusively breastfed infants (46 completed). Sung 2014: 167 infants across mixed and formula-fed cohorts. Cochrane review (Biagioli 2016): 31 randomized controlled trials.',
         proved: 'In exclusively breastfed infants, L. reuteri DSM 17938 showed a measurable reduction in daily crying time by day 21 compared to simethicone. However, in the larger Sung 2014 trial with formula-fed infants, no benefit over placebo was detected. Cochrane review showed simethicone drops perform no better than placebo.',
         limits: 'Probiotics are not a quick fix (they require 2&ndash;3 weeks to colonize) and have not shown benefit for formula-fed infants. Always consult your pediatrician before introducing any infant supplement.',
@@ -1826,10 +1827,10 @@
         title: 'Sound Safety & The Tiger Hold',
         citation: 'Hugh et al., 2014 / AAP 2023 Technical Report & Barr et al., 1991',
         blueprintChapter: 'Chapter 3 & Chapter 8: Acoustic Soothing & Calming Holds',
-        coreQuestion: 'How does sound soothe an infant nervous system safely, and does extra carrying cure colic?',
+        coreQuestion: 'How does sound soothe an infant nervous system safely, and does extra carrying shorten colic?',
         cohort: 'Acoustic testing of 14 commercial infant sound machines at maximum and moderate volumes; randomized carrying trials in 66 clinical colic infants.',
         proved: 'Low continuous brown noise masks sudden household sounds that trigger the primitive startle (Moro) reflex. Firm forearm pressure (the Tiger Hold) provides calming proprioceptive input to the infant\'s abdominal area during acute evening distress.',
-        limits: 'Hugh et al. revealed that every tested sound machine exceeded safe nursery noise limits (50 dBA) at maximum volume. Continuous sound must be quiet, low, on a timer, and placed across the room. Barr showed carrying does not shorten the underlying weeks of colic.',
+        limits: 'Hugh et al. revealed that every tested sound machine exceeded recommended nursery sound levels at maximum volume. Continuous sound must be quiet, low, on a timer, and placed across the room. Barr showed carrying does not shorten the underlying weeks of colic.',
         action: 'Place your phone or speaker across the room (never in the crib). Play low brown noise on a timer. Use the Tiger Hold (baby chest down on your forearm, head supported near your elbow) for acute evening settling.'
       },
       'brick-6': {
@@ -1856,11 +1857,11 @@
       },
       {
         title: 'Why Brown Noise Beats High Frequencies',
-        desc: 'Higher frequency noise contains equal energy across harsh 2,000&ndash;5,000 Hz frequencies that irritate newborn ears. Brown noise rolls off high frequencies by 6 dB per octave, keeping energy gentle and deep.'
+        desc: 'Higher frequency noise contains equal energy across harsh frequencies that irritate newborn ears. Brown noise rolls off high frequencies steeply per octave, keeping energy gentle and deep.'
       },
       {
         title: 'AAP Nursery Placement Safety',
-        desc: 'Hugh et al. (2014) showed commercial machines exceeded safe 50 dBA nursery limits at max volume. Keep speaker across the room (never in the crib), at conversation volume, on a timer.'
+        desc: 'Hugh et al. (2014) showed commercial machines exceeded recommended nursery sound levels at max volume. Keep speaker across the room (never in the crib), at conversation volume, on a timer.'
       }
     ];
 
@@ -2336,7 +2337,7 @@
       const titleEl = document.getElementById('sound-now-playing-title');
       const subEl = document.getElementById('sound-now-playing-sub');
       if (mode === 'pulse') {
-        titleEl.innerText = 'Rhythmic Pulse (60 BPM)';
+        titleEl.innerText = 'Rhythmic Pulse';
         subEl.innerText = 'Low-frequency rhythmic pulse &bull; Maternal cadence';
       } else if (mode === 'womb') {
         titleEl.innerText = 'Womb Resonance';
@@ -2406,7 +2407,7 @@
         state.noiseNode.connect(state.filterNode);
 
         if (state.soundMode === 'pulse') {
-          // 60 BPM (1 Hz) LFO modulation
+          // Rhythmic 1 Hz LFO modulation
           state.lfoNode = state.audioCtx.createOscillator();
           state.lfoNode.type = 'sine';
           state.lfoNode.frequency.value = 1.0;
@@ -2433,7 +2434,7 @@
 
         // MediaSession API for lockscreen controls
         if ('mediaSession' in navigator) {
-          const modeName = state.soundMode === 'pulse' ? 'Rhythmic Pulse (60 BPM)' : (state.soundMode === 'womb' ? 'Womb Resonance' : 'Deep Brown Noise');
+          const modeName = state.soundMode === 'pulse' ? 'Rhythmic Pulse' : (state.soundMode === 'womb' ? 'Womb Resonance' : 'Deep Brown Noise');
           navigator.mediaSession.metadata = new MediaMetadata({
             title: 'Acoustic Soothing: ' + modeName,
             artist: 'Colic Protocol · 3 AM Console',
@@ -2648,7 +2649,42 @@
     }
 
     // Check-In Modal
-    function openCheckInModal() { document.getElementById('modal-checkin').style.display = 'flex'; }
+    function openCheckInModal() {
+      const s = getStore();
+      const dayTotals = {};
+      (s.ev || []).forEach(e => {
+        if (e.k === 'cry' && e.d && e.d.min) {
+          const dStr = (e.t || '').slice(0, 10);
+          if (dStr) dayTotals[dStr] = (dayTotals[dStr] || 0) + Number(e.d.min);
+        }
+      });
+      const sortedDays = Object.keys(dayTotals).sort();
+      const statBefore = document.getElementById('checkin-stat-before');
+      const statRecent = document.getElementById('checkin-stat-recent');
+      const statNote = document.getElementById('checkin-stat-note');
+
+      if (sortedDays.length >= 3) {
+        const recentDays = sortedDays.slice(-2);
+        const earlierDays = sortedDays.slice(0, -2);
+        const recentAvgMins = recentDays.reduce((acc, d) => acc + dayTotals[d], 0) / recentDays.length;
+        const earlierAvgMins = earlierDays.reduce((acc, d) => acc + dayTotals[d], 0) / earlierDays.length;
+        if (statBefore) statBefore.innerHTML = `Earlier Days Average: <strong>${(earlierAvgMins / 60).toFixed(1)} hrs/day</strong>`;
+        if (statRecent) statRecent.innerHTML = `Last 2 Days Average: <strong>${(recentAvgMins / 60).toFixed(1)} hrs/day</strong>`;
+        if (statNote) statNote.innerText = `Calculated across ${sortedDays.length} logged days (${earlierDays.length} earlier vs 2 recent).`;
+      } else if (sortedDays.length > 0) {
+        const totalMins = sortedDays.reduce((acc, d) => acc + dayTotals[d], 0);
+        const avgMins = totalMins / sortedDays.length;
+        if (statBefore) statBefore.innerHTML = `Logged Average: <strong>${(avgMins / 60).toFixed(1)} hrs/day</strong>`;
+        if (statRecent) statRecent.innerHTML = `Recorded Days: <strong>${sortedDays.length} day(s)</strong>`;
+        if (statNote) statNote.innerText = 'Log at least 3 days to see a comparative before-and-during trial split.';
+      } else {
+        if (statBefore) statBefore.innerHTML = 'Earlier Days Average: <strong>No data yet</strong>';
+        if (statRecent) statRecent.innerHTML = 'Last 2 Days Average: <strong>No data yet</strong>';
+        if (statNote) statNote.innerText = 'Start logging crying spells in the 3 AM Console or Midnight Run to populate comparison.';
+      }
+
+      document.getElementById('modal-checkin').style.display = 'flex';
+    }
     function closeCheckInModal() { document.getElementById('modal-checkin').style.display = 'none'; }
     function saveCheckIn() {
       closeCheckInModal();
