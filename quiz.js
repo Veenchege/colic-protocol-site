@@ -1717,6 +1717,13 @@ function showResult() {
   document.getElementById('redFlagBox').innerHTML =
     `<b>Call a doctor first if you see any of these.</b> ${RED_FLAG} ${OVERWHELMED}`;
 
+  const closestFitContainer = document.getElementById('closestFitVisualCard');
+  if (closestFitContainer) {
+    closestFitContainer.innerHTML = getClosestFitVisualHtml(type);
+  }
+
+  document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
+
   document.getElementById('resultSeeing').textContent   = R.seeing;
   document.getElementById('resultWhy').textContent      = R.why;
   document.getElementById('resultRulesOut').textContent = R.rulesOut;
@@ -1766,6 +1773,235 @@ function showResult() {
   resultShown = true;
   show('resultScreen');
   window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+/* ── CLOSEST FIT PHYSIOLOGICAL VISUAL ARCHITECTURE ── */
+function getClosestFitVisualHtml(type) {
+  let badge = '';
+  let title = '';
+  let sub = '';
+  let mechanismTag = '';
+  let mechanismText = '';
+  let badgeColor = '#37452F';
+  let badgeBg = 'rgba(108,135,89,0.12)';
+  let specificPaths = '';
+  let callouts = '';
+
+  if (type === 'NS') {
+    badge = 'AUTONOMIC & SENSORY ARCHITECTURE';
+    title = "How Sensory Overload & Autonomic Arousal Trigger Evening Clusters";
+    sub = "Developing sensory cortex, vagus nerve tract, and cardiac autonomic regulation.";
+    mechanismTag = "THE SENSORY-CARDIAC FEEDBACK LOOP";
+    mechanismText = "In young infants, sensory inputs accumulate faster than the immature brain can filter them. During evening clusters, sensory fatigue triggers sympathetic autonomic acceleration, elevating heart rate and distress. Steady rhythmic vestibular input and low sensory lighting activate the vagus nerve, calming the cardiac response and returning your baby to baseline.";
+    badgeColor = '#37452F';
+    badgeBg = 'rgba(108,135,89,0.14)';
+
+    specificPaths = `
+      <!-- Brain glow & neural network -->
+      <path d="M 112 58 C 114 42, 138 38, 154 44 C 168 50, 172 68, 164 78 C 156 86, 132 86, 120 78 Z" fill="rgba(108,135,89,0.22)" stroke="#6C8759" stroke-width="1.6"/>
+      <circle cx="132" cy="56" r="3.5" fill="#6C8759"/>
+      <circle cx="148" cy="54" r="3" fill="#C0963F"/>
+      <circle cx="140" cy="68" r="3.5" fill="#6C8759"/>
+      <line x1="132" y1="56" x2="148" y2="54" stroke="#6C8759" stroke-width="1.2" stroke-dasharray="2,2"/>
+      <line x1="132" y1="56" x2="140" y2="68" stroke="#6C8759" stroke-width="1.2"/>
+      <line x1="148" y1="54" x2="140" y2="68" stroke="#6C8759" stroke-width="1.2"/>
+
+      <!-- Sensory Input Wavelets -->
+      <path d="M 88 52 C 94 54, 96 60, 104 60" fill="none" stroke="#C0963F" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M 84 58 C 90 60, 94 66, 102 66" fill="none" stroke="#C0963F" stroke-width="1.8" stroke-linecap="round"/>
+
+      <!-- Spinal Cord & Vagus Nerve Trunk -->
+      <path d="M 138 84 Q 134 110, 132 140 T 130 190" fill="none" stroke="#6C8759" stroke-width="2.5"/>
+      <path d="M 134 115 Q 138 126, 146 135" fill="none" stroke="#6C8759" stroke-width="1.5" stroke-dasharray="2,2"/>
+      <path d="M 133 130 Q 138 142, 144 148" fill="none" stroke="#6C8759" stroke-width="1.5" stroke-dasharray="2,2"/>
+      <path d="M 131 155 Q 138 165, 148 175" fill="none" stroke="#6C8759" stroke-width="1.5" stroke-dasharray="2,2"/>
+    `;
+
+    callouts = `
+      <line x1="154" y1="46" x2="204" y2="34" stroke="rgba(38,27,20,0.35)" stroke-width="1"/>
+      <circle cx="204" cy="34" r="2.5" fill="#6C8759"/>
+      <text x="210" y="32" font-family="'DM Sans', sans-serif" font-size="9" font-weight="700" fill="#241A12">Sensory Cortex</text>
+      <text x="210" y="43" font-family="'DM Mono', monospace" font-size="7.5" fill="#7A6856">Sound & Light Overload</text>
+
+      <line x1="132" y1="110" x2="68" y2="100" stroke="rgba(38,27,20,0.35)" stroke-width="1"/>
+      <circle cx="68" cy="100" r="2.5" fill="#6C8759"/>
+      <text x="64" y="98" font-family="'DM Sans', sans-serif" font-size="9" font-weight="700" fill="#241A12" text-anchor="end">Vagus Nerve Axis</text>
+      <text x="64" y="109" font-family="'DM Mono', monospace" font-size="7.5" fill="#7A6856" text-anchor="end">Calming Reflex Pathway</text>
+
+      <line x1="156" y1="140" x2="204" y2="148" stroke="rgba(38,27,20,0.35)" stroke-width="1"/>
+      <circle cx="204" cy="148" r="2.5" fill="#E63946"/>
+      <text x="210" y="146" font-family="'DM Sans', sans-serif" font-size="9" font-weight="700" fill="#E63946">Cardiac Rhythm</text>
+      <text x="210" y="157" font-family="'DM Mono', monospace" font-size="7.5" fill="#7A6856">Pulsating Heart Rate</text>
+    `;
+  } else if (type === 'GUT') {
+    badge = 'VISCERAL & ENTERIC NERVOUS SYSTEM';
+    title = "How Visceral Cramps & Gut Sensitivity Drive Crying Waves";
+    sub = "Enteric nervous system plexus, brain-gut communication, and visceral discomfort.";
+    mechanismTag = "THE ENTERIC-AUTONOMIC CONNECTION";
+    mechanismText = "Gas movement and digestive transit create localized smooth-muscle contractions in the immature intestinal wall. The enteric nervous system relays visceral discomfort signals to the brainstem, producing cyclical crying waves with tucked knees until the digestive spasm eases.";
+    badgeColor = '#8A3F22';
+    badgeBg = 'rgba(188,90,51,0.14)';
+
+    specificPaths = `
+      <!-- Brain-Gut Vagal Trunk -->
+      <path d="M 140 76 Q 134 110, 132 140 T 136 175" fill="none" stroke="#BC5A33" stroke-width="2"/>
+      
+      <!-- Stomach & Intestinal Loops -->
+      <path d="M 136 150 C 130 152, 126 160, 130 166 C 136 172, 146 168, 150 162 Z" fill="rgba(188,90,51,0.22)" stroke="#BC5A33" stroke-width="1.6"/>
+      <path d="M 132 170 C 128 176, 138 184, 144 178 C 150 172, 156 182, 148 188 C 140 192, 134 186, 130 182" fill="none" stroke="#BC5A33" stroke-width="2.2" stroke-linecap="round"/>
+      
+      <!-- Spasm waves -->
+      <circle cx="140" cy="178" r="16" fill="none" stroke="#BC5A33" stroke-width="1.2" stroke-dasharray="2,3"/>
+    `;
+
+    callouts = `
+      <line x1="134" y1="110" x2="68" y2="100" stroke="rgba(38,27,20,0.35)" stroke-width="1"/>
+      <circle cx="68" cy="100" r="2.5" fill="#BC5A33"/>
+      <text x="64" y="98" font-family="'DM Sans', sans-serif" font-size="9" font-weight="700" fill="#241A12" text-anchor="end">Brain-Gut Axis</text>
+      <text x="64" y="109" font-family="'DM Mono', monospace" font-size="7.5" fill="#7A6856" text-anchor="end">Visceral Feedback Trunk</text>
+
+      <line x1="156" y1="140" x2="204" y2="136" stroke="rgba(38,27,20,0.35)" stroke-width="1"/>
+      <circle cx="204" cy="136" r="2.5" fill="#E63946"/>
+      <text x="210" y="134" font-family="'DM Sans', sans-serif" font-size="9" font-weight="700" fill="#E63946">Cardiac Stress Pulse</text>
+      <text x="210" y="145" font-family="'DM Mono', monospace" font-size="7.5" fill="#7A6856">Autonomic Rhythm</text>
+
+      <line x1="152" y1="178" x2="204" y2="182" stroke="rgba(38,27,20,0.35)" stroke-width="1"/>
+      <circle cx="204" cy="182" r="2.5" fill="#BC5A33"/>
+      <text x="210" y="180" font-family="'DM Sans', sans-serif" font-size="9" font-weight="700" fill="#241A12">Enteric Spasm Zone</text>
+      <text x="210" y="191" font-family="'DM Mono', monospace" font-size="7.5" fill="#7A6856">Visceral Contractions</text>
+    `;
+  } else if (type === 'FM') {
+    badge = 'ORAL MECHANICS & GASTRIC DISTENSION';
+    title = "How Milk Flow Velocity & Swallowed Air Drive Post-Feed Distress";
+    sub = "Palate latch dynamics, aerophagia, and gastric volume distension.";
+    mechanismTag = "FLOW VELOCITY & AIR INTAKE";
+    mechanismText = "Rapid milk flow or a shallow latch forces your baby to gulp rapidly to protect their airway, swallowing aerated milk and air pockets. This triggers immediate gastric distension and back-arching within 20 minutes of feeding.";
+    badgeColor = '#8A6A20';
+    badgeBg = 'rgba(192,150,63,0.16)';
+
+    specificPaths = `
+      <!-- Oral latch zone -->
+      <path d="M 120 72 C 114 74, 112 80, 118 84" fill="none" stroke="#C0963F" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="116" cy="78" r="3.5" fill="#C0963F"/>
+
+      <!-- Esophagus down to stomach -->
+      <path d="M 124 86 Q 134 110, 136 145" fill="none" stroke="#C0963F" stroke-width="2"/>
+
+      <!-- Stomach reservoir with air bubble -->
+      <path d="M 134 148 C 128 152, 126 162, 132 170 C 140 174, 152 170, 154 160 C 154 152, 146 146, 134 148 Z" fill="rgba(192,150,63,0.2)" stroke="#C0963F" stroke-width="1.6"/>
+      <circle cx="138" cy="154" r="4.5" fill="#FFF" stroke="#C0963F" stroke-width="1.2"/>
+      <circle cx="145" cy="158" r="2.5" fill="#FFF" stroke="#C0963F" stroke-width="1"/>
+    `;
+
+    callouts = `
+      <line x1="114" y1="78" x2="68" y2="72" stroke="rgba(38,27,20,0.35)" stroke-width="1"/>
+      <circle cx="68" cy="72" r="2.5" fill="#C0963F"/>
+      <text x="64" y="70" font-family="'DM Sans', sans-serif" font-size="9" font-weight="700" fill="#241A12" text-anchor="end">Palate Latch Seal</text>
+      <text x="64" y="81" font-family="'DM Mono', monospace" font-size="7.5" fill="#7A6856" text-anchor="end">Flow Rate & Air Entry</text>
+
+      <line x1="156" y1="138" x2="204" y2="132" stroke="rgba(38,27,20,0.35)" stroke-width="1"/>
+      <circle cx="204" cy="132" r="2.5" fill="#E63946"/>
+      <text x="210" y="130" font-family="'DM Sans', sans-serif" font-size="9" font-weight="700" fill="#E63946">Cardiac-Swallow Pacing</text>
+      <text x="210" y="141" font-family="'DM Mono', monospace" font-size="7.5" fill="#7A6856">Respiratory Sync</text>
+
+      <line x1="154" y1="162" x2="204" y2="170" stroke="rgba(38,27,20,0.35)" stroke-width="1"/>
+      <circle cx="204" cy="170" r="2.5" fill="#C0963F"/>
+      <text x="210" y="168" font-family="'DM Sans', sans-serif" font-size="9" font-weight="700" fill="#241A12">Gastric Air Pocket</text>
+      <text x="210" y="179" font-family="'DM Mono', monospace" font-size="7.5" fill="#7A6856">Volume Distension</text>
+    `;
+  } else {
+    badge = 'MULTISYSTEM DEVELOPMENTAL AXIS';
+    title = "How Feeding, Digestion, and Sensory Input Interact Across the Day";
+    sub = "Integrated overview of sensory accumulation, gut transit, and autonomic regulation.";
+    mechanismTag = "THE INTEGRATED DEVELOPMENTAL LOOP";
+    mechanismText = "When multiple signs appear simultaneously, evening sensory fatigue interacts with digestive transit and feeding pace. A structured 3-step sequence addresses feeding mechanics first, then winding, and finally evening sensory dimming.";
+    badgeColor = '#37452F';
+    badgeBg = 'rgba(108,135,89,0.12)';
+
+    specificPaths = `
+      <circle cx="140" cy="62" r="8" fill="rgba(108,135,89,0.22)" stroke="#6C8759" stroke-width="1.4"/>
+      <path d="M 140 70 Q 134 105, 132 140 T 136 175" fill="none" stroke="#6C8759" stroke-width="2"/>
+      <path d="M 132 165 C 128 172, 142 180, 148 172" fill="none" stroke="#BC5A33" stroke-width="2" stroke-linecap="round"/>
+    `;
+
+    callouts = `
+      <line x1="148" y1="62" x2="204" y2="54" stroke="rgba(38,27,20,0.35)" stroke-width="1"/>
+      <circle cx="204" cy="54" r="2.5" fill="#6C8759"/>
+      <text x="210" y="52" font-family="'DM Sans', sans-serif" font-size="9" font-weight="700" fill="#241A12">Sensory Cortex</text>
+
+      <line x1="156" y1="140" x2="204" y2="140" stroke="rgba(38,27,20,0.35)" stroke-width="1"/>
+      <circle cx="204" cy="140" r="2.5" fill="#E63946"/>
+      <text x="210" y="138" font-family="'DM Sans', sans-serif" font-size="9" font-weight="700" fill="#E63946">Cardiac Rhythm</text>
+
+      <line x1="148" y1="172" x2="204" y2="180" stroke="rgba(38,27,20,0.35)" stroke-width="1"/>
+      <circle cx="204" cy="180" r="2.5" fill="#BC5A33"/>
+      <text x="210" y="178" font-family="'DM Sans', sans-serif" font-size="9" font-weight="700" fill="#241A12">Enteric Gut</text>
+    `;
+  }
+
+  return `
+    <div class="dev-curve-card" style="margin: 18px 0;">
+      <div class="dcc-header">
+        <div class="dcc-badge" style="background:${badgeBg};color:${badgeColor}">${badge}</div>
+        <div class="dcc-title">${title}</div>
+        <p style="font-size:12.5px;color:var(--muted);margin-top:4px">${sub}</p>
+      </div>
+
+      <div style="position:relative;width:100%;display:flex;justify-content:center;margin:12px 0">
+        <svg viewBox="0 0 320 230" width="100%" style="max-width:320px;height:auto">
+          <style>
+            @keyframes heartPulseGlow {
+              0%, 100% { opacity: 0.25; }
+              20% { opacity: 0.95; }
+              40% { opacity: 0.35; }
+              60% { opacity: 0.85; }
+              80% { opacity: 0.25; }
+            }
+            @keyframes cardiacWave {
+              0%, 100% { opacity: 0.15; }
+              20% { opacity: 0.9; }
+              40% { opacity: 0.25; }
+              60% { opacity: 0.75; }
+              80% { opacity: 0.15; }
+            }
+            .heart-glow-ring {
+              animation: heartPulseGlow 1.3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            }
+            .cardiac-pulse-circle {
+              animation: cardiacWave 1.3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            }
+          </style>
+
+          <rect x="8" y="8" width="304" height="214" rx="16" fill="#FBF7F0" stroke="rgba(38,27,20,0.08)" stroke-width="1.2"/>
+
+          <!-- Infant silhouette profile -->
+          <circle cx="140" cy="64" r="32" fill="#FAF3E8" stroke="#241A12" stroke-width="1.8"/>
+          <path d="M 124 94 C 118 120, 116 160, 122 195 C 130 205, 162 205, 170 195 C 174 160, 168 120, 156 94 Z" fill="#FAF3E8" stroke="#241A12" stroke-width="1.8"/>
+
+          ${specificPaths}
+
+          <!-- BRIGHT RED PULSATING HEART -->
+          <circle cx="146" cy="140" r="14" fill="none" stroke="#E63946" stroke-width="1.5" class="cardiac-pulse-circle"/>
+          <circle cx="146" cy="140" r="13" fill="#E63946" class="heart-glow-ring"/>
+
+          <g transform="translate(146, 140)">
+            <path d="M 0 7 C -6 2, -10 -3, -10 -8 A 5.5 5.5 0 0 1 0 -6 A 5.5 5.5 0 0 1 10 -8 C 10 -3, 6 2, 0 7 Z" fill="#E63946" stroke="#C9182B" stroke-width="1"/>
+            <circle cx="-3" cy="-6" r="1.5" fill="#FFF" opacity="0.7"/>
+          </g>
+
+          ${callouts}
+        </svg>
+      </div>
+
+      <div class="aic-classification-box" style="margin-top:10px">
+        <div class="aic-class-header">
+          <span class="aic-class-tag">${mechanismTag}</span>
+          <span class="aic-class-status">Clinical Starting Point</span>
+        </div>
+        <div class="aic-milestone-text">${mechanismText}</div>
+      </div>
+    </div>
+  `;
 }
 
 /* ── BLOG GUIDES & PROVEN MARKETING VIDEO SPOTLIGHTS ── */
