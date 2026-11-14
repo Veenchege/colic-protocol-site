@@ -314,6 +314,7 @@ const SOOTHE_STEPS = {
 
 const RESULTS = {
   GUT: {
+    apiType: "Gut Microbiome Imbalance",
     type: "Gut Microbiome Imbalance",
     subtitle: "Closest Fit",
     emoji: "🦠",
@@ -366,6 +367,7 @@ const RESULTS = {
   },
 
   NS: {
+    apiType: "Nervous System Dysregulation",
     type: "Nervous System Dysregulation",
     subtitle: "Closest Fit",
     emoji: "⚡",
@@ -414,6 +416,7 @@ const RESULTS = {
   },
 
   FM: {
+    apiType: "Feeding Mechanics",
     type: "Feeding Mechanics",
     subtitle: "Closest Fit",
     emoji: "🍼",
