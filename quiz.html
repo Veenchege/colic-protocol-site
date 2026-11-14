@@ -170,6 +170,11 @@ a{color:inherit}
 
 .redflag-box{background:#FFF4F0;border:1.5px solid var(--terra);border-radius:12px;padding:14px 16px;font-size:13px;color:var(--ink);line-height:1.6;margin:10px 0}
 .redflag-box b{color:var(--terra-deep)}
+.anatomy-card{background:#080D14;border:1px solid #1A2736;border-radius:18px;box-shadow:0 16px 48px rgba(0,0,0,0.4);padding:20px;margin:16px 0 20px;position:relative;overflow:hidden}
+@keyframes cardiacPulse{0%,100%{opacity:0.68}15%{opacity:1.0}28%{opacity:0.72}42%{opacity:0.96}60%{opacity:0.68}}
+.cardiac-glow{animation:cardiacPulse 1.25s infinite ease-in-out}
+@keyframes ecgSweep{0%{stroke-dashoffset:400}100%{stroke-dashoffset:0}}
+.ecg-line{stroke-dasharray:400;animation:ecgSweep 3.2s linear infinite}
 
 .cta-section{background:var(--glass);border:1px solid rgba(255,252,247,.6);border-top:none;border-radius:0 0 20px 20px;padding:26px 28px 32px}
 .protocol-list{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:20px}
