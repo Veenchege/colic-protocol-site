@@ -625,31 +625,6 @@ function shake(id, msg) {
 
 /* ── FLOW: START QUIZ ────────────────────────────────────────────────── */
 function startQuiz() {
-  const name = document.getElementById('nameInput').value.trim();
-  const email = document.getElementById('emailInput').value.trim();
-  const ageRaw = document.getElementById('ageInput').value.trim();
-  const honeypot = document.getElementById('hpField').value;
-  const consentBox = document.getElementById('consentCheck');
-
-  if (!name) return shake('nameInput', 'Please enter your name');
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return shake('emailInput', 'Please enter a valid email');
-  if (!ageRaw) return shake('ageInput', "Please enter baby's age in weeks");
-  const ageNum = Number(ageRaw);
-  if (!Number.isInteger(ageNum) || ageNum < 0 || ageNum > 52) return shake('ageInput', 'Enter age in weeks, 0 to 52');
-  if (!consentBox.checked) {
-    consentBox.closest('.consent-row').style.outline = '1.5px solid #BA5731';
-    setTimeout(() => { consentBox.closest('.consent-row').style.outline = ''; }, 2000);
-    consentBox.focus();
-    return;
-  }
-
-  userName = name;
-  userEmail = email;
-  userConsent = true;
-  babyAgeWeeks = ageNum;
-  currentAgeWeeks = ageNum;
-  babyName = ((document.getElementById('babyNameInput') || {}).value || '').trim().slice(0, 40);
-
   scores = { GUT: 0, NS: 0, FM: 0 };
   feedingMethod = '';
   triedItems = [];
@@ -660,12 +635,8 @@ function startQuiz() {
   selectedMap.clear();
   rfSelected.clear();
   redFlagStatus = 'pending';
-
-  if (honeypot || (Date.now() - quizStartedAt) < 1500) {
-    suppressSubscribe = true;
-  } else {
-    subscribeToMailerLite(userName, userEmail, 'Unassigned', 'Quiz Started', 'started');
-  }
+  babyAgeWeeks = 6;
+  currentAgeWeeks = 6;
 
   hide('landingScreen');
   renderRedFlag();
@@ -725,7 +696,6 @@ function submitRedFlag() {
 
   if (flagged.length === 0) {
     redFlagStatus = 'none';
-    subscribeToMailerLite(userName, userEmail, 'Unassigned', 'Safety check passed', 'started');
     hide('redFlagScreen');
     show('quizScreen');
     renderQuestion();
@@ -735,8 +705,7 @@ function submitRedFlag() {
   const labels = flagged.map(i => RED_FLAG_OPTIONS[i].short);
   document.getElementById('rfStopList').textContent = labels.join(', ');
   redFlagStatus = 'flagged: ' + labels.join(', ');
-  subscribeToMailerLite(userName, userEmail, 'Unassigned', 'Safety check flagged', 'red_flag');
-  sendEvent('red_flag_stop', { colic_type: 'Unassigned' });
+  sendEvent('red_flag_stop', { colic_type: 'Unassigned', symptoms: labels.join(', ') });
   hide('redFlagScreen');
   show('redFlagStopScreen');
 }
@@ -1113,7 +1082,11 @@ function prevQ() {
     clearTimeout(autoAdvanceTimer);
     autoAdvanceTimer = null;
   }
-  if (qIndex <= 0) return;
+  if (qIndex <= 0) {
+    hide('quizScreen');
+    show('redFlagScreen');
+    return;
+  }
 
   qIndex--;
   const prevSaved = qHistory[qIndex];
@@ -1195,7 +1168,8 @@ function advanceQ() {
       renderQuestion();
     } else {
       hide('quizScreen');
-      showAnalysis();
+      show('leadCaptureScreen');
+      updateProgress(100);
       return;
     }
     card.style.transition = 'none';
@@ -1206,9 +1180,62 @@ function advanceQ() {
   }, 150);
 }
 
+/* ── PRE-RESULT LEAD CAPTURE GATE ────────────────────────────────────── */
+function backFromLeadGate() {
+  hide('leadCaptureScreen');
+  show('quizScreen');
+  qIndex = QUESTIONS.length - 1;
+  renderQuestion();
+}
+
+function submitLeadAndShowResult() {
+  const nameEl = document.getElementById('nameInput');
+  const emailEl = document.getElementById('emailInput');
+  const consentEl = document.getElementById('consentCheck');
+  const hpEl = document.getElementById('hpField');
+  const babyNameEl = document.getElementById('babyNameInput');
+
+  const name = nameEl ? nameEl.value.trim() : '';
+  const email = emailEl ? emailEl.value.trim() : '';
+  const babyVal = babyNameEl ? babyNameEl.value.trim().slice(0, 40) : '';
+  const honeypot = hpEl ? hpEl.value : '';
+
+  if (!name) return shake('nameInput', 'Please enter your first name');
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return shake('emailInput', 'Please enter a valid email address');
+  if (consentEl && !consentEl.checked) {
+    const row = consentEl.closest('.consent-row');
+    if (row) {
+      row.style.outline = '1.5px solid #BA5731';
+      setTimeout(() => { row.style.outline = ''; }, 2000);
+    }
+    consentEl.focus();
+    return;
+  }
+
+  userName = name;
+  userEmail = email;
+  babyName = babyVal;
+  userConsent = true;
+
+  const type = getPrimaryType(scores);
+  const R = RESULTS[type] || RESULTS['MIXED'];
+
+  if (honeypot || (Date.now() - quizStartedAt) < 1500) {
+    suppressSubscribe = true;
+  } else {
+    subscribeToMailerLite(userName, userEmail, R.apiType, R.type, 'completed');
+  }
+
+  hide('leadCaptureScreen');
+  showAnalysis();
+}
+
 function showAnalysis() {
   show('analysisScreen');
-  setTimeout(showResult, 2800);
+  setTimeout(() => {
+    hide('analysisScreen');
+    showResult();
+  }, 2200);
 }
 
 /* ── PRIMARY TYPE CALCULATION (ZERO-SAFE) ────────────────────────────── */
