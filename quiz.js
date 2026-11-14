@@ -737,6 +737,7 @@ function backFromRedFlagStop() {
 /* ── AGE QUESTION (DEVELOPMENTAL CRYING CURVE) ───────────────────────── */
 function renderAgeQuestion() {
   const box = document.getElementById('optionsBox');
+  if (!box) return;
   const selectedWeeks = (babyAgeWeeks !== null && babyAgeWeeks !== undefined) ? babyAgeWeeks : (currentAgeWeeks || 6);
   currentAgeWeeks = selectedWeeks;
   const classification = classifyAge(selectedWeeks);
@@ -752,32 +753,32 @@ function renderAgeQuestion() {
       <div class="dcc-title">Where Your Baby Sits on the Typical Crying Curve</div>
     </div>
     <div class="dcc-graph-wrap">
-      <svg viewBox="0 0 540 180" width="100%" height="auto">
+      <svg viewBox="0 0 540 180" style="width:100%;height:auto;display:block" role="img" aria-label="Developmental Crying Timeline Curve" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
         <defs>
           <linearGradient id="curveShade" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stop-color="#BA5731" stop-opacity="0.25"/>
             <stop offset="100%" stop-color="#BA5731" stop-opacity="0.02"/>
           </linearGradient>
         </defs>
-        <line x1="40" y1="140" x2="500" y2="140" stroke="rgba(38,27,20,0.18)" stroke-width="1.5"/>
-        <line x1="40" y1="85" x2="500" y2="85" stroke="rgba(38,27,20,0.06)" stroke-dasharray="4,4"/>
-        <line x1="40" y1="35" x2="500" y2="35" stroke="rgba(38,27,20,0.06)" stroke-dasharray="4,4"/>
+        <line x1="40" y1="140" x2="500" y2="140" stroke="rgba(38,27,20,0.18)" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+        <line x1="40" y1="85" x2="500" y2="85" stroke="rgba(38,27,20,0.06)" stroke-dasharray="4,4" vector-effect="non-scaling-stroke"/>
+        <line x1="40" y1="35" x2="500" y2="35" stroke="rgba(38,27,20,0.06)" stroke-dasharray="4,4" vector-effect="non-scaling-stroke"/>
         
         <text x="40" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 0</text>
         <text x="95" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 2</text>
         <text x="150" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 4</text>
         <text x="213" y="160" font-family="'DM Mono', monospace" font-size="11" font-weight="700" fill="#BA5731" text-anchor="middle">Wk 6 (Peak)</text>
-        <text x="270" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 8</text>
-        <text x="330" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 10</text>
-        <text x="385" y="160" font-family="'DM Mono', monospace" font-size="11" font-weight="700" fill="#698457" text-anchor="middle">Wk 12 (Ease)</text>
-        <text x="445" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 14</text>
+        <text x="268" y="160" font-family="'DM Mono', monospace" font-size="10.5" fill="#7A6856" text-anchor="middle">Wk 8</text>
+        <text x="322" y="160" font-family="'DM Mono', monospace" font-size="10.5" fill="#7A6856" text-anchor="middle">Wk 10</text>
+        <text x="392" y="160" font-family="'DM Mono', monospace" font-size="10.5" font-weight="700" fill="#698457" text-anchor="middle">Wk 12 (Ease)</text>
+        <text x="448" y="160" font-family="'DM Mono', monospace" font-size="10.5" fill="#7A6856" text-anchor="middle">Wk 14</text>
         <text x="500" y="160" font-family="'DM Mono', monospace" font-size="11" fill="#7A6856" text-anchor="middle">Wk 16+</text>
 
         <path d="M 40 135 C 100 130, 160 55, 212.5 35 C 280 50, 360 120, 500 140 L 500 140 L 40 140 Z" fill="url(#curveShade)"/>
-        <path d="M 40 135 C 100 130, 160 55, 212.5 35 C 280 50, 360 120, 500 140" fill="none" stroke="#BA5731" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M 40 135 C 100 130, 160 55, 212.5 35 C 280 50, 360 120, 500 140" fill="none" stroke="#BA5731" stroke-width="3.5" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
 
         <g id="curvePinGroup" transform="translate(${coords.x}, ${coords.y})" style="transition: transform 0.25s ease;">
-          <line id="curvePinLine" x1="0" y1="0" x2="0" y2="${140 - coords.y}" stroke="#BA5731" stroke-width="1.8" stroke-dasharray="3,3"/>
+          <line id="curvePinLine" x1="0" y1="0" x2="0" y2="${140 - coords.y}" stroke="#BA5731" stroke-width="1.8" stroke-dasharray="3,3" vector-effect="non-scaling-stroke"/>
           <circle cx="0" cy="0" r="7" fill="#BA5731" stroke="#FAF4EC" stroke-width="2.5"/>
           <rect x="-42" y="-28" width="84" height="20" rx="5" fill="#261B14"/>
           <text id="curvePinText" x="0" y="-14" font-family="'DM Mono', monospace" font-size="10" font-weight="700" fill="#FAF4EC" text-anchor="middle">Week ${selectedWeeks}${selectedWeeks === 6 ? ' (Peak)' : ''}</text>
@@ -831,8 +832,10 @@ function renderAgeQuestion() {
   box.appendChild(inputCard);
 
   const btn = document.getElementById('continueBtn');
-  btn.classList.add('visible');
-  btn.textContent = `Continue with ${selectedWeeks} Weeks →`;
+  if (btn) {
+    btn.classList.add('visible');
+    btn.textContent = `Continue with ${selectedWeeks} Weeks →`;
+  }
 }
 
 function setAgeWeeks(val) {
@@ -978,7 +981,7 @@ function generateClockTicks(cx, cy, r) {
     const y2 = (cy + r * Math.sin(rad)).toFixed(1);
     const strokeColor = isCardinal ? '#241A12' : (isMajor ? 'rgba(36,26,18,0.55)' : 'rgba(36,26,18,0.22)');
     const strokeWidth = isCardinal ? 1.8 : (isMajor ? 1.3 : 0.8);
-    s += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${strokeColor}" stroke-width="${strokeWidth}" stroke-linecap="round"/>`;
+    s += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${strokeColor}" stroke-width="${strokeWidth}" stroke-linecap="round" vector-effect="non-scaling-stroke"/>`;
   }
   // 48 half-hour micro-dots for precision instrument calibration
   for (let i = 0; i < 24; i++) {
@@ -995,7 +998,7 @@ function generateClockTicks(cx, cy, r) {
 /* ── TIMING QUESTION (24-HOUR DAILY CLOCK & PATTERNS) ───────────────── */
 const TIMING_CLOCK_META = [
   {
-    hubVal: "5 PM – 12 AM",
+    hubVal: "5 PM - 12 AM",
     hubSub: "Evening Cluster",
     tag: "Nervous System Pattern",
     status: "Classic Witching Hour Cluster",
@@ -1004,7 +1007,7 @@ const TIMING_CLOCK_META = [
   },
   {
     hubVal: "Post-Feed",
-    hubSub: "Every 2.5–3 Hours",
+    hubSub: "Every 2.5 to 3 Hours",
     tag: "Feeding Mechanics Pattern",
     status: "Post-Prandial Discomfort",
     milestone: "Crying that consistently begins during feeding or within 20 minutes after indicates mechanical discomfort: air swallowing, latch fatigue, milk flow velocity mismatch, or early gastric distension.",
@@ -1113,6 +1116,7 @@ function updateTimingClock(idx) {
 
 function renderDurationClockQuestion() {
   const box = document.getElementById('optionsBox');
+  if (!box) return;
   const q = QUESTIONS[1];
 
   let selectedIdx = 3;
@@ -1141,7 +1145,7 @@ function renderDurationClockQuestion() {
       <div class="dcc-title">How Much of Your Baby's Day is Consumed by Crying</div>
     </div>
     <div class="dcc-clock-wrap">
-      <svg viewBox="-8 -8 296 296" style="width:100%;max-width:320px;height:auto;display:block;margin:0 auto">
+      <svg viewBox="-8 -8 296 296" style="width:100%;max-width:320px;height:auto;display:block;margin:0 auto" role="img" aria-label="24-Hour Crying Duration Chronograph Dial" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
         <defs>
           <linearGradient id="q2NightGrad" x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" stop-color="#232B1E" stop-opacity="0.10"/>
@@ -1275,8 +1279,10 @@ function renderDurationClockQuestion() {
   box.appendChild(inputCard);
 
   const btn = document.getElementById('continueBtn');
-  btn.classList.add('visible');
-  btn.textContent = `Continue with ${curOpt[7] || curMeta.num} →`;
+  if (btn) {
+    btn.classList.add('visible');
+    btn.textContent = `Continue with ${curOpt[7] || curMeta.num} →`;
+  }
 }
 
 function setDurationIdx(val) {
@@ -1374,7 +1380,7 @@ function renderQuestion() {
         <div class="dcc-title">When Crying Clusters Across the 24-Hour Day</div>
       </div>
       <div class="dcc-clock-wrap">
-        <svg viewBox="-8 -8 296 296" style="width:100%;max-width:320px;height:auto;display:block;margin:0 auto">
+        <svg viewBox="-8 -8 296 296" style="width:100%;max-width:320px;height:auto;display:block;margin:0 auto" role="img" aria-label="24-Hour Daily Timing Pattern Chronograph Dial" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
           <defs>
             <linearGradient id="q3NightGrad" x1="0%" y1="0%" x2="0%" y2="100%">
               <stop offset="0%" stop-color="#232B1E" stop-opacity="0.10"/>
@@ -1452,7 +1458,7 @@ function renderQuestion() {
           <circle cx="140" cy="140" r="47" fill="none" stroke="#C0963F" stroke-width="1.6"/>
           <circle cx="140" cy="140" r="45" fill="url(#q3HubGrad)" stroke="#1B130D" stroke-width="1.5"/>
           <circle cx="140" cy="140" r="43" fill="none" stroke="rgba(192,150,63,0.35)" stroke-width="1" stroke-dasharray="2,2"/>
-          <text id="timingClockHubVal" x="140" y="136" font-family="'Cormorant Garamond', Georgia, serif" font-size="20" font-weight="700" fill="#FAF5EE" text-anchor="middle">Daily Cycle</text>
+          <text id="timingClockHubVal" x="140" y="136" font-family="'Cormorant Garamond', Georgia, serif" font-size="14.5" font-weight="700" fill="#FAF5EE" text-anchor="middle">Daily Cycle</text>
           <text id="timingClockHubSub" x="140" y="153" font-family="'DM Mono', monospace" font-size="8" font-weight="600" fill="#C0963F" text-anchor="middle">Tap Timing Below</text>
         </svg>
       </div>
