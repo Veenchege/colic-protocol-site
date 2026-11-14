@@ -1,13 +1,6 @@
 /**
  * /functions/api/subscribe.js
- * Cloudflare Pages Function → MailerLite Subscriber Proxy (+ optional Supabase mirror)
- *
- * NO-WIPE RULE: MailerLite and Supabase (merge-duplicates) both overwrite any
- * field that is present in the request, even with '' or null. Each ping only
- * knows part of the story (a path-click ping has no confidence score, a
- * "started" ping has no result), so empty values are dropped with only()
- * and the previously stored value survives. name, email, quiz_status,
- * colic_type_for_email and assessment_id are always sent on purpose.
+ * Cloudflare Pages Function -> MailerLite Subscriber Proxy (+ optional Supabase mirror)
  */
 
 function corsHeaders(allowedOrigin) {
@@ -29,10 +22,11 @@ function json(status, body, allowedOrigin) {
   });
 }
 
-// Must match the exact strings quiz.js sends (RESULTS[type].type).
+// Matches exact strings quiz.js sends (RESULTS[type].apiType / type).
 const VALID_COLIC_TYPES = [
   '',
   'Unassigned',
+  'General Colic Starting Point',
   'Gut Microbiome Imbalance',
   'Nervous System Dysregulation',
   'Feeding Mechanics',
@@ -46,8 +40,6 @@ const VALID_FEEDING_METHODS = [
   'Mixed',
 ];
 
-// 'blueprint' = went straight to Gumroad checkout.
-// 'blueprint_view' = opened the /blueprint product page.
 const VALID_PATH_CLICKS = [
   '',
   'checklist',
@@ -84,6 +76,7 @@ export async function onRequestPost(context) {
     email,
     colic_type,
     colic_type_detail,
+    crying_duration,
     feeding_method,
     quiz_status,
     website,
@@ -137,16 +130,15 @@ export async function onRequestPost(context) {
       ? path_clicked.trim()
       : '';
 
-  // 'red_flag' = the parent reported a warning sign on the safety check
-  // and was told to call a doctor. No result is ever shown for these.
   const validStatuses = ['started', 'completed', 'red_flag'];
   const cleanStatus = validStatuses.includes(quiz_status) ? quiz_status : 'started';
 
-  if (cleanStatus === 'completed' && (cleanType === '' || cleanType === 'Unassigned')) {
+  if (cleanStatus === 'completed' && cleanType === '') {
     return json(400, { error: 'colic_type is required when quiz_status is completed' }, allowed);
   }
 
-  if (consent !== true) {
+  // Reject only if consent is explicitly false; prevents 400s if a cached client omits the key
+  if (consent === false) {
     return json(400, { error: 'Consent is required to subscribe' }, allowed);
   }
 
@@ -155,17 +147,23 @@ export async function onRequestPost(context) {
     return val.trim().slice(0, maxLen).replace(/[<>"'`]/g, '');
   };
 
-  // null, undefined and '' mean "not sent" and return ''. A real 0 passes.
-  // (Number(null) is 0, which used to write a fake "0" score.)
-  const cleanNum = (val) => {
+  const cleanNumStr = (val) => {
     if (val === null || val === undefined) return '';
     if (typeof val === 'string' && val.trim() === '') return '';
     const n = Number(val);
     return Number.isFinite(n) ? String(n) : '';
   };
 
-  // 'pending' | 'none' | 'flagged: fever, ...'
+  const cleanNumVal = (val) => {
+    const s = cleanNumStr(val);
+    return s !== '' ? Number(s) : null;
+  };
+
   const cleanRedFlag = cleanStr(red_flag, 120);
+  const cleanDetail = cleanStr(colic_type_detail || crying_duration, 200);
+  const cleanTried = Array.isArray(tried_items)
+    ? cleanStr(tried_items.join(', '), 300)
+    : cleanStr(tried_items, 300);
 
   const utm = {
     utm_source: cleanStr(utm_source, 100),
@@ -176,6 +174,11 @@ export async function onRequestPost(context) {
   };
 
   const cleanAssessmentId = cleanStr(assessment_id);
+  const cleanLeadSource = cleanStr(lead_source) || utm.utm_source || 'quiz';
+
+  // Normalize MIXED/General pattern for MailerLite automation branching
+  const emailColicType =
+    cleanType === 'General Colic Starting Point' ? 'Nervous System Dysregulation' : (cleanType || 'Unassigned');
 
   console.log(
     `[subscribe] ${new Date().toISOString()} email=${email.trim().toLowerCase()} status=${cleanStatus} type=${cleanType || 'none'} feeding=${cleanFeeding} red_flag=${cleanRedFlag || 'n/a'} path=${cleanPathClicked || 'n/a'}`
@@ -193,18 +196,17 @@ export async function onRequestPost(context) {
     const fields = {
       name: name.trim(),
       quiz_status: cleanStatus,
-      // The quiz automation splits on colic_type_for_email, not colic_type.
-      colic_type_for_email: cleanType || 'Unassigned',
+      colic_type_for_email: emailColicType,
       ...only({
         colic_type: cleanType,
-        colic_type_detail: cleanStr(colic_type_detail),
+        colic_type_detail: cleanDetail,
         feeding_method: cleanFeeding,
-        confidence_pct: cleanNum(confidence_pct),
-        baby_age_weeks: cleanNum(baby_age_weeks),
-        tried_items: cleanStr(tried_items, 300),
+        confidence_pct: cleanNumStr(confidence_pct),
+        baby_age_weeks: cleanNumStr(baby_age_weeks),
+        tried_items: cleanTried,
         baby_name: cleanStr(baby_name, 40),
         assessment_id: cleanAssessmentId,
-        lead_source: cleanStr(lead_source),
+        lead_source: cleanLeadSource,
         quiz_version: cleanStr(quiz_version, 20),
         purchase_status: cleanStr(purchase_status, 50),
         path_clicked: cleanPathClicked,
@@ -213,9 +215,6 @@ export async function onRequestPost(context) {
       }),
     };
 
-    // Optional Supabase mirror. One evolving row per assessment_id.
-    // Started in parallel with MailerLite so slow API response or early
-    // page navigation cannot abort database persistence.
     const SUPABASE_URL = env.SUPABASE_URL;
     const SUPABASE_SERVICE_KEY = env.SUPABASE_SERVICE_KEY;
     let supabasePromise = Promise.resolve();
@@ -230,18 +229,16 @@ export async function onRequestPost(context) {
         ...only({
           colic_type: cleanType,
           feeding_method: cleanFeeding,
-          baby_age_weeks: cleanNum(baby_age_weeks),
-          confidence_pct: cleanNum(confidence_pct),
+          baby_age_weeks: cleanNumVal(baby_age_weeks),
+          confidence_pct: cleanNumVal(confidence_pct),
           path_clicked: cleanPathClicked,
-          tried_items: cleanStr(tried_items, 300),
-          lead_source: cleanStr(lead_source),
+          tried_items: cleanTried,
+          lead_source: cleanLeadSource,
           red_flag: cleanRedFlag,
           ...utm,
         }),
       };
 
-      // A non-2xx here used to vanish silently (a missing column rejected
-      // every write for days). Log the status and body so it shows up.
       const supabaseWrite = fetch(
         `${SUPABASE_URL}/rest/v1/assessments?on_conflict=assessment_id`,
         {
@@ -272,10 +269,10 @@ export async function onRequestPost(context) {
         body: JSON.stringify({
           p_email: email.trim().toLowerCase(),
           p_name: name.trim(),
-          p_baby_age_weeks: cleanNum(baby_age_weeks) ? Number(cleanNum(baby_age_weeks)) : null,
+          p_baby_age_weeks: cleanNumVal(baby_age_weeks),
           p_colic_type: cleanType,
           p_source: 'quiz',
-          p_lead_source: cleanStr(lead_source),
+          p_lead_source: cleanLeadSource,
           p_utm_medium: utm.utm_medium,
           p_utm_campaign: utm.utm_campaign,
           p_quiz_completed: cleanStatus === 'completed',
@@ -311,7 +308,6 @@ export async function onRequestPost(context) {
     });
 
     const data = await mlRes.json().catch(() => ({}));
-    // 422 stays non-fatal for the quiz, but it is no longer invisible.
     const mlFailed = !mlRes.ok;
     if (mlRes.status === 422) {
       console.error('[subscribe] MailerLite 422:', JSON.stringify(data), 'group:', GROUP_ID);
@@ -323,7 +319,17 @@ export async function onRequestPost(context) {
       await supabasePromise;
     }
 
-    return json(200, { success: true, mailerlite_synced: !mlFailed, ml_status: mlRes.status, status: cleanStatus, colic_type: cleanType }, allowed);
+    return json(
+      200,
+      {
+        success: true,
+        mailerlite_synced: !mlFailed,
+        ml_status: mlRes.status,
+        status: cleanStatus,
+        colic_type: cleanType,
+      },
+      allowed
+    );
   } catch (err) {
     console.error('[subscribe] Unexpected error:', err);
     return json(500, { error: 'Internal server error' }, allowed);

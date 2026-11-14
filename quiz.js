@@ -473,7 +473,7 @@ const RESULTS = {
 
 // Add MIXED / GENERAL pattern to RESULTS for all-zero / balanced edge cases
 RESULTS.MIXED = {
-  apiType: "Unassigned",
+  apiType: "General Colic Starting Point",
   type: "General Colic Starting Point",
   subtitle: "Combined starting-point pattern",
   emoji: "⚖️",
@@ -561,43 +561,57 @@ function sendEvent(name, params) {
   } catch(e){}
 }
 
-/* ── SAFE SUBSCRIPTION ──────────────────────────────────────────────── */
-async function subscribeToMailerLite(name, email, colcType, mlGroup, quizStatus) {
-  if (suppressSubscribe) return;
+/* ── SAFE SUBSCRIPTION (MATCHED TO /functions/api/subscribe.js) ──────── */
+async function subscribeToMailerLite(name, email, colcType, mlGroup, quizStatus, pathClicked = '') {
+  if (suppressSubscribe || !email) return;
   const utm = getStoredUTMs();
   const ageCohort = classifyAge(babyAgeWeeks !== null ? babyAgeWeeks : currentAgeWeeks);
 
   let apiType = 'Unassigned';
-  if (colcType === 'Gut Microbiome Imbalance' || colcType === 'Nervous System Dysregulation' || colcType === 'Feeding Mechanics') {
+  if (
+    colcType === 'Gut Microbiome Imbalance' ||
+    colcType === 'Nervous System Dysregulation' ||
+    colcType === 'Feeding Mechanics' ||
+    colcType === 'General Colic Starting Point'
+  ) {
     apiType = colcType;
   } else if (RESULTS[colcType] && RESULTS[colcType].apiType) {
     apiType = RESULTS[colcType].apiType;
   }
 
+  const payload = {
+    name,
+    email,
+    consent: true,
+    colic_type: apiType,
+    colic_type_detail: cryingDuration || mlGroup || '',
+    baby_name: babyName || '',
+    baby_age_weeks: babyAgeWeeks !== null ? babyAgeWeeks : currentAgeWeeks,
+    baby_age_range: ageCohort.range,
+    crying_duration: cryingDuration || '',
+    feeding_method: feedingMethod || 'Not specified',
+    confidence_pct: getConfidencePct(),
+    tried_items: triedItems.join(', '),
+    lead_source: utm.utm_source || 'quiz',
+    quiz_status: quizStatus || 'completed',
+    quiz_version: QUIZ_VERSION,
+    assessment_id: ASSESSMENT_ID,
+    red_flag: redFlagStatus,
+    path_clicked: pathClicked,
+    ...utm
+  };
+
   try {
     const res = await fetch('/api/subscribe', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name,
-        email,
-        colic_type: apiType,
-        baby_name: babyName || '',
-        baby_age_weeks: babyAgeWeeks !== null ? babyAgeWeeks : currentAgeWeeks,
-        baby_age_range: ageCohort.range,
-        crying_duration: cryingDuration || '',
-        feeding_method: feedingMethod || 'Not specified',
-        quiz_status: quizStatus || 'completed',
-        quiz_version: QUIZ_VERSION,
-        assessment_id: ASSESSMENT_ID,
-        red_flag: redFlagStatus,
-        ...utm
-      })
+      keepalive: true, // Ensures path_clicked pings finish even during page navigation
+      body: JSON.stringify(payload)
     });
     if (!res.ok) {
       sendEvent('lead_capture_failed', { colic_type: apiType, ml_status: res.status });
     }
-  } catch(e) {
+  } catch (e) {
     console.warn('Subscribe error:', e);
     sendEvent('lead_capture_failed', { colic_type: apiType, ml_status: 0 });
   }
@@ -1223,7 +1237,7 @@ function submitLeadAndShowResult() {
   if (honeypot || (Date.now() - quizStartedAt) < 1500) {
     suppressSubscribe = true;
   } else {
-    subscribeToMailerLite(userName, userEmail, R.apiType, R.type, 'completed');
+    subscribeToMailerLite(userName, userEmail, R.apiType, R.mailerliteField, 'completed');
   }
 
   hide('leadCaptureScreen');
@@ -1554,6 +1568,7 @@ function goToProduct() {
   const type = getPrimaryType(scores);
   const R = RESULTS[type] || RESULTS['MIXED'];
   sendEvent('blueprint_checkout_click', { colic_type: R.apiType, surface: 'quiz_result' });
+  subscribeToMailerLite(userName, userEmail, R.apiType, R.mailerliteField, 'completed', 'blueprint');
   const url = `${CFG.productUrl}?ref=${encodeURIComponent(ASSESSMENT_ID)}&wanted=true&utm_source=quiz&utm_medium=assessment&utm_campaign=${encodeURIComponent(UTM_SOURCE)}`;
   window.location.href = url;
 }
@@ -1562,6 +1577,7 @@ function viewProduct() {
   const type = getPrimaryType(scores);
   const R = RESULTS[type] || RESULTS['MIXED'];
   sendEvent('blueprint_view_click', { colic_type: R.apiType, surface: 'quiz_result' });
+  subscribeToMailerLite(userName, userEmail, R.apiType, R.mailerliteField, 'completed', 'blueprint_view');
   const url = `${CFG.productPageUrl}?ref=${encodeURIComponent(ASSESSMENT_ID)}&utm_source=quiz&utm_medium=assessment_view&utm_campaign=${encodeURIComponent(UTM_SOURCE)}`;
   window.location.href = url;
 }
@@ -1569,6 +1585,8 @@ function viewProduct() {
 function goToChecklist() {
   if (!resultShown) return;
   const type = getPrimaryType(scores);
+  const R = RESULTS[type] || RESULTS['MIXED'];
+  subscribeToMailerLite(userName, userEmail, R.apiType, R.mailerliteField, 'completed', 'checklist');
   try {
     sessionStorage.setItem('cp_lead', JSON.stringify({
       babyName: babyName,
@@ -1577,7 +1595,7 @@ function goToChecklist() {
       age: babyAgeWeeks !== null ? babyAgeWeeks : currentAgeWeeks,
       consent: true,
     }));
-  } catch(e){}
+  } catch (e) {}
   const ageVal = babyAgeWeeks !== null ? babyAgeWeeks : currentAgeWeeks;
   const url = `${CFG.checklistUrl}?type=${type}&confidence=${getConfidencePct()}&aid=${encodeURIComponent(ASSESSMENT_ID)}&name=${encodeURIComponent(userName)}&age=${encodeURIComponent(ageVal)}&handoff=quiz_result`;
   window.location.href = url;
@@ -1599,6 +1617,9 @@ function copyDMMessage() {
 }
 
 function goToDM() {
+  const type = getPrimaryType(scores);
+  const R = RESULTS[type] || RESULTS['MIXED'];
   sendEvent('dm_open_click', { surface: 'quiz_result' });
+  subscribeToMailerLite(userName, userEmail, R.apiType, R.mailerliteField, 'completed', 'dm');
   window.open(CFG.dmUrl, '_blank', 'noopener');
 }
