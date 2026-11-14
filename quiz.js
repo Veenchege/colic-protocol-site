@@ -885,64 +885,237 @@ function adjustAgeWeeks(delta) {
   setAgeWeeks(currentAgeWeeks + delta);
 }
 
-/* ── CRYING DURATION QUESTION (24-HOUR CLOCK) ────────────────────────── */
-function renderDurationClock(q) {
-  const selected = Array.from(selectedMap.keys());
+/* ── CRYING DURATION QUESTION (24-HOUR CLOCK & CONTROLS) ─────────────── */
+const DURATION_META = [
+  {
+    num: "< 1 hr",
+    fraction: "~4% of 24h",
+    tag: "Baseline Fussiness",
+    status: "Within Typical Newborn Range",
+    milestone: "Under 1 hour of daily crying is within the typical infant baseline expected in the early newborn weeks."
+  },
+  {
+    num: "1 to 2 hrs",
+    fraction: "~7% of 24h",
+    tag: "Moderate Clustering",
+    status: "Early Clustering Pattern",
+    milestone: "1 to 2 hours of daily crying represents moderate clustering, common during developmental growth spurts and evening sensory overload."
+  },
+  {
+    num: "2 to 3 hrs",
+    fraction: "~11% of 24h",
+    tag: "Borderline Threshold",
+    status: "Approaching Colic Criteria",
+    milestone: "2 to 3 hours daily approaches the traditional colic threshold; typically concentrated during late afternoon or evening witching hours."
+  },
+  {
+    num: "3 to 4 hrs",
+    fraction: "~15% of 24h",
+    tag: "Wessel Colic Threshold",
+    status: "Meets Pediatric Colic Criteria",
+    milestone: "3 to 4 hours daily meets the traditional pediatric Wessel criteria (> 3 hours a day for 3+ days a week). Indicates elevated developmental distress."
+  },
+  {
+    num: "4 to 5 hrs",
+    fraction: "~19% of 24h",
+    tag: "Significant Daily Distress",
+    status: "Above Colic Threshold",
+    milestone: "4 to 5 hours daily represents severe distress across both day and night, where conventional soothing tips frequently fail."
+  },
+  {
+    num: "5+ hrs",
+    fraction: "21%+ of 24h",
+    tag: "Severe Persistent Crying",
+    status: "High Distress Burden",
+    milestone: "5 or more hours daily indicates intense, round-the-clock crying that places extraordinary exhaustion on the baby and entire family."
+  },
+  {
+    num: "Varies",
+    fraction: "Unpredictable Daily Hours",
+    tag: "Unpredictable Timeline",
+    status: "Varying Daily Pattern",
+    milestone: "Crying duration shifts substantially from day to day, suggesting sensory or feeding triggers that occur intermittently."
+  }
+];
+
+function getWedgePath(angle, cx, cy, r) {
+  if (angle <= 0) return '';
+  const startX = cx;
+  const startY = cy - r;
+  const rad = (angle - 90) * Math.PI / 180;
+  const endX = (cx + r * Math.cos(rad)).toFixed(2);
+  const endY = (cy + r * Math.sin(rad)).toFixed(2);
+  const largeArc = angle > 180 ? 1 : 0;
+  return `M ${cx} ${cy} L ${startX} ${startY} A ${r} ${r} 0 ${largeArc} 1 ${endX} ${endY} Z`;
+}
+
+function generateClockTicks(cx, cy, r) {
+  let s = '';
+  for (let i = 0; i < 24; i++) {
+    const angle = i * 15;
+    const rad = (angle - 90) * Math.PI / 180;
+    const isMajor = (i % 6 === 0);
+    const innerR = isMajor ? r - 10 : r - 5;
+    const x1 = (cx + innerR * Math.cos(rad)).toFixed(1);
+    const y1 = (cy + innerR * Math.sin(rad)).toFixed(1);
+    const x2 = (cx + r * Math.cos(rad)).toFixed(1);
+    const y2 = (cy + r * Math.sin(rad)).toFixed(1);
+    s += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${isMajor ? '#241A12' : 'rgba(38,27,20,0.22)'}" stroke-width="${isMajor ? 2 : 1}"/>`;
+  }
+  return s;
+}
+
+function renderDurationClockQuestion() {
+  const box = document.getElementById('optionsBox');
+  const q = QUESTIONS[1];
+
+  let selectedIdx = 3;
+  if (selectedMap.size > 0) {
+    selectedIdx = Array.from(selectedMap.keys())[0];
+  } else if (qHistory[qIndex] && qHistory[qIndex].selected.size > 0) {
+    selectedIdx = Array.from(qHistory[qIndex].selected.keys())[0];
+  }
+
+  const curOpt = q.opts[selectedIdx] || q.opts[3];
+  const curMeta = DURATION_META[selectedIdx] || DURATION_META[3];
+  const curAngle = curOpt[5] || 52.5;
+  const curColor = curOpt[6] || '#BA5731';
+
+  selectedMap.clear();
+  selectedMap.set(selectedIdx, { weights: curOpt[1], feeding: null, triedTag: null, reason: curOpt[4] });
+  cryingDuration = curOpt[4] || '';
+
   const clockCard = document.createElement('div');
   clockCard.id = 'dynamicSpecialVisualBox';
-  clockCard.className = 'duration-clock-card';
-
-  let chosenAngle = 0;
-  let chosenColor = '#BA5731';
-  let chosenVal = 'Tap an option below to highlight crying hours';
-  let chosenSub = 'Visualizes what fraction of your baby\'s 24 hours is consumed by crying.';
-
-  if (selected.length > 0) {
-    const opt = q.opts[selected[0]];
-    chosenAngle = opt[5] || 0;
-    chosenColor = opt[6] || '#BA5731';
-    chosenVal = opt[7] || opt[0];
-    chosenSub = opt[8] || '';
-  }
-
-  // Draw wedge starting from midnight (top) clockwise
-  let arcPath = '';
-  if (chosenAngle > 0) {
-    const r = 36;
-    const cx = 60, cy = 60;
-    const startX = cx, startY = cy - r;
-    const rad = (chosenAngle - 90) * Math.PI / 180;
-    const endX = (cx + r * Math.cos(rad)).toFixed(2);
-    const endY = (cy + r * Math.sin(rad)).toFixed(2);
-    const largeArc = chosenAngle > 180 ? 1 : 0;
-    arcPath = `M ${cx} ${cy} L ${startX} ${startY} A ${r} ${r} 0 ${largeArc} 1 ${endX} ${endY} Z`;
-  }
+  clockCard.className = 'dev-curve-card';
 
   clockCard.innerHTML = `
-    <div class="dcc-clock-left">
-      <svg viewBox="0 0 120 120" width="80" height="80">
-        <circle cx="60" cy="60" r="54" fill="#F4EDE4" stroke="rgba(38,27,20,0.18)" stroke-width="2"/>
-        <line x1="60" y1="10" x2="60" y2="18" stroke="#261B14" stroke-width="2"/>
-        <line x1="110" y1="60" x2="102" y2="60" stroke="#261B14" stroke-width="2"/>
-        <line x1="60" y1="110" x2="60" y2="102" stroke="#261B14" stroke-width="2"/>
-        <line x1="10" y1="60" x2="18" y2="60" stroke="#261B14" stroke-width="2"/>
-        <text x="60" y="27" font-family="'DM Mono', monospace" font-size="7" fill="#7A6856" text-anchor="middle">24h</text>
-        <text x="96" y="62.5" font-family="'DM Mono', monospace" font-size="7" fill="#7A6856" text-anchor="middle">6h</text>
-        <text x="60" y="99" font-family="'DM Mono', monospace" font-size="7" fill="#7A6856" text-anchor="middle">12h</text>
-        <text x="24" y="62.5" font-family="'DM Mono', monospace" font-size="7" fill="#7A6856" text-anchor="middle">18h</text>
-        ${arcPath ? `<path d="${arcPath}" fill="${chosenColor}" fill-opacity="0.35" stroke="${chosenColor}" stroke-width="1.5"/>` : ''}
-        <circle cx="60" cy="60" r="4" fill="#261B14"/>
+    <div class="dcc-header">
+      <div class="dcc-badge">24-Hour Day & Night Burden</div>
+      <div class="dcc-title">How Much of Your Baby's Day is Consumed by Crying</div>
+    </div>
+    <div class="dcc-clock-wrap">
+      <svg viewBox="0 0 240 240" width="100%" height="auto">
+        <circle cx="120" cy="120" r="102" fill="#FAF4EC" stroke="rgba(38,27,20,0.16)" stroke-width="2"/>
+        <path d="M 120 18 A 102 102 0 0 1 120 222" fill="none" stroke="rgba(192,150,63,0.22)" stroke-width="6"/>
+        <path d="M 120 222 A 102 102 0 0 1 120 18" fill="none" stroke="rgba(35,43,30,0.18)" stroke-width="6"/>
+
+        ${generateClockTicks(120, 120, 102)}
+
+        <text x="120" y="38" font-family="'DM Mono', monospace" font-size="8.5" font-weight="700" fill="#7A6856" text-anchor="middle">12 AM (0h)</text>
+        <text x="195" y="123" font-family="'DM Mono', monospace" font-size="8.5" font-weight="700" fill="#7A6856" text-anchor="middle">6 AM</text>
+        <text x="120" y="208" font-family="'DM Mono', monospace" font-size="8.5" font-weight="700" fill="#7A6856" text-anchor="middle">12 PM (Noon)</text>
+        <text x="44" y="123" font-family="'DM Mono', monospace" font-size="8.5" font-weight="700" fill="#7A6856" text-anchor="middle">6 PM</text>
+
+        <line x1="120" y1="120" x2="182" y2="58" stroke="#BA5731" stroke-width="1.8" stroke-dasharray="3,3"/>
+        <circle cx="182" cy="58" r="3" fill="#BA5731"/>
+        <text x="186" y="52" font-family="'DM Mono', monospace" font-size="8" font-weight="700" fill="#BA5731">3h Threshold</text>
+
+        <path id="clockArcWedge" d="${getWedgePath(curAngle, 120, 120, 88)}" fill="${curColor}" fill-opacity="0.38" stroke="${curColor}" stroke-width="2" style="transition: all 0.25s ease;"/>
+
+        <circle cx="120" cy="120" r="42" fill="#241A12" stroke="#FAF4EC" stroke-width="3"/>
+        <text id="clockHubVal" x="120" y="116" font-family="'Cormorant Garamond', serif" font-size="22" font-weight="700" fill="#FAF4EC" text-anchor="middle">${curMeta.num}</text>
+        <text id="clockHubSub" x="120" y="132" font-family="'DM Mono', monospace" font-size="8.5" font-weight="600" fill="rgba(250,244,236,0.8)" text-anchor="middle">${curMeta.fraction}</text>
       </svg>
     </div>
-    <div class="dcc-clock-right">
-      <div class="dcc-clock-kicker">24-Hour Day & Night Burden</div>
-      <div class="dcc-clock-val">${chosenVal}</div>
-      <div class="dcc-clock-sub">${chosenSub}</div>
+  `;
+  box.appendChild(clockCard);
+
+  const inputCard = document.createElement('div');
+  inputCard.className = 'age-integer-card';
+  inputCard.innerHTML = `
+    <div class="aic-stepper-wrap">
+      <button type="button" class="aic-step-btn" onclick="adjustDurationIdx(-1)">&minus;</button>
+      <div class="aic-val-box">
+        <span class="aic-val-num" id="durValDisplay">${curMeta.num}</span>
+        <span class="aic-val-unit">daily crying across 24h</span>
+      </div>
+      <button type="button" class="aic-step-btn" onclick="adjustDurationIdx(1)">&plus;</button>
+    </div>
+
+    <div class="aic-slider-wrap">
+      <input type="range" id="durSlider" min="0" max="6" value="${selectedIdx}" step="1" oninput="setDurationIdx(this.value)" class="aic-slider"/>
+      <div class="aic-slider-ticks">
+        <span>&lt; 1h</span>
+        <span>1-2h</span>
+        <span>2-3h</span>
+        <span style="color:var(--terra);font-weight:700">3-4h (Colic)</span>
+        <span>4-5h</span>
+        <span>5h+</span>
+        <span>Varies</span>
+      </div>
+    </div>
+
+    <div class="aic-chips-wrap">
+      <button type="button" class="aic-chip ${selectedIdx === 0 ? 'active' : ''}" id="dur-chip-0" onclick="setDurationIdx(0)">&lt; 1 hour</button>
+      <button type="button" class="aic-chip ${selectedIdx === 1 ? 'active' : ''}" id="dur-chip-1" onclick="setDurationIdx(1)">1 to 2 hours</button>
+      <button type="button" class="aic-chip ${selectedIdx === 2 ? 'active' : ''}" id="dur-chip-2" onclick="setDurationIdx(2)">2 to 3 hours</button>
+      <button type="button" class="aic-chip ${selectedIdx === 3 ? 'active' : ''}" id="dur-chip-3" onclick="setDurationIdx(3)">3 to 4 hours (Colic threshold)</button>
+      <button type="button" class="aic-chip ${selectedIdx === 4 ? 'active' : ''}" id="dur-chip-4" onclick="setDurationIdx(4)">4 to 5 hours</button>
+      <button type="button" class="aic-chip ${selectedIdx === 5 ? 'active' : ''}" id="dur-chip-5" onclick="setDurationIdx(5)">5+ hours</button>
+      <button type="button" class="aic-chip ${selectedIdx === 6 ? 'active' : ''}" id="dur-chip-6" onclick="setDurationIdx(6)">Varies / Unsure</button>
+    </div>
+
+    <div class="aic-classification-box">
+      <div class="aic-class-header">
+        <span class="aic-class-tag" id="durClassTag">${curMeta.tag}</span>
+        <span class="aic-class-status" id="durClassStatus">${curMeta.status}</span>
+      </div>
+      <div class="aic-milestone-text" id="durClassMilestone">${curMeta.milestone}</div>
     </div>
   `;
+  box.appendChild(inputCard);
 
-  const box = document.getElementById('optionsBox');
-  box.parentNode.insertBefore(clockCard, box);
+  const btn = document.getElementById('continueBtn');
+  btn.classList.add('visible');
+  btn.textContent = `Continue with ${curOpt[7] || curMeta.num} →`;
+}
+
+function setDurationIdx(val) {
+  const idx = Math.min(6, Math.max(0, parseInt(val, 10) || 0));
+  const q = QUESTIONS[1];
+  const opt = q.opts[idx];
+  const meta = DURATION_META[idx];
+
+  selectedMap.clear();
+  selectedMap.set(idx, { weights: opt[1], feeding: null, triedTag: null, reason: opt[4] });
+  cryingDuration = opt[4] || '';
+
+  const wedge = document.getElementById('clockArcWedge');
+  if (wedge) {
+    wedge.setAttribute('d', getWedgePath(opt[5] || 0, 120, 120, 88));
+    wedge.setAttribute('fill', opt[6] || '#BA5731');
+    wedge.setAttribute('stroke', opt[6] || '#BA5731');
+  }
+  const hubVal = document.getElementById('clockHubVal');
+  if (hubVal) hubVal.textContent = meta.num;
+  const hubSub = document.getElementById('clockHubSub');
+  if (hubSub) hubSub.textContent = meta.fraction;
+
+  const valEl = document.getElementById('durValDisplay');
+  if (valEl) valEl.textContent = meta.num;
+  const slider = document.getElementById('durSlider');
+  if (slider) slider.value = idx;
+
+  for (let i = 0; i <= 6; i++) {
+    const chip = document.getElementById('dur-chip-' + i);
+    if (chip) chip.classList.toggle('active', i === idx);
+  }
+
+  const tagEl = document.getElementById('durClassTag');
+  if (tagEl) tagEl.textContent = meta.tag;
+  const statusEl = document.getElementById('durClassStatus');
+  if (statusEl) statusEl.textContent = meta.status;
+  const detailEl = document.getElementById('durClassMilestone');
+  if (detailEl) detailEl.textContent = meta.milestone;
+
+  const btn = document.getElementById('continueBtn');
+  if (btn) btn.textContent = `Continue with ${opt[7] || meta.num} →`;
+}
+
+function adjustDurationIdx(delta) {
+  const current = selectedMap.size > 0 ? Array.from(selectedMap.keys())[0] : 3;
+  setDurationIdx(current + delta);
 }
 
 /* ── QUESTION RENDERING ──────────────────────────────────────────────── */
@@ -978,7 +1151,8 @@ function renderQuestion() {
   }
 
   if (q.isDurationClock) {
-    renderDurationClock(q);
+    renderDurationClockQuestion();
+    return;
   }
 
   // Restore previously saved answer if parent used Back button
@@ -1070,13 +1244,6 @@ function toggleOption(idx, weights, el, single, feeding, triedTag, reason, oText
         select(el);
       }
     }
-  }
-
-  const curQ = QUESTIONS[qIndex];
-  if (curQ && curQ.isDurationClock) {
-    const existingClock = document.getElementById('dynamicSpecialVisualBox');
-    if (existingClock) existingClock.remove();
-    renderDurationClock(curQ);
   }
 
   const btn = document.getElementById('continueBtn');

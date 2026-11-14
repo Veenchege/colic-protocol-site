@@ -540,23 +540,20 @@ a{color:inherit}
 .aic-milestone-text{font-size:13px;color:var(--ink);line-height:1.55}
 
 /* ── 24-HOUR COMPLETE DAY & NIGHT CLOCK ── */
-.duration-clock-card{
-  background:linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(241,229,211,0.45) 100%);
-  border:1.5px solid rgba(38,27,20,0.1);
-  border-radius:18px;
-  padding:16px 20px;
-  margin-bottom:18px;
+.dcc-clock-wrap{
+  position:relative;
+  width:100%;
   display:flex;
+  justify-content:center;
   align-items:center;
-  gap:18px;
-  box-shadow:0 6px 18px rgba(38,27,20,0.03);
+  margin:12px 0 16px;
 }
-.dcc-clock-left{flex-shrink:0}
-.analog-clock-svg{display:block;filter:drop-shadow(0 4px 10px rgba(38,27,20,0.08))}
-.dcc-clock-right{flex:1}
-.dcc-clock-kicker{font-family:var(--fm);font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
-.dcc-clock-val{font-family:var(--fd);font-size:19px;font-weight:700;color:var(--terra-deep);line-height:1.2;margin-bottom:3px}
-.dcc-clock-sub{font-size:12px;color:var(--muted);line-height:1.45}
+.dcc-clock-wrap svg{
+  display:block;
+  max-width:240px;
+  width:100%;
+  height:auto;
+}
 
 /* ── BLOG GUIDES & VERIFIED VIDEO SPOTLIGHT ── */
 .blog-recs-section{margin-top:24px;padding-top:20px;border-top:1px dashed rgba(38,27,20,0.15)}
