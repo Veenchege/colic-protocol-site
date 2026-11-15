@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#c4603a">
+  <link rel="manifest" href="/manifest.webmanifest">
   <title>Bloom Protocol · Personalized Nighttime Management System</title>
   <!-- Google tag (gtag.js) -->
   <script async data-cfasync="false" src="https://www.googletagmanager.com/gtag/js?id=G-4BRJ9M0K26"></script>
@@ -1980,6 +1981,9 @@
       highlightActiveTimeWindow();
       initVisualizer();
       applyEntitlementUI();
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').catch(function(){});
+      }
     }
 
     function checkLicenseFromUrl() {
