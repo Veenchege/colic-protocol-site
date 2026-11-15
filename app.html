@@ -779,6 +779,28 @@
       background: #fff;
     }
     .diff-table tr:nth-child(even) td { background: #faf8f5; }
+
+    @media print {
+      body * { visibility: hidden; }
+      #modal-doctor-summary, #modal-doctor-summary * { visibility: visible; }
+      #modal-doctor-summary {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        display: block !important;
+        background: #fff !important;
+        padding: 0 !important;
+      }
+      #modal-doctor-summary .modal-card {
+        box-shadow: none !important;
+        border: none !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        padding: 20px !important;
+      }
+      .no-print { display: none !important; }
+    }
   </style>
 </head>
 <body>
@@ -883,7 +905,7 @@
               <img src="/images/blog/bottle-angle-correct-paced.jpg" alt="Correct horizontal bottle angle" onerror="this.src='images/blog/bottle-angle-correct-paced.jpg'">
               <div class="graphic-meta correct">
                 <strong>Correct Paced Angle</strong>
-                Horizontal: nipple full of milk, baby paces flow.
+                Horizontal: nipple fully covered with milk, baby paces flow.
               </div>
             </div>
           </div>
@@ -1165,7 +1187,7 @@
           </button>
         </div>
 
-        <h3 style="margin-top: 20px;">Baseline Assessment Diagnostic Scores</h3>
+        <h3 style="margin-top: 20px;">Baseline Assessment Pattern Scores</h3>
         <p class="mu">Ingested from your 90-second assessment:</p>
         <div class="score-breakdown">
           <div class="score-tile active-type" id="score-tile-fm">
@@ -1368,7 +1390,7 @@
         <span class="badge badge-sage">Pediatrician Prep</span>
         <h2>Export Doctor Visit Summary</h2>
         <p class="mu" style="margin-bottom: 12px;">
-          Generates a clean 1-page summary of your recorded crying episodes and feeding patterns to prevent being brushed off at short appointments.
+          Generates a clean 1-page summary of your recorded crying episodes and feeding patterns to review directly with your pediatrician at your next visit.
         </p>
         <button class="btn-secondary" onclick="exportDoctorSummary()">Generate Printable Summary</button>
       </div>
@@ -1565,7 +1587,7 @@
       <div style="padding: 6px 0; font-size: 13.5px;">&bull; <strong>Lethargy or weak cry:</strong> Very hard to wake, floppy, or unusual high-pitched cry.</div>
 
       <div style="background: var(--bg); padding: 12px; border-radius: 8px; margin-top: 14px; font-size: 12.5px;">
-        <strong>Disclaimer:</strong> This app is educational and does not provide clinical diagnoses. Always consult your pediatrician before altering infant care.
+        <strong>Disclaimer:</strong> This is educational, not medical advice. It does not replace your baby's doctor. Fever, repeated vomiting, poor weight gain, blood in stool, or refusing feeds? Call your pediatrician.
       </div>
       <button class="btn-secondary" style="margin-top: 14px;" onclick="closeRedFlagModal()">Return to Protocol</button>
     </div>
@@ -1649,10 +1671,57 @@
 
       <!-- Section 6: Safety Note -->
       <div style="background: var(--bg); padding: 10px 12px; border-radius: 6px; font-size: 12px; color: var(--mu); margin-bottom: 14px;">
-        <strong>Safety Rule:</strong> Colic is educational guidance, not medical diagnosis. Fever, vomiting, poor weight gain, blood in stool, or refusing feeds? Call your pediatrician immediately.
+        <strong>Safety Rule:</strong> This is educational, not medical advice. It does not replace your baby's doctor. Fever, repeated vomiting, poor weight gain, blood in stool, or refusing feeds? Call your pediatrician.
       </div>
 
       <button class="btn-secondary" onclick="closeStudyFramework()">Close Reading Framework</button>
+    </div>
+  </div>
+
+  <!-- DOCTOR VISIT SUMMARY MODAL -->
+  <div class="modal-overlay" id="modal-doctor-summary">
+    <div class="modal-card" style="max-height: 90vh; overflow-y: auto;">
+      <button class="modal-close no-print" onclick="closeDoctorSummary()">&times;</button>
+      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+          <span class="badge badge-sage">Pediatrician Visit Summary</span>
+          <h2 style="margin-top: 4px;">Infant Crying & Symptom Log</h2>
+        </div>
+        <button class="btn-sage btn-sm no-print" onclick="window.print()" style="width: auto;">Print / Save PDF</button>
+      </div>
+
+      <div style="background: var(--bg); padding: 12px; border-radius: 8px; margin: 12px 0; font-size: 13px;">
+        <div id="doc-sum-patient"><strong>Patient:</strong> Baby Zion &bull; <strong>Age:</strong> 5 Weeks &bull; <strong>Feeding:</strong> Formula-fed</div>
+        <div id="doc-sum-date" style="color: var(--mu); font-size: 11.5px; margin-top: 2px;">Report Generated: Nov 15, 2026 &bull; Source: Bloom Protocol</div>
+      </div>
+
+      <div style="background: var(--sage-soft); border-left: 3px solid var(--sage); padding: 10px 12px; border-radius: 4px; font-size: 12px; margin-bottom: 12px;">
+        <strong>Safety Note:</strong> No red flags (fever &ge;100.4&deg;F, repeated vomiting, blood in stool, or lethargy) recorded during home logging.
+      </div>
+
+      <h3 style="font-size: 14px; margin-top: 14px; margin-bottom: 6px;">Recorded Crying Metrics</h3>
+      <div id="doc-sum-crying-metrics" style="font-size: 13px; line-height: 1.5; margin-bottom: 12px;">
+        Loading recorded episodes...
+      </div>
+
+      <h3 style="font-size: 14px; margin-top: 14px; margin-bottom: 6px;">Timing Relative to Feeds</h3>
+      <div id="doc-sum-timing-breakdown" style="font-size: 13px; line-height: 1.5; margin-bottom: 12px;">
+        Loading timing breakdown...
+      </div>
+
+      <h3 style="font-size: 14px; margin-top: 14px; margin-bottom: 6px;">Home Soothing Techniques Tried</h3>
+      <div id="doc-sum-techniques-tried" style="font-size: 13px; line-height: 1.5; margin-bottom: 12px;">
+        Loading soothing history...
+      </div>
+
+      <div style="background: var(--bg); padding: 10px 12px; border-radius: 6px; font-size: 11.5px; color: var(--mu); margin-top: 14px; line-height: 1.4;">
+        <strong>Clinical Disclaimer:</strong> This summary is compiled from parental logging for discussion with your pediatrician. This is educational, not medical advice. It does not replace your baby's doctor. Fever, repeated vomiting, poor weight gain, blood in stool, or refusing feeds? Call your pediatrician.
+      </div>
+
+      <div class="no-print" style="margin-top: 14px; display: flex; gap: 8px;">
+        <button class="btn-terra" onclick="window.print()" style="flex: 1;">Print / Save PDF</button>
+        <button class="btn-secondary" onclick="closeDoctorSummary()" style="flex: 1;">Close Summary</button>
+      </div>
     </div>
   </div>
 
@@ -1785,7 +1854,7 @@
         blueprintChapter: 'Chapter 1: The Physiology of Infant Crying',
         coreQuestion: 'Is my baby suffering from a hidden stomach defect, permanent injury, or failing care?',
         cohort: 'Evaluated healthy, thriving infants presenting with severe paroxysmal crying bouts. Established the pediatric benchmark: Rule of Three (>3 hours/day, >3 days/week, for >3 weeks in an otherwise healthy infant).',
-        proved: 'Colic is not an internal disease or structural defect. It is a temporary, developmental peak of normal infant crying that typically starts around week 2, peaks around week 6, and resolves naturally by 3 to 4 months as the infant nervous system matures.',
+        proved: 'Colic is not an internal disease or structural defect. It is a temporary, developmental peak of normal infant crying that typically starts around week 2, peaks around week 6, and eases by about 3 to 4 months as the infant nervous system matures.',
         limits: 'Did not identify a single biological malfunction. Did not prove that prescription drugs, drastic maternal elimination diets, or invasive medical interventions resolve colic.',
         action: 'If red flags are absent, stop searching for an instant fix. Colic is a developmental storm to manage together, not a disease to fix. Focus on dim lighting, firm soothing holds, and tag-teaming with your partner to protect your nervous system.'
       },
@@ -1809,7 +1878,7 @@
         cohort: '29 mother-infant pairs in the 2025 paced trial; 1,055 infants in the 2026 JAMA bottle trial comparing vented vs. standard bottles.',
         proved: 'Holding the bottle horizontally with the nipple fully covered with milk slows flow velocity to match natural breastfeeding cadence. The baby drinks actively rather than passively gulping, swallowing significantly less air.',
         limits: 'Did not show that paced feeding or specific bottle brands shorten colic duration. Mechanics (horizontal angle, fully covered nipple, slow nipple flow) matter far more than purchasing expensive designer bottles.',
-        action: 'For bottle feeds: Hold bottle horizontal to the floor with nipple full of milk; let baby suck actively. For breastfeeding: Use the Flipple deep asymmetric latch (nipple to nose, wide gape, chin deep into lower breast).'
+        action: 'For bottle feeds: Hold bottle horizontal to the floor with the nipple fully covered with milk; let baby suck actively. For breastfeeding: Use the Flipple deep asymmetric latch (nipple to nose, wide gape, chin deep into lower breast).'
       },
       'brick-4': {
         brickNumber: 'Brick 4 &bull; Gut & Digestion',
@@ -2201,7 +2270,7 @@
               <img src="/images/blog/bottle-angle-correct-paced.jpg" alt="Correct horizontal bottle angle" onerror="this.src='images/blog/bottle-angle-correct-paced.jpg'">
               <div class="graphic-meta correct">
                 <strong>Correct Paced Angle</strong>
-                Horizontal: nipple full of milk, baby paces flow.
+                Horizontal: nipple fully covered with milk, baby paces flow.
               </div>
             </div>
           </div>
@@ -2844,7 +2913,89 @@
     }
 
     function exportDoctorSummary() {
-      alert("Doctor Summary generated! Summarizes cpx_v1 crying hours, timing against feeds, and Chapter 5 conversation scripts.");
+      const s = getStore();
+      const patientEl = document.getElementById('doc-sum-patient');
+      const dateEl = document.getElementById('doc-sum-date');
+      const cryingEl = document.getElementById('doc-sum-crying-metrics');
+      const timingEl = document.getElementById('doc-sum-timing-breakdown');
+      const techEl = document.getElementById('doc-sum-techniques-tried');
+
+      if (patientEl) {
+        patientEl.innerHTML = `<strong>Baby:</strong> ${s.baby || 'Your baby'} &bull; <strong>Age:</strong> ${s.age || 5} Weeks &bull; <strong>Feeding:</strong> ${s.feed || 'Formula-fed'}`;
+      }
+      if (dateEl) {
+        const d = new Date();
+        dateEl.innerHTML = `Report Generated: ${d.toLocaleDateString()} &bull; Source: Bloom Protocol (cpx_v1)`;
+      }
+
+      const dayTotals = {};
+      const timingCounts = {};
+      const techCounts = {};
+      let totalEpisodes = 0;
+      let totalMins = 0;
+
+      (s.ev || []).forEach(e => {
+        if (e.k === 'cry') {
+          totalEpisodes++;
+          const mins = Number(e.d && e.d.min) || 0;
+          totalMins += mins;
+          const dStr = (e.t || '').slice(0, 10);
+          if (dStr) dayTotals[dStr] = (dayTotals[dStr] || 0) + mins;
+
+          const tm = (e.d && e.d.timing) || 'unknown';
+          timingCounts[tm] = (timingCounts[tm] || 0) + 1;
+
+          const tc = (e.d && (e.d.tech || e.d.tried)) || 'unspecified';
+          const hp = (e.d && e.d.helped) || 'none';
+          if (!techCounts[tc]) techCounts[tc] = { total: 0, helped: 0, some: 0, no: 0 };
+          techCounts[tc].total++;
+          if (hp === 'yes') techCounts[tc].helped++;
+          else if (hp === 'some') techCounts[tc].some++;
+          else if (hp === 'no') techCounts[tc].no++;
+        }
+      });
+
+      const dayCount = Object.keys(dayTotals).length;
+      const dailyAvgHours = dayCount > 0 ? (totalMins / dayCount / 60).toFixed(1) : '0.0';
+
+      if (cryingEl) {
+        if (totalEpisodes > 0) {
+          cryingEl.innerHTML = `
+            &bull; <strong>Recorded Episodes:</strong> ${totalEpisodes} crying episodes across ${dayCount} logged day(s).<br>
+            &bull; <strong>Daily Crying Duration:</strong> Averaging <strong>${dailyAvgHours} hrs/day</strong> (Total recorded: ${(totalMins / 60).toFixed(1)} hours).<br>
+            &bull; <strong>Clinical Context:</strong> Colic usually peaks around week 6 and eases by about 3 to 4 months.
+          `;
+        } else {
+          cryingEl.innerHTML = '<em>No crying episodes logged yet. Start logging in the 3 AM Console or Midnight Run.</em>';
+        }
+      }
+
+      if (timingEl) {
+        const tmLabels = {
+          near: 'Within 30 minutes after feed (Air ingestion / reflux pattern)',
+          late: '1 to 3 hours after feed (Gut / digestion pattern)',
+          evening: 'Evening cluster after 5 PM (Sensory / autonomic pattern)',
+          random: 'No clear pattern'
+        };
+        const rows = Object.keys(timingCounts).map(k => `&bull; <strong>${tmLabels[k] || k}:</strong> ${timingCounts[k]} episode(s)`).join('<br>');
+        timingEl.innerHTML = rows || '<em>Timing patterns require feed-relative logging.</em>';
+      }
+
+      if (techEl) {
+        const rows = Object.keys(techCounts).map(k => {
+          const item = techCounts[k];
+          return `&bull; <strong>${k}:</strong> Tried ${item.total} time(s) (Helped: ${item.helped}, Partial: ${item.some}, No change: ${item.no})`;
+        }).join('<br>');
+        techEl.innerHTML = rows || '<em>No specific holds or soothing techniques recorded yet.</em>';
+      }
+
+      const modal = document.getElementById('modal-doctor-summary');
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function closeDoctorSummary() {
+      const modal = document.getElementById('modal-doctor-summary');
+      if (modal) modal.style.display = 'none';
     }
 
     window.addEventListener('DOMContentLoaded', init);
