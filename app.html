@@ -1,0 +1,3008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#c4603a">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <title>Bloom Protocol · Personalized Nighttime Management System</title>
+  <!-- Google tag (gtag.js) -->
+  <script async data-cfasync="false" src="https://www.googletagmanager.com/gtag/js?id=G-4BRJ9M0K26"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-4BRJ9M0K26');
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f4ede4;
+      --card: #ffffff;
+      --ink: #2c1f18;
+      --mu: #7a6555;
+      --terra: #c4603a;
+      --terra-soft: #fbeee8;
+      --sage: #5c7a5f;
+      --sage-soft: #edf3ee;
+      --gold: #c89a3e;
+      --gold-soft: #fbf5e6;
+      --bd: rgba(44, 31, 24, 0.14);
+      --red: #b84040;
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans: 'DM Sans', system-ui, -apple-system, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body {
+      font: 15px/1.55 var(--font-sans);
+      background: var(--bg);
+      color: var(--ink);
+      padding-bottom: 85px;
+    }
+
+    /* Red Flag Safety Header */
+    .safety-banner {
+      background: #782618;
+      color: #fff;
+      padding: 9px 16px;
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .safety-banner a {
+      color: #ffd8d0;
+      text-decoration: underline;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* App Header */
+    header {
+      background: #faf6f0;
+      border-bottom: 1px solid var(--bd);
+      padding: 12px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .brand-title {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.1;
+    }
+    .brand-subtitle {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--terra);
+      font-weight: 700;
+    }
+    .profile-pill {
+      background: var(--sage-soft);
+      color: var(--sage);
+      border: 1px solid rgba(92, 122, 95, 0.3);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    /* Cards */
+    .c {
+      background: var(--card);
+      border: 1px solid var(--bd);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 5px rgba(44, 31, 24, 0.02);
+    }
+    .c-highlight {
+      border: 2px solid var(--terra);
+      background: #fffdfb;
+    }
+
+    h1, h2, h3 {
+      font-family: var(--font-serif);
+      color: var(--ink);
+      font-weight: 700;
+      line-height: 1.25;
+    }
+    h1 { font-size: 28px; margin: 8px 0 4px; }
+    h2 { font-size: 21px; margin-bottom: 6px; }
+    h3 { font-size: 17px; margin-bottom: 4px; }
+
+    .mu { color: var(--mu); font-size: 13px; }
+
+    /* Badges */
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .badge-terra { background: var(--terra-soft); color: var(--terra); }
+    .badge-sage { background: var(--sage-soft); color: var(--sage); }
+    .badge-gold { background: var(--gold-soft); color: var(--gold); }
+    .evidence-tag {
+      font-size: 11px;
+      background: var(--sage-soft);
+      color: var(--sage);
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      display: inline-block;
+    }
+
+    /* Buttons */
+    button, .b {
+      font: 600 14px var(--font-sans);
+      min-height: 44px;
+      border-radius: 8px;
+      border: 1px solid var(--bd);
+      background: #fff;
+      color: var(--ink);
+      padding: 10px 16px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      text-align: center;
+      transition: opacity 0.15s;
+    }
+    button:active, .b:active { opacity: 0.85; }
+    .btn-terra { background: var(--terra); color: #fff; border-color: var(--terra); }
+    .btn-sage { background: var(--sage); color: #fff; border-color: var(--sage); }
+    .btn-secondary { background: #faf6f0; color: var(--ink); border: 1px solid var(--bd); }
+    .btn-sm { min-height: 32px; font-size: 12px; padding: 4px 10px; width: auto; }
+
+    /* Acute Triage Trigger Card */
+    .acute-triage-trigger {
+      background: linear-gradient(135deg, #c4603a, #9e3f1e);
+      color: #fff;
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(196, 96, 58, 0.22);
+      cursor: pointer;
+    }
+    .acute-triage-trigger strong {
+      font-family: var(--font-serif);
+      font-size: 19px;
+      display: block;
+    }
+    .acute-triage-trigger span {
+      font-size: 12px;
+      opacity: 0.92;
+    }
+
+    /* 3 AM Acoustic & Sensory Console */
+    .night-console {
+      background: #231913;
+      color: #f7f3ee;
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+    .night-console h2, .night-console h3 { color: #ffffff; }
+    .night-console p { color: #dfd5cb; font-size: 13.5px; }
+
+    .sound-widget {
+      background: #2f221a;
+      border: 1px solid #453428;
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .sound-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .timer-tags { display: flex; gap: 6px; }
+    .timer-tag {
+      background: #3e2d23;
+      color: #d1c5b8;
+      border: 1px solid #553e31;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      cursor: pointer;
+    }
+    .timer-tag.active {
+      background: var(--gold);
+      color: #2c1f18;
+      font-weight: 700;
+      border-color: var(--gold);
+    }
+
+    /* 2 Minute Reset Breathing Box */
+    .breath-box {
+      border: 1px dashed #6b5547;
+      border-radius: 8px;
+      padding: 14px;
+      text-align: center;
+      margin-top: 12px;
+      background: #2a1e17;
+    }
+    .breath-circle {
+      width: 66px;
+      height: 66px;
+      border-radius: 50%;
+      background: var(--terra);
+      margin: 10px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #fff;
+      font-size: 13px;
+      transition: transform 4s ease-in-out;
+    }
+    .breath-circle.inhale { transform: scale(1.35); }
+    .breath-circle.hold { background: var(--gold); }
+    .breath-circle.exhale { transform: scale(0.9); }
+
+    /* Illustrated Step Graphics */
+    .graphics-container {
+      margin: 12px 0;
+      background: #faf6f0;
+      border: 1px solid var(--bd);
+      border-radius: 10px;
+      padding: 12px;
+    }
+    .graphics-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .graphic-card {
+      background: #fff;
+      border: 1px solid var(--bd);
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .graphic-card img {
+      width: 100%;
+      height: 125px;
+      object-fit: cover;
+      display: block;
+      background: #ebd8c8;
+    }
+    .graphic-meta {
+      padding: 8px;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+    .graphic-meta strong {
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 2px;
+    }
+    .graphic-meta.wrong strong { color: var(--red); }
+    .graphic-meta.correct strong { color: var(--sage); }
+
+    .single-hero-graphic {
+      width: 100%;
+      border-radius: 8px;
+      border: 1px solid var(--bd);
+      overflow: hidden;
+      margin: 10px 0;
+      background: #fff;
+    }
+    .single-hero-graphic img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Study Box */
+    .study-box {
+      background: #fbf9f5;
+      border-left: 3px solid var(--sage);
+      padding: 10px 14px;
+      margin: 12px 0;
+      font-size: 13px;
+      border-radius: 0 6px 6px 0;
+    }
+    .study-box strong { color: var(--sage); }
+
+    /* Pill Selection Options */
+    .pill-group {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin: 8px 0 14px;
+    }
+    .pill-option {
+      border: 1.5px solid var(--bd);
+      border-radius: 8px;
+      padding: 10px 12px;
+      background: #fff;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 500;
+      font-size: 13.5px;
+    }
+    .pill-option.selected {
+      border-color: var(--terra);
+      background: var(--terra-soft);
+      font-weight: 700;
+      color: var(--terra);
+    }
+
+    /* Modals */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(44, 31, 24, 0.72);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 16px;
+    }
+    .modal-card {
+      background: #ffffff;
+      border-radius: 12px;
+      max-width: 520px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 20px;
+      position: relative;
+    }
+    .modal-close {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      font-size: 22px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--mu);
+      width: auto;
+      min-height: auto;
+      padding: 4px;
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #faf6f0;
+      border-top: 1px solid var(--bd);
+      display: flex;
+      justify-content: space-around;
+      padding: 7px 0;
+      z-index: 40;
+    }
+    .nav-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--mu);
+      background: none;
+      border: none;
+      cursor: pointer;
+      gap: 2px;
+      width: auto;
+      min-height: auto;
+      padding: 4px 6px;
+    }
+    .nav-btn.active { color: var(--terra); }
+    .nav-btn svg { width: 19px; height: 19px; stroke: currentColor; }
+
+    /* MIDNIGHT PROTOCOL 4-STAGE RUNNER */
+    .midnight-stage-box {
+      background: #181310;
+      color: #f5efe6;
+      border-radius: 12px;
+      border: 1px solid var(--bd);
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+    .midnight-stepbar {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 14px;
+    }
+    .midnight-stepbar span {
+      flex: 1;
+      height: 4px;
+      border-radius: 2px;
+      background: rgba(244, 237, 228, 0.15);
+      transition: background 0.3s;
+    }
+    .midnight-stepbar span.on {
+      background: var(--gold);
+      box-shadow: 0 0 6px var(--gold);
+    }
+    .midnight-stepbar span.done {
+      background: var(--sage);
+    }
+    .midnight-checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(244, 237, 228, 0.1);
+      font-size: 13.5px;
+    }
+    .midnight-checklist-item input {
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      accent-color: var(--sage);
+    }
+
+    /* Score Bar for Assessment */
+    .score-breakdown {
+      display: flex;
+      gap: 8px;
+      margin: 12px 0;
+    }
+    .score-tile {
+      flex: 1;
+      background: #faf6f0;
+      border: 1px solid var(--bd);
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+    }
+    .score-tile b {
+      display: block;
+      font-family: var(--font-serif);
+      font-size: 20px;
+    }
+    .score-tile span {
+      font-size: 11px;
+      color: var(--mu);
+    }
+    .score-tile.active-type {
+      border-color: var(--terra);
+      background: var(--terra-soft);
+      color: var(--terra);
+    }
+
+    /* Time-of-Day Grid Matrix */
+    .tod-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 12px 0;
+    }
+    .tod-card {
+      background: #faf6f0;
+      border: 1px solid var(--bd);
+      border-radius: 8px;
+      padding: 12px;
+      position: relative;
+    }
+    .tod-card.active-window {
+      border: 2px solid var(--terra);
+      background: #fffdfb;
+    }
+    .tod-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+    .tod-title {
+      font-weight: 700;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .tod-time { font-size: 10.5px; color: var(--mu); }
+    .tod-dominant {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-top: 4px;
+    }
+    .tod-cue { font-size: 11.5px; color: var(--mu); margin-top: 2px; }
+
+    /* Brick on Brick Educational Studies Layout */
+    .brick-card {
+      background: #fff;
+      border: 1px solid var(--bd);
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+    .brick-card.clickable-brick {
+      cursor: pointer;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .brick-card.clickable-brick:hover {
+      border-color: var(--terra);
+      box-shadow: 0 3px 12px rgba(44, 31, 24, 0.08);
+    }
+    .brick-action-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--terra);
+      margin-top: 10px;
+      text-decoration: underline;
+    }
+    .brick-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+    .brick-number {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--terra);
+    }
+    .brick-title {
+      font-family: var(--font-serif);
+      font-size: 19px;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    /* Feeding Mode Selector */
+    .feeding-pill-selector {
+      display: flex;
+      gap: 6px;
+      background: #efebe7;
+      padding: 4px;
+      border-radius: 8px;
+      margin: 10px 0 14px 0;
+    }
+    .feed-pill {
+      flex: 1;
+      padding: 7px 8px;
+      font-size: 12px;
+      font-weight: 700;
+      border: none;
+      background: none;
+      border-radius: 6px;
+      cursor: pointer;
+      color: var(--mu);
+      text-align: center;
+      transition: all 0.15s ease;
+    }
+    .feed-pill.active {
+      background: #ffffff;
+      color: var(--ink);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    /* Sound Widget & Visualizer */
+    .sound-modes {
+      display: flex;
+      gap: 6px;
+      margin: 10px 0;
+    }
+    .sound-mode-btn {
+      flex: 1;
+      padding: 6px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(0,0,0,0.2);
+      color: #dfd5cb;
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s ease;
+    }
+    .sound-mode-btn.active {
+      border-color: var(--gold);
+      background: rgba(200, 154, 62, 0.2);
+      color: #fff;
+    }
+    #acoustic-visualizer {
+      width: 100%;
+      height: 64px;
+      background: #1a120c;
+      border-radius: 6px;
+      margin: 8px 0;
+      display: block;
+    }
+    .acoustic-science-feed {
+      background: rgba(255,255,255,0.06);
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-size: 11.5px;
+      line-height: 1.45;
+      color: #cfc2b5;
+      margin-top: 8px;
+      border-left: 2px solid var(--gold);
+    }
+    .acoustic-science-feed strong {
+      color: var(--gold);
+      display: block;
+      margin-bottom: 3px;
+    }
+    .screen-lock-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #bcaea1;
+    }
+    .screen-lock-badge span.dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--sage);
+      display: inline-block;
+    }
+
+    /* License & Gated Preview Styling */
+    .license-status-pill {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 12px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s ease;
+    }
+    .license-status-pill.locked {
+      background: #fde8e4;
+      color: var(--terra);
+      border: 1px solid rgba(196, 96, 58, 0.3);
+    }
+    .license-status-pill.unlocked {
+      background: var(--sage-soft);
+      color: var(--sage);
+      border: 1px solid rgba(92, 122, 95, 0.3);
+    }
+
+    .gated-overlay-card {
+      background: #ffffff;
+      border: 1px solid var(--bd);
+      border-radius: 10px;
+      padding: 16px;
+      margin: 14px 0 8px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(44, 31, 24, 0.04);
+    }
+    .gated-lock-icon {
+      font-size: 26px;
+      margin-bottom: 6px;
+    }
+    .gated-overlay-card h3 {
+      font-family: var(--font-serif);
+      font-size: 19px;
+      margin: 0 0 6px;
+      color: var(--ink);
+    }
+    .gated-overlay-card p {
+      font-size: 13px;
+      color: var(--mu);
+      line-height: 1.45;
+      margin: 0 0 12px;
+    }
+    .gated-guarantee-box {
+      background: var(--bg);
+      border-left: 3px solid var(--gold);
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      color: var(--ink);
+      text-align: left;
+      line-height: 1.4;
+      margin-bottom: 12px;
+    }
+
+    /* Toast Notification Banner */
+    .toast-banner {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--espresso);
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+      z-index: 9999;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    /* Differential Table (Colic vs Reflux) */
+    .diff-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 12.5px;
+    }
+    .diff-table th {
+      background: #efebe7;
+      text-align: left;
+      padding: 8px 10px;
+      border: 1px solid var(--bd);
+      font-weight: 700;
+    }
+    .diff-table td {
+      padding: 8px 10px;
+      border: 1px solid var(--bd);
+      vertical-align: top;
+      background: #fff;
+    }
+    .diff-table tr:nth-child(even) td { background: #faf8f5; }
+
+    @media print {
+      body * { visibility: hidden; }
+      #modal-doctor-summary, #modal-doctor-summary * { visibility: visible; }
+      #modal-doctor-summary {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        display: block !important;
+        background: #fff !important;
+        padding: 0 !important;
+      }
+      #modal-doctor-summary .modal-card {
+        box-shadow: none !important;
+        border: none !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        padding: 20px !important;
+      }
+      .no-print { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Toast Notification -->
+  <div id="toast-notification" class="toast-banner">✓ Calm Baby Blueprint companion unlocked</div>
+
+  <!-- Persistent Safety Screen Link -->
+  <div class="safety-banner">
+    <span>Safety Check: Fever, vomiting, or blood in stool?</span>
+    <a onclick="openRedFlagModal()">When to Call Doctor</a>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div>
+      <div class="brand-title">Bloom Protocol</div>
+      <div class="brand-subtitle">Nighttime Management System</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <div class="license-status-pill locked" id="header-license-pill" onclick="handleLicensePillClick()">
+        <span id="header-license-text">Preview &bull; Unlock ($47)</span>
+      </div>
+      <div class="profile-pill" onclick="openProfileModal()">
+        <span id="header-baby-badge">Baby &bull; Week 5</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <div class="container">
+
+    <!-- ACUTE EPISODE TRIAGE TRIGGER CARD -->
+    <div class="acute-triage-trigger" onclick="openAcuteTriage()">
+      <div>
+        <strong>Baby Crying Right Now?</strong>
+        <span>Quick 3-Question 2 A.M. Triage &rarr; Immediate Action Step</span>
+      </div>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+    </div>
+
+    <!-- VIEW 1: 3 A.M. Console & Active Protocol Step -->
+    <div id="view-console">
+
+      <!-- Dynamic Active Plan Card (One Step at a Time) -->
+      <div class="c c-highlight" id="active-step-card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+          <div>
+            <span class="badge badge-terra" id="step-number-badge">Active Step 1</span>
+            <span class="evidence-tag" id="step-evidence-badge">Slows flow &bull; Colic benefit unproven</span>
+          </div>
+          <span style="font-size: 11px; font-weight: 700; color: var(--gold);" id="trial-counter">Day 2 of 5 Fair Trial</span>
+        </div>
+
+        <!-- Feeding Method Quick Selector -->
+        <div class="feeding-pill-selector">
+          <button id="feed-pill-formula" class="feed-pill" onclick="setFeedingMode('formula')">Bottle-Feeding</button>
+          <button id="feed-pill-breast" class="feed-pill" onclick="setFeedingMode('breast')">Breastfeeding</button>
+          <button id="feed-pill-mixed" class="feed-pill" onclick="setFeedingMode('mixed')">Mixed (Both)</button>
+        </div>
+
+        <h2 id="active-step-title" style="margin-top: 4px;">Paced Bottle Feeding & Horizontal Angle</h2>
+        <div class="mu" style="margin-bottom: 8px;">
+          Matching Blueprint Reference: <strong id="active-step-ref">Chapter 4 & Chapter 11</strong>
+        </div>
+
+        <p id="active-step-reason" style="font-size: 14px; margin-bottom: 12px;">
+          Your log shows crying occurs within 30 minutes of a bottle feed with clicking sounds. Pacing allows your baby to control milk velocity and swallow less air.
+        </p>
+
+        <!-- Gated Preview Overlay (Shown when isUnlocked === false) -->
+        <div id="gated-step-overlay" class="gated-overlay-card" style="display: none;">
+          <div class="gated-lock-icon">🔒</div>
+          <h3>Unlock Bloom Protocol & The Blueprint</h3>
+          <p>
+            Bloom Protocol turns your baby's crying log into a clear starting plan. It provides the full step-by-step illustrations, acoustic synthesizer modes, the live Midnight Protocol runner, and the 6-brick clinical evidence vault.
+          </p>
+          <div class="gated-guarantee-box">
+            <strong>72-Hour Guarantee:</strong> If it doesn't produce a meaningful shift in 72 hours, reply and I'll make it right. You keep the Blueprint either way.
+          </div>
+          <div style="display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap;">
+            <button class="btn-terra btn-sm" onclick="openUnlockModal()" style="flex: 1; min-width: 140px;">Enter License Key or Email</button>
+            <a href="https://colicprotocol.gumroad.com/l/TheCalmBabyBlueprint?wanted=true" target="_blank" rel="noopener" class="btn-sage btn-sm" style="flex: 1; min-width: 140px; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center;">Get Blueprint ($47) &rarr;</a>
+          </div>
+        </div>
+
+        <!-- Illustrated Step Graphics -->
+        <div class="graphics-container" id="graphics-container">
+          <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--mu); margin-bottom: 8px;">
+            Illustrated Side-by-Side Technique (Paced Feeding)
+          </div>
+          <div class="graphics-grid">
+            <div class="graphic-card">
+              <img src="/images/blog/bottle-angle-too-steep.jpg" alt="Steep angle mistake" onerror="this.src='images/blog/bottle-angle-too-steep.jpg'">
+              <div class="graphic-meta wrong">
+                <strong>Common Mistake</strong>
+                Tipped steeply: milk rushes, baby gulps air.
+              </div>
+            </div>
+            <div class="graphic-card">
+              <img src="/images/blog/bottle-angle-correct-paced.jpg" alt="Correct horizontal bottle angle" onerror="this.src='images/blog/bottle-angle-correct-paced.jpg'">
+              <div class="graphic-meta correct">
+                <strong>Correct Paced Angle</strong>
+                Horizontal: nipple fully covered with milk, baby paces flow.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dynamic Action Points Checklist -->
+        <div id="step-action-points-box" style="background: #faf8f5; border: 1px solid var(--bd); border-radius: 8px; padding: 12px; margin: 12px 0;">
+          <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--terra); letter-spacing: 0.05em; margin-bottom: 6px;">
+            Technique Checklist
+          </div>
+          <div id="step-action-points" style="font-size: 13px; color: var(--ink); line-height: 1.5;"></div>
+        </div>
+
+        <div class="study-box" id="step-clinical-box">
+          <span id="step-clinical-text">
+            <strong>Clinical Note (2025 Comparative Study, 29 Pairs):</strong> Paced feeding reliably slows milk velocity without reducing overall intake. Trials have not proven it shortens colic duration, but it is free and safe for calmer feeds.
+          </span>
+          <br><a style="color: var(--sage); font-weight: 700; text-decoration: underline; cursor: pointer; display: inline-block; margin-top: 4px;" onclick="openStudyFramework('brick-3')">View Detailed Clinical Framework &rarr;</a>
+        </div>
+
+        <button id="btn-fair-trial-checkin" class="btn-secondary" onclick="openCheckInModal()" style="margin-top: 8px;">
+          Complete Fair-Trial Check-In
+        </button>
+      </div>
+
+      <!-- Quick 3 AM Acoustic Toolbox -->
+      <div class="night-console">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+          <span class="badge badge-gold">Acoustic Soothing</span>
+          <span class="screen-lock-badge" id="screen-lock-status">
+            <span class="dot"></span> Lockscreen Playback Ready
+          </span>
+        </div>
+        <h2>AAP-Safe Acoustic Synthesizer</h2>
+        <p>Continuous low-frequency brown noise synthesized in your browser. Set across the room on a timer.</p>
+
+        <div class="sound-widget">
+          <!-- Mode Selector -->
+          <div class="sound-modes">
+            <button id="smode-brown" class="sound-mode-btn active" onclick="setSoundMode('brown')">Deep Brown Noise</button>
+            <button id="smode-pulse" class="sound-mode-btn" onclick="setSoundMode('pulse')">Rhythmic Pulse</button>
+            <button id="smode-womb" class="sound-mode-btn" onclick="setSoundMode('womb')">Womb Resonance</button>
+          </div>
+
+          <!-- Live Visualizer Canvas -->
+          <canvas id="acoustic-visualizer" width="460" height="64"></canvas>
+
+          <div class="sound-controls">
+            <div>
+              <strong id="sound-now-playing-title" style="color: #fff; font-size: 13.5px;">Deep Brownian Noise</strong>
+              <div id="sound-now-playing-sub" style="font-size: 11px; color: #bcaea1;">Continuous intrauterine bass &bull; Filtered &lt;250 Hz</div>
+            </div>
+            <button id="btn-audio" class="btn-sage btn-sm" onclick="toggleBrownNoise()">Play Sound</button>
+          </div>
+
+          <div class="sound-controls" style="margin-top: 6px;">
+            <span style="font-size: 12px; color: #bcaea1;">Auto-off Timer:</span>
+            <div class="timer-tags">
+              <span class="timer-tag active" onclick="setTimer(15, this)">15m</span>
+              <span class="timer-tag" onclick="setTimer(30, this)">30m</span>
+              <span class="timer-tag" onclick="setTimer(45, this)">45m</span>
+            </div>
+          </div>
+
+          <!-- Dynamic Acoustic Science in Action -->
+          <div class="acoustic-science-feed" id="acoustic-science-feed">
+            <strong id="as-fact-title">Intrauterine Acoustic Baseline</strong>
+            <span id="as-fact-desc">In utero, uterine arterial blood flow creates an ambient low rumble of ~100&ndash;200 Hz. Total room silence triggers neonatal vigilance; continuous low frequencies restore sensory familiarization.</span>
+          </div>
+
+          <audio id="bg-audio-keeper" loop playsinline style="display:none;"></audio>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- VIEW 2: ENHANCED 4-STAGE MIDNIGHT PROTOCOL -->
+    <div id="view-midnight" style="display: none;">
+      <div class="midnight-stage-box">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <span class="badge badge-gold" id="midnight-stage-badge">Stage 1 of 4</span>
+          <span style="font-size: 12px; color: var(--gold);" id="midnight-dwell-timer">Session: 00:00</span>
+        </div>
+
+        <div class="midnight-stepbar">
+          <span class="on" id="bar-1"></span>
+          <span id="bar-2"></span>
+          <span id="bar-3"></span>
+          <span id="bar-4"></span>
+        </div>
+
+        <!-- STAGE 1: STOP SCAN -->
+        <div id="midnight-stage-1">
+          <h2 style="color: #fff;">1. Safety Check (StopScan)</h2>
+          <p class="mu" style="color: #cfc2b5; margin-bottom: 12px;">Quick 10-second scan before trying home soothing:</p>
+
+          <div class="midnight-checklist-item">
+            <input type="checkbox" id="m-chk1" checked>
+            <label for="m-chk1">No fever of 100.4&deg;F (38&deg;C) or higher in baby</label>
+          </div>
+          <div class="midnight-checklist-item">
+            <input type="checkbox" id="m-chk2" checked>
+            <label for="m-chk2">No forceful projectile vomiting or green bile</label>
+          </div>
+          <div class="midnight-checklist-item">
+            <input type="checkbox" id="m-chk3" checked>
+            <label for="m-chk3">No blood in stool or vomit</label>
+          </div>
+          <div class="midnight-checklist-item">
+            <input type="checkbox" id="m-chk4" checked>
+            <label for="m-chk4">Baby is breathing easily and responsive</label>
+          </div>
+
+          <button class="btn-terra" style="margin-top: 16px;" onclick="advanceMidnightStage(2)">
+            Safety Confirmed &rarr; Proceed to Room Priming
+          </button>
+        </div>
+
+        <!-- STAGE 2: CALM THE ROOM FIRST -->
+        <div id="midnight-stage-2" style="display: none;">
+          <h2 style="color: #fff;">2. Calm the Room First</h2>
+          <p class="mu" style="color: #cfc2b5; margin-bottom: 12px;">Set the sensory foundation before soothing holds:</p>
+
+          <div class="midnight-checklist-item">
+            <input type="checkbox" id="m2-chk1">
+            <label for="m2-chk1">Dim the lights or turn off harsh overhead lighting</label>
+          </div>
+          <div class="midnight-checklist-item">
+            <input type="checkbox" id="m2-chk2">
+            <label for="m2-chk2">Turn on brown noise across the room, on a timer</label>
+          </div>
+          <div class="midnight-checklist-item">
+            <input type="checkbox" id="m2-chk3">
+            <label for="m2-chk3">Check nursery room temperature (68&deg;F to 72&deg;F)</label>
+          </div>
+
+          <button class="btn-terra" style="margin-top: 16px;" onclick="advanceMidnightStage(3)">
+            Environment Set &rarr; Proceed to Soothing Hold
+          </button>
+        </div>
+
+        <!-- STAGE 3: POSITION & HOLD (TAILORED TO ASSESSMENT TYPE) -->
+        <div id="midnight-stage-3" style="display: none;">
+          <h2 style="color: #fff;" id="m3-title">3. Tailored Soothing Hold</h2>
+          <p class="mu" style="color: #cfc2b5; margin-bottom: 12px;" id="m3-desc">
+            Executing your active protocol hold with continuous stopwatch tracking:
+          </p>
+
+          <div class="single-hero-graphic" id="m3-hero-img-wrap">
+            <img src="/images/blog/calms-face-down-hold.jpg" alt="Tiger hold support" id="m3-img" onerror="this.src='images/blog/calms-face-down-hold.jpg'">
+          </div>
+
+          <div class="midnight-checklist-item">
+            <input type="checkbox" id="m3-chk1">
+            <label for="m3-chk1" id="m3-cue1">Face-down along forearm with head turned safely at elbow</label>
+          </div>
+          <div class="midnight-checklist-item">
+            <input type="checkbox" id="m3-chk2">
+            <label for="m3-chk2" id="m3-cue2">Firm, gentle belly pressure with hand supporting chest</label>
+          </div>
+          <div class="midnight-checklist-item">
+            <input type="checkbox" id="m3-chk3">
+            <label for="m3-chk3">Slow, rhythmic swaying or walking in dim room</label>
+          </div>
+
+          <h3 style="color:#fff; margin-top:14px;">How is baby responding?</h3>
+          <div style="display: flex; gap: 8px; margin-top: 8px;">
+            <button class="btn-sage btn-sm" style="flex:1;" onclick="finishMidnightSession('settled')">Baby Settled &bull; Fell Asleep</button>
+            <button class="btn-secondary btn-sm" style="flex:1;" onclick="finishMidnightSession('partial')">Calmed Down Partially</button>
+          </div>
+          <button class="btn-terra btn-sm" style="margin-top: 8px; width: 100%;" onclick="advanceMidnightStage(4)">
+            Still Crying &rarr; De-escalate & Reset
+          </button>
+        </div>
+
+        <!-- STAGE 4: PARENT RESET & DE-ESCALATE -->
+        <div id="midnight-stage-4" style="display: none;">
+          <h2 style="color: #fff;">4. Parent Reset & De-escalate</h2>
+          <p class="mu" style="color: #cfc2b5; margin-bottom: 12px;">
+            If crying is inconsolable after 20 minutes, your nervous system needs a reset:
+          </p>
+
+          <div class="breath-box" style="margin: 10px 0;">
+            <div id="m4-breath-circle" class="breath-circle">Breathe</div>
+            <div id="m4-breath-cue" style="font-size: 13px; font-weight: 700; color: var(--gold); min-height: 20px;">Ready</div>
+            <button class="btn-secondary btn-sm" style="margin-top: 8px;" onclick="toggleBreathing()">Start 2-Min Reset</button>
+          </div>
+
+          <div class="midnight-checklist-item">
+            <input type="checkbox" id="m4-chk1">
+            <label for="m4-chk1">Baby placed safely on their back in their empty crib</label>
+          </div>
+          <div class="midnight-checklist-item">
+            <input type="checkbox" id="m4-chk2">
+            <label for="m4-chk2">Stepped into another room for 2 minutes to breathe</label>
+          </div>
+
+          <div style="background: rgba(226,104,92,0.15); border-left: 3px solid var(--red); padding: 10px; border-radius: 4px; margin-top: 12px; font-size: 12px;">
+            <strong>Immediate Parent Support:</strong> National Maternal Mental Health Hotline: <strong>1-833-943-5746</strong> (Free, 24/7). Suicide & Crisis Lifeline: <strong>988</strong>.
+          </div>
+
+          <button class="btn-secondary" style="margin-top: 14px;" onclick="finishMidnightSession('reset')">
+            End Session & Save to Log
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- VIEW 3: DYNAMIC ASSESSMENT & TIME-OF-DAY PATTERN TRACKER -->
+    <div id="view-assessment" style="display: none;">
+      <div class="c">
+        <span class="badge badge-terra">Dynamic Assessment</span>
+        <h2>Starting-Point Pattern Profiler</h2>
+        <p class="mu">Colic signs fluctuate across the day. Track which starting point dominates during different time windows:</p>
+
+        <!-- 24-Hour Day/Night Pattern Heatmap Matrix -->
+        <div class="tod-grid">
+          <!-- Morning -->
+          <div class="tod-card" id="tod-morning">
+            <div class="tod-header">
+              <span class="tod-title" style="color: var(--terra);">Morning</span>
+              <span class="tod-time">6 AM - 12 PM</span>
+            </div>
+            <div class="tod-dominant" id="tod-dom-morning">Feeding Mechanics</div>
+            <div class="tod-cue">Fast eager flow, milk leakage, clicking.</div>
+          </div>
+          <!-- Afternoon -->
+          <div class="tod-card" id="tod-afternoon">
+            <div class="tod-header">
+              <span class="tod-title" style="color: var(--sage);">Afternoon</span>
+              <span class="tod-time">12 PM - 5 PM</span>
+            </div>
+            <div class="tod-dominant" id="tod-dom-afternoon">Gut & Gas Buildup</div>
+            <div class="tod-cue">Hard belly, knees pulling up after feeds.</div>
+          </div>
+          <!-- Evening / Witching Hour -->
+          <div class="tod-card active-window" id="tod-evening">
+            <div class="tod-header">
+              <span class="tod-title" style="color: var(--gold);">Evening (Peak)</span>
+              <span class="tod-time">5 PM - 10 PM</span>
+            </div>
+            <div class="tod-dominant" id="tod-dom-evening">Overwhelmed Nervous System</div>
+            <div class="tod-cue">Sensory saturation, startling, cluster crying.</div>
+          </div>
+          <!-- Night / Midnight -->
+          <div class="tod-card" id="tod-night">
+            <div class="tod-header">
+              <span class="tod-title" style="color: var(--mu);">Night / 2 AM</span>
+              <span class="tod-time">10 PM - 6 AM</span>
+            </div>
+            <div class="tod-dominant" id="tod-dom-night">Midnight Protocol</div>
+            <div class="tod-cue">Dim nursery, low brown noise, Tiger Hold.</div>
+          </div>
+        </div>
+
+        <!-- 30-Second Real-Time Check-In -->
+        <div style="background: #faf6f0; border: 1px solid var(--bd); border-radius: 8px; padding: 14px; margin-top: 14px;">
+          <h3>Log Current Starting-Point Signs</h3>
+          <p class="mu" style="margin-bottom: 10px;">Notice a shift right now? Log what you see to update your 24-hour profile:</p>
+          
+          <label style="font-size: 12px; font-weight: 700; color: var(--mu);">Current Time Window:</label>
+          <select id="recheck-window" style="width: 100%; padding: 8px; margin: 4px 0 10px; border: 1px solid var(--bd); border-radius: 6px;">
+            <option value="morning">Morning (6 AM - 12 PM)</option>
+            <option value="afternoon">Afternoon (12 PM - 5 PM)</option>
+            <option value="evening" selected>Evening Witching Hour (5 PM - 10 PM)</option>
+            <option value="night">Night (10 PM - 6 AM)</option>
+          </select>
+
+          <label style="font-size: 12px; font-weight: 700; color: var(--mu);">Primary Behavior Right Now:</label>
+          <select id="recheck-symptom" style="width: 100%; padding: 8px; margin: 4px 0 12px; border: 1px solid var(--bd); border-radius: 6px;">
+            <option value="mech">Clicking, gulping air, or milk leaking during feeds</option>
+            <option value="ns" selected>Startling easily, crying builds into evening peak</option>
+            <option value="gut">Hard tight tummy, pulling knees up to chest</option>
+          </select>
+
+          <button class="btn-terra btn-sm" style="width: 100%;" onclick="saveTimepointCheckIn()">
+            Update 24-Hour Profile & Re-Rank Step
+          </button>
+        </div>
+
+        <h3 style="margin-top: 20px;">Baseline Assessment Pattern Scores</h3>
+        <p class="mu">Ingested from your 90-second assessment:</p>
+        <div class="score-breakdown">
+          <div class="score-tile active-type" id="score-tile-fm">
+            <b id="score-fm-val">78%</b>
+            <span>Feeding Mechanics</span>
+          </div>
+          <div class="score-tile" id="score-tile-ns">
+            <b id="score-ns-val">14%</b>
+            <span>Nervous System</span>
+          </div>
+          <div class="score-tile" id="score-tile-gut">
+            <b id="score-gut-val">8%</b>
+            <span>Gut Imbalance</span>
+          </div>
+        </div>
+
+        <button class="btn-secondary" onclick="openProfileModal()" style="margin-top: 8px;">Edit Intake Profile</button>
+      </div>
+    </div>
+
+    <!-- VIEW 4: CLINICAL EVIDENCE VAULT (BRICK ON BRICK CURRICULUM) -->
+    <div id="view-evidence" style="display: none;">
+      <div class="c">
+        <span class="badge badge-terra">Brick-on-Brick Clinical Vault</span>
+        <h2>The Evidence Curriculum</h2>
+        <p class="mu" style="margin-bottom: 14px;">
+          Built brick on brick from the 44-page Blueprint so you understand exactly what the research shows, starting with what colic is and isn't.
+        </p>
+
+        <!-- BRICK 1: WHAT COLIC ACTUALLY IS -->
+        <div class="brick-card clickable-brick" onclick="openStudyFramework('brick-1')">
+          <div class="brick-number">Brick 1 &bull; Foundations</div>
+          <div class="brick-title">What Colic Actually Is (and Isn't)</div>
+          <p class="mu" style="margin-top: 4px;">
+            Colic is not an internal disease, a stomach malformation, or a diagnosis of failure. Since 1954, pediatricians have defined it by a crying timeline: Wessel's Rule of Three.
+          </p>
+          <div class="study-box" style="margin-top: 8px;">
+            <strong>Wessel et al., 1954 (Pediatrics):</strong> Crying for &gt;3 hours a day, &gt;3 days a week, for &gt;3 weeks in an otherwise healthy, growing baby. Colic usually peaks around week 6 and eases naturally by 3 to 4 months.
+          </div>
+          <div class="brick-action-link">Open Full Reading Framework &rarr;</div>
+        </div>
+
+        <!-- BRICK 2: COLIC VS REFLUX VS CMPA -->
+        <div class="brick-card clickable-brick" style="border-left: 3px solid var(--terra);" onclick="openStudyFramework('brick-2')">
+          <div class="brick-number" style="color: var(--terra);">Brick 2 &bull; Differential Triage</div>
+          <div class="brick-title">Colic or Reflux? (How to Tell)</div>
+          <p class="mu" style="margin-top: 4px;">
+            Reflux is the condition most often confused with colic. In reflux, the stomach valve is immature, causing stomach contents to flow back up. Use this clinical check to tell them apart:
+          </p>
+
+          <table class="diff-table">
+            <thead>
+              <tr>
+                <th>Sign</th>
+                <th>Colic</th>
+                <th>Reflux</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Timing</strong></td>
+                <td>Often worse in the evening (cluster crying)</td>
+                <td>Often worse right after feeds, any time of day</td>
+              </tr>
+              <tr>
+                <td><strong>Spit-Up</strong></td>
+                <td>Not a main feature</td>
+                <td>Frequent spit-up or painful wet burps</td>
+              </tr>
+              <tr>
+                <td><strong>Back Arching</strong></td>
+                <td>Can happen during acute crying spells</td>
+                <td>Often happens during or right after a feed</td>
+              </tr>
+              <tr>
+                <td><strong>Feeding</strong></td>
+                <td>Usually feeds normally and eagerly</td>
+                <td>May arch away or refuse bottle/breast in pain</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div style="background: var(--terra-soft); padding: 10px; border-radius: 6px; font-size: 12px; line-height: 1.4;">
+            <strong>The 5-Sign Cow's Milk Allergy Check:</strong> Blood or mucus in stool, severe eczema, projectile vomiting, hives, or poor weight gain. If present, contact your pediatrician for an allergy review, not simple colic soothing.
+          </div>
+          <div class="brick-action-link">Open Full Reading Framework &rarr;</div>
+        </div>
+
+        <!-- BRICK 3: FEEDING MECHANICS -->
+        <div class="brick-card clickable-brick" onclick="openStudyFramework('brick-3')">
+          <div class="brick-number">Brick 3 &bull; Mechanics Physics</div>
+          <div class="brick-title">Bottle Pacing, Venting & Latch Physics</div>
+          <p class="mu" style="margin-top: 4px;">
+            When feeding goes too fast, excess swallowed air causes abdominal discomfort later in the evening.
+          </p>
+          <div class="study-box">
+            <strong>2025 Paced Feeding Trial (29 Pairs):</strong> Pacing reliably slows milk flow and extends feed duration to match breastfeeding pace without reducing total nutrition.
+          </div>
+          <div class="study-box">
+            <strong>JAMA Network Open, 2026 (1,055 Infants):</strong> Bottom-vented bottles reduced immediate post-feed fussing, but overall colic rates remained similar across bottle designs. Mechanics matter more than expensive bottle brands.
+          </div>
+          <div class="brick-action-link">Open Full Reading Framework &rarr;</div>
+        </div>
+
+        <!-- BRICK 4: GUT & PROBIOTICS -->
+        <div class="brick-card clickable-brick" onclick="openStudyFramework('brick-4')">
+          <div class="brick-number">Brick 4 &bull; Gut & Digestion</div>
+          <div class="brick-title">The Honest Probiotic Picture (L. reuteri)</div>
+          <p class="mu" style="margin-top: 4px;">
+            The research on <em>Lactobacillus reuteri</em> DSM 17938 is genuinely mixed, and depends on how your baby is fed:
+          </p>
+          <div class="study-box">
+            <strong>Savino et al., 2010 (Pediatrics):</strong> Found less crying by day 21 with L. reuteri in 50 exclusively breastfed infants.
+          </div>
+          <div class="study-box" style="border-left-color: var(--terra);">
+            <strong>Sung et al., 2014 (BMJ):</strong> A larger trial in 167 mixed and formula-fed infants found no benefit over placebo. Formula parents should lead with feeding mechanics and soothing steps, not probiotics.
+          </div>
+          <div class="study-box">
+            <strong>Biagioli et al., 2016 (Cochrane Review):</strong> Simethicone gas drops (Mylicon) showed no statistically significant difference from placebo.
+          </div>
+          <div class="brick-action-link">Open Full Reading Framework &rarr;</div>
+        </div>
+
+        <!-- BRICK 5: SENSORY ENVIRONMENT -->
+        <div class="brick-card clickable-brick" onclick="openStudyFramework('brick-5')">
+          <div class="brick-number">Brick 5 &bull; Sensory Science</div>
+          <div class="brick-title">Sound Safety & The Tiger Hold</div>
+          <p class="mu" style="margin-top: 4px;">
+            A newborn's sensory nervous system is brand new. Dim rooms, continuous brown noise, and firm holds give comfort in the moment:
+          </p>
+          <div class="study-box">
+            <strong>Hugh et al., 2014 & AAP 2023 Technical Report:</strong> Tested 14 sound machines; every one exceeded recommended nursery sound limits at max volume. Sound should always be quiet, low, on a timer, and across the room.
+          </div>
+          <div class="study-box">
+            <strong>Barr et al., 1991 (Pediatrics):</strong> Extra carrying does not shorten the underlying course of colic. The Tiger Hold is an essential comfort hold for tonight, not an instant resolution.
+          </div>
+          <div class="brick-action-link">Open Full Reading Framework &rarr;</div>
+        </div>
+
+        <!-- BRICK 6: SLEEP & PARENT HEALTH -->
+        <div class="brick-card clickable-brick" onclick="openStudyFramework('brick-6')">
+          <div class="brick-number">Brick 6 &bull; Outlook & Parent Health</div>
+          <div class="brick-title">Long-Term Outcomes & Parent Wellbeing</div>
+          <p class="mu" style="margin-top: 4px;">
+            What the latest research says about your baby's future and your own mental health:
+          </p>
+          <div class="study-box">
+            <strong>Liao et al., 2026 (Scientific Reports, 19,191 Infants):</strong> Found a statistical association with childhood gut sensitivity, but no evidence of lasting cognitive, behavioral, or developmental harm. The large majority of colicky babies grow up completely healthy.
+          </div>
+          <div class="study-box">
+            <strong>Pediatrics Systematic Review, 2026 (2,508 Parents):</strong> Structured parent education with actionable coping steps measurably reduced parental depression and anxiety, protecting the caregiver while the infant matures.
+          </div>
+          <div class="brick-action-link">Open Full Reading Framework &rarr;</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- VIEW 5: EPISODE STOPWATCH & LOG -->
+    <div id="view-log" style="display: none;">
+      <div class="c">
+        <span class="badge badge-gold">Appendix A Logger</span>
+        <h2>Colic Episode Stopwatch</h2>
+        <p class="mu">Record crying duration and holds tried to discover patterns over a few nights.</p>
+        <div style="text-align: center; margin: 16px 0;">
+          <div id="stopwatch-display" style="font-family: var(--font-serif); font-size: 42px; font-weight: 700; color: var(--terra);">00:00:00</div>
+          <div style="display: flex; gap: 8px; margin-top: 10px;">
+            <button id="btn-stopwatch" class="btn-sage" onclick="toggleStopwatch()">Start Episode Timer</button>
+            <button class="btn-secondary" onclick="resetStopwatch()" style="width: auto;">Reset</button>
+          </div>
+        </div>
+
+        <div>
+          <label style="font-size: 12px; font-weight: 700; color: var(--mu);">Hold or Technique Used:</label>
+          <select id="log-technique" style="width: 100%; padding: 10px; margin-top: 4px; border: 1px solid var(--bd); border-radius: 8px;">
+            <option value="pos">Paced Bottle Feeding</option>
+            <option value="hold">Tiger Hold (Supported Face-Down)</option>
+            <option value="pos">Flipple Asymmetric Latch</option>
+            <option value="sound">Brown Noise + Rhythmic Sway</option>
+            <option value="burp">Burping or ILY Tummy Massage</option>
+          </select>
+
+          <label style="font-size: 12px; font-weight: 700; color: var(--mu); display: block; margin-top: 10px;">Timing relative to feeding:</label>
+          <select id="log-timing" style="width: 100%; padding: 10px; margin-top: 4px; border: 1px solid var(--bd); border-radius: 8px;">
+            <option value="near">Within 30 mins after feed (Gas/Clicking)</option>
+            <option value="late">1 to 3 hours after feed</option>
+            <option value="evening">Evening cluster (After 5 PM)</option>
+            <option value="random">No clear pattern</option>
+          </select>
+
+          <button class="btn-terra btn-sm" style="margin-top: 12px; width: 100%;" onclick="saveLogEntry()">Save to Night Log (Updates Tracker)</button>
+        </div>
+
+        <h3 style="margin-top: 22px;">Recent Logged Events</h3>
+        <div id="log-entries" style="font-size: 13.5px; color: var(--ink);"></div>
+      </div>
+
+      <!-- Doctor Report Exporter -->
+      <div class="c">
+        <span class="badge badge-sage">Pediatrician Prep</span>
+        <h2>Export Doctor Visit Summary</h2>
+        <p class="mu" style="margin-bottom: 12px;">
+          Generates a clean 1-page summary of your recorded crying episodes and feeding patterns to review directly with your pediatrician at your next visit.
+        </p>
+        <button class="btn-secondary" onclick="exportDoctorSummary()">Generate Printable Summary</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav">
+    <button class="nav-btn active" id="tab-console" onclick="switchTab('console')">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke-width="2"/></svg>
+      3 AM Console
+    </button>
+    <button class="nav-btn" id="tab-midnight" onclick="switchTab('midnight')">
+      <svg viewBox="0 0 24 24" fill="none"><polyline points="9 11 12 14 22 4" stroke-width="2"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke-width="2"/></svg>
+      Midnight Run
+    </button>
+    <button class="nav-btn" id="tab-assessment" onclick="switchTab('assessment')">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke-width="2"/><line x1="12" y1="16" x2="12" y2="12" stroke-width="2"/><line x1="12" y1="8" x2="12.01" y2="8" stroke-width="2"/></svg>
+      Assessment
+    </button>
+    <button class="nav-btn" id="tab-evidence" onclick="switchTab('evidence')">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 19.5A2.5 2.5 0 0 0 6.5 22H20V2H6.5A2.5 2.5 0 0 0 4 4.5v15z" stroke-width="2"/></svg>
+      Studies
+    </button>
+    <button class="nav-btn" id="tab-log" onclick="switchTab('log')">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke-width="2"/><polyline points="12 6 12 12 16 14" stroke-width="2"/></svg>
+      Log
+    </button>
+  </div>
+
+  <!-- ACUTE EPISODE TRIAGE MODAL -->
+  <div class="modal-overlay" id="modal-acute-triage">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeAcuteTriage()">&times;</button>
+      <span class="badge badge-terra">2 A.M. Episode Triage</span>
+      <h2>Active Crying Spell</h2>
+      <p class="mu">Answer 3 quick taps to route directly to tonight's starting step:</p>
+
+      <div style="margin-top: 14px;">
+        <label style="font-size: 12px; font-weight: 700; text-transform: uppercase;">1. When was baby's last feed?</label>
+        <div class="pill-group">
+          <div class="pill-option selected" onclick="selectPill(this, 'triageLastFeed', 'recent')">Within the last 30 minutes</div>
+          <div class="pill-option" onclick="selectPill(this, 'triageLastFeed', 'hour')">1 to 2 hours ago</div>
+          <div class="pill-option" onclick="selectPill(this, 'triageLastFeed', 'long')">Over 2.5 hours ago (Baby may be hungry)</div>
+        </div>
+
+        <label style="font-size: 12px; font-weight: 700; text-transform: uppercase;">2. Any Red Flags Right Now?</label>
+        <div class="pill-group">
+          <div class="pill-option selected" onclick="selectPill(this, 'triageRedFlag', 'none')">None of these (Healthy newborn)</div>
+          <div class="pill-option" onclick="selectPill(this, 'triageRedFlag', 'flag')" style="color: var(--red);">Fever 100.4&deg;F+, forceful vomiting, or blood</div>
+        </div>
+
+        <label style="font-size: 12px; font-weight: 700; text-transform: uppercase;">3. Primary Physical Sign</label>
+        <div class="pill-group">
+          <div class="pill-option selected" onclick="selectPill(this, 'triageSign', 'swallow')">Clicking sounds or gulping air during feeds</div>
+          <div class="pill-option" onclick="selectPill(this, 'triageSign', 'sensory')">Evening cluster crying, startles easily</div>
+          <div class="pill-option" onclick="selectPill(this, 'triageSign', 'gas')">Hard swollen belly, pulling knees to chest</div>
+        </div>
+
+        <button class="btn-terra" onclick="submitAcuteTriage()">Get Immediate Action Step</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAIR-TRIAL CHECK-IN MODAL -->
+  <div class="modal-overlay" id="modal-checkin">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeCheckInModal()">&times;</button>
+      <span class="badge badge-sage">Trial Review</span>
+      <h2>Fair-Trial Check-In</h2>
+      <div class="mu" style="margin-bottom: 12px;" id="checkin-target-step">Evaluating: Paced Bottle Feeding (5-Day Trial)</div>
+
+      <p class="mu" style="margin-bottom: 14px;">
+        Colic naturally eases on its own as babies mature. A reduction in crying is encouraging, but not clinical proof this step caused it.
+      </p>
+
+      <div style="background: var(--bg); padding: 12px; border-radius: 8px; margin-bottom: 14px;">
+        <div style="font-size: 12px; font-weight: 700;">Recorded Crying Duration:</div>
+        <div id="checkin-crying-stats" style="display: flex; justify-content: space-between; margin-top: 6px; font-size: 13px;">
+          <span id="checkin-stat-before">Before Trial Average: <strong>--</strong></span>
+          <span id="checkin-stat-recent">Last 2 Days Average: <strong>--</strong></span>
+        </div>
+        <div id="checkin-stat-note" style="font-size: 11px; color: var(--mu); margin-top: 4px;"></div>
+      </div>
+
+      <label style="font-size: 12px; font-weight: 700; text-transform: uppercase;">What is your decision?</label>
+      <div class="pill-group">
+        <div class="pill-option selected" onclick="selectPill(this, 'checkinAction', 'keep')">Meaningful shift &bull; Keep this as core routine</div>
+        <div class="pill-option" onclick="selectPill(this, 'checkinAction', 'next')">No real change &bull; Move to Next Protocol Step</div>
+        <div class="pill-option" onclick="selectPill(this, 'checkinAction', 'doctor')">Symptoms worrying &bull; Call Pediatrician</div>
+      </div>
+
+      <button class="btn-terra" onclick="saveCheckIn()">Update Protocol Plan</button>
+    </div>
+  </div>
+
+  <!-- PROFILE / INTAKE MODAL -->
+  <div class="modal-overlay" id="modal-profile">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeProfileModal()">&times;</button>
+      <span class="badge badge-sage">Personalization Engine</span>
+      <h2>Baby Profile & Feeding</h2>
+      <p class="mu">Connected with your live Bloom Tracker store (cpx_v1).</p>
+
+      <div style="margin-top: 14px;">
+        <label style="font-size: 12px; font-weight: 700; color: var(--mu);">Baby's Name</label>
+        <input id="prof-baby-name" type="text" style="width: 100%; padding: 10px; border: 1px solid var(--bd); border-radius: 8px; margin-top: 4px;" value="Zion">
+
+        <label style="font-size: 12px; font-weight: 700; color: var(--mu); display: block; margin-top: 10px;">Feeding Method</label>
+        <select id="prof-feeding" style="width: 100%; padding: 10px; border: 1px solid var(--bd); border-radius: 8px; margin-top: 4px;">
+          <option value="Formula-fed">Formula-fed</option>
+          <option value="Breastfed">Breastfed</option>
+          <option value="Mixed">Mixed (Breast & Formula)</option>
+        </select>
+
+        <label style="font-size: 12px; font-weight: 700; color: var(--mu); display: block; margin-top: 10px;">Baby Age (Weeks)</label>
+        <div style="display: flex; align-items: center; gap: 12px; margin-top: 4px;">
+          <input type="range" min="2" max="12" value="5" id="prof-age-slider" style="flex: 1;" oninput="document.getElementById('prof-age-val').innerText = this.value + ' Weeks'">
+          <span id="prof-age-val" style="font-weight: 700; width: 65px;">5 Weeks</span>
+        </div>
+
+        <!-- Companion License Status Section in Profile -->
+        <div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--bd);">
+          <label style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--mu); display: block; margin-bottom: 4px;">
+            Blueprint Companion License
+          </label>
+          <div id="prof-license-status" style="font-size: 12.5px; color: var(--ink); margin-bottom: 8px;"></div>
+          <button type="button" class="btn-secondary btn-sm" onclick="toggleTestLicense()">
+            Toggle Preview / Unlocked Mode
+          </button>
+        </div>
+
+        <button class="btn-terra" style="margin-top: 16px;" onclick="saveProfileModal()">Save Profile</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GUMROAD LICENSE KEY UNLOCK MODAL -->
+  <div class="modal-overlay" id="modal-unlock">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeUnlockModal()">&times;</button>
+      <span class="badge badge-terra">The Calm Baby Blueprint</span>
+      <h2 style="margin-top: 4px;">Unlock Bloom Protocol</h2>
+      <p class="mu" style="font-size: 13px; margin-bottom: 14px;">
+        Bloom Protocol is the interactive companion included with your purchase of The Calm Baby Blueprint ($47). Enter your Gumroad license key or purchase email below to unlock instant access.
+      </p>
+
+      <div style="margin-bottom: 12px;">
+        <label style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--mu); display: block; margin-bottom: 4px;">
+          Gumroad License Key
+        </label>
+        <input type="text" id="unlock-license-key" placeholder="e.g. XXXXXXXX-XXXXXXXX-XXXXXXXX" style="width: 100%; padding: 10px; border: 1px solid var(--bd); border-radius: 6px; font-size: 13.5px; font-family: monospace; box-sizing: border-box;">
+        <div style="font-size: 11px; color: var(--mu); margin-top: 3px;">Found in your Gumroad purchase receipt email.</div>
+      </div>
+
+      <div style="text-align: center; font-size: 11.5px; font-weight: 700; color: var(--mu); margin: 8px 0;">(or enter your purchase email)</div>
+
+      <div style="margin-bottom: 14px;">
+        <label style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--mu); display: block; margin-bottom: 4px;">
+          Purchase Email Address
+        </label>
+        <input type="email" id="unlock-email" placeholder="name@example.com" style="width: 100%; padding: 10px; border: 1px solid var(--bd); border-radius: 6px; font-size: 13.5px; box-sizing: border-box;">
+      </div>
+
+      <div class="gated-guarantee-box" style="margin-bottom: 14px;">
+        <strong>72-Hour Guarantee:</strong> If it doesn't produce a meaningful shift in 72 hours, reply and I'll make it right. You keep the Blueprint either way.
+      </div>
+
+      <button class="btn-terra" onclick="submitUnlock()" style="width: 100%; margin-bottom: 8px;">
+        Verify & Unlock Protocol
+      </button>
+
+      <div style="text-align: center; margin-top: 10px;">
+        <a href="https://colicprotocol.gumroad.com/l/TheCalmBabyBlueprint?wanted=true" target="_blank" rel="noopener" style="font-size: 12.5px; color: var(--sage); font-weight: 700; text-decoration: underline;">
+          Haven't bought yet? Get The Calm Baby Blueprint ($47) &rarr;
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- RED FLAG SCREENING MODAL -->
+  <div class="modal-overlay" id="modal-redflag">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeRedFlagModal()">&times;</button>
+      <span class="badge" style="background: #fde8e4; color: #9c2718;">Safety-Critical Screening</span>
+      <h2 style="color: #9c2718;">When to Call the Doctor Right Away</h2>
+      <p style="font-size: 14px; margin-bottom: 12px;">Colic is normal crying in a healthy, growing infant. Stop and seek medical care if you observe any of these warning signs:</p>
+      
+      <div style="padding: 6px 0; border-bottom: 1px solid var(--bd); font-size: 13.5px;">&bull; <strong>Fever under 3 months:</strong> 100.4&deg;F (38&deg;C) or higher.</div>
+      <div style="padding: 6px 0; border-bottom: 1px solid var(--bd); font-size: 13.5px;">&bull; <strong>Repeated forceful vomiting:</strong> Projectile vomiting, or green/yellow bile.</div>
+      <div style="padding: 6px 0; border-bottom: 1px solid var(--bd); font-size: 13.5px;">&bull; <strong>Blood in stool or vomit:</strong> Any visible blood or dark flecks.</div>
+      <div style="padding: 6px 0; border-bottom: 1px solid var(--bd); font-size: 13.5px;">&bull; <strong>Dehydration signs:</strong> Fewer than 6 wet diapers in 24 hours, dry lips, sunken fontanelle.</div>
+      <div style="padding: 6px 0; font-size: 13.5px;">&bull; <strong>Lethargy or weak cry:</strong> Very hard to wake, floppy, or unusual high-pitched cry.</div>
+
+      <div style="background: var(--bg); padding: 12px; border-radius: 8px; margin-top: 14px; font-size: 12.5px;">
+        <strong>Disclaimer:</strong> This is educational, not medical advice. It does not replace your baby's doctor. Fever, repeated vomiting, poor weight gain, blood in stool, or refusing feeds? Call your pediatrician.
+      </div>
+      <button class="btn-secondary" style="margin-top: 14px;" onclick="closeRedFlagModal()">Return to Protocol</button>
+    </div>
+  </div>
+
+  <!-- CITATION / DETAIL MODAL -->
+  <div class="modal-overlay" id="modal-citation">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeCitation()">&times;</button>
+      <span class="badge badge-terra" id="cite-chapter">Chapter Reference</span>
+      <h2 id="cite-title">Study Citation</h2>
+      <div id="cite-meta" class="mu" style="margin-bottom: 12px;"></div>
+      
+      <div style="background: var(--sage-soft); border-left: 3px solid var(--sage); padding: 12px; border-radius: 4px; margin-bottom: 12px;">
+        <strong style="color: var(--sage); display: block; font-size: 11px; text-transform: uppercase;">What the Data Showed</strong>
+        <p id="cite-showed" style="font-size: 13.5px; margin-top: 4px;"></p>
+      </div>
+
+      <div style="background: var(--terra-soft); border-left: 3px solid var(--terra); padding: 12px; border-radius: 4px; margin-bottom: 14px;">
+        <strong style="color: var(--terra); display: block; font-size: 11px; text-transform: uppercase;">What It Did Not Show (Honest Guardrail)</strong>
+        <p id="cite-not-showed" style="font-size: 13.5px; margin-top: 4px;"></p>
+      </div>
+
+      <button class="btn-secondary" onclick="closeCitation()">Close Study</button>
+    </div>
+  </div>
+
+  <!-- STUDY READING FRAMEWORK MODAL -->
+  <div class="modal-overlay" id="modal-study-framework">
+    <div class="modal-card" style="max-height: 90vh; overflow-y: auto;">
+      <button class="modal-close" onclick="closeStudyFramework()">&times;</button>
+      <span class="badge badge-terra" id="sf-brick-number">Brick 1 &bull; Foundations</span>
+      <h2 id="sf-title" style="margin-top: 4px; font-size: 21px;">What Colic Actually Is (and Isn't)</h2>
+      <div id="sf-citation" class="mu" style="font-size: 12.5px; margin-bottom: 6px;"></div>
+      <div style="font-size: 12px; color: var(--gold); font-weight: 700; margin-bottom: 14px;">
+        Blueprint Reference: <span id="sf-blueprint-chapter">Chapter 1 &bull; Defining Colic</span>
+      </div>
+
+      <!-- Section 1: The Core Question -->
+      <div style="background: #faf8f5; border: 1px solid var(--bd); padding: 12px; border-radius: 8px; margin-bottom: 10px;">
+        <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--mu); letter-spacing: 0.05em;">1. The Core Question</div>
+        <p id="sf-core-question" style="font-size: 13px; margin-top: 4px; color: var(--ink); font-weight: 600; line-height: 1.45;"></p>
+      </div>
+
+      <!-- Section 2: Study Cohort & Design -->
+      <div style="background: #faf8f5; border: 1px solid var(--bd); padding: 12px; border-radius: 8px; margin-bottom: 10px;">
+        <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--mu); letter-spacing: 0.05em;">2. Clinical Cohort & Trial Design</div>
+        <p id="sf-cohort" style="font-size: 12.5px; margin-top: 4px; color: var(--ink); line-height: 1.45;"></p>
+      </div>
+
+      <!-- Section 3: What the Research Proved -->
+      <div id="sf-sec-proved" style="background: var(--sage-soft); border-left: 3px solid var(--sage); padding: 12px; border-radius: 4px; margin-bottom: 10px;">
+        <strong style="color: var(--sage); display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;">3. What the Evidence Proved</strong>
+        <p id="sf-proved" style="font-size: 12.5px; margin-top: 4px; color: var(--ink); line-height: 1.45;"></p>
+      </div>
+
+      <!-- Section 4: What It Did NOT Show (Honest Guardrails) -->
+      <div id="sf-sec-limits" style="background: var(--terra-soft); border-left: 3px solid var(--terra); padding: 12px; border-radius: 4px; margin-bottom: 10px;">
+        <strong style="color: var(--terra); display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;">4. What It Did NOT Show (Guardrails)</strong>
+        <p id="sf-limits" style="font-size: 12.5px; margin-top: 4px; color: var(--ink); line-height: 1.45;"></p>
+      </div>
+
+      <!-- Section 5: 3 AM Practical Action -->
+      <div id="sf-sec-action" style="background: #faf8f5; border: 1px solid var(--gold); padding: 12px; border-radius: 8px; margin-bottom: 10px;">
+        <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--gold); letter-spacing: 0.05em;">5. Practical 3 AM Action for Tonight</div>
+        <p id="sf-action" style="font-size: 12.5px; margin-top: 4px; color: var(--ink); line-height: 1.45;"></p>
+      </div>
+
+      <!-- Gated Study Callout -->
+      <div id="sf-gated-callout" class="gated-overlay-card" style="display: none; margin: 10px 0;">
+        <div class="gated-lock-icon">🔒</div>
+        <div style="font-weight: 700; font-size: 14px; margin-bottom: 4px;">Full Clinical Trial Analysis & 3 AM Action Guide</div>
+        <p style="font-size: 12.5px; color: var(--mu); margin-bottom: 10px;">
+          Evidence guardrails, peer-reviewed takeaways, and actionable 3 AM steps for this study are included with The Calm Baby Blueprint ($47).
+        </p>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <button class="btn-terra btn-sm" onclick="closeStudyFramework(); openUnlockModal();" style="flex: 1; min-width: 140px;">Enter License Key or Email</button>
+          <a href="https://colicprotocol.gumroad.com/l/TheCalmBabyBlueprint?wanted=true" target="_blank" rel="noopener" class="btn-sage btn-sm" style="flex: 1; min-width: 140px; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center;">Get Blueprint ($47) &rarr;</a>
+        </div>
+      </div>
+
+      <!-- Section 6: Safety Note -->
+      <div style="background: var(--bg); padding: 10px 12px; border-radius: 6px; font-size: 12px; color: var(--mu); margin-bottom: 14px;">
+        <strong>Safety Rule:</strong> This is educational, not medical advice. It does not replace your baby's doctor. Fever, repeated vomiting, poor weight gain, blood in stool, or refusing feeds? Call your pediatrician.
+      </div>
+
+      <button class="btn-secondary" onclick="closeStudyFramework()">Close Reading Framework</button>
+    </div>
+  </div>
+
+  <!-- DOCTOR VISIT SUMMARY MODAL -->
+  <div class="modal-overlay" id="modal-doctor-summary">
+    <div class="modal-card" style="max-height: 90vh; overflow-y: auto;">
+      <button class="modal-close no-print" onclick="closeDoctorSummary()">&times;</button>
+      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+          <span class="badge badge-sage">Pediatrician Visit Summary</span>
+          <h2 style="margin-top: 4px;">Infant Crying & Symptom Log</h2>
+        </div>
+        <button class="btn-sage btn-sm no-print" onclick="window.print()" style="width: auto;">Print / Save PDF</button>
+      </div>
+
+      <div style="background: var(--bg); padding: 12px; border-radius: 8px; margin: 12px 0; font-size: 13px;">
+        <div id="doc-sum-patient"><strong>Patient:</strong> Baby Zion &bull; <strong>Age:</strong> 5 Weeks &bull; <strong>Feeding:</strong> Formula-fed</div>
+        <div id="doc-sum-date" style="color: var(--mu); font-size: 11.5px; margin-top: 2px;">Report Generated: Nov 15, 2026 &bull; Source: Bloom Protocol</div>
+      </div>
+
+      <div style="background: var(--sage-soft); border-left: 3px solid var(--sage); padding: 10px 12px; border-radius: 4px; font-size: 12px; margin-bottom: 12px;">
+        <strong>Safety Note:</strong> No red flags (fever &ge;100.4&deg;F, repeated vomiting, blood in stool, or lethargy) recorded during home logging.
+      </div>
+
+      <h3 style="font-size: 14px; margin-top: 14px; margin-bottom: 6px;">Recorded Crying Metrics</h3>
+      <div id="doc-sum-crying-metrics" style="font-size: 13px; line-height: 1.5; margin-bottom: 12px;">
+        Loading recorded episodes...
+      </div>
+
+      <h3 style="font-size: 14px; margin-top: 14px; margin-bottom: 6px;">Timing Relative to Feeds</h3>
+      <div id="doc-sum-timing-breakdown" style="font-size: 13px; line-height: 1.5; margin-bottom: 12px;">
+        Loading timing breakdown...
+      </div>
+
+      <h3 style="font-size: 14px; margin-top: 14px; margin-bottom: 6px;">Home Soothing Techniques Tried</h3>
+      <div id="doc-sum-techniques-tried" style="font-size: 13px; line-height: 1.5; margin-bottom: 12px;">
+        Loading soothing history...
+      </div>
+
+      <div style="background: var(--bg); padding: 10px 12px; border-radius: 6px; font-size: 11.5px; color: var(--mu); margin-top: 14px; line-height: 1.4;">
+        <strong>Clinical Disclaimer:</strong> This summary is compiled from parental logging for discussion with your pediatrician. This is educational, not medical advice. It does not replace your baby's doctor. Fever, repeated vomiting, poor weight gain, blood in stool, or refusing feeds? Call your pediatrician.
+      </div>
+
+      <div class="no-print" style="margin-top: 14px; display: flex; gap: 8px;">
+        <button class="btn-terra" onclick="window.print()" style="flex: 1;">Print / Save PDF</button>
+        <button class="btn-secondary" onclick="closeDoctorSummary()" style="flex: 1;">Close Summary</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const STORE_KEY = 'cpx_v1';
+    const SILENT_WAV = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==';
+
+    const state = {
+      activeStepIndex: 0,
+      activeFeedingMode: 'formula', // 'formula', 'breast', 'mixed'
+      midnightStage: 1,
+      midnightSessionSeconds: 0,
+      midnightTimer: null,
+      assessmentType: 'FM',
+      triageLastFeed: 'recent',
+      triageRedFlag: 'none',
+      triageSign: 'swallow',
+      soundMode: 'brown', // 'brown', 'pulse', 'womb'
+      brownNoisePlaying: false,
+      timerMinutes: 15,
+      timerId: null,
+      audioCtx: null,
+      noiseNode: null,
+      filterNode: null,
+      lfoNode: null,
+      lfoGain: null,
+      gainNode: null,
+      visualizerAnimId: null,
+      scienceIntervalId: null,
+      scienceIndex: 0,
+      stopwatchActive: false,
+      stopwatchSeconds: 0,
+      stopwatchInterval: null,
+      breathingActive: false,
+      breathingInterval: null,
+      isUnlocked: false
+    };
+
+    const feedingSteps = {
+      formula: {
+        number: 'Active Step 1',
+        title: 'Paced Bottle Feeding & Horizontal Angle',
+        chapterRef: 'Chapter 4 & Chapter 11',
+        evidenceLabel: 'Slows Flow &bull; Colic Benefit Unproven',
+        trialLength: '5-Day Fair Trial',
+        reason: 'Your log notes bottle feeding. Tipping bottles steeply forces milk into the mouth too quickly, causing frantic gulping and swallowed air. Pacing with a horizontal bottle allows your baby to control milk velocity and swallow less air.',
+        citationId: 'brick-3',
+        imageType: 'bottle',
+        actionPoints: [
+          'Hold baby semi-upright (never flat on their back).',
+          'Keep the bottle horizontal to the floor with the nipple fully covered with milk.',
+          'Let baby draw the nipple in actively; do not force it into the mouth.',
+          'Gently dip the bottle down every 10&ndash;15 sucks to allow a natural breathing pause.'
+        ],
+        clinicalNote: 'Clinical Note (2025 Comparative Study, 29 Pairs): Paced feeding reliably slows milk velocity without reducing overall intake. Trials have not proven it shortens colic duration, but it is free and safe for calmer feeds.'
+      },
+      breast: {
+        number: 'Active Step 1',
+        title: 'The Flipple Technique (Deep Asymmetric Latch)',
+        chapterRef: 'Chapter 2 & Chapter 4',
+        evidenceLabel: 'Clinical IBCLC Standard Practice',
+        trialLength: '3-Day Fair Trial',
+        reason: 'Your log notes breastfeeding. Clicking sounds, shallow latch, or nipple pain indicate the baby is breaking the seal and swallowing air with each suck. The Flipple aims your nipple at baby\'s nose so they tilt their head back and take a deep mouthful of lower areola.',
+        citationId: 'brick-3',
+        imageType: 'latch',
+        actionPoints: [
+          'Position baby belly-to-belly with nose pointed toward your nipple.',
+          'Wait for a wide, yawning gape before bringing baby to breast.',
+          'Aim lower jaw first so chin buries deeply into the lower breast.',
+          'Roll top lip over the nipple; bottom lip should flange outward like fish lips.'
+        ],
+        clinicalNote: 'Clinical Practice Standard (IBCLC Reviewer Recommended): If clicking sounds or sharp nipple pain continue after 3 days of latch adjustment, schedule an evaluation with an IBCLC to evaluate tongue mobility and latch mechanics.'
+      },
+      mixed: {
+        number: 'Active Step 1',
+        title: 'Paced Combination Feeding (Flow Matching & Deep Latch)',
+        chapterRef: 'Chapter 2, 4 & 11',
+        evidenceLabel: 'Flow Cadence &bull; Bottle-to-Breast Harmony',
+        trialLength: '5-Day Fair Trial',
+        reason: 'Your log notes mixed feeding (both breast and bottle). Babies frequently develop evening agitation when bottle flow is rapid compared to breast letdown. Combining horizontal paced bottle feeding with the Flipple latch balances milk flow velocity across both.',
+        citationId: 'brick-3',
+        imageType: 'mixed',
+        actionPoints: [
+          'Use the slowest flow nipple available for all bottle feeds so flow rate matches the breast.',
+          'Hold the bottle horizontally with nipple fully covered with milk to avoid free-flow flooding.',
+          'Apply the Flipple asymmetric latch during nursing sessions to ensure deep milk transfer.',
+          'Avoid fast bottle feeds right before nursing to prevent breast flow frustration.'
+        ],
+        clinicalNote: 'Paced Combination Feeding Standard: Matching flow rates protects the breastfeeding relationship while preventing rapid aerophagia and gas during bottle top-ups.'
+      }
+    };
+
+    const steps = [
+      {
+        id: 'feeding-step',
+        number: 'Active Step 1',
+        title: 'Feeding Mechanics',
+        chapterRef: 'Chapter 4 & Chapter 11',
+        evidenceLabel: 'Slows Flow &bull; Colic Benefit Unproven',
+        trialLength: '5-Day Fair Trial',
+        reason: 'Feeding mechanics calibration based on your baby\'s feeding method.',
+        citationId: 'brick-3',
+        imageType: 'dynamic'
+      },
+      {
+        id: 'tiger-hold',
+        number: 'Active Step 2',
+        title: 'Low-Stimulus Routine & Tiger Hold',
+        chapterRef: 'Chapter 2 & Chapter 3',
+        evidenceLabel: 'Comfort Hold &bull; Does Not Shorten Colic',
+        trialLength: '72-Hour Fair Trial',
+        reason: 'Your log shows evening cluster crying (after 5 PM). Dimming the room and using firm forearm belly support calms sensory overload in the moment.',
+        citationId: 'brick-5',
+        imageType: 'tiger',
+        actionPoints: [
+          'Place baby chest down on your forearm with their head supported near your elbow.',
+          'Rest your hand securely between baby\'s thighs for gentle abdominal support.',
+          'Keep lights dim and voices quiet; sway slowly without bouncing.',
+          'Safety Rule: Awake hold only. Never lay baby face down to sleep.'
+        ],
+        clinicalNote: 'Barr et al., 1991 (Pediatrics, 66 Infants): Extra carrying does not shorten the underlying course of colic. The Tiger Hold provides essential comfort in the moment, not an instant resolution.'
+      }
+    ];
+
+    const studyFrameworks = {
+      'brick-1': {
+        brickNumber: 'Brick 1 &bull; Foundations',
+        title: 'What Colic Actually Is (and Isn\'t)',
+        citation: 'Wessel et al., 1954 (Pediatrics) & Rome IV Diagnostic Criteria (2016)',
+        blueprintChapter: 'Chapter 1: The Physiology of Infant Crying',
+        coreQuestion: 'Is my baby suffering from a hidden stomach defect, permanent injury, or failing care?',
+        cohort: 'Evaluated healthy, thriving infants presenting with severe paroxysmal crying bouts. Established the pediatric benchmark: Rule of Three (>3 hours/day, >3 days/week, for >3 weeks in an otherwise healthy infant).',
+        proved: 'Colic is not an internal disease or structural defect. It is a temporary, developmental peak of normal infant crying that typically starts around week 2, peaks around week 6, and eases by about 3 to 4 months as the infant nervous system matures.',
+        limits: 'Did not identify a single biological malfunction. Did not prove that prescription drugs, drastic maternal elimination diets, or invasive medical interventions resolve colic.',
+        action: 'If red flags are absent, stop searching for an instant fix. Colic is a developmental storm to manage together, not a disease to fix. Focus on dim lighting, firm soothing holds, and tag-teaming with your partner to protect your nervous system.'
+      },
+      'brick-2': {
+        brickNumber: 'Brick 2 &bull; Differential Triage',
+        title: 'Colic vs. Reflux vs. CMPA (How to Tell)',
+        citation: 'Vandenplas et al., 2015 & ESPGHAN Pediatric GER Guidelines',
+        blueprintChapter: 'Chapter 5: Reflux, Food Allergies & Colic',
+        coreQuestion: 'Is my baby crying from normal evening colic, gastroesophageal reflux, or a cow\'s milk protein allergy?',
+        cohort: 'Observational cohorts comparing infant crying timing, regurgitation frequency, feeding behavior, and gastrointestinal symptoms across 0&ndash;6 month infants.',
+        proved: 'Clear timing and behavioral differences exist. Colic crying clusters in the evening (5 PM&ndash;10 PM) regardless of feeding times. Reflux crying happens during or immediately after feeds throughout the day, accompanied by frequent painful back arching and wet burps. CMPA presents with visible clinical flags: blood/mucus in stool, severe eczema, projectile vomiting, or poor weight gain.',
+        limits: 'Acid suppression medications (PPIs) do not reduce crying in babies without erosive esophagitis and are not recommended for typical infant colic.',
+        action: 'If baby spits up easily but remains cheerful and gains weight, it is normal infant regurgitation (happy spitter). If crying spikes right after feeds with back arching, keep baby upright for 20 minutes post-feed and pace bottle delivery. If CMPA allergy signs are present, consult your pediatrician for a formal evaluation.'
+      },
+      'brick-3': {
+        brickNumber: 'Brick 3 &bull; Mechanics Physics',
+        title: 'Bottle Pacing, Venting & Latch Physics',
+        citation: '2025 Comparative Paced Feeding Trial & JAMA Network Open, 2026',
+        blueprintChapter: 'Chapter 4 & Chapter 11: Feeding Mechanics',
+        coreQuestion: 'Can changing milk delivery physics reduce aerophagia (swallowed air) and evening gas distress?',
+        cohort: '29 mother-infant pairs in the 2025 paced trial; 1,055 infants in the 2026 JAMA bottle trial comparing vented vs. standard bottles.',
+        proved: 'Holding the bottle horizontally with the nipple fully covered with milk slows flow velocity to match natural breastfeeding cadence. The baby drinks actively rather than passively gulping, swallowing significantly less air.',
+        limits: 'Did not show that paced feeding or specific bottle brands shorten colic duration. Mechanics (horizontal angle, fully covered nipple, slow nipple flow) matter far more than purchasing expensive designer bottles.',
+        action: 'For bottle feeds: Hold bottle horizontal to the floor with the nipple fully covered with milk; let baby suck actively. For breastfeeding: Use the Flipple deep asymmetric latch (nipple to nose, wide gape, chin deep into lower breast).'
+      },
+      'brick-4': {
+        brickNumber: 'Brick 4 &bull; Gut & Digestion',
+        title: 'The Honest Probiotic Picture (L. reuteri)',
+        citation: 'Savino et al., 2010 (Pediatrics) paired with Sung et al., 2014 (BMJ)',
+        blueprintChapter: 'Chapter 2 & Chapter 5: Probiotics & Gut Flora',
+        coreQuestion: 'Does Lactobacillus reuteri DSM 17938 ease infant crying, and does feeding method matter?',
+        cohort: 'Savino 2010: 50 exclusively breastfed infants (46 completed). Sung 2014: 167 infants across mixed and formula-fed cohorts. Cochrane review (Biagioli 2016): 31 randomized controlled trials.',
+        proved: 'In exclusively breastfed infants, L. reuteri DSM 17938 showed a measurable reduction in daily crying time by day 21 compared to simethicone. However, in the larger Sung 2014 trial with formula-fed infants, no benefit over placebo was detected. Cochrane review showed simethicone drops perform no better than placebo.',
+        limits: 'Probiotics are not a quick fix (they require 2&ndash;3 weeks to colonize) and have not shown benefit for formula-fed infants. Always consult your pediatrician before introducing any infant supplement.',
+        action: 'If formula or mixed-feeding, lead with feeding mechanics (paced feeding) and soothing holds, not probiotic drops. If exclusively breastfeeding, discuss L. reuteri DSM 17938 with your baby\'s doctor.'
+      },
+      'brick-5': {
+        brickNumber: 'Brick 5 &bull; Sensory Science',
+        title: 'Sound Safety & The Tiger Hold',
+        citation: 'Hugh et al., 2014 / AAP 2023 Technical Report & Barr et al., 1991',
+        blueprintChapter: 'Chapter 3 & Chapter 8: Acoustic Soothing & Calming Holds',
+        coreQuestion: 'How does sound soothe an infant nervous system safely, and does extra carrying shorten colic?',
+        cohort: 'Acoustic testing of 14 commercial infant sound machines at maximum and moderate volumes; randomized carrying trials in 66 clinical colic infants.',
+        proved: 'Low continuous brown noise masks sudden household sounds that trigger the primitive startle (Moro) reflex. Firm forearm pressure (the Tiger Hold) provides calming proprioceptive input to the infant\'s abdominal area during acute evening distress.',
+        limits: 'Hugh et al. revealed that every tested sound machine exceeded recommended nursery sound levels at maximum volume. Continuous sound must be quiet, low, on a timer, and placed across the room. Barr showed carrying does not shorten the underlying weeks of colic.',
+        action: 'Place your phone or speaker across the room (never in the crib). Play low brown noise on a timer. Use the Tiger Hold (baby chest down on your forearm, head supported near your elbow) for acute evening settling.'
+      },
+      'brick-6': {
+        brickNumber: 'Brick 6 &bull; Outlook & Parent Health',
+        title: 'Long-Term Outcomes & Parent Mental Health',
+        citation: 'Liao et al., 2026 (Scientific Reports) & Pediatrics Postpartum Stress Review',
+        blueprintChapter: 'Chapter 6 & Chapter 12: Parental Resilience & Coping',
+        coreQuestion: 'Will colic cause permanent behavioral or cognitive harm, and how do exhausted parents survive?',
+        cohort: '19,191 infants followed longitudinally; systematic review of 2,508 parents navigating infant crying distress.',
+        proved: 'Colic does NOT cause long-term emotional, intellectual, or developmental harm. Colicky babies grow up just as cognitively capable and secure as non-colicky peers. However, relentless infant crying triggers acute parental autonomic stress, sleep loss, and postpartum depression.',
+        limits: 'Parents cannot pour from an empty cup. Trying to soothe a screaming baby continuously without breaks harms caregiver wellbeing without speeding infant recovery.',
+        action: 'Remember: A baby crying in a safe, empty crib on their back is completely safe. If you feel overwhelmed, set baby down safely in the crib, step out of the room, close the door, and take 10 slow breaths. Tag-team with your partner or family.'
+      }
+    };
+
+    const acousticFacts = [
+      {
+        title: 'Intrauterine Acoustic Baseline',
+        desc: 'In utero, uterine arterial blood flow creates an ambient low rumble of ~100&ndash;200 Hz. Total room silence triggers neonatal vigilance; continuous low frequencies restore sensory familiarization.'
+      },
+      {
+        title: 'Moro Startle Reflex Shield',
+        desc: 'Sudden environmental transients (floor creaks, distant dogs, door latches) trigger the primitive Moro reflex. Continuous brown noise masks sudden peak transients without alerting the auditory cortex.'
+      },
+      {
+        title: 'Why Brown Noise Beats High Frequencies',
+        desc: 'Higher frequency noise contains equal energy across harsh frequencies that irritate newborn ears. Brown noise rolls off high frequencies steeply per octave, keeping energy gentle and deep.'
+      },
+      {
+        title: 'AAP Nursery Placement Safety',
+        desc: 'Hugh et al. (2014) showed commercial machines exceeded recommended nursery sound levels at max volume. Keep speaker across the room (never in the crib), at conversation volume, on a timer.'
+      }
+    ];
+
+    function getStore() {
+      try {
+        const s = JSON.parse(localStorage.getItem(STORE_KEY));
+        if (s && s.id) return s;
+      } catch(e) {}
+      return { id: 'usr-' + Date.now(), rf: 'none', age: 5, feed: 'Formula-fed', baby: 'Zion', ev: [] };
+    }
+
+    function saveStore(s) {
+      try { localStorage.setItem(STORE_KEY, JSON.stringify(s)); } catch(e) {}
+    }
+
+    function init() {
+      try {
+        const p = new URLSearchParams(window.location.search);
+        const s = getStore();
+        if (p.has('type')) {
+          s.colic_type = p.get('type');
+          state.assessmentType = p.get('type');
+        }
+        if (p.has('name') && p.get('name')) s.name = p.get('name');
+        if (p.has('baby') && p.get('baby')) s.baby = p.get('baby');
+        if (p.has('age') && p.get('age')) s.age = parseInt(p.get('age'), 10);
+        if (p.has('feed') && p.get('feed')) s.feed = p.get('feed');
+        saveStore(s);
+      } catch(e) {}
+
+      // 1. Process URL hash / query parameters for Gumroad license key or magic link
+      checkLicenseFromUrl();
+
+      // 2. Resolve entitlement state
+      const s = getStore();
+      if (s.entitlement && s.entitlement.status === 'active') {
+        state.isUnlocked = true;
+      } else {
+        state.isUnlocked = false;
+      }
+
+      mapStoreFeedToState(s.feed);
+      updateHeaderBadge(s);
+      renderActiveStep();
+      renderTimeline(s);
+      startMidnightClock();
+      highlightActiveTimeWindow();
+      initVisualizer();
+      applyEntitlementUI();
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').catch(function(){});
+      }
+    }
+
+    function checkLicenseFromUrl() {
+      let key = null;
+      let email = null;
+
+      // 1. URL Hash (#key=... or #license_key=... or #email=...)
+      if (window.location.hash) {
+        const hashStr = window.location.hash.substring(1);
+        const params = new URLSearchParams(hashStr);
+        key = params.get('key') || params.get('license_key') || params.get('license');
+        email = params.get('email');
+      }
+
+      // 2. URL Search (?key=... or ?license_key=... or ?email=...)
+      if (!key) {
+        const urlParams = new URLSearchParams(window.location.search);
+        key = urlParams.get('key') || urlParams.get('license_key') || urlParams.get('license');
+        if (!email) email = urlParams.get('email');
+      }
+
+      if (key || email) {
+        // Strip license key from address bar so it does not linger in browser history
+        if (window.history && window.history.replaceState) {
+          const cleanSearch = window.location.search ? window.location.search.replace(/[?&](key|license_key|license|email)=[^&]*/g, '') : '';
+          const cleanUrl = window.location.pathname + (cleanSearch ? (cleanSearch.startsWith('&') ? '?' + cleanSearch.substring(1) : cleanSearch) : '');
+          window.history.replaceState(null, '', cleanUrl || window.location.pathname);
+        }
+        activateEntitlement(key || 'GUMROAD-MAGIC-LINK', email, 'magic_link');
+        return true;
+      }
+      return false;
+    }
+
+    function handleLicensePillClick() {
+      if (state.isUnlocked) {
+        openProfileModal();
+      } else {
+        openUnlockModal();
+      }
+    }
+
+    function openUnlockModal() {
+      document.getElementById('modal-unlock').style.display = 'flex';
+    }
+
+    function closeUnlockModal() {
+      document.getElementById('modal-unlock').style.display = 'none';
+    }
+
+    function submitUnlock() {
+      const keyInput = document.getElementById('unlock-license-key');
+      const emailInput = document.getElementById('unlock-email');
+      const key = keyInput ? keyInput.value.trim() : '';
+      const email = emailInput ? emailInput.value.trim() : '';
+
+      if (!key && !email) {
+        alert('Please enter your Gumroad license key or purchase email.');
+        return;
+      }
+
+      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        alert('Please enter a valid email address.');
+        return;
+      }
+
+      const licenseCode = key || ('GUMROAD-' + email.split('@')[0].toUpperCase() + '-' + Date.now().toString().slice(-4));
+      activateEntitlement(licenseCode, email, key ? 'manual_key' : 'manual_email');
+      closeUnlockModal();
+    }
+
+    function activateEntitlement(key, email, method) {
+      const s = getStore();
+      s.entitlement = {
+        status: 'active',
+        key: key || 'ACTIVE-KEY',
+        email: email || '',
+        unlocked_at: new Date().toISOString(),
+        method: method || 'manual'
+      };
+      saveStore(s);
+      state.isUnlocked = true;
+      applyEntitlementUI();
+      showToast('✓ Calm Baby Blueprint companion unlocked');
+    }
+
+    function toggleTestLicense() {
+      const s = getStore();
+      if (state.isUnlocked) {
+        s.entitlement = null;
+        saveStore(s);
+        state.isUnlocked = false;
+        applyEntitlementUI();
+        showToast('Switched to Preview Mode');
+      } else {
+        s.entitlement = {
+          status: 'active',
+          key: 'TEST-DEMO-KEY',
+          unlocked_at: new Date().toISOString(),
+          method: 'demo_toggle'
+        };
+        saveStore(s);
+        state.isUnlocked = true;
+        applyEntitlementUI();
+        showToast('✓ Calm Baby Blueprint companion unlocked');
+      }
+      closeProfileModal();
+    }
+
+    function applyEntitlementUI() {
+      const pill = document.getElementById('header-license-pill');
+      const text = document.getElementById('header-license-text');
+      const overlay = document.getElementById('gated-step-overlay');
+      const graphics = document.getElementById('graphics-container');
+      const actionBox = document.getElementById('step-action-points-box');
+      const clinicalBox = document.getElementById('step-clinical-box');
+      const checkinBtn = document.getElementById('btn-fair-trial-checkin');
+
+      if (state.isUnlocked) {
+        if (pill) {
+          pill.className = 'license-status-pill unlocked';
+          text.innerHTML = '&check; Blueprint Unlocked';
+        }
+        if (overlay) overlay.style.display = 'none';
+        if (graphics) graphics.style.display = 'block';
+        if (actionBox) actionBox.style.display = 'block';
+        if (clinicalBox) clinicalBox.style.display = 'block';
+        if (checkinBtn) checkinBtn.style.display = 'block';
+      } else {
+        if (pill) {
+          pill.className = 'license-status-pill locked';
+          text.innerHTML = 'Preview &bull; Unlock ($47)';
+        }
+        if (overlay) overlay.style.display = 'block';
+        if (graphics) graphics.style.display = 'none';
+        if (actionBox) actionBox.style.display = 'none';
+        if (clinicalBox) clinicalBox.style.display = 'none';
+        if (checkinBtn) checkinBtn.style.display = 'none';
+      }
+
+      // Update Profile Modal license status text
+      const profStatus = document.getElementById('prof-license-status');
+      if (profStatus) {
+        const s = getStore();
+        if (state.isUnlocked && s.entitlement) {
+          profStatus.innerHTML = `<span style="color: var(--sage); font-weight: 700;">&check; Unlocked Active</span> (Key: <code>${s.entitlement.key || 'Active'}</code>)`;
+        } else {
+          profStatus.innerHTML = '<span style="color: var(--terra); font-weight: 700;">Locked Preview Mode</span> (Enter license to unlock full companion)';
+        }
+      }
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast-notification');
+      if (!t) return;
+      t.innerText = msg;
+      t.style.display = 'block';
+      setTimeout(() => { t.style.opacity = '1'; }, 20);
+      setTimeout(() => {
+        t.style.opacity = '0';
+        setTimeout(() => { t.style.display = 'none'; }, 260);
+      }, 3500);
+    }
+
+    function mapStoreFeedToState(feedStr) {
+      if (!feedStr) return;
+      const lower = feedStr.toLowerCase();
+      if (lower.includes('breast')) state.activeFeedingMode = 'breast';
+      else if (lower.includes('mix')) state.activeFeedingMode = 'mixed';
+      else state.activeFeedingMode = 'formula';
+    }
+
+    function setFeedingMode(mode) {
+      state.activeFeedingMode = mode;
+      const s = getStore();
+      s.feed = mode === 'formula' ? 'Formula-fed' : (mode === 'breast' ? 'Breastfed' : 'Mixed');
+      saveStore(s);
+      renderActiveStep();
+    }
+
+    function updateHeaderBadge(s) {
+      const label = s.baby ? `${s.baby} &bull; Wk ${s.age || 5}` : `Baby &bull; Wk ${s.age || 5}`;
+      document.getElementById('header-baby-badge').innerHTML = label;
+    }
+
+    function highlightActiveTimeWindow() {
+      const hr = new Date().getHours();
+      document.querySelectorAll('.tod-card').forEach(c => c.classList.remove('active-window'));
+      if (hr >= 6 && hr < 12) {
+        document.getElementById('tod-morning').classList.add('active-window');
+        document.getElementById('recheck-window').value = 'morning';
+      } else if (hr >= 12 && hr < 17) {
+        document.getElementById('tod-afternoon').classList.add('active-window');
+        document.getElementById('recheck-window').value = 'afternoon';
+      } else if (hr >= 17 && hr < 22) {
+        document.getElementById('tod-evening').classList.add('active-window');
+        document.getElementById('recheck-window').value = 'evening';
+      } else {
+        document.getElementById('tod-night').classList.add('active-window');
+        document.getElementById('recheck-window').value = 'night';
+      }
+    }
+
+    function saveTimepointCheckIn() {
+      const win = document.getElementById('recheck-window').value;
+      const sym = document.getElementById('recheck-symptom').value;
+      const s = getStore();
+
+      if (sym === 'mech') {
+        state.activeStepIndex = 0; // Feeding mechanics
+        if (win === 'morning') document.getElementById('tod-dom-morning').innerText = 'Feeding Mechanics (Logged)';
+        else if (win === 'afternoon') document.getElementById('tod-dom-afternoon').innerText = 'Feeding Mechanics (Logged)';
+        else if (win === 'evening') document.getElementById('tod-dom-evening').innerText = 'Feeding Mechanics (Logged)';
+        else document.getElementById('tod-dom-night').innerText = 'Feeding Mechanics (Logged)';
+      } else if (sym === 'ns') {
+        state.activeStepIndex = 1; // Tiger Hold & sensory
+        if (win === 'evening') document.getElementById('tod-dom-evening').innerText = 'Nervous System (Logged)';
+        else if (win === 'afternoon') document.getElementById('tod-dom-afternoon').innerText = 'Sensory Overwhelm (Logged)';
+      } else {
+        state.activeStepIndex = 1;
+        if (win === 'afternoon') document.getElementById('tod-dom-afternoon').innerText = 'Gut & Gas Buildup (Logged)';
+      }
+
+      renderActiveStep();
+      alert(`Timepoint recorded for ${win}! Starting step updated on 3 AM Console.`);
+      switchTab('console');
+    }
+
+    function renderActiveStep() {
+      // Update feeding mode buttons
+      const pills = ['formula', 'breast', 'mixed'];
+      pills.forEach(p => {
+        const btn = document.getElementById('feed-pill-' + p);
+        if (btn) {
+          if (p === state.activeFeedingMode) btn.classList.add('active');
+          else btn.classList.remove('active');
+        }
+      });
+
+      let currentStep;
+      if (state.activeStepIndex === 0) {
+        currentStep = feedingSteps[state.activeFeedingMode] || feedingSteps.formula;
+      } else {
+        currentStep = steps[1];
+      }
+
+      document.getElementById('step-number-badge').innerText = currentStep.number;
+      document.getElementById('step-evidence-badge').innerHTML = currentStep.evidenceLabel;
+      document.getElementById('active-step-title').innerText = currentStep.title;
+      document.getElementById('active-step-ref').innerText = currentStep.chapterRef;
+      document.getElementById('active-step-reason').innerText = currentStep.reason;
+      document.getElementById('trial-counter').innerText = 'Day 2 of ' + currentStep.trialLength;
+      document.getElementById('checkin-target-step').innerText = 'Evaluating: ' + currentStep.title + ' (' + currentStep.trialLength + ')';
+
+      // Action points
+      const pointsBox = document.getElementById('step-action-points');
+      if (pointsBox && currentStep.actionPoints) {
+        pointsBox.innerHTML = currentStep.actionPoints.map(pt => `
+          <div style="display: flex; gap: 8px; margin-bottom: 4px;">
+            <span style="color: var(--sage); font-weight: 700;">&check;</span>
+            <span>${pt}</span>
+          </div>
+        `).join('');
+      }
+
+      // Clinical Note
+      const clinicalEl = document.getElementById('step-clinical-text');
+      if (clinicalEl && currentStep.clinicalNote) {
+        clinicalEl.innerHTML = `<strong>${currentStep.clinicalNote}</strong>`;
+      }
+
+      // Graphics
+      const container = document.getElementById('graphics-container');
+      if (currentStep.imageType === 'bottle') {
+        container.innerHTML = `
+          <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--mu); margin-bottom: 8px;">
+            Illustrated Side-by-Side Technique (Paced Feeding)
+          </div>
+          <div class="graphics-grid">
+            <div class="graphic-card">
+              <img src="/images/blog/bottle-angle-too-steep.jpg" alt="Steep angle mistake" onerror="this.src='images/blog/bottle-angle-too-steep.jpg'">
+              <div class="graphic-meta wrong">
+                <strong>Common Mistake</strong>
+                Tipped steeply: milk rushes, baby gulps air.
+              </div>
+            </div>
+            <div class="graphic-card">
+              <img src="/images/blog/bottle-angle-correct-paced.jpg" alt="Correct horizontal bottle angle" onerror="this.src='images/blog/bottle-angle-correct-paced.jpg'">
+              <div class="graphic-meta correct">
+                <strong>Correct Paced Angle</strong>
+                Horizontal: nipple fully covered with milk, baby paces flow.
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (currentStep.imageType === 'latch') {
+        container.innerHTML = `
+          <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--mu); margin-bottom: 8px;">
+            The Flipple Technique (Deep Asymmetric Latch)
+          </div>
+          <div class="graphics-grid">
+            <div class="graphic-card">
+              <img src="/images/latch-mechanism.jpg" alt="Flipple latch mechanism" onerror="this.src='images/latch-mechanism.jpg'">
+              <div class="graphic-meta correct">
+                <strong>Flipple Latch</strong>
+                Nipple to nose &bull; Lower areola deep in mouth.
+              </div>
+            </div>
+            <div class="graphic-card">
+              <div style="padding: 14px; background: #faf8f5; height: 100%; border-radius: 6px; box-sizing: border-box; font-size: 12px; line-height: 1.45;">
+                <strong style="color: var(--terra); display: block; margin-bottom: 6px; text-transform: uppercase; font-size: 11px;">Latch Quality Checklist</strong>
+                &bull; Wide 140&deg; yawning gape<br>
+                &bull; Lips flanged like fish lips<br>
+                &bull; Chin buried deep into breast<br>
+                &bull; Cheeks rounded (no dimples or clicking)
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (currentStep.imageType === 'mixed') {
+        container.innerHTML = `
+          <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--mu); margin-bottom: 8px;">
+            Paced Combination Feeding (Flow Matching)
+          </div>
+          <div class="graphics-grid">
+            <div class="graphic-card">
+              <img src="/images/blog/bottle-angle-correct-paced.jpg" alt="Horizontal paced bottle" onerror="this.src='images/blog/bottle-angle-correct-paced.jpg'">
+              <div class="graphic-meta correct">
+                <strong>Paced Bottle</strong>
+                Horizontal angle & slow flow nipple.
+              </div>
+            </div>
+            <div class="graphic-card">
+              <img src="/images/latch-mechanism.jpg" alt="Deep asymmetric latch" onerror="this.src='images/latch-mechanism.jpg'">
+              <div class="graphic-meta correct">
+                <strong>Deep Nursing Latch</strong>
+                Flipple technique maintains breast cadence.
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (currentStep.imageType === 'tiger') {
+        container.innerHTML = `
+          <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--mu); margin-bottom: 8px;">
+            The Tiger Hold Technique & Safety Check
+          </div>
+          <div class="graphics-grid">
+            <div class="graphic-card">
+              <img src="/images/blog/calms-face-down-hold.jpg" alt="Tiger hold support" onerror="this.src='images/blog/calms-face-down-hold.jpg'">
+              <div class="graphic-meta correct">
+                <strong>Proper Forearm Grip</strong>
+                Belly pressed on arm, head clear near elbow.
+              </div>
+            </div>
+            <div class="graphic-card">
+              <img src="/images/tiger-hold-errors.jpg" alt="Tiger hold safety errors" onerror="this.src='images/tiger-hold-errors.jpg'">
+              <div class="graphic-meta wrong">
+                <strong>Safety Rule</strong>
+                Awake hold only. Never lay baby face-down to sleep.
+              </div>
+            </div>
+          </div>
+        `;
+      }
+      applyEntitlementUI();
+    }
+
+    // STUDY READING FRAMEWORK
+    function openStudyFramework(brickId) {
+      const framework = studyFrameworks[brickId];
+      if (!framework) return;
+
+      document.getElementById('sf-brick-number').innerHTML = framework.brickNumber;
+      document.getElementById('sf-title').innerText = framework.title;
+      document.getElementById('sf-citation').innerText = framework.citation;
+      document.getElementById('sf-blueprint-chapter').innerText = framework.blueprintChapter;
+      document.getElementById('sf-core-question').innerText = framework.coreQuestion;
+      document.getElementById('sf-cohort').innerText = framework.cohort;
+
+      const isFreeBrick = (brickId === 'brick-1' || brickId === 'brick-2');
+      const sfProvedSec = document.getElementById('sf-sec-proved');
+      const sfLimitsSec = document.getElementById('sf-sec-limits');
+      const sfActionSec = document.getElementById('sf-sec-action');
+      const sfGatedCallout = document.getElementById('sf-gated-callout');
+
+      if (state.isUnlocked || isFreeBrick) {
+        if (sfProvedSec) sfProvedSec.style.display = 'block';
+        if (sfLimitsSec) sfLimitsSec.style.display = 'block';
+        if (sfActionSec) sfActionSec.style.display = 'block';
+        if (sfGatedCallout) sfGatedCallout.style.display = 'none';
+        document.getElementById('sf-proved').innerText = framework.proved;
+        document.getElementById('sf-limits').innerText = framework.limits;
+        document.getElementById('sf-action').innerText = framework.action;
+      } else {
+        if (sfProvedSec) sfProvedSec.style.display = 'none';
+        if (sfLimitsSec) sfLimitsSec.style.display = 'none';
+        if (sfActionSec) sfActionSec.style.display = 'none';
+        if (sfGatedCallout) sfGatedCallout.style.display = 'block';
+      }
+
+      document.getElementById('modal-study-framework').style.display = 'flex';
+    }
+
+    function closeStudyFramework() {
+      document.getElementById('modal-study-framework').style.display = 'none';
+    }
+
+    // ACOUSTIC SOOTHING SUITE
+    function setSoundMode(mode) {
+      if (mode !== 'brown' && !state.isUnlocked) {
+        openUnlockModal();
+        return;
+      }
+      state.soundMode = mode;
+      const modes = ['brown', 'pulse', 'womb'];
+      modes.forEach(m => {
+        const btn = document.getElementById('smode-' + m);
+        if (btn) {
+          if (m === mode) btn.classList.add('active');
+          else btn.classList.remove('active');
+        }
+      });
+
+      const titleEl = document.getElementById('sound-now-playing-title');
+      const subEl = document.getElementById('sound-now-playing-sub');
+      if (mode === 'pulse') {
+        titleEl.innerText = 'Rhythmic Pulse';
+        subEl.innerText = 'Low-frequency rhythmic pulse &bull; Maternal cadence';
+      } else if (mode === 'womb') {
+        titleEl.innerText = 'Womb Resonance';
+        subEl.innerText = 'Amniotic acoustic profile &bull; Filtered <160 Hz';
+      } else {
+        titleEl.innerText = 'Deep Brownian Noise';
+        subEl.innerText = 'Continuous intrauterine bass &bull; Filtered <240 Hz';
+      }
+
+      if (state.brownNoisePlaying) {
+        stopBrownNoise();
+        startBrownNoise();
+      }
+    }
+
+    function toggleBrownNoise() {
+      const btn = document.getElementById('btn-audio');
+      if (state.brownNoisePlaying) {
+        stopBrownNoise();
+        btn.innerText = 'Play Sound';
+        btn.className = 'btn-sage btn-sm';
+      } else {
+        startBrownNoise();
+        btn.innerText = 'Pause Sound';
+        btn.className = 'btn-secondary btn-sm';
+      }
+    }
+
+    function startBrownNoise() {
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        state.audioCtx = new AudioContext();
+        if (state.audioCtx.state === 'suspended') {
+          state.audioCtx.resume();
+        }
+
+        const bufferSize = state.audioCtx.sampleRate * 2;
+        const noiseBuffer = state.audioCtx.createBuffer(1, bufferSize, state.audioCtx.sampleRate);
+        const output = noiseBuffer.getChannelData(0);
+        let lastOut = 0.0;
+        for (let i = 0; i < bufferSize; i++) {
+          const white = Math.random() * 2 - 1;
+          output[i] = (lastOut + (0.02 * white)) / 1.02;
+          lastOut = output[i];
+          output[i] *= 3.5;
+        }
+
+        state.noiseNode = state.audioCtx.createBufferSource();
+        state.noiseNode.buffer = noiseBuffer;
+        state.noiseNode.loop = true;
+
+        // Mode-specific acoustic filtering
+        state.filterNode = state.audioCtx.createBiquadFilter();
+        if (state.soundMode === 'womb') {
+          state.filterNode.type = 'lowpass';
+          state.filterNode.frequency.value = 160;
+          state.filterNode.Q.value = 2.4;
+        } else {
+          state.filterNode.type = 'lowpass';
+          state.filterNode.frequency.value = 240;
+          state.filterNode.Q.value = 0.8;
+        }
+
+        state.gainNode = state.audioCtx.createGain();
+        state.gainNode.gain.value = 0.28;
+
+        state.noiseNode.connect(state.filterNode);
+
+        if (state.soundMode === 'pulse') {
+          // Rhythmic 1 Hz LFO modulation
+          state.lfoNode = state.audioCtx.createOscillator();
+          state.lfoNode.type = 'sine';
+          state.lfoNode.frequency.value = 1.0;
+
+          state.lfoGain = state.audioCtx.createGain();
+          state.lfoGain.gain.value = 0.12;
+
+          state.lfoNode.connect(state.lfoGain);
+          state.lfoGain.connect(state.gainNode.gain);
+          state.lfoNode.start(0);
+        }
+
+        state.filterNode.connect(state.gainNode);
+        state.gainNode.connect(state.audioCtx.destination);
+        state.noiseNode.start(0);
+        state.brownNoisePlaying = true;
+
+        // Screen Lock Audio Keeper (plays silent loop to retain background playback)
+        const keeper = document.getElementById('bg-audio-keeper');
+        if (keeper) {
+          keeper.src = SILENT_WAV;
+          keeper.play().catch(() => {});
+        }
+
+        // MediaSession API for lockscreen controls
+        if ('mediaSession' in navigator) {
+          const modeName = state.soundMode === 'pulse' ? 'Rhythmic Pulse' : (state.soundMode === 'womb' ? 'Womb Resonance' : 'Deep Brown Noise');
+          navigator.mediaSession.metadata = new MediaMetadata({
+            title: 'Acoustic Soothing: ' + modeName,
+            artist: 'Colic Protocol · 3 AM Console',
+            album: 'Calm Baby Blueprint',
+            artwork: [
+              { src: '/images/blog/bottle-angle-correct-paced.jpg', sizes: '512x512', type: 'image/jpeg' }
+            ]
+          });
+          navigator.mediaSession.playbackState = 'playing';
+          navigator.mediaSession.setActionHandler('play', () => { if (!state.brownNoisePlaying) toggleBrownNoise(); });
+          navigator.mediaSession.setActionHandler('pause', () => { if (state.brownNoisePlaying) toggleBrownNoise(); });
+        }
+
+        // Start visualizer and science ticker
+        startScienceTicker();
+        animateVisualizer();
+
+        // Auto-off timer
+        if (state.timerId) clearTimeout(state.timerId);
+        state.timerId = setTimeout(() => {
+          if (state.brownNoisePlaying) toggleBrownNoise();
+        }, state.timerMinutes * 60 * 1000);
+      } catch (e) {
+        console.error('Audio init error', e);
+      }
+    }
+
+    function stopBrownNoise() {
+      if (state.noiseNode) { try { state.noiseNode.stop(); } catch(e) {} }
+      if (state.lfoNode) { try { state.lfoNode.stop(); } catch(e) {} }
+      if (state.audioCtx) { try { state.audioCtx.close(); } catch(e) {} }
+      state.brownNoisePlaying = false;
+      if (state.timerId) clearTimeout(state.timerId);
+
+      const keeper = document.getElementById('bg-audio-keeper');
+      if (keeper) { keeper.pause(); }
+
+      if ('mediaSession' in navigator) {
+        navigator.mediaSession.playbackState = 'paused';
+      }
+
+      stopScienceTicker();
+      cancelAnimationFrame(state.visualizerAnimId);
+      initVisualizer();
+    }
+
+    function setTimer(minutes, elem) {
+      document.querySelectorAll('.timer-tag').forEach(t => t.classList.remove('active'));
+      elem.classList.add('active');
+      state.timerMinutes = minutes;
+    }
+
+    // CANVAS VISUALIZER
+    function initVisualizer() {
+      const canvas = document.getElementById('acoustic-visualizer');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#1a120c';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.beginPath();
+      ctx.moveTo(0, canvas.height / 2);
+      ctx.lineTo(canvas.width, canvas.height / 2);
+      ctx.strokeStyle = '#3e2c22';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+
+    function animateVisualizer() {
+      const canvas = document.getElementById('acoustic-visualizer');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let phase = 0;
+
+      function render() {
+        if (!state.brownNoisePlaying) return;
+
+        ctx.fillStyle = 'rgba(26, 18, 12, 0.22)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        phase += 0.035;
+
+        // Wave 1: Warm terracotta primary wave
+        ctx.beginPath();
+        ctx.moveTo(0, canvas.height / 2);
+        for (let x = 0; x < canvas.width; x += 4) {
+          const y = canvas.height / 2 + Math.sin(x * 0.025 + phase) * 14 * Math.sin(phase * 0.45);
+          ctx.lineTo(x, y);
+        }
+        ctx.strokeStyle = 'rgba(196, 96, 58, 0.75)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Wave 2: Sage soothing secondary wave
+        ctx.beginPath();
+        ctx.moveTo(0, canvas.height / 2);
+        for (let x = 0; x < canvas.width; x += 4) {
+          const y = canvas.height / 2 + Math.sin(x * 0.04 - phase * 0.75) * 9 * Math.cos(phase * 0.3);
+          ctx.lineTo(x, y);
+        }
+        ctx.strokeStyle = 'rgba(92, 122, 95, 0.65)';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        // Wave 3: Gold gentle harmonic wave
+        ctx.beginPath();
+        ctx.moveTo(0, canvas.height / 2);
+        for (let x = 0; x < canvas.width; x += 4) {
+          const y = canvas.height / 2 + Math.sin(x * 0.015 + phase * 1.1) * 7;
+          ctx.lineTo(x, y);
+        }
+        ctx.strokeStyle = 'rgba(200, 154, 62, 0.55)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        state.visualizerAnimId = requestAnimationFrame(render);
+      }
+      render();
+    }
+
+    // ACOUSTIC SCIENCE TICKER
+    function startScienceTicker() {
+      stopScienceTicker();
+      state.scienceIntervalId = setInterval(() => {
+        state.scienceIndex = (state.scienceIndex + 1) % acousticFacts.length;
+        const fact = acousticFacts[state.scienceIndex];
+        const titleEl = document.getElementById('as-fact-title');
+        const descEl = document.getElementById('as-fact-desc');
+        if (titleEl && descEl) {
+          titleEl.innerHTML = fact.title;
+          descEl.innerHTML = fact.desc;
+        }
+      }, 10000);
+    }
+
+    function stopScienceTicker() {
+      if (state.scienceIntervalId) {
+        clearInterval(state.scienceIntervalId);
+        state.scienceIntervalId = null;
+      }
+    }
+
+    // MIDNIGHT PROTOCOL 4-STAGE ENGINE
+    function startMidnightClock() {
+      state.midnightTimer = setInterval(() => {
+        state.midnightSessionSeconds++;
+        const mins = String(Math.floor(state.midnightSessionSeconds / 60)).padStart(2, '0');
+        const secs = String(state.midnightSessionSeconds % 60).padStart(2, '0');
+        const el = document.getElementById('midnight-dwell-timer');
+        if (el) el.innerText = `Session: ${mins}:${secs}`;
+      }, 1000);
+    }
+
+    function advanceMidnightStage(stageNum) {
+      state.midnightStage = stageNum;
+      document.getElementById('midnight-stage-badge').innerText = `Stage ${stageNum} of 4`;
+
+      for (let i = 1; i <= 4; i++) {
+        const box = document.getElementById('midnight-stage-' + i);
+        const bar = document.getElementById('bar-' + i);
+        if (box) box.style.display = i === stageNum ? 'block' : 'none';
+        if (bar) {
+          if (i < stageNum) bar.className = 'done';
+          else if (i === stageNum) bar.className = 'on';
+          else bar.className = '';
+        }
+      }
+
+      if (stageNum === 2 && !state.brownNoisePlaying) {
+        toggleBrownNoise();
+      }
+    }
+
+    function finishMidnightSession(outcome) {
+      const s = getStore();
+      const mins = Math.max(1, Math.round(state.midnightSessionSeconds / 60));
+      const newEv = {
+        id: 'midnight-' + Date.now(),
+        t: new Date().toISOString(),
+        k: 'cry',
+        d: { min: mins, tried: 'midnight_protocol', helped: outcome === 'settled' ? 'yes' : (outcome === 'partial' ? 'some' : 'no') }
+      };
+      s.ev.push(newEv);
+      saveStore(s);
+      renderTimeline(s);
+
+      advanceMidnightStage(1);
+      state.midnightSessionSeconds = 0;
+      switchTab('log');
+    }
+
+    // Acute Episode Triage
+    function openAcuteTriage() { document.getElementById('modal-acute-triage').style.display = 'flex'; }
+    function closeAcuteTriage() { document.getElementById('modal-acute-triage').style.display = 'none'; }
+
+    function submitAcuteTriage() {
+      closeAcuteTriage();
+      if (state.triageRedFlag === 'flag') {
+        openRedFlagModal();
+        return;
+      }
+
+      if (state.triageSign === 'swallow') {
+        state.activeStepIndex = 0;
+      } else {
+        state.activeStepIndex = 1;
+      }
+
+      renderActiveStep();
+      switchTab('midnight');
+      advanceMidnightStage(2);
+    }
+
+    // Check-In Modal
+    function openCheckInModal() {
+      const s = getStore();
+      const dayTotals = {};
+      (s.ev || []).forEach(e => {
+        if (e.k === 'cry' && e.d && e.d.min) {
+          const dStr = (e.t || '').slice(0, 10);
+          if (dStr) dayTotals[dStr] = (dayTotals[dStr] || 0) + Number(e.d.min);
+        }
+      });
+      const sortedDays = Object.keys(dayTotals).sort();
+      const statBefore = document.getElementById('checkin-stat-before');
+      const statRecent = document.getElementById('checkin-stat-recent');
+      const statNote = document.getElementById('checkin-stat-note');
+
+      if (sortedDays.length >= 3) {
+        const recentDays = sortedDays.slice(-2);
+        const earlierDays = sortedDays.slice(0, -2);
+        const recentAvgMins = recentDays.reduce((acc, d) => acc + dayTotals[d], 0) / recentDays.length;
+        const earlierAvgMins = earlierDays.reduce((acc, d) => acc + dayTotals[d], 0) / earlierDays.length;
+        if (statBefore) statBefore.innerHTML = `Earlier Days Average: <strong>${(earlierAvgMins / 60).toFixed(1)} hrs/day</strong>`;
+        if (statRecent) statRecent.innerHTML = `Last 2 Days Average: <strong>${(recentAvgMins / 60).toFixed(1)} hrs/day</strong>`;
+        if (statNote) statNote.innerText = `Calculated across ${sortedDays.length} logged days (${earlierDays.length} earlier vs 2 recent).`;
+      } else if (sortedDays.length > 0) {
+        const totalMins = sortedDays.reduce((acc, d) => acc + dayTotals[d], 0);
+        const avgMins = totalMins / sortedDays.length;
+        if (statBefore) statBefore.innerHTML = `Logged Average: <strong>${(avgMins / 60).toFixed(1)} hrs/day</strong>`;
+        if (statRecent) statRecent.innerHTML = `Recorded Days: <strong>${sortedDays.length} day(s)</strong>`;
+        if (statNote) statNote.innerText = 'Log at least 3 days to see a comparative before-and-during trial split.';
+      } else {
+        if (statBefore) statBefore.innerHTML = 'Earlier Days Average: <strong>No data yet</strong>';
+        if (statRecent) statRecent.innerHTML = 'Last 2 Days Average: <strong>No data yet</strong>';
+        if (statNote) statNote.innerText = 'Start logging crying spells in the 3 AM Console or Midnight Run to populate comparison.';
+      }
+
+      document.getElementById('modal-checkin').style.display = 'flex';
+    }
+    function closeCheckInModal() { document.getElementById('modal-checkin').style.display = 'none'; }
+    function saveCheckIn() {
+      closeCheckInModal();
+      state.activeStepIndex = (state.activeStepIndex + 1) % steps.length;
+      renderActiveStep();
+    }
+
+    // Profile Modal
+    function openProfileModal() {
+      const s = getStore();
+      document.getElementById('prof-baby-name').value = s.baby || 'Zion';
+      document.getElementById('prof-feeding').value = s.feed || 'Formula-fed';
+      document.getElementById('prof-age-slider').value = s.age || 5;
+      document.getElementById('prof-age-val').innerText = (s.age || 5) + ' Weeks';
+
+      const profStatus = document.getElementById('prof-license-status');
+      if (profStatus) {
+        if (state.isUnlocked && s.entitlement) {
+          profStatus.innerHTML = `<span style="color: var(--sage); font-weight: 700;">&check; Unlocked Active</span> (Key: <code>${s.entitlement.key || 'Active'}</code>)`;
+        } else {
+          profStatus.innerHTML = '<span style="color: var(--terra); font-weight: 700;">Locked Preview Mode</span> (Enter license to unlock full companion)';
+        }
+      }
+
+      document.getElementById('modal-profile').style.display = 'flex';
+    }
+    function closeProfileModal() { document.getElementById('modal-profile').style.display = 'none'; }
+    function saveProfileModal() {
+      const s = getStore();
+      s.baby = document.getElementById('prof-baby-name').value.trim() || 'Zion';
+      s.feed = document.getElementById('prof-feeding').value;
+      s.age = parseInt(document.getElementById('prof-age-slider').value, 10);
+      saveStore(s);
+      mapStoreFeedToState(s.feed);
+      updateHeaderBadge(s);
+      renderActiveStep();
+      closeProfileModal();
+    }
+
+    // Save Log Entry
+    function saveLogEntry() {
+      const s = getStore();
+      const mins = Math.max(1, Math.round(state.stopwatchSeconds / 60));
+      const tech = document.getElementById('log-technique').value;
+      const timing = document.getElementById('log-timing').value;
+      const newEv = {
+        id: 'ev-' + Date.now(),
+        t: new Date().toISOString(),
+        k: 'cry',
+        d: { min: mins, tried: tech, helped: 'some', timing: timing }
+      };
+      s.ev.push(newEv);
+      saveStore(s);
+      renderTimeline(s);
+      resetStopwatch();
+    }
+
+    function renderTimeline(s) {
+      const container = document.getElementById('log-entries');
+      const recent = (s.ev || []).slice(-4).reverse();
+      if (!recent.length) {
+        container.innerHTML = '<p class="mu">No episodes logged yet. Recorded episodes appear here.</p>';
+        return;
+      }
+      container.innerHTML = recent.map(e => `
+        <div style="padding: 7px 0; border-bottom: 1px solid var(--bd);">
+          <strong>${new Date(e.t).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</strong> &bull;
+          ${e.k === 'cry' ? 'Crying ' + (e.d.min || 0) + ' min (' + (e.d.tried || 'hold') + ')' : 'Feed (' + (e.d.ft || 'Bottle') + ')'}
+        </div>
+      `).join('');
+    }
+
+    // Stopwatch
+    function toggleStopwatch() {
+      const btn = document.getElementById('btn-stopwatch');
+      if (state.stopwatchActive) {
+        clearInterval(state.stopwatchInterval);
+        state.stopwatchActive = false;
+        btn.innerText = 'Resume Timer';
+        btn.className = 'btn-sage';
+      } else {
+        state.stopwatchActive = true;
+        btn.innerText = 'Pause Timer';
+        btn.className = 'btn-secondary';
+        state.stopwatchInterval = setInterval(() => {
+          state.stopwatchSeconds++;
+          const hrs = String(Math.floor(state.stopwatchSeconds / 3600)).padStart(2, '0');
+          const mins = String(Math.floor((state.stopwatchSeconds % 3600) / 60)).padStart(2, '0');
+          const secs = String(state.stopwatchSeconds % 60).padStart(2, '0');
+          document.getElementById('stopwatch-display').innerText = `${hrs}:${mins}:${secs}`;
+        }, 1000);
+      }
+    }
+
+    function resetStopwatch() {
+      clearInterval(state.stopwatchInterval);
+      state.stopwatchActive = false;
+      state.stopwatchSeconds = 0;
+      document.getElementById('stopwatch-display').innerText = '00:00:00';
+      document.getElementById('btn-stopwatch').innerText = 'Start Episode Timer';
+      document.getElementById('btn-stopwatch').className = 'btn-sage';
+    }
+
+    // 2-Minute Breathing Box
+    function toggleBreathing() {
+      const circle = document.getElementById('m4-breath-circle');
+      const cue = document.getElementById('m4-breath-cue');
+
+      if (state.breathingActive) {
+        clearInterval(state.breathingInterval);
+        state.breathingActive = false;
+        circle.className = 'breath-circle';
+        cue.innerText = 'Ready';
+        return;
+      }
+
+      state.breathingActive = true;
+      let cycle = 0;
+
+      function tick() {
+        const step = cycle % 14;
+        if (step === 0) {
+          circle.className = 'breath-circle inhale';
+          cue.innerText = 'Inhale slowly through nose (4s)';
+        } else if (step === 4) {
+          circle.className = 'breath-circle hold';
+          cue.innerText = 'Hold gently (4s)';
+        } else if (step === 8) {
+          circle.className = 'breath-circle exhale';
+          cue.innerText = 'Exhale slowly through mouth (6s)';
+        }
+        cycle++;
+      }
+      tick();
+      state.breathingInterval = setInterval(tick, 1000);
+    }
+
+    function openRedFlagModal() { document.getElementById('modal-redflag').style.display = 'flex'; }
+    function closeRedFlagModal() { document.getElementById('modal-redflag').style.display = 'none'; }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.bottom-nav .nav-btn').forEach(btn => btn.classList.remove('active'));
+      document.getElementById('tab-' + tabId).classList.add('active');
+
+      document.getElementById('view-console').style.display = tabId === 'console' ? 'block' : 'none';
+      document.getElementById('view-midnight').style.display = tabId === 'midnight' ? 'block' : 'none';
+      document.getElementById('view-assessment').style.display = tabId === 'assessment' ? 'block' : 'none';
+      document.getElementById('view-evidence').style.display = tabId === 'evidence' ? 'block' : 'none';
+      document.getElementById('view-log').style.display = tabId === 'log' ? 'block' : 'none';
+    }
+
+    function selectPill(elem, group, value) {
+      const parent = elem.parentElement;
+      parent.querySelectorAll('.pill-option').forEach(el => el.classList.remove('selected'));
+      elem.classList.add('selected');
+      state[group] = value;
+    }
+
+    function exportDoctorSummary() {
+      const s = getStore();
+      const patientEl = document.getElementById('doc-sum-patient');
+      const dateEl = document.getElementById('doc-sum-date');
+      const cryingEl = document.getElementById('doc-sum-crying-metrics');
+      const timingEl = document.getElementById('doc-sum-timing-breakdown');
+      const techEl = document.getElementById('doc-sum-techniques-tried');
+
+      if (patientEl) {
+        patientEl.innerHTML = `<strong>Baby:</strong> ${s.baby || 'Your baby'} &bull; <strong>Age:</strong> ${s.age || 5} Weeks &bull; <strong>Feeding:</strong> ${s.feed || 'Formula-fed'}`;
+      }
+      if (dateEl) {
+        const d = new Date();
+        dateEl.innerHTML = `Report Generated: ${d.toLocaleDateString()} &bull; Source: Bloom Protocol (cpx_v1)`;
+      }
+
+      const dayTotals = {};
+      const timingCounts = {};
+      const techCounts = {};
+      let totalEpisodes = 0;
+      let totalMins = 0;
+
+      (s.ev || []).forEach(e => {
+        if (e.k === 'cry') {
+          totalEpisodes++;
+          const mins = Number(e.d && e.d.min) || 0;
+          totalMins += mins;
+          const dStr = (e.t || '').slice(0, 10);
+          if (dStr) dayTotals[dStr] = (dayTotals[dStr] || 0) + mins;
+
+          const tm = (e.d && e.d.timing) || 'unknown';
+          timingCounts[tm] = (timingCounts[tm] || 0) + 1;
+
+          const tc = (e.d && (e.d.tech || e.d.tried)) || 'unspecified';
+          const hp = (e.d && e.d.helped) || 'none';
+          if (!techCounts[tc]) techCounts[tc] = { total: 0, helped: 0, some: 0, no: 0 };
+          techCounts[tc].total++;
+          if (hp === 'yes') techCounts[tc].helped++;
+          else if (hp === 'some') techCounts[tc].some++;
+          else if (hp === 'no') techCounts[tc].no++;
+        }
+      });
+
+      const dayCount = Object.keys(dayTotals).length;
+      const dailyAvgHours = dayCount > 0 ? (totalMins / dayCount / 60).toFixed(1) : '0.0';
+
+      if (cryingEl) {
+        if (totalEpisodes > 0) {
+          cryingEl.innerHTML = `
+            &bull; <strong>Recorded Episodes:</strong> ${totalEpisodes} crying episodes across ${dayCount} logged day(s).<br>
+            &bull; <strong>Daily Crying Duration:</strong> Averaging <strong>${dailyAvgHours} hrs/day</strong> (Total recorded: ${(totalMins / 60).toFixed(1)} hours).<br>
+            &bull; <strong>Clinical Context:</strong> Colic usually peaks around week 6 and eases by about 3 to 4 months.
+          `;
+        } else {
+          cryingEl.innerHTML = '<em>No crying episodes logged yet. Start logging in the 3 AM Console or Midnight Run.</em>';
+        }
+      }
+
+      if (timingEl) {
+        const tmLabels = {
+          near: 'Within 30 minutes after feed (Air ingestion / reflux pattern)',
+          late: '1 to 3 hours after feed (Gut / digestion pattern)',
+          evening: 'Evening cluster after 5 PM (Sensory / autonomic pattern)',
+          random: 'No clear pattern'
+        };
+        const rows = Object.keys(timingCounts).map(k => `&bull; <strong>${tmLabels[k] || k}:</strong> ${timingCounts[k]} episode(s)`).join('<br>');
+        timingEl.innerHTML = rows || '<em>Timing patterns require feed-relative logging.</em>';
+      }
+
+      if (techEl) {
+        const rows = Object.keys(techCounts).map(k => {
+          const item = techCounts[k];
+          return `&bull; <strong>${k}:</strong> Tried ${item.total} time(s) (Helped: ${item.helped}, Partial: ${item.some}, No change: ${item.no})`;
+        }).join('<br>');
+        techEl.innerHTML = rows || '<em>No specific holds or soothing techniques recorded yet.</em>';
+      }
+
+      const modal = document.getElementById('modal-doctor-summary');
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function closeDoctorSummary() {
+      const modal = document.getElementById('modal-doctor-summary');
+      if (modal) modal.style.display = 'none';
+    }
+
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
