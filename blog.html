@@ -37,15 +37,15 @@
 </script>
 <style>
 :root{
-  --paper:#FBF4EA; --paper-alt:#F1E5D3; --card:#FFFCF7;
-  --ink:#241A12; --ink-soft:#4A3B2E; --muted:#7A6A56; --muted2:#9C8C77;
-  --terra:#BC5A33; --terra-deep:#8A3F22; --terra-d:rgba(188,90,51,.10);
-  --pine:#37452F; --pine-deep:#232B1E; --pine-d:rgba(55,69,47,.08);
-  --sage:#6C8759; --sage-d:rgba(108,135,89,.12);
+  --paper:#F5F5F7; --paper-alt:#E8E8ED; --card:#FFFFFF;
+  --ink:#1D1D1F; --ink-soft:#333336; --muted:#515154; --muted2:#86868B;
+  --terra:#FF8000; --terra-deep:#E67300; --terra-d:rgba(255,128,0,.10);
+  --pine:#1D1D1F; --pine-deep:#111213; --pine-d:rgba(0,0,0,.06);
+  --sage:#1DB954; --sage-d:rgba(29,185,84,.12);
   --mauve:#8A6A7A; --mauve-d:rgba(138,106,122,.12);
-  --gold:#C0963F; --gold-d:rgba(192,150,63,.14);
-  --border:rgba(36,26,18,.10); --border2:rgba(36,26,18,.17);
-  --shadow:0 10px 34px rgba(33,43,32,.12);
+  --gold:#FFB800; --gold-d:rgba(255,184,0,.14);
+  --border:rgba(0,0,0,.08); --border2:rgba(0,0,0,.14);
+  --shadow:0 8px 30px rgba(0,0,0,.06);
   --radius:16px;
   --serif:'Cormorant Garamond',Georgia,serif;
   --sans:'DM Sans',system-ui,sans-serif;
@@ -62,7 +62,7 @@ h1,h2,h3{font-family:var(--serif);color:var(--ink);font-weight:700}
 p{font-size:15.5px;line-height:1.75;color:var(--muted)}
 .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--terra);display:block;margin-bottom:12px}
 /* nav (matches every other page) */
-.site-nav{position:sticky;top:0;z-index:100;background:rgba(251,244,234,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+.site-nav{position:sticky;top:0;z-index:100;background:rgba(245,245,247,.96);border-bottom:1px solid var(--border)}
 .nav-inner{max-width:1100px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
 .nav-logo{display:flex;align-items:center;gap:10px}
 .logo-name{font-family:var(--serif);font-size:17px;font-weight:700;color:var(--ink)}
@@ -70,23 +70,23 @@ p{font-size:15.5px;line-height:1.75;color:var(--muted)}
 .nav-links a{color:var(--muted);font-size:14px;font-weight:500}
 .nav-links a:hover{color:var(--ink)}
 .nav-links a.current{color:var(--terra)}
-.nav-pill{background:var(--ink);border:none;border-radius:9px;padding:9px 18px;color:#fff!important;font-weight:700!important}
-.nav-pill:hover{background:var(--terra)!important}
+.nav-pill{background:var(--terra);border:none;border-radius:9px;padding:9px 18px;color:#fff!important;font-weight:700!important}
+.nav-pill:hover{background:var(--terra-deep)!important}
 .nav-toggle{display:none;background:none;border:none;color:var(--ink);font-size:22px;cursor:pointer;padding:4px}
 .mobile-nav{display:none;background:var(--paper);padding:6px 24px 22px;flex-direction:column;gap:15px;border-top:1px solid var(--border)}
 .mobile-nav.open{display:flex}
 .mobile-nav a{color:var(--ink);font-size:16px;font-weight:500}
 .mob-cta{background:var(--terra);color:#fff!important;padding:13px;border-radius:10px;text-align:center;font-weight:700!important}
 /* hero */
-.blog-hero{background:linear-gradient(150deg,var(--pine-deep) 0%,var(--pine) 100%);padding:clamp(48px,7vw,76px) 0;text-align:center}
+.blog-hero{background:var(--pine-deep);border-bottom:4px solid var(--sage);padding:clamp(48px,7vw,76px) 0;text-align:center}
 .blog-hero h1{color:#fff;font-size:clamp(30px,4.2vw,46px);line-height:1.15;margin-bottom:14px}
-.blog-hero h1 em{font-style:italic;color:#E3A57C}
-.blog-hero p{color:rgba(255,255,255,.66);font-size:16.5px;max-width:520px;margin:0 auto}
+.blog-hero h1 em{font-style:italic;color:var(--terra)}
+.blog-hero p{color:rgba(255,255,255,.8);font-size:16.5px;max-width:520px;margin:0 auto}
 /* category filter */
 .filter-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:28px 0 8px}
 .filter-chip{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;padding:7px 14px;border-radius:20px;border:1px solid var(--border2);color:var(--muted);cursor:pointer;background:var(--card);transition:all .15s}
-.filter-chip:hover{border-color:var(--terra)}
-.filter-chip.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+.filter-chip:hover{border-color:var(--terra);color:var(--ink)}
+.filter-chip.active{background:var(--terra);color:#fff;border-color:var(--terra)}
 /* post grid */
 .post-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px;margin-top:14px}
 .post-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s}
@@ -95,7 +95,7 @@ p{font-size:15.5px;line-height:1.75;color:var(--muted)}
 .tag-diagnosis .post-tag-bar{background:var(--terra)}
 .tag-timeline .post-tag-bar{background:var(--gold)}
 .tag-techniques .post-tag-bar{background:var(--sage)}
-.tag-evidence .post-tag-bar{background:var(--pine)}
+.tag-evidence .post-tag-bar{background:var(--pine-deep)}
 .tag-support .post-tag-bar{background:var(--mauve)}
 .post-body{padding:24px 22px;display:flex;flex-direction:column;flex:1}
 .post-meta{display:flex;gap:10px;align-items:center;margin-bottom:10px}
@@ -107,7 +107,7 @@ p{font-size:15.5px;line-height:1.75;color:var(--muted)}
 .post-link{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--ink);display:inline-flex;align-items:center;gap:4px}
 .post-card:hover .post-link{color:var(--terra)}
 /* footer */
-.site-footer{background:var(--pine-deep);padding:40px 0}
+.site-footer{background:var(--pine-deep);padding:40px 0;border-top:1px solid rgba(255,255,255,.08)}
 .footer-inner{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:20px}
 .footer-brand{display:flex;align-items:center;gap:10px}
 .footer-brand-name{font-family:var(--serif);font-size:15px;color:rgba(255,255,255,.82)}
@@ -122,7 +122,7 @@ p{font-size:15.5px;line-height:1.75;color:var(--muted)}
 <nav class="site-nav" aria-label="Main navigation">
   <div class="nav-inner">
     <a href="index.html" class="nav-logo" aria-label="Colic Protocol home">
-      <svg width="34" height="30" viewBox="0 0 40 36"><circle cx="15" cy="14" r="10.5" fill="none" stroke="#BC5A33" stroke-width="2.3" opacity=".92"/><circle cx="25" cy="14" r="10.5" fill="none" stroke="#6C8759" stroke-width="2.3" opacity=".92"/><circle cx="20" cy="23" r="10.5" fill="none" stroke="#C0963F" stroke-width="2.3" opacity=".92"/></svg>
+      <svg width="34" height="30" viewBox="0 0 40 36"><circle cx="15" cy="14" r="10.5" fill="none" stroke="#FF8000" stroke-width="2.3" opacity=".92"/><circle cx="25" cy="14" r="10.5" fill="none" stroke="#1DB954" stroke-width="2.3" opacity=".92"/><circle cx="20" cy="23" r="10.5" fill="none" stroke="#FFB800" stroke-width="2.3" opacity=".92"/></svg>
       <span class="logo-name">Colic Protocol</span>
     </a>
     <div class="nav-links">
@@ -532,7 +532,7 @@ p{font-size:15.5px;line-height:1.75;color:var(--muted)}
 <footer class="site-footer" role="contentinfo">
   <div class="wrap footer-inner">
     <div class="footer-brand">
-      <svg width="26" height="23" viewBox="0 0 40 36"><circle cx="15" cy="14" r="10.5" fill="none" stroke="#BC5A33" stroke-width="2.6" opacity=".85"/><circle cx="25" cy="14" r="10.5" fill="none" stroke="#6C8759" stroke-width="2.6" opacity=".85"/><circle cx="20" cy="23" r="10.5" fill="none" stroke="#C0963F" stroke-width="2.6" opacity=".85"/></svg>
+      <svg width="26" height="23" viewBox="0 0 40 36"><circle cx="15" cy="14" r="10.5" fill="none" stroke="#FF8000" stroke-width="2.6" opacity=".85"/><circle cx="25" cy="14" r="10.5" fill="none" stroke="#1DB954" stroke-width="2.6" opacity=".85"/><circle cx="20" cy="23" r="10.5" fill="none" stroke="#FFB800" stroke-width="2.6" opacity=".85"/></svg>
       <span class="footer-brand-name">Colic Protocol</span>
     </div>
     <nav class="footer-links" aria-label="Footer navigation">
