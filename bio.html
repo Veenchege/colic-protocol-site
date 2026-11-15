@@ -40,17 +40,17 @@ html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 
 /* ── Tokens ── */
 :root {
-  --cream:     #f5eedf;
-  --parchment: #ede4ce;
-  --card:      #fdf8f0;
-  --terra:     #c4603a;
-  --terra-dim: rgba(196,96,58,0.10);
-  --sage:      #4d6e51;
-  --sage-dim:  rgba(77,110,81,0.10);
-  --brown:     #2c1a10;
-  --muted:     #7a6048;
-  --muted-dim: rgba(122,96,72,0.12);
-  --border:    rgba(44,26,16,0.09);
+  --cream:     #F5F5F7;
+  --parchment: #E8E8ED;
+  --card:      #FFFFFF;
+  --terra:     #FF8000;
+  --terra-dim: rgba(255,128,0,0.10);
+  --sage:      #1DB954;
+  --sage-dim:  rgba(29,185,84,0.10);
+  --brown:     #1D1D1F;
+  --muted:     #515154;
+  --muted-dim: rgba(81,81,84,0.12);
+  --border:    rgba(0,0,0,0.08);
   --serif: 'Cormorant Garamond', Georgia, serif;
   --sans:  'DM Sans', system-ui, sans-serif;
 }
@@ -73,7 +73,7 @@ a   { color: inherit; text-decoration: none; }
   position: sticky;
   top: 0;
   z-index: 100;
-  background: var(--cream);
+  background: rgba(245,245,247,.96);
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
@@ -241,22 +241,24 @@ a   { color: inherit; text-decoration: none; }
 
 /* ── Section images ── */
 .section-img {
-  border-radius: 10px;
+  border-radius: 12px;
   overflow: hidden;
   margin-bottom: 20px;
   background: var(--parchment);
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.04);
 }
-.section-img img { border-radius: 10px; }
+.section-img img { border-radius: 12px; }
 
 /* ── Buttons ── */
 .btn {
   display: block;
   width: 100%;
   padding: 16px 22px;
-  border-radius: 6px;
+  border-radius: 10px;
   font-family: var(--sans);
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 700;
   text-align: center;
   cursor: pointer;
   border: none;
@@ -265,7 +267,7 @@ a   { color: inherit; text-decoration: none; }
   -webkit-tap-highlight-color: transparent;
 }
 .btn:active { opacity: 0.82; }
-.btn-primary  { background: var(--terra); color: #fff; }
+.btn-primary  { background: var(--terra); color: #fff; box-shadow: 0 4px 14px rgba(255,128,0,0.25); }
 .btn-outline  { background: transparent; color: var(--sage); border: 1.5px solid var(--sage); }
 .btn-note {
   font-size: 12px;
@@ -303,9 +305,9 @@ a   { color: inherit; text-decoration: none; }
 
 /* ── Guarantee strip ── */
 .guarantee {
-  background: var(--terra-dim);
-  border-left: 3px solid var(--terra);
-  border-radius: 0 6px 6px 0;
+  background: var(--sage-dim);
+  border-left: 3px solid var(--sage);
+  border-radius: 0 8px 8px 0;
   padding: 13px 15px;
   margin-bottom: 20px;
   font-size: 13px;
@@ -348,7 +350,7 @@ a   { color: inherit; text-decoration: none; }
   object-fit: cover;
   object-position: 50% 28%;
   flex-shrink: 0;
-  border: 2px solid var(--border);
+  border: 2px solid var(--parchment);
 }
 .founder-placeholder {
   width: 68px;
@@ -394,7 +396,7 @@ a   { color: inherit; text-decoration: none; }
   border-bottom: 1px solid var(--border);
 }
 .stars {
-  color: var(--terra);
+  color: #FFB800;
   font-size: 15px;
   letter-spacing: 2px;
   margin-bottom: 10px;
