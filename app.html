@@ -822,11 +822,19 @@
       <div class="brand-subtitle">Nighttime Management System</div>
     </div>
     <div style="display: flex; align-items: center; gap: 8px;">
+      <button id="header-install-btn" class="install-pill" onclick="triggerInstallPrompt()" style="display: none; align-items: center; gap: 4px; padding: 5px 10px; border-radius: 20px; font-size: 11.5px; font-weight: 700; background: var(--terra-soft); color: var(--terra); border: 1px solid rgba(196, 96, 58, 0.3); cursor: pointer;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span>Install App</span>
+      </button>
+      <button class="guide-pill" onclick="openHowToUseModal()" style="display: inline-flex; align-items: center; gap: 4px; padding: 5px 10px; border-radius: 20px; font-size: 11.5px; font-weight: 700; background: #faf6f0; color: var(--mu); border: 1px solid var(--bd); cursor: pointer;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        <span>How to Use</span>
+      </button>
       <div class="license-status-pill locked" id="header-license-pill" onclick="handleLicensePillClick()">
         <span id="header-license-text">Preview &bull; Unlock ($47)</span>
       </div>
       <div class="profile-pill" onclick="openProfileModal()">
-        <span id="header-baby-badge">Baby &bull; Week 5</span>
+        <span id="header-baby-badge">Set Up Profile</span>
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
       </div>
     </div>
@@ -834,6 +842,18 @@
 
   <!-- Main Container -->
   <div class="container">
+
+    <!-- PWA INSTALL BANNER -->
+    <div class="c" id="pwa-install-banner" style="background: #faf6f0; border: 1px dashed var(--terra); display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 12px; padding: 12px 14px;">
+      <div>
+        <strong style="font-size: 13px; color: var(--ink); display: block;">Install Bloom Protocol as an App</strong>
+        <span class="mu" style="font-size: 11.5px;">Instant 0s launch on your home screen &bull; 100% offline access for 3 AM crying</span>
+      </div>
+      <div style="display: flex; gap: 6px;">
+        <button class="btn-terra btn-sm" onclick="triggerInstallPrompt()" style="white-space: nowrap; padding: 6px 12px; font-size: 12px;">Install</button>
+        <button class="btn-secondary btn-sm" onclick="openHowToUseModal()" style="white-space: nowrap; padding: 6px 12px; font-size: 12px;">Guide</button>
+      </div>
+    </div>
 
     <!-- ACUTE EPISODE TRIAGE TRIGGER CARD -->
     <div class="acute-triage-trigger" onclick="openAcuteTriage()">
@@ -1498,8 +1518,8 @@
       <p class="mu">Connected with your live Bloom Tracker store (cpx_v1).</p>
 
       <div style="margin-top: 14px;">
-        <label style="font-size: 12px; font-weight: 700; color: var(--mu);">Baby's Name</label>
-        <input id="prof-baby-name" type="text" style="width: 100%; padding: 10px; border: 1px solid var(--bd); border-radius: 8px; margin-top: 4px;" value="Zion">
+        <label style="font-size: 12px; font-weight: 700; color: var(--mu);">Baby's Name (Optional)</label>
+        <input id="prof-baby-name" type="text" placeholder="e.g. Maya (or leave blank for 'your baby')" style="width: 100%; padding: 10px; border: 1px solid var(--bd); border-radius: 8px; margin-top: 4px;" value="">
 
         <label style="font-size: 12px; font-weight: 700; color: var(--mu); display: block; margin-top: 10px;">Feeding Method</label>
         <select id="prof-feeding" style="width: 100%; padding: 10px; border: 1px solid var(--bd); border-radius: 8px; margin-top: 4px;">
@@ -1660,13 +1680,16 @@
       <!-- Gated Study Callout -->
       <div id="sf-gated-callout" class="gated-overlay-card" style="display: none; margin: 10px 0;">
         <div class="gated-lock-icon">🔒</div>
-        <div style="font-weight: 700; font-size: 14px; margin-bottom: 4px;">Full Clinical Trial Analysis & 3 AM Action Guide</div>
-        <p style="font-size: 12.5px; color: var(--mu); margin-bottom: 10px;">
-          Evidence guardrails, peer-reviewed takeaways, and actionable 3 AM steps for this study are included with The Calm Baby Blueprint ($47).
+        <div style="font-weight: 700; font-size: 14px; margin-bottom: 4px;">Paired with The Calm Baby Blueprint Book</div>
+        <p style="font-size: 12.5px; color: var(--mu); margin-bottom: 6px;">
+          The full clinical analysis (sample sizes, conflicting trial evidence, and step-by-step home execution) is paired directly with <strong id="sf-gated-chapter-name" style="color: var(--ink);">Chapter 1: Defining Colic</strong> in the 44-page Blueprint book.
+        </p>
+        <p style="font-size: 12px; color: var(--terra); margin-bottom: 12px; font-weight: 600;">
+          72-Hour Guarantee. If it doesn't produce a meaningful shift in 72 hours, reply and I'll make it right. You keep the Blueprint either way. $47 one time.
         </p>
         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
           <button class="btn-terra btn-sm" onclick="closeStudyFramework(); openUnlockModal();" style="flex: 1; min-width: 140px;">Enter License Key or Email</button>
-          <a href="https://colicprotocol.gumroad.com/l/TheCalmBabyBlueprint?wanted=true" target="_blank" rel="noopener" class="btn-sage btn-sm" style="flex: 1; min-width: 140px; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center;">Get Blueprint ($47) &rarr;</a>
+          <a href="https://colicprotocol.gumroad.com/l/TheCalmBabyBlueprint?wanted=true" target="_blank" rel="noopener" class="btn-sage btn-sm" style="flex: 1; min-width: 140px; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center;">Unlock Book & Full Analysis ($47) &rarr;</a>
         </div>
       </div>
 
@@ -1692,7 +1715,7 @@
       </div>
 
       <div style="background: var(--bg); padding: 12px; border-radius: 8px; margin: 12px 0; font-size: 13px;">
-        <div id="doc-sum-patient"><strong>Patient:</strong> Baby Zion &bull; <strong>Age:</strong> 5 Weeks &bull; <strong>Feeding:</strong> Formula-fed</div>
+        <div id="doc-sum-patient"><strong>Patient:</strong> Your baby &bull; <strong>Age:</strong> 5 Weeks &bull; <strong>Feeding:</strong> Formula-fed</div>
         <div id="doc-sum-date" style="color: var(--mu); font-size: 11.5px; margin-top: 2px;">Report Generated: Nov 15, 2026 &bull; Source: Bloom Protocol</div>
       </div>
 
@@ -1723,6 +1746,124 @@
         <button class="btn-terra" onclick="window.print()" style="flex: 1;">Print / Save PDF</button>
         <button class="btn-secondary" onclick="closeDoctorSummary()" style="flex: 1;">Close Summary</button>
       </div>
+    </div>
+  </div>
+
+  <!-- FIRST-TIME ONBOARDING / SETUP MODAL -->
+  <div class="modal-overlay" id="modal-onboarding" style="display: none;">
+    <div class="modal-card">
+      <span class="badge badge-terra">First-Time Setup</span>
+      <h2 style="font-size: 21px; margin-top: 4px;">Welcome to Bloom Protocol</h2>
+      <p class="mu" style="font-size: 13px; margin-bottom: 14px;">
+        Personalize your 3 AM console so the soothing steps, feeding mechanics, and doctor summaries match your baby.
+      </p>
+
+      <div style="margin-top: 10px;">
+        <label style="font-size: 12px; font-weight: 700; color: var(--mu);">Baby's Name (Optional)</label>
+        <input id="onboard-baby-name" type="text" placeholder="e.g. Maya (or leave blank for 'your baby')" style="width: 100%; padding: 10px; border: 1px solid var(--bd); border-radius: 8px; margin-top: 4px; font-size: 14px;">
+
+        <label style="font-size: 12px; font-weight: 700; color: var(--mu); display: block; margin-top: 12px;">Feeding Method</label>
+        <select id="onboard-feeding" style="width: 100%; padding: 10px; border: 1px solid var(--bd); border-radius: 8px; margin-top: 4px; font-size: 14px; background: #fff;">
+          <option value="">Select feeding method</option>
+          <option value="Formula-fed">Formula-fed</option>
+          <option value="Breastfed">Breastfed</option>
+          <option value="Mixed">Mixed (Breast & Formula)</option>
+        </select>
+
+        <label style="font-size: 12px; font-weight: 700; color: var(--mu); display: block; margin-top: 12px;">Baby Age (Weeks)</label>
+        <div style="display: flex; align-items: center; gap: 12px; margin-top: 4px;">
+          <input type="range" min="2" max="12" value="5" id="onboard-age-slider" style="flex: 1;" oninput="document.getElementById('onboard-age-val').innerText = this.value + ' Weeks'">
+          <span id="onboard-age-val" style="font-weight: 700; width: 65px; font-size: 13px;">5 Weeks</span>
+        </div>
+
+        <button class="btn-terra" style="margin-top: 18px; width: 100%;" onclick="completeOnboarding()">Save & Start 3 AM Protocol</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PWA INSTALL GUIDE MODAL -->
+  <div class="modal-overlay" id="modal-install-guide" style="display: none;">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeInstallGuide()">&times;</button>
+      <span class="badge badge-terra">Offline Web App</span>
+      <h2 style="font-size: 21px; margin-top: 4px;">Install Bloom Protocol as an App</h2>
+      <p class="mu" style="font-size: 13px; margin-bottom: 14px;">
+        Add Bloom Protocol to your home screen for instant 0-second launch and 100% offline access during 3 AM crying episodes.
+      </p>
+
+      <div style="background: #faf8f5; border: 1px solid var(--bd); padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+        <strong style="color: var(--ink); font-size: 13px; display: block; margin-bottom: 4px;">On iPhone / iPad (Safari)</strong>
+        <ol style="padding-left: 20px; font-size: 12.5px; color: var(--mu); line-height: 1.6;">
+          <li>Tap the <strong>Share</strong> button at the bottom of Safari (the square with an arrow pointing up).</li>
+          <li>Scroll down and tap <strong>Add to Home Screen</strong>.</li>
+          <li>Tap <strong>Add</strong> in the top-right corner.</li>
+        </ol>
+      </div>
+
+      <div style="background: #faf8f5; border: 1px solid var(--bd); padding: 12px; border-radius: 8px; margin-bottom: 14px;">
+        <strong style="color: var(--ink); font-size: 13px; display: block; margin-bottom: 4px;">On Android (Chrome / Edge)</strong>
+        <ol style="padding-left: 20px; font-size: 12.5px; color: var(--mu); line-height: 1.6;">
+          <li>Tap the browser menu (<strong>&vellip;</strong>) in the top-right corner.</li>
+          <li>Tap <strong>Install app</strong> or <strong>Add to Home screen</strong>.</li>
+          <li>Confirm by tapping <strong>Install</strong>.</li>
+        </ol>
+      </div>
+
+      <div style="font-size: 12px; color: var(--sage); font-weight: 700; margin-bottom: 14px;">
+        &check; No app store required &bull; Takes under 1 MB of storage &bull; Opens without WiFi or mobile data
+      </div>
+
+      <button class="btn-secondary" onclick="closeInstallGuide()">Got It</button>
+    </div>
+  </div>
+
+  <!-- HOW TO USE & FEATURE GUIDE MODAL -->
+  <div class="modal-overlay" id="modal-how-to-use" style="display: none;">
+    <div class="modal-card" style="max-height: 90vh; overflow-y: auto;">
+      <button class="modal-close" onclick="closeHowToUse()">&times;</button>
+      <span class="badge badge-sage">System Overview</span>
+      <h2 style="font-size: 22px; margin-top: 4px;">How to Use Bloom Protocol</h2>
+      <p class="mu" style="font-size: 13px; margin-bottom: 14px;">
+        A practical guide to the free 3 AM tools and what unlocks inside the Blueprint book companion.
+      </p>
+
+      <!-- FREE TOOLS SECTION -->
+      <div style="background: #faf8f5; border: 1px solid var(--bd); padding: 14px; border-radius: 8px; margin-bottom: 14px;">
+        <span class="badge badge-sage" style="margin-bottom: 6px;">Free 3 AM Toolkit</span>
+        <h3 style="font-size: 16px; margin-bottom: 8px;">What You Get Free (Forever)</h3>
+        <ul style="padding-left: 18px; font-size: 12.5px; color: var(--mu); line-height: 1.65;">
+          <li><strong>The 3 AM Console:</strong> One-tap stopwatch to time crying episodes and record which soothing holds helped, building an objective log for your pediatrician.</li>
+          <li><strong>Continuous Brown Noise Player:</strong> Low-frequency acoustic sound designed to run across the room at conversation volume, masking sudden startling noises without digital looping.</li>
+          <li><strong>24-Hour Starting-Point Matrix:</strong> Visualizes your baby's crying episodes by hour to identify witching-hour patterns.</li>
+          <li><strong>Printable Doctor Summary:</strong> Formatted clinical summary to print or export as a PDF for well-child appointments.</li>
+          <li><strong>100% Offline PWA:</strong> Install to your home screen so it opens instantly without cell signal or WiFi.</li>
+        </ul>
+      </div>
+
+      <!-- PREMIUM BLUEPRINT SECTION -->
+      <div style="background: #fffdfb; border: 2px solid var(--terra); padding: 14px; border-radius: 8px; margin-bottom: 14px;">
+        <span class="badge badge-terra" style="margin-bottom: 6px;">Paired with The Calm Baby Blueprint ($47)</span>
+        <h3 style="font-size: 16px; margin-bottom: 8px;">What Unlocks with the Blueprint Book</h3>
+        <ul style="padding-left: 18px; font-size: 12.5px; color: var(--ink); line-height: 1.65;">
+          <li><strong>Clinical Study Frameworks:</strong> In-depth trial analyses for every study, paired directly with chapters in the 44-page Blueprint book (Savino 2010 vs Sung 2014, Hugh 2014 acoustic safety, and gastrointestinal studies).</li>
+          <li><strong>Step 1 Precision Feeding Mechanics:</strong> High-resolution photo walkthroughs for the Flipple Latch (for breastfed babies) and Paced Bottle Feeding with the nipple fully covered with milk (for formula or mixed-fed babies).</li>
+          <li><strong>Soothing Holds Library:</strong> Step-by-step positions including the Tiger in the Tree, Reverse Football hold, and rhythmic chest-to-chest pacing.</li>
+          <li><strong>Advanced Acoustic Synthesizer:</strong> Custom frequency sweeps, womb resonance profiles, and background lockscreen audio playback.</li>
+          <li><strong>The 6 Clinical Bricks Vault:</strong> Complete curriculum covering infant gut development, nervous system overstimulation, and the Colic vs Reflux vs CMPA differential table.</li>
+          <li><strong>72-Hour Shift Tracker:</strong> Day-by-day check-in with the 72-Hour Guarantee.</li>
+        </ul>
+
+        <div style="margin-top: 12px; padding: 10px; background: var(--terra-soft); border-radius: 6px; font-size: 12px; color: var(--terra); line-height: 1.5;">
+          <strong>72-Hour Guarantee.</strong> If it doesn't produce a meaningful shift in 72 hours, reply and I'll make it right. You keep the Blueprint either way. $47 one time.
+        </div>
+
+        <div style="display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap;">
+          <button class="btn-terra btn-sm" onclick="closeHowToUse(); openUnlockModal();" style="flex: 1; min-width: 140px;">Enter License Key</button>
+          <a href="https://colicprotocol.gumroad.com/l/TheCalmBabyBlueprint?wanted=true" target="_blank" rel="noopener" class="btn-sage btn-sm" style="flex: 1; min-width: 140px; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center;">Get Blueprint ($47) &rarr;</a>
+        </div>
+      </div>
+
+      <button class="btn-secondary" onclick="closeHowToUse()">Close Guide</button>
     </div>
   </div>
 
@@ -1937,10 +2078,53 @@
 
     function getStore() {
       try {
-        const s = JSON.parse(localStorage.getItem(STORE_KEY));
-        if (s && s.id) return s;
+        const raw = localStorage.getItem(STORE_KEY);
+        if (raw) {
+          const s = JSON.parse(raw);
+          if (s && s.id) return s;
+        }
       } catch(e) {}
-      return { id: 'usr-' + Date.now(), rf: 'none', age: 5, feed: 'Formula-fed', baby: 'Zion', ev: [] };
+
+      // Auto-pickup from quiz or checklist if available
+      let autoName = '';
+      let autoEmail = '';
+      let autoType = '';
+      try {
+        autoName = localStorage.getItem('colic_name') || '';
+        autoEmail = localStorage.getItem('colic_email') || '';
+        autoType = localStorage.getItem('colic_type') || '';
+      } catch(e) {}
+
+      // Inspect URL parameters (?name=...&baby=...&age=...&feed=...&type=...)
+      let pBaby = '';
+      let pAge = null;
+      let pFeed = '';
+      try {
+        const params = new URLSearchParams(window.location.search);
+        pBaby = params.get('baby') || params.get('name') || '';
+        if (params.has('age')) pAge = parseInt(params.get('age'), 10);
+        if (params.has('feed')) pFeed = params.get('feed');
+        if (params.has('type')) autoType = params.get('type');
+      } catch(e) {}
+
+      const resolvedBaby = pBaby || autoName || '';
+      const resolvedAge = pAge || (autoName ? 5 : null);
+      const resolvedFeed = pFeed || '';
+      const isComplete = Boolean(resolvedFeed && resolvedAge);
+
+      const blankStore = {
+        id: 'usr-' + Date.now(),
+        rf: 'none',
+        age: resolvedAge,
+        feed: resolvedFeed,
+        baby: resolvedBaby,
+        email: autoEmail || '',
+        colic_type: autoType || 'FM',
+        ev: [],
+        onboarding_completed: isComplete
+      };
+      saveStore(blankStore);
+      return blankStore;
     }
 
     function saveStore(s) {
@@ -1981,9 +2165,17 @@
       highlightActiveTimeWindow();
       initVisualizer();
       applyEntitlementUI();
+
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/sw.js').catch(function(){});
       }
+
+      // Check if first-time onboarding should be presented
+      if (!s.onboarding_completed || !s.feed || !s.age) {
+        openOnboardingModal();
+      }
+
+      checkStandaloneMode();
     }
 
     function checkLicenseFromUrl() {
@@ -2165,8 +2357,14 @@
     }
 
     function updateHeaderBadge(s) {
-      const label = s.baby ? `${s.baby} &bull; Wk ${s.age || 5}` : `Baby &bull; Wk ${s.age || 5}`;
-      document.getElementById('header-baby-badge').innerHTML = label;
+      const badgeEl = document.getElementById('header-baby-badge');
+      if (!badgeEl) return;
+      if (!s.feed && !s.age && !s.baby) {
+        badgeEl.innerHTML = 'Set Up Profile';
+      } else {
+        const label = s.baby ? `${s.baby} &bull; Wk ${s.age || 5}` : `Baby &bull; Wk ${s.age || 5}`;
+        badgeEl.innerHTML = label;
+      }
     }
 
     function highlightActiveTimeWindow() {
@@ -2363,13 +2561,18 @@
       document.getElementById('sf-core-question').innerText = framework.coreQuestion;
       document.getElementById('sf-cohort').innerText = framework.cohort;
 
-      const isFreeBrick = (brickId === 'brick-1' || brickId === 'brick-2');
       const sfProvedSec = document.getElementById('sf-sec-proved');
       const sfLimitsSec = document.getElementById('sf-sec-limits');
       const sfActionSec = document.getElementById('sf-sec-action');
       const sfGatedCallout = document.getElementById('sf-gated-callout');
+      const sfGatedChapter = document.getElementById('sf-gated-chapter-name');
 
-      if (state.isUnlocked || isFreeBrick) {
+      if (sfGatedChapter) {
+        sfGatedChapter.innerText = framework.blueprintChapter;
+      }
+
+      // In-depth clinical study frameworks are paired with The Calm Baby Blueprint book
+      if (state.isUnlocked) {
         if (sfProvedSec) sfProvedSec.style.display = 'block';
         if (sfLimitsSec) sfLimitsSec.style.display = 'block';
         if (sfActionSec) sfActionSec.style.display = 'block';
@@ -2768,7 +2971,7 @@
     // Profile Modal
     function openProfileModal() {
       const s = getStore();
-      document.getElementById('prof-baby-name').value = s.baby || 'Zion';
+      document.getElementById('prof-baby-name').value = s.baby || '';
       document.getElementById('prof-feeding').value = s.feed || 'Formula-fed';
       document.getElementById('prof-age-slider').value = s.age || 5;
       document.getElementById('prof-age-val').innerText = (s.age || 5) + ' Weeks';
@@ -2787,14 +2990,130 @@
     function closeProfileModal() { document.getElementById('modal-profile').style.display = 'none'; }
     function saveProfileModal() {
       const s = getStore();
-      s.baby = document.getElementById('prof-baby-name').value.trim() || 'Zion';
+      s.baby = document.getElementById('prof-baby-name').value.trim();
       s.feed = document.getElementById('prof-feeding').value;
       s.age = parseInt(document.getElementById('prof-age-slider').value, 10);
+      s.onboarding_completed = true;
       saveStore(s);
       mapStoreFeedToState(s.feed);
       updateHeaderBadge(s);
       renderActiveStep();
       closeProfileModal();
+      showToast('Profile saved for ' + (s.baby || 'your baby') + '.');
+    }
+
+    // First-Time Onboarding
+    function openOnboardingModal() {
+      const s = getStore();
+      const nameInput = document.getElementById('onboard-baby-name');
+      const feedSelect = document.getElementById('onboard-feeding');
+      const ageSlider = document.getElementById('onboard-age-slider');
+      const ageVal = document.getElementById('onboard-age-val');
+
+      if (nameInput) nameInput.value = s.baby || '';
+      if (feedSelect) feedSelect.value = s.feed || '';
+      if (ageSlider) ageSlider.value = s.age || 5;
+      if (ageVal) ageVal.innerText = (s.age || 5) + ' Weeks';
+
+      const modal = document.getElementById('modal-onboarding');
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function closeOnboardingModal() {
+      const modal = document.getElementById('modal-onboarding');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function completeOnboarding() {
+      const s = getStore();
+      const nameInput = document.getElementById('onboard-baby-name');
+      const feedSelect = document.getElementById('onboard-feeding');
+      const ageSlider = document.getElementById('onboard-age-slider');
+
+      const babyName = nameInput ? nameInput.value.trim() : '';
+      const feedMethod = feedSelect ? feedSelect.value : '';
+      const babyAge = ageSlider ? parseInt(ageSlider.value, 10) : 5;
+
+      if (!feedMethod) {
+        alert('Please choose a feeding method (Breastfed, Formula-fed, or Mixed) so the protocol displays the appropriate technique for your baby.');
+        return;
+      }
+
+      s.baby = babyName;
+      s.feed = feedMethod;
+      s.age = babyAge;
+      s.onboarding_completed = true;
+      saveStore(s);
+
+      mapStoreFeedToState(s.feed);
+      updateHeaderBadge(s);
+      renderActiveStep();
+      renderTimeline(s);
+
+      closeOnboardingModal();
+      showToast('Profile personalized for ' + (s.baby || 'your baby') + '.');
+    }
+
+    // PWA Installation
+    let deferredInstallPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+      const installBtn = document.getElementById('header-install-btn');
+      if (installBtn) installBtn.style.display = 'inline-flex';
+      const banner = document.getElementById('pwa-install-banner');
+      if (banner) banner.style.display = 'flex';
+    });
+
+    window.addEventListener('appinstalled', () => {
+      deferredInstallPrompt = null;
+      hideInstallUI();
+      showToast('✓ Bloom Protocol installed on your home screen');
+    });
+
+    function triggerInstallPrompt() {
+      if (deferredInstallPrompt) {
+        deferredInstallPrompt.prompt();
+        deferredInstallPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            hideInstallUI();
+          }
+          deferredInstallPrompt = null;
+        });
+      } else {
+        openInstallGuideModal();
+      }
+    }
+
+    function hideInstallUI() {
+      const installBtn = document.getElementById('header-install-btn');
+      if (installBtn) installBtn.style.display = 'none';
+      const banner = document.getElementById('pwa-install-banner');
+      if (banner) {
+        banner.innerHTML = '<div style="font-size: 12px; color: var(--sage); font-weight: 700; padding: 4px 0;">&check; Bloom Protocol Installed &bull; 100% Offline Access Active</div>';
+      }
+    }
+
+    function checkStandaloneMode() {
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+      if (isStandalone) {
+        hideInstallUI();
+      }
+    }
+
+    function openInstallGuideModal() {
+      document.getElementById('modal-install-guide').style.display = 'flex';
+    }
+    function closeInstallGuide() {
+      document.getElementById('modal-install-guide').style.display = 'none';
+    }
+
+    // How to Use Modal
+    function openHowToUseModal() {
+      document.getElementById('modal-how-to-use').style.display = 'flex';
+    }
+    function closeHowToUse() {
+      document.getElementById('modal-how-to-use').style.display = 'none';
     }
 
     // Save Log Entry
