@@ -8,7 +8,80 @@
   <title>Bloom Protocol · Personalized Nighttime Management System</title>
   <!-- Google tag (gtag.js) -->
   <script async data-cfasync="false" src="https://www.googletagmanager.com/gtag/js?id=G-4BRJ9M0K26"></script>
-  <script>
+
+  <!-- ELIMINATION TRIAL REPORT MODAL -->
+  <div class="modal-overlay" id="modal-elimination-report">
+    <div class="modal-card" style="max-height: 90vh; overflow-y: auto;">
+      <button class="modal-close no-print" onclick="closeEliminationReport()">&times;</button>
+      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+          <span class="badge badge-terra">Clinical Diet Record</span>
+          <h2 style="margin-top: 4px;">14-Day Elimination Trial Summary</h2>
+        </div>
+        <button class="btn-sage btn-sm no-print" onclick="window.print()" style="width: auto;">Print / Save PDF</button>
+      </div>
+
+      <div style="background: var(--bg); padding: 12px; border-radius: 8px; margin: 12px 0; font-size: 13px;">
+        <div><strong>Patient:</strong> <span id="elim-modal-baby">Baby</span> &bull; <strong>Protocol:</strong> Bloom Elimination Tracker &bull; <strong>Date:</strong> <span id="elim-modal-date"></span></div>
+        <div style="margin-top: 4px;"><strong>Target Foods Eliminated:</strong> <span id="elim-modal-foods"></span></div>
+      </div>
+
+      <div style="font-size: 13px; line-height: 1.5; margin-bottom: 14px;">
+        <p><strong>Clinical Mechanism:</strong> In non-IgE mediated cow's milk protein allergy or food sensitivity, maternal dietary antigen clearance takes 10 to 14 days. This table tracks adherence against infant crying duration and digestive signs.</p>
+      </div>
+
+      <table style="width: 100%; border-collapse: collapse; font-size: 12.5px; margin-bottom: 16px;">
+        <thead>
+          <tr style="background: #eee7df;">
+            <th style="padding: 6px; border: 1px solid #ccc;">Day</th>
+            <th style="padding: 6px; border: 1px solid #ccc;">Adherence</th>
+            <th style="padding: 6px; border: 1px solid #ccc;">Crying Mins</th>
+            <th style="padding: 6px; border: 1px solid #ccc;">Severity</th>
+            <th style="padding: 6px; border: 1px solid #ccc;">Stool</th>
+          </tr>
+        </thead>
+        <tbody id="elim-modal-table-body"></tbody>
+      </table>
+
+      <div style="background: #fff8f0; border-left: 3px solid var(--terra); padding: 10px 12px; font-size: 12.5px; margin-bottom: 16px;">
+        <strong>Pediatric Discussion Questions:</strong>
+        <ol style="margin: 4px 0 0 16px; padding: 0;">
+          <li>Based on the 14-day trajectory, should we maintain maternal elimination or proceed with a formal challenge?</li>
+          <li>If formula-fed, does symptom presentation justify an extensively hydrolyzed (eHF) or amino acid formula?</li>
+        </ol>
+      </div>
+
+      <button class="btn-secondary no-print" onclick="closeEliminationReport()">Close Report</button>
+    </div>
+  </div>
+
+  <!-- WEEKLY REVIEW REPORT MODAL -->
+  <div class="modal-overlay" id="modal-weekly-review-report">
+    <div class="modal-card" style="max-height: 90vh; overflow-y: auto;">
+      <button class="modal-close no-print" onclick="closeWeeklyReviewReport()">&times;</button>
+      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+          <span class="badge badge-gold">Chapter 9 Milestone</span>
+          <h2 style="margin-top: 4px;">The 'Is It Working?' Review</h2>
+        </div>
+        <button class="btn-sage btn-sm no-print" onclick="window.print()" style="width: auto;">Print / Save PDF</button>
+      </div>
+
+      <div style="background: var(--bg); padding: 12px; border-radius: 8px; margin: 12px 0; font-size: 13px;">
+        <div><strong>Evaluation Period:</strong> <span id="rev-modal-week">Week 1</span> &bull; <strong>Overall Score:</strong> <span id="rev-modal-score" style="font-weight: 700; color: var(--terra);"></span></div>
+      </div>
+
+      <div style="font-size: 13px; line-height: 1.5; margin-bottom: 14px;">
+        <strong>Pediatrician Discussion Summary:</strong>
+        <ul id="rev-modal-notes" style="margin: 6px 0 12px 18px; padding: 0; line-height: 1.6;"></ul>
+        <p style="color: var(--mu); font-size: 12px; margin-top: 8px;">Colic usually peaks around week 6 and eases by about 3 to 4 months. This review is an educational tracking tool and does not replace medical advice.</p>
+      </div>
+
+      <button class="btn-secondary no-print" onclick="closeWeeklyReviewReport()">Close Review</button>
+    </div>
+  </div>
+
+    <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
@@ -802,7 +875,131 @@
       }
       .no-print { display: none !important; }
     }
-  </style>
+  
+    /* Task t45: Premium Tracking Tools Styles */
+    .log-subnav {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 16px;
+      background: rgba(44,31,24,0.06);
+      padding: 4px;
+      border-radius: 10px;
+    }
+    .log-sub-btn {
+      flex: 1;
+      padding: 9px 6px;
+      font-size: 12px;
+      font-weight: 700;
+      border: none;
+      border-radius: 7px;
+      background: transparent;
+      color: var(--mu);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .log-sub-btn.active {
+      background: var(--card);
+      color: var(--ink);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .food-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1.5px solid var(--bd);
+      background: var(--card);
+      color: var(--ink);
+      transition: all 0.15s ease;
+      margin: 3px 2px;
+    }
+    .food-tag.active {
+      background: rgba(196,96,58,0.12);
+      border-color: var(--terra);
+      color: var(--terra);
+    }
+    .day-pill-scroll {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 6px 2px 10px;
+      scrollbar-width: thin;
+    }
+    .day-pill {
+      min-width: 54px;
+      text-align: center;
+      padding: 8px 4px;
+      border: 1.5px solid var(--bd);
+      border-radius: 8px;
+      background: var(--card);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--mu);
+      transition: all 0.15s ease;
+      flex-shrink: 0;
+    }
+    .day-pill.active {
+      border-color: var(--terra);
+      color: var(--terra);
+      background: rgba(196,96,58,0.08);
+    }
+    .day-pill.logged {
+      border-color: var(--sage);
+      color: var(--sage);
+    }
+    .day-pill.active.logged {
+      border-color: var(--terra);
+      background: rgba(196,96,58,0.12);
+    }
+    .review-q-card {
+      border: 1px solid var(--bd);
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 14px;
+      background: #faf6f0;
+    }
+    .review-opt {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      margin-top: 6px;
+      border: 1px solid var(--bd);
+      border-radius: 8px;
+      background: #fff;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.15s ease;
+    }
+    .review-opt:hover {
+      border-color: var(--terra);
+    }
+    .review-opt.selected {
+      border-color: var(--terra);
+      background: rgba(196,96,58,0.08);
+      color: var(--terra);
+      font-weight: 700;
+    }
+    .review-opt-radio {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 2px solid var(--bd);
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .review-opt.selected .review-opt-radio {
+      border-color: var(--terra);
+      background: var(--terra);
+      box-shadow: inset 0 0 0 3px #fff;
+    }
+</style>
 </head>
 <body>
 
@@ -1367,9 +1564,18 @@
       </div>
     </div>
 
-    <!-- VIEW 5: EPISODE STOPWATCH & LOG -->
+    <!-- VIEW 5: EPISODE STOPWATCH & PREMIUM TRACKING -->
     <div id="view-log" style="display: none;">
-      <div class="c">
+      <!-- Sub-Navigation for Logger & Premium Tracking Tools -->
+      <div class="log-subnav">
+        <button class="log-sub-btn active" id="btn-sub-stopwatch" onclick="switchLogSubtab('stopwatch')">Episode Timer</button>
+        <button class="log-sub-btn" id="btn-sub-elimination" onclick="switchLogSubtab('elimination')">14-Day Elimination</button>
+        <button class="log-sub-btn" id="btn-sub-review" onclick="switchLogSubtab('review')">Weekly Review</button>
+      </div>
+
+      <!-- SUBTAB 1: Stopwatch & Recent Log -->
+      <div id="subtab-stopwatch">
+        <div class="c">
         <span class="badge badge-gold">Appendix A Logger</span>
         <h2>Colic Episode Stopwatch</h2>
         <p class="mu">Record crying duration and holds tried to discover patterns over a few nights.</p>
@@ -1415,6 +1621,185 @@
         </p>
         <button class="btn-secondary" onclick="exportDoctorSummary()">Generate Printable Summary</button>
       </div>
+      </div> <!-- end subtab-stopwatch -->
+
+      <!-- SUBTAB 2: 14-Day Elimination Trial -->
+      <div id="subtab-elimination" style="display: none;">
+        <div class="c">
+          <span class="badge badge-terra">Maternal &amp; Infant Diet Trial</span>
+          <h2>14-Day Elimination Trial</h2>
+          <p class="mu" style="margin-bottom: 14px;">
+            Track maternal dietary eliminations (breastfeeding) or hypoallergenic feeds and observe daily crying duration correlation.
+          </p>
+
+          <div style="background: rgba(196,96,58,0.06); border: 1px solid rgba(196,96,58,0.2); border-radius: 10px; padding: 12px; margin-bottom: 16px; font-size: 13px; line-height: 1.5;">
+            <strong>Clinical Context (Savino 2005 &amp; Iacono 1998):</strong> Cow's milk protein antibodies require 10 to 14 days to clear maternal breastmilk and infant intestinal mucosa. Before starting any restricted maternal diet or formula switch, check with your pediatrician.
+          </div>
+
+          <label style="font-size: 12px; font-weight: 700; color: var(--mu); display: block; margin-bottom: 6px;">Target Food Groups to Eliminate:</label>
+          <div style="display: flex; flex-wrap: wrap; margin-bottom: 16px;" id="elim-food-group-box">
+            <span class="food-tag active" onclick="toggleFoodGroup(this, 'dairy')">Cow's Milk Dairy</span>
+            <span class="food-tag" onclick="toggleFoodGroup(this, 'soy')">Soy &amp; Soy Lecithin</span>
+            <span class="food-tag" onclick="toggleFoodGroup(this, 'eggs')">Eggs</span>
+            <span class="food-tag" onclick="toggleFoodGroup(this, 'wheat')">Wheat / Gluten</span>
+            <span class="food-tag" onclick="toggleFoodGroup(this, 'nuts')">Peanuts &amp; Tree Nuts</span>
+            <span class="food-tag" onclick="toggleFoodGroup(this, 'caffeine')">High Caffeine (&gt;300mg)</span>
+          </div>
+
+          <label style="font-size: 12px; font-weight: 700; color: var(--mu); display: block; margin-bottom: 4px;">Trial Days (1 to 14):</label>
+          <div class="day-pill-scroll" id="elim-day-pills"></div>
+
+          <!-- Day Log Card -->
+          <div id="elim-active-day-form" style="border: 1px solid var(--bd); border-radius: 10px; padding: 14px; margin-top: 10px; background: #faf6f0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <h3 id="elim-day-heading" style="margin: 0; font-size: 16px; color: var(--terra);">Day 1 Check-In</h3>
+              <span id="elim-day-status-pill" class="badge badge-gold">Not Logged</span>
+            </div>
+
+            <label style="font-size: 12px; font-weight: 700; color: var(--mu); display: block; margin-bottom: 6px;">Dietary Adherence Today:</label>
+            <div style="display: flex; gap: 8px; margin-bottom: 14px;">
+              <button type="button" id="elim-btn-clean" class="btn-secondary" style="flex: 1; padding: 8px; font-size: 12.5px; border-color: var(--sage); color: var(--sage);" onclick="setElimAdherence('clean')">Clean Elimination (No exposure)</button>
+              <button type="button" id="elim-btn-exposure" class="btn-secondary" style="flex: 1; padding: 8px; font-size: 12.5px;" onclick="setElimAdherence('exposure')">Exposure Noted</button>
+            </div>
+
+            <label style="font-size: 12px; font-weight: 700; color: var(--mu); display: block; margin-bottom: 4px;">Total Crying Duration Today (Minutes):</label>
+            <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 14px;">
+              <input type="number" id="elim-crying-mins" value="0" min="0" max="1440" style="width: 90px; padding: 10px; border: 1px solid var(--bd); border-radius: 8px; font-size: 15px; font-weight: 700; color: var(--ink);">
+              <button type="button" class="btn-secondary" style="padding: 6px 10px; font-size: 12px;" onclick="addElimMins(15)">+15m</button>
+              <button type="button" class="btn-secondary" style="padding: 6px 10px; font-size: 12px;" onclick="addElimMins(30)">+30m</button>
+              <button type="button" class="btn-secondary" style="padding: 6px 10px; font-size: 12px;" onclick="addElimMins(60)">+60m</button>
+            </div>
+
+            <label style="font-size: 12px; font-weight: 700; color: var(--mu); display: block; margin-bottom: 4px;">Digestive &amp; Gas Severity (1 to 5):</label>
+            <select id="elim-severity" style="width: 100%; padding: 10px; border: 1px solid var(--bd); border-radius: 8px; font-size: 13.5px; margin-bottom: 14px;">
+              <option value="1">1 - Calm &bull; Soft, relaxed abdomen</option>
+              <option value="2">2 - Mild &bull; Occasional gas, passes easily</option>
+              <option value="3" selected>3 - Moderate &bull; Pulling legs up, cramping after feeds</option>
+              <option value="4">4 - Severe &bull; Prolonged hard crying, stiff back</option>
+              <option value="5">5 - Acute &bull; Rigid abdominal distension, piercing distress</option>
+            </select>
+
+            <label style="font-size: 12px; font-weight: 700; color: var(--mu); display: block; margin-bottom: 4px;">Stool Characteristics:</label>
+            <select id="elim-stool" onchange="checkElimRedFlags()" style="width: 100%; padding: 10px; border: 1px solid var(--bd); border-radius: 8px; font-size: 13.5px; margin-bottom: 14px;">
+              <option value="normal" selected>Normal soft infant stool</option>
+              <option value="mucus">Mucus present / stringy</option>
+              <option value="frothy">Green / watery or frothy</option>
+              <option value="blood">Blood specks or red flecks (Pediatric Flag)</option>
+            </select>
+
+            <div id="elim-redflag-alert" style="display: none; background: #fff0f0; border-left: 4px solid var(--red); padding: 10px 12px; border-radius: 6px; font-size: 12.5px; color: #a02020; margin-bottom: 14px;">
+              <strong>Pediatrician Alert:</strong> Fever, repeated vomiting, blood in stool, poor weight gain, or refusing feeds? Call your pediatrician promptly.
+            </div>
+
+            <button type="button" class="btn-terra" style="width: 100%;" onclick="saveElimDay()">Save Day Check-In</button>
+          </div>
+
+          <!-- 14-Day Progress Summary Card -->
+          <div style="margin-top: 20px; border-top: 1px solid var(--bd); padding-top: 16px;">
+            <h3>Trial Progress &amp; Correlation</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
+              <div style="background: var(--card); border: 1px solid var(--bd); border-radius: 8px; padding: 12px;">
+                <div style="font-size: 11px; font-weight: 700; color: var(--mu); text-transform: uppercase;">Week 1 Crying Avg</div>
+                <div id="elim-w1-avg" style="font-family: var(--font-serif); font-size: 24px; font-weight: 700; color: var(--terra); margin-top: 4px;">--</div>
+              </div>
+              <div style="background: var(--card); border: 1px solid var(--bd); border-radius: 8px; padding: 12px;">
+                <div style="font-size: 11px; font-weight: 700; color: var(--mu); text-transform: uppercase;">Week 2 Crying Avg</div>
+                <div id="elim-w2-avg" style="font-family: var(--font-serif); font-size: 24px; font-weight: 700; color: var(--sage); margin-top: 4px;">--</div>
+              </div>
+            </div>
+            <div id="elim-trajectory-note" style="margin-top: 10px; font-size: 13px; color: var(--mu);">
+              Log at least 7 days to reveal Week 1 vs Week 2 trajectory.
+            </div>
+            <button class="btn-secondary" style="margin-top: 14px; width: 100%;" onclick="exportEliminationReport()">Export Pediatrician Diet Summary</button>
+          </div>
+        </div>
+      </div> <!-- end subtab-elimination -->
+
+      <!-- SUBTAB 3: "Is It Working?" Weekly Review -->
+      <div id="subtab-review" style="display: none;">
+        <div class="c">
+          <span class="badge badge-gold">Chapter 9 Milestone</span>
+          <h2>The "Is It Working?" Weekly Review</h2>
+          <p class="mu" style="margin-bottom: 14px;">
+            A structured 5-question audit to evaluate your baby's response over the past 7 days across crying duration, peak intensity, hold response, feeding comfort, and parent well-being.
+          </p>
+
+          <label style="font-size: 12px; font-weight: 700; color: var(--mu); display: block; margin-bottom: 6px;">Select Review Period:</label>
+          <div style="display: flex; gap: 6px; margin-bottom: 16px;">
+            <button type="button" class="btn-secondary active" id="rev-btn-w1" style="flex: 1; padding: 8px 4px; font-size: 12px; font-weight: 700; border-color: var(--terra); color: var(--terra);" onclick="selectReviewWeek(1)">Week 1 (Day 7)</button>
+            <button type="button" class="btn-secondary" id="rev-btn-w2" style="flex: 1; padding: 8px 4px; font-size: 12px; font-weight: 700;" onclick="selectReviewWeek(2)">Week 2 (Day 14)</button>
+            <button type="button" class="btn-secondary" id="rev-btn-w3" style="flex: 1; padding: 8px 4px; font-size: 12px; font-weight: 700;" onclick="selectReviewWeek(3)">Week 3 (Day 21)</button>
+            <button type="button" class="btn-secondary" id="rev-btn-w4" style="flex: 1; padding: 8px 4px; font-size: 12px; font-weight: 700;" onclick="selectReviewWeek(4)">Week 4 (Day 28)</button>
+          </div>
+
+          <!-- Q1: Crying Duration & Frequency -->
+          <div class="review-q-card">
+            <h4 style="margin: 0 0 6px 0; font-size: 14px; color: var(--ink);">1. Daily Crying Duration &amp; Frequency</h4>
+            <p style="font-size: 12px; color: var(--mu); margin-bottom: 8px;">Compared to before starting the protocol, total crying hours are:</p>
+            <div class="review-opt" onclick="setReviewScore(1, 4, this)"><span class="review-opt-radio"></span> Meaningfully reduced (&gt;50% drop in crying time)</div>
+            <div class="review-opt" onclick="setReviewScore(1, 3, this)"><span class="review-opt-radio"></span> Moderately reduced (crying spells noticeably shorter)</div>
+            <div class="review-opt" onclick="setReviewScore(1, 2, this)"><span class="review-opt-radio"></span> Slightly reduced or inconsistent</div>
+            <div class="review-opt" onclick="setReviewScore(1, 1, this)"><span class="review-opt-radio"></span> Unchanged or worse</div>
+          </div>
+
+          <!-- Q2: Peak Episode Intensity -->
+          <div class="review-q-card">
+            <h4 style="margin: 0 0 6px 0; font-size: 14px; color: var(--ink);">2. Peak Crying Intensity</h4>
+            <p style="font-size: 12px; color: var(--mu); margin-bottom: 8px;">When crying peaks at evening or night, how does it sound?</p>
+            <div class="review-opt" onclick="setReviewScore(2, 4, this)"><span class="review-opt-radio"></span> Manageable fussing (rigid screaming has ceased)</div>
+            <div class="review-opt" onclick="setReviewScore(2, 3, this)"><span class="review-opt-radio"></span> Calmer peaks, but still cries hard periodically</div>
+            <div class="review-opt" onclick="setReviewScore(2, 2, this)"><span class="review-opt-radio"></span> High-pitched crying, but shorter duration</div>
+            <div class="review-opt" onclick="setReviewScore(2, 1, this)"><span class="review-opt-radio"></span> Inconsolable, rigid arching with clenched fists</div>
+          </div>
+
+          <!-- Q3: Hold Latency -->
+          <div class="review-q-card">
+            <h4 style="margin: 0 0 6px 0; font-size: 14px; color: var(--ink);">3. Calming Latency with Technique (e.g. Tiger Hold)</h4>
+            <p style="font-size: 12px; color: var(--mu); margin-bottom: 8px;">When initiating your starting hold in a quiet, dim room:</p>
+            <div class="review-opt" onclick="setReviewScore(3, 4, this)"><span class="review-opt-radio"></span> Settles within 5 to 10 minutes</div>
+            <div class="review-opt" onclick="setReviewScore(3, 3, this)"><span class="review-opt-radio"></span> Settles within 15 to 20 minutes</div>
+            <div class="review-opt" onclick="setReviewScore(3, 2, this)"><span class="review-opt-radio"></span> Calms briefly, then restarts upon putting down</div>
+            <div class="review-opt" onclick="setReviewScore(3, 1, this)"><span class="review-opt-radio"></span> Does not respond to hold / fights position</div>
+          </div>
+
+          <!-- Q4: Feeding Comfort -->
+          <div class="review-q-card">
+            <h4 style="margin: 0 0 6px 0; font-size: 14px; color: var(--ink);">4. Feeding Mechanics &amp; Digestive Comfort</h4>
+            <p style="font-size: 12px; color: var(--mu); margin-bottom: 8px;">During feeds (breast or bottle) and post-feed burping:</p>
+            <div class="review-opt" onclick="setReviewScore(4, 4, this)"><span class="review-opt-radio"></span> Feeds smoothly with relaxed hands and no air gulping</div>
+            <div class="review-opt" onclick="setReviewScore(4, 3, this)"><span class="review-opt-radio"></span> Occasional gas, but clears with horizontal paced angle</div>
+            <div class="review-opt" onclick="setReviewScore(4, 2, this)"><span class="review-opt-radio"></span> Frequent clicking or pulling off during feeds</div>
+            <div class="review-opt" onclick="setReviewScore(4, 1, this)"><span class="review-opt-radio"></span> Painful arching throughout or refusing feeds</div>
+          </div>
+
+          <!-- Q5: Parent Coping -->
+          <div class="review-q-card">
+            <h4 style="margin: 0 0 6px 0; font-size: 14px; color: var(--ink);">5. Parent Autonomic Stability &amp; Coping</h4>
+            <p style="font-size: 12px; color: var(--mu); margin-bottom: 8px;">How does your own nervous system feel during crying spells?</p>
+            <div class="review-opt" onclick="setReviewScore(5, 4, this)"><span class="review-opt-radio"></span> Steadier and grounded with a clear plan to execute</div>
+            <div class="review-opt" onclick="setReviewScore(5, 3, this)"><span class="review-opt-radio"></span> Exhausted, but no longer guessing blindly</div>
+            <div class="review-opt" onclick="setReviewScore(5, 2, this)"><span class="review-opt-radio"></span> Stressed and anxious, but managing the routine</div>
+            <div class="review-opt" onclick="setReviewScore(5, 1, this)"><span class="review-opt-radio"></span> Completely overwhelmed / at the breaking point</div>
+          </div>
+
+          <button type="button" class="btn-terra" style="width: 100%;" onclick="saveWeeklyReview()">Save &amp; Score Week Review</button>
+
+          <!-- Review Result Card -->
+          <div id="rev-score-card" style="display: none; margin-top: 18px; border: 1.5px solid var(--bd); border-radius: 10px; padding: 16px; background: #fff;">
+            <div style="display: flex; justify-content: space-between; align-items: baseline;">
+              <h3 id="rev-result-title" style="margin: 0; font-size: 17px; color: var(--ink);">Week 1 Evaluation</h3>
+              <span id="rev-result-badge" class="score-badge-pill" style="background: rgba(92,122,95,0.15); color: var(--sage);">Score: 85%</span>
+            </div>
+            <p id="rev-result-desc" style="font-size: 13.5px; color: var(--mu); margin: 8px 0 12px 0; line-height: 1.5;"></p>
+
+            <div style="background: #faf6f0; border-radius: 8px; padding: 12px; margin-bottom: 12px;">
+              <h4 style="margin: 0 0 6px 0; font-size: 12.5px; color: var(--terra); text-transform: uppercase;">Pediatrician Discussion Notes:</h4>
+              <ul id="rev-pediatrician-points" style="margin: 0; padding-left: 18px; font-size: 13px; color: var(--ink); line-height: 1.5;"></ul>
+            </div>
+            <button class="btn-secondary" style="width: 100%;" onclick="exportWeeklyReviewReport()">Print / Export Weekly Review</button>
+          </div>
+        </div>
+      </div> <!-- end subtab-review -->
     </div>
 
   </div>
@@ -3319,6 +3704,364 @@
     function closeDoctorSummary() {
       const modal = document.getElementById('modal-doctor-summary');
       if (modal) modal.style.display = 'none';
+    }
+
+    
+    /* ─── Task t45: Premium Tracking Logic ─── */
+    function switchLogSubtab(subId) {
+      document.querySelectorAll('.log-subnav .log-sub-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById('btn-sub-' + subId);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      document.getElementById('subtab-stopwatch').style.display = subId === 'stopwatch' ? 'block' : 'none';
+      document.getElementById('subtab-elimination').style.display = subId === 'elimination' ? 'block' : 'none';
+      document.getElementById('subtab-review').style.display = subId === 'review' ? 'block' : 'none';
+
+      if (subId === 'elimination') {
+        renderElimDayPills();
+        loadElimDay(currentElimDay);
+        renderEliminationSummary();
+      } else if (subId === 'review') {
+        loadReviewWeek(currentReviewWeek);
+      }
+    }
+
+    // --- Elimination Trial State & Logic ---
+    let currentElimDay = 1;
+    let elimAdherence = 'clean';
+
+    function toggleFoodGroup(el, group) {
+      el.classList.toggle('active');
+      const s = getStore();
+      if (!s.elimination) s.elimination = { targetFoods: ['Cow\'s Milk Dairy'], days: {} };
+      const activeFoods = [];
+      document.querySelectorAll('#elim-food-group-box .food-tag.active').forEach(tag => {
+        activeFoods.push(tag.textContent.trim());
+      });
+      s.elimination.targetFoods = activeFoods;
+      saveStore(s);
+    }
+
+    function renderElimDayPills() {
+      const container = document.getElementById('elim-day-pills');
+      if (!container) return;
+      const s = getStore();
+      const days = (s.elimination && s.elimination.days) || {};
+      container.innerHTML = '';
+      for (let i = 1; i <= 14; i++) {
+        const isLogged = Boolean(days[i]);
+        const isActive = i === currentElimDay;
+        const pill = document.createElement('div');
+        pill.className = `day-pill ${isActive ? 'active' : ''} ${isLogged ? 'logged' : ''}`;
+        pill.innerHTML = `<div>Day ${i}</div><div style="font-size: 9px; margin-top: 2px;">${isLogged ? '&#10003;' : '&bull;'}</div>`;
+        pill.onclick = () => selectElimDay(i);
+        container.appendChild(pill);
+      }
+    }
+
+    function selectElimDay(dayNum) {
+      currentElimDay = dayNum;
+      renderElimDayPills();
+      loadElimDay(dayNum);
+    }
+
+    function loadElimDay(dayNum) {
+      const s = getStore();
+      const dayData = (s.elimination && s.elimination.days && s.elimination.days[dayNum]) || null;
+      document.getElementById('elim-day-heading').textContent = `Day ${dayNum} Check-In`;
+      const statusPill = document.getElementById('elim-day-status-pill');
+
+      if (dayData) {
+        statusPill.className = 'badge badge-sage';
+        statusPill.textContent = 'Logged';
+        setElimAdherence(dayData.adherence || 'clean');
+        document.getElementById('elim-crying-mins').value = dayData.cryingMins || 0;
+        document.getElementById('elim-severity').value = dayData.severity || '3';
+        document.getElementById('elim-stool').value = dayData.stool || 'normal';
+      } else {
+        statusPill.className = 'badge badge-gold';
+        statusPill.textContent = 'Not Logged';
+        setElimAdherence('clean');
+        document.getElementById('elim-crying-mins').value = 0;
+        document.getElementById('elim-severity').value = '3';
+        document.getElementById('elim-stool').value = 'normal';
+      }
+      checkElimRedFlags();
+    }
+
+    function setElimAdherence(type) {
+      elimAdherence = type;
+      const btnClean = document.getElementById('elim-btn-clean');
+      const btnExp = document.getElementById('elim-btn-exposure');
+      if (type === 'clean') {
+        btnClean.style.borderColor = 'var(--sage)';
+        btnClean.style.color = 'var(--sage)';
+        btnClean.style.fontWeight = '700';
+        btnExp.style.borderColor = 'var(--bd)';
+        btnExp.style.color = 'var(--ink)';
+        btnExp.style.fontWeight = '500';
+      } else {
+        btnExp.style.borderColor = 'var(--terra)';
+        btnExp.style.color = 'var(--terra)';
+        btnExp.style.fontWeight = '700';
+        btnClean.style.borderColor = 'var(--bd)';
+        btnClean.style.color = 'var(--ink)';
+        btnClean.style.fontWeight = '500';
+      }
+    }
+
+    function addElimMins(mins) {
+      const input = document.getElementById('elim-crying-mins');
+      const cur = parseInt(input.value, 10) || 0;
+      input.value = Math.max(0, cur + mins);
+    }
+
+    function checkElimRedFlags() {
+      const stool = document.getElementById('elim-stool').value;
+      const alertBox = document.getElementById('elim-redflag-alert');
+      if (stool === 'blood') {
+        alertBox.style.display = 'block';
+      } else {
+        alertBox.style.display = 'none';
+      }
+    }
+
+    function saveElimDay() {
+      const s = getStore();
+      if (!s.elimination) s.elimination = { targetFoods: ['Cow\'s Milk Dairy'], days: {} };
+      if (!s.elimination.days) s.elimination.days = {};
+
+      const mins = parseInt(document.getElementById('elim-crying-mins').value, 10) || 0;
+      const severity = parseInt(document.getElementById('elim-severity').value, 10) || 3;
+      const stool = document.getElementById('elim-stool').value;
+
+      s.elimination.days[currentElimDay] = {
+        day: currentElimDay,
+        adherence: elimAdherence,
+        cryingMins: mins,
+        severity: severity,
+        stool: stool,
+        updatedAt: new Date().toISOString()
+      };
+
+      saveStore(s);
+      renderElimDayPills();
+      renderEliminationSummary();
+      showToast(`Day ${currentElimDay} check-in saved!`);
+    }
+
+    function renderEliminationSummary() {
+      const s = getStore();
+      const days = (s.elimination && s.elimination.days) || {};
+      let w1Total = 0, w1Count = 0;
+      let w2Total = 0, w2Count = 0;
+
+      for (let i = 1; i <= 7; i++) {
+        if (days[i]) {
+          w1Total += (days[i].cryingMins || 0);
+          w1Count++;
+        }
+      }
+      for (let i = 8; i <= 14; i++) {
+        if (days[i]) {
+          w2Total += (days[i].cryingMins || 0);
+          w2Count++;
+        }
+      }
+
+      const elW1 = document.getElementById('elim-w1-avg');
+      const elW2 = document.getElementById('elim-w2-avg');
+      const elNote = document.getElementById('elim-trajectory-note');
+
+      if (elW1) elW1.textContent = w1Count > 0 ? `${Math.round(w1Total / w1Count)}m / day` : '--';
+      if (elW2) elW2.textContent = w2Count > 0 ? `${Math.round(w2Total / w2Count)}m / day` : '--';
+
+      if (elNote) {
+        if (w1Count >= 3 && w2Count >= 3) {
+          const avg1 = w1Total / w1Count;
+          const avg2 = w2Total / w2Count;
+          const pct = Math.round(((avg1 - avg2) / avg1) * 100);
+          if (pct > 25) {
+            elNote.innerHTML = `<strong style="color:var(--sage);">&#10003; Positive Trial Trajectory:</strong> Crying duration decreased by <strong>${pct}%</strong> between Week 1 and Week 2. Correlates with dietary clearance.`;
+          } else if (pct < -15) {
+            elNote.innerHTML = `<strong style="color:var(--terra);">Pattern Observation:</strong> Crying duration increased by ${Math.abs(pct)}%. Diet may not be the primary driver; assess sensory or feeding mechanics.`;
+          } else {
+            elNote.innerHTML = `<strong>Neutral Trajectory:</strong> Crying duration remains steady (${pct > 0 ? '-' + pct : '+' + Math.abs(pct)}%). Continue monitoring through Day 14.`;
+          }
+        } else {
+          elNote.textContent = 'Log at least 3 days in Week 1 and 3 days in Week 2 to calculate correlation.';
+        }
+      }
+    }
+
+    // --- Weekly Review Logic ---
+    let currentReviewWeek = 1;
+    let reviewAnswers = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+
+    function selectReviewWeek(wNum) {
+      currentReviewWeek = wNum;
+      for (let i = 1; i <= 4; i++) {
+        const btn = document.getElementById('rev-btn-w' + i);
+        if (btn) {
+          if (i === wNum) {
+            btn.style.borderColor = 'var(--terra)';
+            btn.style.color = 'var(--terra)';
+          } else {
+            btn.style.borderColor = 'var(--bd)';
+            btn.style.color = 'var(--ink)';
+          }
+        }
+      }
+      loadReviewWeek(wNum);
+    }
+
+    function setReviewScore(qNum, score, el) {
+      reviewAnswers[qNum] = score;
+      const parent = el.parentElement;
+      parent.querySelectorAll('.review-opt').forEach(opt => opt.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+
+    function loadReviewWeek(wNum) {
+      const s = getStore();
+      const revData = (s.weeklyReviews && s.weeklyReviews[wNum]) || null;
+      reviewAnswers = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+
+      document.querySelectorAll('.review-q-card').forEach((card, idx) => {
+        card.querySelectorAll('.review-opt').forEach(opt => opt.classList.remove('selected'));
+        if (revData && revData.answers && revData.answers[idx + 1]) {
+          const score = revData.answers[idx + 1];
+          reviewAnswers[idx + 1] = score;
+          const optIdx = 4 - score;
+          const opts = card.querySelectorAll('.review-opt');
+          if (opts[optIdx]) opts[optIdx].classList.add('selected');
+        }
+      });
+
+      const scoreCard = document.getElementById('rev-score-card');
+      if (revData) {
+        displayReviewScore(revData.score, revData.notes);
+        if (scoreCard) scoreCard.style.display = 'block';
+      } else {
+        if (scoreCard) scoreCard.style.display = 'none';
+      }
+    }
+
+    function saveWeeklyReview() {
+      for (let q = 1; q <= 5; q++) {
+        if (!reviewAnswers[q]) {
+          showToast(`Please answer Question ${q} before scoring.`);
+          return;
+        }
+      }
+
+      const totalScoreRaw = reviewAnswers[1] + reviewAnswers[2] + reviewAnswers[3] + reviewAnswers[4] + reviewAnswers[5];
+      const pct = Math.round((totalScoreRaw / 20) * 100);
+
+      const s = getStore();
+      if (!s.weeklyReviews) s.weeklyReviews = {};
+
+      let notes = [];
+      if (reviewAnswers[1] <= 2) notes.push("Crying duration remains elevated (>2-3 hours daily). Ask pediatrician about non-colic differentials.");
+      if (reviewAnswers[4] <= 2) notes.push("Feeding mechanics show frequent clicking or arching. Recommend latch check or paced bottle feeding review.");
+      if (reviewAnswers[3] >= 3) notes.push("Positive response to physical holds: Tiger Hold settles baby within 15 minutes.");
+      if (reviewAnswers[5] <= 2) notes.push("High parental exhaustion noted. Discuss nocturnal respite care and safe soothing shifts.");
+      if (notes.length === 0) notes.push("Consistent developmental progress noted across soothing, feeding, and holding protocols.");
+
+      s.weeklyReviews[currentReviewWeek] = {
+        week: currentReviewWeek,
+        score: pct,
+        answers: { ...reviewAnswers },
+        notes: notes,
+        savedAt: new Date().toISOString()
+      };
+
+      saveStore(s);
+      displayReviewScore(pct, notes);
+      document.getElementById('rev-score-card').style.display = 'block';
+      showToast(`Week ${currentReviewWeek} review completed!`);
+    }
+
+    function displayReviewScore(score, notes) {
+      document.getElementById('rev-result-title').textContent = `Week ${currentReviewWeek} Evaluation`;
+      const badge = document.getElementById('rev-result-badge');
+      const desc = document.getElementById('rev-result-desc');
+      const ul = document.getElementById('rev-pediatrician-points');
+
+      badge.textContent = `Score: ${score}%`;
+      if (score >= 75) {
+        badge.style.background = 'rgba(92,122,95,0.15)';
+        badge.style.color = 'var(--sage)';
+        desc.textContent = "Strong Positive Response. Your baby is showing meaningful shifts in soothing response, feeding comfort, and overall regulation. Continue current consistent protocol.";
+      } else if (score >= 50) {
+        badge.style.background = 'rgba(200,154,62,0.15)';
+        badge.style.color = 'var(--gold)';
+        desc.textContent = "Moderate Shift. Certain holding and soothing patterns are helping, but feeding or late-day crying persists. Check bottle angles or maternal dietary consistency.";
+      } else {
+        badge.style.background = 'rgba(196,96,58,0.15)';
+        badge.style.color = 'var(--terra)';
+        desc.textContent = "No Meaningful Shift. At this stage, bring your logged review notes to your pediatrician to review reflux, milk protein sensitivities, or tongue ties.";
+      }
+
+      ul.innerHTML = '';
+      (notes || []).forEach(n => {
+        ul.innerHTML += `<li>${n}</li>`;
+      });
+    }
+
+    // --- Export Reports ---
+    function exportEliminationReport() {
+      const s = getStore();
+      const elim = s.elimination || { targetFoods: ['Cow\'s Milk Dairy'], days: {} };
+      const days = elim.days || {};
+
+      let rows = '';
+      for (let i = 1; i <= 14; i++) {
+        const d = days[i];
+        if (d) {
+          rows += `<tr>
+            <td style="padding: 6px; border: 1px solid #ccc; text-align: center;">Day ${i}</td>
+            <td style="padding: 6px; border: 1px solid #ccc; text-align: center;">${d.adherence === 'clean' ? '&#10003; Clean' : 'Exposure'}</td>
+            <td style="padding: 6px; border: 1px solid #ccc; text-align: center;">${d.cryingMins}m</td>
+            <td style="padding: 6px; border: 1px solid #ccc; text-align: center;">Level ${d.severity}/5</td>
+            <td style="padding: 6px; border: 1px solid #ccc; text-align: center;">${d.stool}</td>
+          </tr>`;
+        }
+      }
+
+      if (!rows) {
+        rows = '<tr><td colspan="5" style="padding: 12px; text-align: center; color: #888;">No elimination trial days logged yet.</td></tr>';
+      }
+
+      document.getElementById('elim-modal-baby').textContent = s.baby || 'Your baby';
+      document.getElementById('elim-modal-date').textContent = new Date().toLocaleDateString();
+      document.getElementById('elim-modal-foods').textContent = (elim.targetFoods || []).join(', ') || "Cow's Milk Dairy";
+      document.getElementById('elim-modal-table-body').innerHTML = rows;
+      document.getElementById('modal-elimination-report').style.display = 'flex';
+    }
+
+    function closeEliminationReport() {
+      document.getElementById('modal-elimination-report').style.display = 'none';
+    }
+
+    function exportWeeklyReviewReport() {
+      const s = getStore();
+      const rev = (s.weeklyReviews && s.weeklyReviews[currentReviewWeek]) || null;
+      if (!rev) {
+        showToast("Please save this week's review first.");
+        return;
+      }
+
+      document.getElementById('rev-modal-week').textContent = `Week ${currentReviewWeek} Review`;
+      document.getElementById('rev-modal-score').textContent = `${rev.score}%`;
+      const ul = document.getElementById('rev-modal-notes');
+      ul.innerHTML = '';
+      (rev.notes || []).forEach(n => ul.innerHTML += `<li>${n}</li>`);
+      document.getElementById('modal-weekly-review-report').style.display = 'flex';
+    }
+
+    function closeWeeklyReviewReport() {
+      document.getElementById('modal-weekly-review-report').style.display = 'none';
     }
 
     window.addEventListener('DOMContentLoaded', init);
