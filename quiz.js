@@ -723,7 +723,7 @@ function submitRedFlag() {
   const labels = flagged.map(i => RED_FLAG_OPTIONS[i].short);
   document.getElementById('rfStopList').textContent = labels.join(', ');
   redFlagStatus = 'flagged: ' + labels.join(', ');
-  sendEvent('red_flag_stop', { colic_type: 'Unassigned', symptoms: labels.join(', ') });
+  sendEvent('red_flag_stop', { colic_type: 'Unassigned' });
   hide('redFlagScreen');
   show('redFlagStopScreen');
 }
@@ -1714,6 +1714,13 @@ function submitLeadAndShowResult() {
 
   if (!name) return shake('nameInput', 'Please enter your first name');
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return shake('emailInput', 'Please enter a valid email address');
+  const typoMap = { 'gamil.com': 'gmail.com', 'gmial.com': 'gmail.com', 'gmal.com': 'gmail.com', 'gnail.com': 'gmail.com', 'gmail.con': 'gmail.com', 'yaho.com': 'yahoo.com', 'yahooo.com': 'yahoo.com', 'yahoo.con': 'yahoo.com', 'hotmal.com': 'hotmail.com', 'hotnail.com': 'hotmail.com', 'outlok.com': 'outlook.com', 'icloud.cm': 'icloud.com', 'icloud.con': 'icloud.com' };
+  const emailParts = email.toLowerCase().split('@');
+  const fixedDom = emailParts.length === 2 ? (typoMap[emailParts[1]] || (emailParts[1].endsWith('.con') ? emailParts[1].slice(0, -4) + '.com' : '')) : '';
+  if (fixedDom && emailEl && emailEl.dataset.typoWarned !== email.toLowerCase()) {
+    emailEl.dataset.typoWarned = email.toLowerCase();
+    return shake('emailInput', `Did you mean ${emailParts[0]}@${fixedDom}? Fix it or submit again to keep it.`);
+  }
   if (consentEl && !consentEl.checked) {
     const row = consentEl.closest('.consent-row');
     if (row) {

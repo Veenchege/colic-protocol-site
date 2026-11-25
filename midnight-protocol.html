@@ -1001,6 +1001,15 @@ function renderWelcome(){
       errEmail.hidden = emailOK; errEmail.textContent = 'Enter a valid email, that’s where tonight’s protocol is saved to.';
       errConsent.hidden = consent; errConsent.textContent = 'Check the box to continue, we only send what you agree to.';
       if (!(nameOK && ageOK && emailOK && consent)) return;
+      var typoMap = {'gamil.com':'gmail.com','gmial.com':'gmail.com','gmal.com':'gmail.com','gnail.com':'gmail.com','gmail.con':'gmail.com','yaho.com':'yahoo.com','yahooo.com':'yahoo.com','yahoo.con':'yahoo.com','hotmal.com':'hotmail.com','hotnail.com':'hotmail.com','outlok.com':'outlook.com','icloud.cm':'icloud.com','icloud.con':'icloud.com'};
+      var parts = email.toLowerCase().split('@');
+      var fixDom = parts.length === 2 ? (typoMap[parts[1]] || (parts[1].endsWith('.con') ? parts[1].slice(0, -4) + '.com' : '')) : '';
+      if (fixDom && el.dataset.typoWarned !== email.toLowerCase()) {
+        el.dataset.typoWarned = email.toLowerCase();
+        errEmail.hidden = false;
+        errEmail.textContent = 'Did you mean ' + parts[0] + '@' + fixDom + '? Fix it or tap Continue again to keep this email.';
+        return;
+      }
       state.lead = { name:name, babyName:(state.lead && state.lead.babyName) || '', email:email.toLowerCase(), babyAgeWeeks:Number(age), consent:true, hp:hp };
       submitLead(false);
       goTo('stopscan');
