@@ -817,6 +817,12 @@ details.faq-item p{margin-top:10px}
     });
   }, { threshold: 0.35 });
   document.querySelectorAll('[data-track]').forEach(function (s) { io.observe(s); });
+  try { gtag('event', 'blueprint_view', { surface: 'blueprint_page' }); } catch (e) {}
+  document.querySelectorAll('a[href*="gumroad.com"]').forEach(function (a) {
+    a.addEventListener('click', function () {
+      try { gtag('event', 'blueprint_checkout_click', { surface: 'blueprint_page', cta_id: a.id || 'link' }); } catch (e) {}
+    });
+  });
 })();
 </script>
 <!-- Gumroad overlay checkout widget: must load after the script above so it binds
