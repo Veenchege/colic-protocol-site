@@ -135,7 +135,7 @@ function nudge(m){var L=[],f=ago(lastOf('feed')),w=parseInt(S.age,10),t=tried8()
  if(w>=2&&w<=12)L.push('Week '+w+': this is common. Crying usually peaks around week 6 and eases by about 3 to 4 months.');
  if(m>=20)L.push('This is a long one, and staying with '+B()+' is the right thing. Crying rises and falls on its own, so a calm spell does not prove what caused it.');
  if(m>=30)L.push('If you feel overwhelmed, it is safe to lay '+B()+' on their back in the crib and step away for a few minutes to breathe. Come back when you feel steadier. If you ever feel you might harm yourself or your baby, call your local emergency number or tell your doctor today.');
- L.push('Call your pediatrician for fever, repeated vomiting, blood in the stool, refusing feeds, or a baby who is floppy or very drowsy.');
+ L.push('Fever, vomiting (especially green), blood in stools, poor feeding, or a baby who seems limp or very hard to wake: call your doctor now, not later.');
  return L.map(function(x,i){return'<p class="'+(i===L.length-1?'mu':'')+'" style="margin:6px 0;font-size:14px">'+x+'</p>'}).join('')}
 function epHtml(){if(tmr)return'<div class="c offer"><h2>Crying for <span id="el"></span></h2><div id="nudge"></div><button class="p" id="stopep" style="width:100%;margin-top:10px">It has settled. Save this episode</button></div>';
  var ph=peakHour(),n=new Date().getHours(),x=ph!=null&&!sheet&&(n===ph||n===(ph+23)%24)?'<p class="mu" style="margin-top:8px">'+(S.baby?esc(S.baby)+"'s log":'Your log')+' shows crying most often around '+hr(ph)+'. A calm set-up now (dim room, quiet low sound across the room, on a timer) is common practice and costs nothing.</p>':'';
