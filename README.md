@@ -72,8 +72,9 @@ approaches explored for this project, chosen over the Next.js version.
 /quiz.html                     90-second assessment, two-phase capture (see above)
 /about.html                    Founder page, Zion story, credential-scope explanation
 /blueprint.html                $47 sales page, now with FAQPage structured data
-/blog.html                     Blog index, 5 posts, category filter
-/blog/*.html                   5 individual posts
+/blog.html                     Blog index and category filter
+/blog/*.html                   Individual posts (including /blog/survival-guide.html)
+/images/guide/                 Illustrations for /blog/survival-guide.html
 /privacy.html, /terms.html, /medical-disclaimer.html
 /robots.txt
 /sitemap.xml                   Now includes blog + legal pages

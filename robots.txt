@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /api/
+Disallow: /guide
+Disallow: /blog/guide
 
 Sitemap: https://colicprotocol.baby/sitemap.xml
